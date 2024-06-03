@@ -6,7 +6,7 @@ import { arayToHour } from "./utils/function";
 const employees = ['Ross Geller', 'Marta Geller', 'Chandler Bing'];
 
 export const JobHourApp = () => {
-  const [employeeData, setEmployeeData] = useState(employees.map(username => ({ username, hours: Array(10).fill(0), totalHours: 0 })));
+  const [employeeData, setEmployeeData] = useState(employees.map(username => ({ username, hours: Array(56).fill(0), totalHours: 0 })));
 
   // Manejar el cambio en las horas de un empleado
   const handleHourChange = (index, employeeIndex, value) => {
@@ -21,7 +21,8 @@ export const JobHourApp = () => {
   };
 
   return (
-    <>
+    <fieldset>
+      <legend>Lunes</legend>
       {employeeData.map((employee, employeeIndex) => (
         <div key={employeeIndex}>
           <HorizontalBar
@@ -35,6 +36,6 @@ export const JobHourApp = () => {
       <button onClick={() => console.log(employeeData)}>
         Imprimir
       </button>
-    </>
+    </fieldset>
   );
 };
