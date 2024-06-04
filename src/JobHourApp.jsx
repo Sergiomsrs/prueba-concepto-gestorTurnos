@@ -13,7 +13,6 @@ export const JobHourApp = ({ employees, onHourChange }) => {
           <HorizontalBar
             username={employee.nombre}
             hours={employee.horas}
-            totalHours={employee.total}
             onHourChange={(hourIndex, value) => onHourChange(employeeIndex, hourIndex, value)}
           />
         </div>

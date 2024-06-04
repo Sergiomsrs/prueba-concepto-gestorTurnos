@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 
-export const HorizontalBar = ({ username, hours, totalHours, onHourChange }) => {
-    const [total, setTotal] = useState(totalHours);
+export const HorizontalBar = ({ username, hours, onHourChange }) => {
+    const [total, setTotal] = useState("00:00");
   
     const handleChange = (index, event) => {
       const newValue = Number(event.target.value);
@@ -27,6 +27,7 @@ export const HorizontalBar = ({ username, hours, totalHours, onHourChange }) => 
               key={index}
               type="text"
               inputMode="numeric"
+              maxLength="1"
               pattern="[01]*"
               value={value}
               onChange={(event) => handleChange(index, event)}

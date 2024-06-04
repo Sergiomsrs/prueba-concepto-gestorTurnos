@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { JobHourApp } from "./JobHourApp";
+import { arayToHour } from "./utils/function";
 
 export const Daily = () => {
   const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -17,11 +18,12 @@ export const Daily = () => {
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
     newData[dayIndex].employees[employeeIndex].horas[hourIndex] = value;
+    newData[dayIndex].employees[employeeIndex].total = arayToHour(newData[dayIndex].employees[employeeIndex].horas);
     setData(newData);
   };
 
   const handlePrint = () => {
-    console.log(data); // Imprimir el objeto completo con la información actualizada
+    console.log(JSON.stringify(data)); // Imprimir el objeto completo con la información actualizada
   };
   
   return (
