@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { JobHourApp } from "./JobHourApp";
 import { arayToHour } from "./utils/function";
-import { days, employees, hours } from "./utils/data";
+import { days, employess, hours } from "./utils/data";
+import { Resumen } from "./gridComponents/Resumen";
 
 
 export const Daily = () => {
@@ -11,7 +12,7 @@ export const Daily = () => {
   const generateData = () => {
     return days.map(day => ({
       day,
-      employees: employees.map(nombre => ({nombre, horas: Array(56).fill(0), total: '00:00'}))
+      employees: employess.map(emp => ({nombre: emp.nombre, seccion:emp.seccion, horas: Array(78).fill(0), total: '00:00'}))
     }));
   };
   
@@ -26,6 +27,7 @@ export const Daily = () => {
 
   const handlePrint = () => {
     console.log(JSON.stringify(data)); // Imprimir el objeto completo con la información actualizada
+    console.log(JSON.stringify(totalHoursByEmployee)); // Imprimir el objeto completo con la información actualizada
   };
 
   const totalHoursByEmployee = {};
@@ -50,72 +52,51 @@ data.forEach(day => {
 
   
   return (
+    <section className="p-7">
+      <h1 className="mb-4">
+      Semana del {<input type="date" />} al {<input type="date" />}
+      </h1>
 
-    <body className="p-7</body>">
-      <h1 className="mb-4">Semana del {<input type="date" />} al  {<input type="date" />}</h1>
-
-
-    <div className="border overflow-x-auto">
+      <div className="border overflow-x-auto">
       {data.map((day, dayIndex) => (
-        <table className="table-fixed w-full max-w-full overflow-hidden" key={dayIndex} >
-          <thead className="w-auto h-40 mb-3" >
-                <tr>
-                  <th className="w-12  p-0 align-bottom" >{day.day}</th>
-                  {
-                    hours.map((value, index) => ( <th className="rotate-90 w-2 h-36 "  key={index}> {
-                      <div className="flex "> 
+        <>
+        <h3 className="m-0 p-0">{day.day}</h3>
+        <table className="table-fixed w-full max-w-full overflow-hidden mt-0 pt-0" key={dayIndex}>
+        
+        <thead className="w-auto h-40 mb-3">
+          <tr>
+          <th className="w-12 p-0 align-bottom">Seccion</th>
+          <th className="w-12 p-0 align-bottom">Nombre</th>
+          {hours.entrada.map((entrada, index) => (
+            <th className="rotate-90 w-2 h-36" key={index}>
+            <div className="flex justify-center"> {/* Add justify-center class */}
+              <div>{entrada}</div>
+              <div>-</div>
+              <div>{hours.salida[index]}</div>
+            </div>
+            </th>
+          ))}
+          <th className="w-8 p-0 m-0 align-bottom">Total</th>
+          </tr>
+        </thead>
 
-                      <div>{value}</div>
-                      <div>-</div>
-                      <div>{value}</div>
-                      
-                      </div>
-                      
-                      
-                      } </th> ))
-                  }
-                  
-                  <th className="w-8 p-0 m-0 align-bottom">Total</th>
-                </tr>
-              </thead>
- 
-          <JobHourApp
-            employees={day.employees}
-            onHourChange={(employeeIndex, hourIndex, value) => handleHourChange(dayIndex, employeeIndex, hourIndex, value)}
+        <JobHourApp
+          employees={day.employees}
+          onHourChange={(employeeIndex, hourIndex, value) =>
+            handleHourChange(dayIndex, employeeIndex, hourIndex, value)
+            }
             />
         </table>
+      </>
       ))}
-
-    </div>
-      <div>
-
-      <button onClick={handlePrint}>
-        Imprimir
-      </button>
-
-        <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Empleado</th>
-                    <th>Total de Horas</th>
-                </tr>
-            </thead>
-            <tbody>
-                {Object.entries(totalHoursByEmployee).map(([nombre, total]) => (
-                    <tr key={nombre}>
-                        <td>{nombre}</td>
-                        <td>{total}</td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-        </div>
-
-
       </div>
 
-   
-      </body>
+      <div>
+      <button onClick={handlePrint}>Imprimir</button>
+
+      </div>
+      <Resumen totalHoursByEmployee={totalHoursByEmployee} employess={employess}/>
+    </section>
+
   );
 };

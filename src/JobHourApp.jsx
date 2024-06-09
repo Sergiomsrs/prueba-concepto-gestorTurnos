@@ -14,6 +14,7 @@ export const JobHourApp = ({ employees, onHourChange }) => {
                   
                     
           <HorizontalBar
+            seccion={employee.seccion}
             username={employee.nombre}
             hours={employee.horas}
             onHourChange={(hourIndex, value) => onHourChange(employeeIndex, hourIndex, value)}

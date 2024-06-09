@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const HorizontalBar = ({ username, hours, onHourChange }) => {
+export const HorizontalBar = ({ username, hours, onHourChange, seccion }) => {
   const [total, setTotal] = useState("00:00");
   const [startSelection, setStartSelection] = useState(null);
   const [isSelecting, setIsSelecting] = useState(false);
@@ -46,6 +46,8 @@ export const HorizontalBar = ({ username, hours, onHourChange }) => {
 
   return (
     <>
+      
+      <td>{seccion}</td>
       <td>{username}</td>
       {hours.map((value, index) => (
         <td
