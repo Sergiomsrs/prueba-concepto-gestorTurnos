@@ -58,14 +58,24 @@ data.forEach(day => {
     <div className="border overflow-x-auto">
       {data.map((day, dayIndex) => (
         <table className="table-fixed w-full max-w-full overflow-hidden" key={dayIndex} >
-          <thead className="w-auto h-16" >
+          <thead className="w-auto h-40 mb-3" >
                 <tr>
-                  <th className="w-10 p-0 m-0" >{day.day}</th>
+                  <th className="w-12  p-0 align-bottom" >{day.day}</th>
                   {
-                    hours.map((value, index) => ( <th className="rotate-90 w-2 h-24 "  key={index}> {value} </th> ))
+                    hours.map((value, index) => ( <th className="rotate-90 w-2 h-36 "  key={index}> {
+                      <div className="flex "> 
+
+                      <div>{value}</div>
+                      <div>-</div>
+                      <div>{value}</div>
+                      
+                      </div>
+                      
+                      
+                      } </th> ))
                   }
                   
-                  <th className="w-6 p-0 m-0 ">Total</th>
+                  <th className="w-8 p-0 m-0 align-bottom">Total</th>
                 </tr>
               </thead>
  
