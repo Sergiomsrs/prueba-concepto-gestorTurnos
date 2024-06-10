@@ -1,4 +1,7 @@
+import { Route, Routes } from "react-router-dom"
 import { Daily } from "./Daily"
+import { Landing } from "./Landing"
+import { Navbar } from "./Navbar"
 
 export const MainPage = () => {
   return (
@@ -7,11 +10,14 @@ export const MainPage = () => {
         <div className="container mx-auto px-16 max-w-full py-8" >
 
         <header className="mb-8">
-    <h1 className="text-3xl font-bold">App Gestion Turnos de Trabajo</h1>
+    <Navbar/>
   </header>
 
   <main className="">
-  <Daily/>
+    <Routes>
+      <Route path="/" element={<Daily />} />
+      <Route path="/landing" element={<Landing />} />
+    </Routes>
   </main>
 
   <footer className="mt-8">
