@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom"
-import { Daily } from "./Daily"
+import { Daily } from "../Daily"
 import { Landing } from "./Landing"
-import { Navbar } from "./Navbar"
+import { Navbar } from "../utilComponents/Navbar"
 
 export const MainPage = () => {
   return (

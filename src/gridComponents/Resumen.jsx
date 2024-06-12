@@ -4,8 +4,9 @@ export const Resumen = ({totalHoursByEmployee, employess }) => {
 
 
   return (
-    <div className="overflow-x-auto">
-  <table className="table-auto">
+    <div className="overflow-x-auto mt-4">
+  <table className="table table-hover">
+ 
     <thead>
       <tr>
         <th>Empleado</th>
@@ -18,11 +19,11 @@ export const Resumen = ({totalHoursByEmployee, employess }) => {
       {Object.entries(totalHoursByEmployee).map(([nombre, total]) => (
         <tr key={nombre}>
           <td >{nombre}</td>
-          <td className="text-center">
+          <td>
             {employess.find((emp) => emp.nombre === nombre)?.jornada[0].horas}
           </td>
-          <td className="text-center">{total}</td>
-          <td className="text-center">
+          <td>{total}</td>
+          <td>
             {employess.find((emp) => emp.nombre === nombre)?.jornada[0].horas - total}
           </td>
         </tr>
@@ -30,6 +31,8 @@ export const Resumen = ({totalHoursByEmployee, employess }) => {
     </tbody>
   </table>
 </div>
+
+
     
   )
 }

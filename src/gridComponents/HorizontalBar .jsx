@@ -47,8 +47,8 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion }) => {
   return (
     <>
       
-      <td>{seccion}</td>
-      <td>{username}</td>
+      <td className="text-base font-semibold text-gray-800" >{seccion}</td>
+      <td className="text-base font-semibold text-gray-800">{username}</td>
       {hours.map((value, index) => (
         <td
           className="w-2 p-0 m-0 truncate"

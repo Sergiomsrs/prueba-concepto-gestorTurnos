@@ -26,7 +26,7 @@ export const employees = ['Ross Geller', 'Marta Geller', 'Chandler Bing'];
 
 export const employess = [
     {
-        nombre: 'Ross',
+        nombre: 'Empleado1',
         apellidos: 'Geller',
         email: 'Ross@correo.com',
         fechaAlta: '2021-01-01',
@@ -41,7 +41,7 @@ export const employess = [
         ]
     },
     {
-        nombre: 'Marta',
+        nombre: 'Empleado2',
         apellidos: 'Geller',
         email: 'Marta@correo.com',
         fechaAlta: '2021-01-01',
@@ -56,7 +56,7 @@ export const employess = [
         ]
     },
     {
-        nombre: 'Chandler',
+        nombre: 'Empleado3',
         apellidos: 'Bing',
         email: 'Chandler@correo.com',
         fechaAlta: '2021-01-01',

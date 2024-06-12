@@ -16,8 +16,8 @@ export const Navbar = () => {
               Services
             </Link>
           </div>
-          <div className="flex items-center text-xl text-gray-300 hover:text-white px-3 py-2  font-extrabold">
-            <h1>App Gestion de Horarios</h1>
+          <div className="flex items-center text-xl  text-white px-3 py-2  font-extrabold">
+            <h1>App Gestión de Horarios</h1>
           </div>
         </div>
       </div>

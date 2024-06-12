@@ -3,6 +3,7 @@ import { JobHourApp } from "./JobHourApp";
 import { arayToHour } from "./utils/function";
 import { days, employess, hours } from "./utils/data";
 import { Resumen } from "./gridComponents/Resumen";
+import { DatePicker } from "./utilComponents/DatePicker";
 
 
 export const Daily = () => {
@@ -53,19 +54,18 @@ data.forEach(day => {
   
   return (
     <section className="p-7">
-      <h1 className="mb-4">
-      Semana del {<input type="date" />} al {<input type="date" />}
-      </h1>
 
-      <div className="border overflow-x-auto">
+      <DatePicker/>
+
+      <div className="border rounded-lg shadow-md overflow-x-auto p-4">
       {data.map((day, dayIndex) => (
         <>
-        <h3 className="m-0 p-0">{day.day}</h3>
+        <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
         <table className="table-fixed w-full max-w-full overflow-hidden mt-0 pt-0" key={dayIndex}>
         
-        <thead className="w-auto h-40 mb-3">
+        <thead className="w-auto h-auto mb-3">
           <tr>
-          <th className="w-12 p-0 align-bottom">Seccion</th>
+          <th className="w-10 p-0 align-bottom">Seccion</th>
           <th className="w-12 p-0 align-bottom">Nombre</th>
           {hours.entrada.map((entrada, index) => (
             <th className="rotate-90 w-2 h-36" key={index}>
@@ -76,7 +76,7 @@ data.forEach(day => {
             </div>
             </th>
           ))}
-          <th className="w-8 p-0 m-0 align-bottom">Total</th>
+          <th className="w-8 align-bottom">Total</th>
           </tr>
         </thead>
 
@@ -89,13 +89,12 @@ data.forEach(day => {
         </table>
       </>
       ))}
-      </div>
-
-      <div>
-      <button onClick={handlePrint}>Imprimir</button>
-
-      </div>
       <Resumen totalHoursByEmployee={totalHoursByEmployee} employess={employess}/>
+
+      <div className="mt-4 mb-4">
+      <button onClick={handlePrint} type="button" className="btn btn-success">Guardar</button>
+      </div>
+      </div>
     </section>
 
   );
