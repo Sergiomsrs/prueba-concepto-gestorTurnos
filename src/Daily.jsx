@@ -15,7 +15,7 @@ import { SectionPicker } from "./utilComponents/SectionPicker";
 export const Daily = () => {
 
 
-  const { data, setData } = useContext(AppContext);
+  const { data, setData, date } = useContext(AppContext);
 
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
@@ -26,7 +26,7 @@ export const Daily = () => {
 
   const handlePrint = () => {
     console.log(JSON.stringify(data)); // Imprimir el objeto completo con la información actualizada
-    //console.log(data[1].employees[1].horas[0])
+    console.log(date)
   };
 
 
