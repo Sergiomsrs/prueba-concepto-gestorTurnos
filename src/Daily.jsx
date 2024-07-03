@@ -38,10 +38,10 @@ export const Daily = () => {
 
       <div className="border rounded-lg shadow-md overflow-x-auto p-4">
 
-      {data.map((day, dayIndex) => (
-        <div key={dayIndex}>
+      {data.map((day, id) => (
+        <div key={id}>
         <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
-        <DayGrid dayIndex={dayIndex}>
+        <DayGrid dayIndex={id}>
 
         
         <HeadRow/>
@@ -49,7 +49,7 @@ export const Daily = () => {
         <JobHourApp
           employees={day.employees}
           onHourChange={(employeeIndex, hourIndex, value) =>
-            handleHourChange(dayIndex, employeeIndex, hourIndex, value)
+            handleHourChange(id, employeeIndex, hourIndex, value)
           }
           />
           </DayGrid>

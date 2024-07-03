@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AppContext } from "../context/AppContext";
 
 export const HorizontalBar = ({ username, hours, onHourChange, seccion }) => {
+  const {data} = useContext(AppContext);
   const [total, setTotal] = useState("00:00");
   const [startSelection, setStartSelection] = useState(null);
   const [isSelecting, setIsSelecting] = useState(false);

@@ -20,7 +20,16 @@ export const hours = {
 }
 
 
-export const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+export const days = [
+    {id: "01-01-2024", dia:"Lunes"},
+    {id: "02-01-2024", dia:"Martes"},
+    {id: "03-01-2024", dia:"Miercoles"},
+    {id: "04-01-2024", dia:"Jueves"},
+    {id: "05-01-2024", dia:"Viernes"},
+    {id: "06-01-2024", dia:"Sabado"},
+    {id: "07-01-2024", dia:"Domingo"}
+
+];
 
 
 export const employess = [
