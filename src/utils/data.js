@@ -49,6 +49,21 @@ export const employess = [
         ]
     },
     {
+        nombre: 'Empleado5',
+        apellidos: 'Geller',
+        email: 'Ross@correo.com',
+        fechaAlta: '2021-01-01',
+        fechaBaja: '2021-02-01',
+        seccion: 'Sec1',
+        jornada: [
+            {
+                fechaInicio: '2021-01-01',
+                fechaFin: '2021-01-31',
+                horas: 18
+            }
+        ]
+    },
+    {
         nombre: 'Empleado2',
         apellidos: 'Geller',
         email: 'Marta@correo.com',

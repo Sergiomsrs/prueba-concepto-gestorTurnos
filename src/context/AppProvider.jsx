@@ -5,14 +5,17 @@ import { generateData } from "../utils/function"
 
 export const AppProvider = ({children})=> {
 
-    const [AppState, setAppState] = useState({})
     const [data, setData] = useState(generateData());
-    const [selectedOption, setSelectedOption] = useState('option1');
+    const [selectedOption, setSelectedOption] = useState('todos');
 
 
     return(
         <AppContext.Provider value={{
-            data, setData, selectedOption, setSelectedOption
+            data, 
+            selectedOption, 
+            
+            setData, 
+            setSelectedOption
         }}>
             {children}
         </AppContext.Provider>

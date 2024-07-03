@@ -1,7 +1,7 @@
-import { useContext} from "react";
+import { useContext } from "react";
 import { JobHourApp } from "./JobHourApp";
 import { arayToHour } from "./utils/function";
-import { employess} from "./utils/data";
+import { employess } from "./utils/data";
 import { Resumen } from "./gridComponents/Resumen";
 import { DatePicker } from "./utilComponents/DatePicker";
 import { HeadRow } from "./gridComponents/HeadRow";
@@ -10,11 +10,13 @@ import { AppContext } from "./context/AppContext";
 import { SectionPicker } from "./utilComponents/SectionPicker";
 
 
+
+
 export const Daily = () => {
 
- 
-  const {data, setData} = useContext(AppContext);
-  
+
+  const { data, setData } = useContext(AppContext);
+
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
     newData[dayIndex].employees[employeeIndex].horas[hourIndex] = value;
@@ -24,47 +26,50 @@ export const Daily = () => {
 
   const handlePrint = () => {
     console.log(JSON.stringify(data)); // Imprimir el objeto completo con la información actualizada
-    console.log(JSON.stringify(totalHoursByEmployee)); // Imprimir el objeto completo con la información actualizada
+    //console.log(data[1].employees[1].horas[0])
   };
 
-  
+
   return (
     <section className="p-7">
 
-      <DatePicker/>
-      <SectionPicker/>
+      <DatePicker />
+      <SectionPicker />
 
 
 
       <div className="border rounded-lg shadow-md overflow-x-auto p-4">
 
-      {data.map((day, id) => (
-        <div key={id}>
-        <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
-        <DayGrid dayIndex={id}>
-
-        
-        <HeadRow/>
-
-        <JobHourApp
-          employees={day.employees}
-          onHourChange={(employeeIndex, hourIndex, value) =>
-            handleHourChange(id, employeeIndex, hourIndex, value)
-          }
-          />
-          </DayGrid>
-      </div>
-      ))}
+        {data.map((day, id, dayIndex) => (
+          <div key={id}>
+            <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
+            <DayGrid dayIndex={id}>
 
 
+              <HeadRow />
 
-      <Resumen employess={employess}/>
+              <JobHourApp
+               dayIndex={dayIndex}
+                day={day}
+                employees={day.employees}
+                onHourChange={(employeeIndex, hourIndex, value) =>
+                  handleHourChange(id, employeeIndex, hourIndex, value)
+                }
+              />
+              
+            </DayGrid>
+          </div>
+        ))}
 
 
 
-      <div className="mt-4 mb-4">
-      <button onClick={handlePrint} type="button" className="btn btn-success">Guardar</button>
-      </div>
+        <Resumen employess={employess} />
+
+
+
+        <div className="mt-4 mb-4">
+          <button onClick={handlePrint} type="button" className="btn btn-success">Guardar</button>
+        </div>
       </div>
 
 

@@ -11,15 +11,23 @@ export const SectionPicker = () => {
     const handleChange = (event) => {
         setSelectedOption(event.target.value);
       };
+      
+      const uniqueSections = employess.reduce((acc, emp) => {
+        if (!acc.includes(emp.seccion)) {
+          acc.push(emp.seccion);
+        }
+        return acc;
+      }, []);
 
 
   return (
     <div>
       <label htmlFor="options">Select an option:</label>
       <select id="options"  value={selectedOption} onChange={handleChange}>
-        {
-          employess.map(emp =>(
-            <option key={emp.seccion} value={emp.seccion}>{emp.seccion}</option>
+      <option value="todos">Todos</option>
+        {   
+          uniqueSections.map(emp =>(
+            <option key={emp} value={emp}>{emp}</option>
 
           ))
         }

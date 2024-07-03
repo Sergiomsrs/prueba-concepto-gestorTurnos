@@ -12,11 +12,16 @@ export const arayToHour = (array) => {
 
 export const generateData = () => {
     return days.map(day => ({
-      id:days.id,
-      day: days.dia,
-      employees: employess.map(emp => ({nombre: emp.nombre, seccion:emp.seccion, horas: Array(78).fill(0), total: '00:00'}))
+        id: day.id,
+        day: day.dia,
+        employees: employess.map(emp => ({
+            nombre: emp.nombre,
+            seccion: emp.seccion,
+            horas: Array(78).fill(0),
+            total: '00:00'
+        }))
     }));
-  };
+};
 
 
 
