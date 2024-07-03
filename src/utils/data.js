@@ -22,7 +22,6 @@ export const hours = {
 
 export const days = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-export const employees = ['Ross Geller', 'Marta Geller', 'Chandler Bing'];
 
 export const employess = [
     {
