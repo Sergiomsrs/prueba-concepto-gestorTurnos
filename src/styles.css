@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+input[type="checkbox"] {
+    /* Reiniciar estilos */
+    -webkit-appearance: checkbox; /* Para Safari y Chrome */
+    -moz-appearance: checkbox; /* Para Firefox */
+    appearance: checkbox; /* Para otros navegadores */
+    margin: 0; /* Ajuste del margen */
+    padding: initial; /* Ajuste del relleno inicial */
+    line-height: initial; /* Ajuste del altura de línea inicial */
+  }

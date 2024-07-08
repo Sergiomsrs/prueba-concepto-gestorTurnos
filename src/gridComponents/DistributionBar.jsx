@@ -4,7 +4,10 @@ export const DistributionBar = ({ day }) => {
     // Iterar sobre los empleados y sumar los valores por índice
     day.employees.forEach(empleado => {
         empleado.horas.forEach((horas, indice) => {
-            sumaPorIndice[indice] += horas;
+          // Sumar 1 si el valor es distinto de 0
+          if (horas !== 0) {
+            sumaPorIndice[indice] += 1;
+          }
         });
     });
 

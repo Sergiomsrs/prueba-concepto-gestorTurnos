@@ -12,8 +12,8 @@ export const Navbar = () => {
             <Link to="/" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
               Create
             </Link>
-            <Link to="/services" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
-              Services
+            <Link to="/adduser" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
+              AddUser
             </Link>
           </div>
           <div className="flex items-center text-xl  text-white px-3 py-2  font-extrabold">

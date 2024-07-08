@@ -11,7 +11,7 @@ export const HeadRow = () => {
     <th className="w-12 p-0 align-bottom">Nombre</th>
     {hours.entrada.map((entrada, index) => (
       <th className="rotate-90 w-2 h-36" key={index}>
-      <div className="flex justify-center"> {/* Add justify-center class */}
+      <div className="flex justify-center"> 
         <div>{entrada}</div>
         <div>-</div>
         <div>{hours.salida[index]}</div>
