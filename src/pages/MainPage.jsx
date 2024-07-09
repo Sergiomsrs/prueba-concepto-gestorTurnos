@@ -3,6 +3,7 @@ import { Daily } from "../Daily"
 import { Landing } from "./Landing"
 import { Navbar } from "../utilComponents/Navbar"
 import { FormUser } from "./FormUser"
+import { HorizontalBar } from "../gridComponents/HorizontalBar "
 
 export const MainPage = () => {
   return (
@@ -16,7 +17,7 @@ export const MainPage = () => {
 
         <main className="">
           <Routes>
-            <Route path="/" element={<Daily />} />
+            <Route path="/" element={<HorizontalBar />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/adduser" element={<FormUser />} />
           </Routes>

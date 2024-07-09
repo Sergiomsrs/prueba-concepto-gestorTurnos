@@ -41,6 +41,9 @@ export const entrada = [
 ]
 
 
+export const horizontalRow = ["nombre", "seccion", [0,0,0], "total"]
+
+
 export const employess = [
     {
         nombre: 'Empleado1',
