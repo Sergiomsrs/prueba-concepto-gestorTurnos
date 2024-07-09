@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { JobHourApp } from "./JobHourApp";
-import { arayToHour } from "./utils/function";
+import { arayToHour, calcularTotal } from "./utils/function";
 import { employess } from "./utils/data";
 import { Resumen } from "./gridComponents/Resumen";
 import { DatePicker } from "./utilComponents/DatePicker";
@@ -20,7 +20,7 @@ export const Daily = () => {
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
     newData[dayIndex].employees[employeeIndex].horas[hourIndex] = value;
-    newData[dayIndex].employees[employeeIndex].total = arayToHour(newData[dayIndex].employees[employeeIndex].horas);
+    newData[dayIndex].employees[employeeIndex].total = calcularTotal( newData[dayIndex].employees[employeeIndex].horas);
     setData(newData);
   };
 

@@ -12,6 +12,9 @@ export const Navbar = () => {
             <Link to="/" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
               Create
             </Link>
+            <Link to="/employeeweek" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
+              WeekByEmployee
+            </Link>
             <Link to="/adduser" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
               AddUser
             </Link>

@@ -23,6 +23,15 @@ export const generateData = () => {
     }));
 };
 
+export const calcularTotal = (h) => {
+    //const totalInMinutes = newHours.reduce((acc, val) => acc + val, 0) * 15;
+    const totalInMinutes = h.filter(item => item !== 0).length * 15;
+    const hoursTotal = Math.floor(totalInMinutes / 60);
+    const minutesTotal = totalInMinutes % 60;
+    const totalFormatted = `${String(hoursTotal).padStart(2, "0")}:${String(minutesTotal).padStart(2, "0")}`;
+    return totalFormatted;
+  };
+
 
 
 // Hacer horarios entrada y salida

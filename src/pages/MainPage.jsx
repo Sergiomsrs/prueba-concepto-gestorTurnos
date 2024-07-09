@@ -3,6 +3,7 @@ import { Daily } from "../Daily"
 import { Landing } from "./Landing"
 import { Navbar } from "../utilComponents/Navbar"
 import { FormUser } from "./FormUser"
+import { EmployeeWeek } from "./EmployeeWeek"
 
 export const MainPage = () => {
   return (
@@ -17,6 +18,7 @@ export const MainPage = () => {
         <main className="">
           <Routes>
             <Route path="/" element={<Daily />} />
+            <Route path="/employeeweek" element={<EmployeeWeek />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/adduser" element={<FormUser />} />
           </Routes>
