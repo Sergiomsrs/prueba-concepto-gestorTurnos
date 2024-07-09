@@ -3,7 +3,7 @@ import { AppContext } from "../context/AppContext";
 import { entrada } from "../utils/data";
 
 export const HorizontalBar = ({ username, hours, onHourChange, seccion }) => {
-  const { data } = useContext(AppContext);
+  const { data, setData } = useContext(AppContext);
   const [total, setTotal] = useState("00:00");
   const [startSelection, setStartSelection] = useState(null);
   const [isSelecting, setIsSelecting] = useState(false);
