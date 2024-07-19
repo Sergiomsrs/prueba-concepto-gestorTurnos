@@ -2,12 +2,16 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { entrada } from "../utils/data";
 
-export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales }) => {
+export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales, phours }) => {
   
   const [startSelection, setStartSelection] = useState(null);
   const [isSelecting, setIsSelecting] = useState(false);
+  console.log(phours);
+
+
 
   
+
 
 
 
@@ -43,14 +47,15 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales 
       <td className="text-base font-semibold text-gray-800">{username}</td>
       {hours.map((value, index) => (
         <td
-          className="border-none"
+          className={phours[index] !== 0 ? "bg-green-500" : "bg-red-500"}
           key={index}
           onMouseDown={() => handleMouseDown(index)}
           onMouseEnter={() => handleMouseEnter(index)}
           onMouseUp={handleMouseUp}
         >
           <input
-            className=" outline-none border-none box-border-none"
+            className="bg-gray-950"
+            //className={phours[index] !== 0 ? "bg-green-500" : "bg-red-500"}
             type="checkbox"
             checked={value !== 0}
             onChange={(event) => handleClick(index, event.target.checked)}

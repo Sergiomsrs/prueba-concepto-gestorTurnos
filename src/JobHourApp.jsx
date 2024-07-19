@@ -6,9 +6,12 @@ import { DistributionBar } from "./gridComponents/DistributionBar";
 
 
 
-export const JobHourApp = ({ employees, onHourChange, day }) => {
+export const JobHourApp = ({ employees, onHourChange, day, dayIndex, eh }) => {
   
   const {selectedOption } = useContext(AppContext);
+  //console.log(employees.horas);
+
+
 
 
   
@@ -25,8 +28,10 @@ export const JobHourApp = ({ employees, onHourChange, day }) => {
             <HorizontalBar
               seccion={employee.seccion}
               day={day}
+              dayIndex={dayIndex}
               username={employee.nombre}
               totales= {employee.total}
+              phours= {eh[employeeIndex].horas}
               hours={employee.horas}
               onHourChange={(hourIndex, value) =>
                 onHourChange(employeeIndex, hourIndex, value)

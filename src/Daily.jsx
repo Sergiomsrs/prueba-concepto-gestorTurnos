@@ -26,7 +26,7 @@ export const Daily = () => {
 
   const handlePrint = () => {
     console.log(
-      JSON.stringify(data[6])
+      JSON.stringify(data, null, 2)
     );
     console.log(date.start)
 
@@ -34,6 +34,16 @@ export const Daily = () => {
   const handlReset = () => {
     setData(generateData());
   };
+
+  const obtenerPreviousDay = (dayIndex) => {
+    if (dayIndex === 0) {
+      return data[data.length - 7];
+    } else {
+      return data[dayIndex - 1];
+    }
+  }
+
+
 
 
   return (
@@ -46,20 +56,21 @@ export const Daily = () => {
 
       <div className="border rounded-lg shadow-md overflow-x-auto p-4">
 
-        {data.map((day, index) => (
-          console.log(index),
+        {data.map((day, dayIndex) => (
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
-            <DayGrid dayIndex={index}>
+            <DayGrid>
 
 
               <HeadRow />
 
               <JobHourApp
                 day={day}
+                dayIndex={dayIndex}
+                eh = {obtenerPreviousDay(dayIndex).employees}
                 employees={day.employees}
                 onHourChange={(employeeIndex, hourIndex, value) =>
-                  handleHourChange(index, employeeIndex, hourIndex, value)
+                  handleHourChange(dayIndex, employeeIndex, hourIndex, value)
                 }
               />
 
