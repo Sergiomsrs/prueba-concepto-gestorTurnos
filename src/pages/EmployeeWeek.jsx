@@ -1,54 +1,52 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { AppContext } from "../context/AppContext";
+import { EmployeePicker } from "../utilComponents/EmployeePicker";
+import { findMinMaxOfBlocks, getStringBlock, splitIntoBlocks } from "../utils/blockHours";
 
 export const EmployeeWeek = () => {
   const { data } = useContext(AppContext);
-  const empleado = "Empleado1";
+  const [selectedEmployee, setSelectedEmployee] = useState("Empleado1");
 
-  // Función para encontrar el valor más alto y más bajo en un array de horas
-  function encontrarMinMaxHoras(horas) {
-    // Filtrar las horas válidas (distintas de "00:00")
-    let horasValidas = horas.filter(hora => hora !== 0).map(hora => {
-      // Convertir cada hora a minutos para facilitar la comparación
-      let [horas, minutos] = hora.split(':');
-      return parseInt(horas) * 60 + parseInt(minutos);
-    });
+  // Selección de empleado
+  const handleEmployeeChange = (employee) => {
+    setSelectedEmployee(employee);
+  };
 
-    // Encontrar el mínimo y el máximo en minutos
-    let minutoMinimo = Math.min(...horasValidas);
-    let minutoMaximo = Math.max(...horasValidas);
-    minutoMaximo += 15;
 
-    // Convertir minutos nuevamente a formato "hh:mm"
-    let horaMinima = `${Math.floor(minutoMinimo / 60).toString().padStart(2, '0')}:${(minutoMinimo % 60).toString().padStart(2, '0')}`;
-    let horaMaxima = `${Math.floor(minutoMaximo / 60).toString().padStart(2, '0')}:${(minutoMaximo % 60).toString().padStart(2, '0')}`;
-
-    return {
-      minimo: horaMinima,
-      maximo: horaMaxima
-    };
-  }
-
-  // Filtrar y mapear los datos para obtener solo las horas de Empleado1
-  const empleado1Data = data.map(day => ({
+  // Obtener array de horas del empleado seleccionado
+  const empleadoData = data.map(day => ({
     id: day.id,
     day: day.day,
-    horas: day.employees.find(emp => emp.nombre === empleado).horas
+    horas: day.employees.find(emp => emp.nombre === selectedEmployee)?.horas || []
   }));
 
-  return (
-    <div>
-      {empleado1Data.map((day, index) => {
-        const { horas } = day;
-        const { minimo, maximo } = encontrarMinMaxHoras(horas);
 
-        return (
-          <div key={index}>
-            <h1>{`${day.day} de ${minimo} a ${maximo}` }</h1>
-           
-          </div>
-        );
-      })}
-    </div>
+  return (
+    <section className="p-7">
+      <EmployeePicker value={selectedEmployee} onChange={handleEmployeeChange} />
+
+      <span className="inline-flex items-center rounded-md bg-gray-800 px-2 py-1 text-sm font-bold text-white ring-1 ring-inset ring-gray-500/10 mb-4">
+        {`Semana del ${data[0].id} al ${data[data.length - 1].id}`}
+      </span>
+
+
+      <div className="border rounded-lg shadow-md overflow-x-auto p-4">
+        {empleadoData.map((day, index) => {
+          const { horas } = day;
+          const blocks = splitIntoBlocks(horas);
+          const minMaxValues = findMinMaxOfBlocks(blocks);
+
+          return (
+            <li key={index} className="flex justify-between gap-x-6">
+              <div className="flex min-w-0 gap-x-4">
+                <div className="min-w-0 flex-auto">
+                  <p className="text-sm font-semibold leading-6 text-gray-900">{getStringBlock(day, minMaxValues)}</p>
+                </div>
+              </div>
+            </li>
+          );
+        })}
+      </div>
+    </section>
   );
 };

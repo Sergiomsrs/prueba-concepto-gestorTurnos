@@ -2,13 +2,6 @@ import { days, employess } from "./data";
 
 
 
-export const arayToHour = (array) => {
-    const countGreaterThanZero = array.filter(value => value > 0).length;
-    const totalInMinutes = countGreaterThanZero * 15;
-    const hours = Math.floor(totalInMinutes / 60);
-    const minutes = totalInMinutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-}
 
 export const generateData = () => {
     return days.map(day => ({
@@ -23,8 +16,8 @@ export const generateData = () => {
     }));
 };
 
+
 export const calcularTotal = (h) => {
-    //const totalInMinutes = newHours.reduce((acc, val) => acc + val, 0) * 15;
     const totalInMinutes = h.filter(item => item !== 0).length * 15;
     const hoursTotal = Math.floor(totalInMinutes / 60);
     const minutesTotal = totalInMinutes % 60;
@@ -33,28 +26,14 @@ export const calcularTotal = (h) => {
   };
 
 
+export const addMinutes = (time, minsToAdd)=> {
+  const [hours, minutes] = time.split(':').map(Number);
+  const date = new Date(0, 0, 0, hours, minutes);
+  date.setMinutes(date.getMinutes() + minsToAdd);
+  const newHours = date.getHours().toString().padStart(2, '0');
+  const newMinutes = date.getMinutes().toString().padStart(2, '0');
+  return `${newHours}:${newMinutes}`;
+}
 
-// Hacer horarios entrada y salida
-//const miercoles = datamock.find(item => item.day === 'Miercoles');
-
-// Luego encontramos el objeto del empleado2 dentro del array employees del miércoles
-//const empleado2 = miercoles.employees.find(empleado => empleado.nombre === 'Empleado2');
-
-// Finalmente, extraemos el array de horas del empleado2
-//const horasEmpleado2Miercoles = empleado2.horas;
-
-// Ahora tienes el array de horas del empleado2 del miércoles en la variable horasEmpleado2Miercoles
-//console.log(horasEmpleado2Miercoles);  // Est
-/*
-const convertirHoraADate = (horasArray) => {
-    return horasArray.map(hora => {
-        const [horaStr, minutosStr] = hora.split(":");
-        const dateObj = new Date();
-        dateObj.setHours(parseInt(horaStr, 10));
-        dateObj.setMinutes(parseInt(minutosStr, 10));
-        return dateObj;
-    });
-};
-*/
 
 

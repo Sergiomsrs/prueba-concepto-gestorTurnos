@@ -1,8 +1,6 @@
-import React, { useContext } from "react";
-import { AppContext } from "../context/AppContext";
 
-export const DatePicker = () => {
-  const { date, setDate } = useContext(AppContext);
+
+export const DatePicker = ({ setDate, date }) => {
 
   const handleChange = (event, type) => {
     const newValue = event.target.value;
@@ -57,6 +55,18 @@ export const DatePicker = () => {
           value={date.end} // Asignamos el valor del estado
           onChange={(event) => handleChange(event, "end")} // Pasamos el tipo de fecha
         />
+      </div>
+
+      <div className="ml-4">
+        <button
+          className="bg-sky-600
+    border dark:border-sky-900 border-sky-900
+    rounded-full
+    inline-flex justify-center items-center gap-x-2
+    py-1 px-2 md:py-2 md:px-4
+    text-xs md:text-base text-white
+    transition
+    hover:scale-110 hover:bg-white/10">Refrescar</button>
       </div>
     </div>
   );

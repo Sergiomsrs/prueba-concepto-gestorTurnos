@@ -2,21 +2,15 @@
 import { useContext } from "react";
 import { HorizontalBar } from "./gridComponents/HorizontalBar ";
 import { AppContext } from "./context/AppContext";
-import { arayToHour } from "./utils/function";
 import { DistributionBar } from "./gridComponents/DistributionBar";
 
 
 
-export const JobHourApp = ({ employees, onHourChange, day, dayIndex }) => {
+export const JobHourApp = ({ employees, onHourChange, day }) => {
   
-  const {data, selectedOption } = useContext(AppContext);
+  const {selectedOption } = useContext(AppContext);
 
-  const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
-    const newData = [...data];
-    newData[dayIndex].employees[employeeIndex].horas[hourIndex] = value;
-    newData[dayIndex].employees[employeeIndex].total = arayToHour(newData[dayIndex].employees[employeeIndex].horas);
-    setData(newData);
-  };
+
   
 
   // Filtrar empleados por la sección seleccionada
@@ -30,6 +24,7 @@ export const JobHourApp = ({ employees, onHourChange, day, dayIndex }) => {
           {(selectedOption === "todos" || selectedOption === employee.seccion) && (
             <HorizontalBar
               seccion={employee.seccion}
+              day={day}
               username={employee.nombre}
               totales= {employee.total}
               hours={employee.horas}

@@ -7,6 +7,8 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales 
   const [startSelection, setStartSelection] = useState(null);
   const [isSelecting, setIsSelecting] = useState(false);
 
+  
+
 
 
   const handleMouseDown = (index) => {
