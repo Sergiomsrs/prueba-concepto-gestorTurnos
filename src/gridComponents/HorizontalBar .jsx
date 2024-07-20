@@ -18,10 +18,10 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
     if (isSelecting && startSelection !== null) {
       const selectionStart = Math.min(startSelection, index);
       const selectionEnd = Math.max(startSelection, index);
-      const isStartSelected = hours[startSelection] !== 0;
+      const isStartSelected = hours[startSelection][0] !== 0;
 
       for (let i = selectionStart; i <= selectionEnd; i++) {
-        onHourChange(i, isStartSelected ? entrada[i] : 0);
+        onHourChange(i, isStartSelected ? entrada[i][0] : 0);
       }
     }
   };
@@ -49,15 +49,15 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
         <td
           //className={phours[index+48] !== 0 && phours[index+48] !== undefined ? "bg-green-500" : "bg-red-500"}
           key={index}
-          onMouseDown={() => handleMouseDown(index)}
-          onMouseEnter={() => handleMouseEnter(index)}
+          onMouseDown={() => handleMouseDown(index[0])}
+          onMouseEnter={() => handleMouseEnter(index[0])}
           onMouseUp={handleMouseUp}
         >
           <input
             className="bg-gray-950"
             //className={phours[index] !== 0 ? "bg-green-500" : "bg-red-500"}
             type="checkbox"
-            checked={value !== 0}
+            checked={value[0] !== 0}
             onChange={(event) => handleClick(index, event.target.checked)}
             //disabled={phours[index + 48] !== 0 && phours[index + 48] !== undefined ? true : false}
             disabled={isInputDisabled(index)}

@@ -10,7 +10,7 @@ export const generateData = () => {
         employees: employess.map(emp => ({
             nombre: emp.nombre,
             seccion: emp.seccion,
-            horas: Array(62).fill(0),
+            horas: Array(62).fill([0,true]),
             total: '00:00'
         }))
     }));

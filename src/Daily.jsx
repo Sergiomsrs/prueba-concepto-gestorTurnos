@@ -20,7 +20,7 @@ export const Daily = () => {
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
     newData[dayIndex].employees[employeeIndex].horas[hourIndex] = value;
-    newData[dayIndex].employees[employeeIndex].total = calcularTotal(newData[dayIndex].employees[employeeIndex].horas);
+    newData[dayIndex].employees[employeeIndex].total = calcularTotal(newData[dayIndex].employees[employeeIndex].horas[0]);
     setData(newData);
   };
 
