@@ -5,10 +5,12 @@ export const Resumen = ({ employess }) => {
 
   const {data} = useContext(AppContext);
 
+  const dataWeek = data.slice(1, data.length+1);
+
   const totalHoursByEmployee = {};
 
 // Iterar sobre los datos
-data.forEach(day => {
+dataWeek.forEach(day => {
     day.employees.forEach(employee => {
         const employeeName = employee.nombre;
 
