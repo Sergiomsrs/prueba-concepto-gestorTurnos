@@ -1,18 +1,12 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { entrada } from "../utils/data";
+import { getHighestNonZeroIndex } from "../utils/function";
 
 export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales, phours }) => {
-  
+
   const [startSelection, setStartSelection] = useState(null);
   const [isSelecting, setIsSelecting] = useState(false);
-  console.log(phours);
-
-
-
-  
-
-
 
 
   const handleMouseDown = (index) => {
@@ -41,13 +35,19 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
     onHourChange(index, isChecked ? entrada[index] : 0);
   };
 
+
+  const isInputDisabled = (index) => {
+    const highestIndex = getHighestNonZeroIndex(phours);
+    return highestIndex >= (index + 48) ? true : false;
+  }
+
   return (
     <>
       <td className="text-base font-semibold text-gray-800">{seccion}</td>
       <td className="text-base font-semibold text-gray-800">{username}</td>
       {hours.map((value, index) => (
         <td
-          className={phours[index] !== 0 ? "bg-green-500" : "bg-red-500"}
+          //className={phours[index+48] !== 0 && phours[index+48] !== undefined ? "bg-green-500" : "bg-red-500"}
           key={index}
           onMouseDown={() => handleMouseDown(index)}
           onMouseEnter={() => handleMouseEnter(index)}
@@ -59,6 +59,9 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
             type="checkbox"
             checked={value !== 0}
             onChange={(event) => handleClick(index, event.target.checked)}
+            //disabled={phours[index + 48] !== 0 && phours[index + 48] !== undefined ? true : false}
+            disabled={isInputDisabled(index)}
+
           />
         </td>
       ))}

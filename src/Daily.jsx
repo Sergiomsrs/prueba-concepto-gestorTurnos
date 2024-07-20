@@ -26,7 +26,7 @@ export const Daily = () => {
 
   const handlePrint = () => {
     console.log(
-      JSON.stringify(data, null, 2)
+      JSON.stringify(data)
     );
     console.log(date.start)
 
@@ -56,7 +56,7 @@ export const Daily = () => {
 
       <div className="border rounded-lg shadow-md overflow-x-auto p-4">
 
-        {data.map((day, dayIndex) => (
+        {data.map((day, dayIndex) => ( dayIndex !== 0 &&
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
             <DayGrid>

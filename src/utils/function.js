@@ -35,5 +35,14 @@ export const addMinutes = (time, minsToAdd)=> {
   return `${newHours}:${newMinutes}`;
 }
 
+export const getHighestNonZeroIndex = (array) => {
+  for (let i = array.length - 1; i >= 0; i--) {
+    if (array[i] !== 0) {
+      return i;
+    }
+  }
+  return -1; // Devuelve -1 si todos los elementos son 0
+};
+
 
 
