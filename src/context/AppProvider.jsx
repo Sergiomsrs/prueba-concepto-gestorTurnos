@@ -6,8 +6,8 @@ import { datamock, datamock2 } from "../utils/mock";
 
 export const AppProvider = ({children})=> {
 
-    const [data, setData] = useState(generateData());
-    //const [data, setData] = useState(datamock2);
+    //const [data, setData] = useState(generateData());
+    const [data, setData] = useState(datamock2);
     const [selectedOption, setSelectedOption] = useState('todos');
     const [date, setDate] = useState({ start: '', end: '' });
 
