@@ -51,7 +51,7 @@ export const Daily = () => {
     <section className="p-7">
 
 
-      <DatePicker date={date} setDate={setDate} />
+      <DatePicker date={date} setDate={setDate} setData={setData} />
       <SectionPicker />
 
 

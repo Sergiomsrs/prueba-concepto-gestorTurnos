@@ -1,6 +1,7 @@
+import { generateDatawithDate, generateDays } from "../utils/function";
 
 
-export const DatePicker = ({ setDate, date }) => {
+export const DatePicker = ({ setDate, date, setData }) => {
 
   const handleChange = (event, type) => {
     const newValue = event.target.value;
@@ -10,6 +11,12 @@ export const DatePicker = ({ setDate, date }) => {
       setDate({ ...date, end: newValue });
     }
   };
+
+
+  const handleClick = () => {
+    const dates = generateDays(date.start)
+    setData(generateDatawithDate(dates))
+  }
 
   return (
     <div className="flex items-center mb-4">
@@ -59,6 +66,7 @@ export const DatePicker = ({ setDate, date }) => {
 
       <div className="ml-4">
         <button
+        onClick={handleClick}
           className="bg-sky-600
     border dark:border-sky-900 border-sky-900
     rounded-full
