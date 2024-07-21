@@ -13,7 +13,7 @@ export const Navbar = () => {
               Create
             </Link>
             <Link to="/employeeweek" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
-              WeekByEmployee
+              WbyE
             </Link>
             <Link to="/adduser" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
               AddUser

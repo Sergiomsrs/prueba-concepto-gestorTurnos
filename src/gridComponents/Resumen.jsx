@@ -30,14 +30,14 @@ dataWeek.forEach(day => {
 
   return (
     <div className="overflow-x-auto mt-4">
-  <table className="table table-hover">
+  <table className="table table-hover table-fixed text-center">
  
     <thead>
       <tr>
         <th>Empleado</th>
         <th>Jornada</th>
-        <th>Total de Horas</th>
-        <th>Variacion</th>
+        <th>Total</th>
+        <th>Var</th>
       </tr>
     </thead>
     <tbody>

@@ -8,6 +8,7 @@ import { HeadRow } from "./gridComponents/HeadRow";
 import { DayGrid } from "./gridComponents/DayGrid";
 import { AppContext } from "./context/AppContext";
 import { SectionPicker } from "./utilComponents/SectionPicker";
+import { RDias } from "./gridComponents/RDias";
 
 
 
@@ -48,7 +49,7 @@ export const Daily = () => {
 
   return (
     <section className="p-7">
-      
+
 
       <DatePicker date={date} setDate={setDate} />
       <SectionPicker />
@@ -57,7 +58,7 @@ export const Daily = () => {
 
       <div className="border rounded-lg shadow-md overflow-x-auto p-4">
 
-        {data.map((day, dayIndex) => ( dayIndex !== 0 &&
+        {data.map((day, dayIndex) => (dayIndex !== 0 &&
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
             <DayGrid>
@@ -68,7 +69,7 @@ export const Daily = () => {
               <JobHourApp
                 day={day}
                 dayIndex={dayIndex}
-                eh = {obtenerPreviousDay(dayIndex).employees}
+                eh={obtenerPreviousDay(dayIndex).employees}
                 employees={day.employees}
                 onHourChange={(employeeIndex, hourIndex, value) =>
                   handleHourChange(dayIndex, employeeIndex, hourIndex, value)
@@ -80,8 +81,15 @@ export const Daily = () => {
         ))}
 
 
+        <div className="w-full flex  flex-row">
 
-        <Resumen employess={employess} />
+          <div className="flex-1">
+            <Resumen employess={employess} />
+          </div>
+          <div className="flex-1">
+            <RDias />
+          </div>
+        </div>
 
         <div className="flex gap-4">
 

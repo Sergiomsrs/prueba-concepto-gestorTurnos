@@ -55,10 +55,10 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
         >
           <input
               type="checkbox"
-              className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl cursor-pointer ${
-                value !== 0 ? 'bg-indigo-500' : 'bg-neutral-200'
+              className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl ${
+                isInputDisabled(index) ? 'cursor-not-allowed opacity-30' : 'cursor-pointer'
               } ${
-                isInputDisabled(index) ? 'cursor-not-allowed opacity-30' : ''
+                value !== 0 ? 'bg-indigo-500' : 'bg-neutral-200'
               } relative`}
               checked={value !== 0}
               onChange={(event) => handleClick(index, event.target.checked)}

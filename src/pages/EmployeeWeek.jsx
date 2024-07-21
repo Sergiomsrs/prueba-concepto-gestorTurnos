@@ -5,6 +5,7 @@ import { findMinMaxOfBlocks, getStringBlock, splitIntoBlocks } from "../utils/bl
 
 export const EmployeeWeek = () => {
   const { data } = useContext(AppContext);
+  
   const [selectedEmployee, setSelectedEmployee] = useState("Empleado1");
 
   // Selección de empleado
@@ -14,7 +15,7 @@ export const EmployeeWeek = () => {
 
 
   // Obtener array de horas del empleado seleccionado
-  const empleadoData = data.map(day => ({
+  const empleadoData = data.slice(1, data.length+1).map(day => ({
     id: day.id,
     day: day.day,
     horas: day.employees.find(emp => emp.nombre === selectedEmployee)?.horas || []
@@ -26,7 +27,7 @@ export const EmployeeWeek = () => {
       <EmployeePicker value={selectedEmployee} onChange={handleEmployeeChange} />
 
       <span className="inline-flex items-center rounded-md bg-gray-800 px-2 py-1 text-sm font-bold text-white ring-1 ring-inset ring-gray-500/10 mb-4">
-        {`Semana del ${data[0].id} al ${data[data.length - 1].id}`}
+        {`Semana del ${empleadoData[0].id} al ${empleadoData[empleadoData.length - 1].id}`}
       </span>
 
 
