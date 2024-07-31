@@ -45,23 +45,8 @@ export const entrada = [
 export const employess = [
     {
         nombre: 'Empleado1',
-        apellidos: 'Geller',
-        email: 'Ross@correo.com',
-        fechaAlta: '2021-01-01',
-        fechaBaja: '2021-02-01',
-        seccion: 'Sec1',
-        jornada: [
-            {
-                fechaInicio: '2021-01-01',
-                fechaFin: '2021-01-31',
-                horas: 18
-            }
-        ]
-    },
-    {
-        nombre: 'Empleado5',
-        apellidos: 'Geller',
-        email: 'Ross@correo.com',
+        apellidos: 'Empleado1',
+        email: 'Empleado1@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
         seccion: 'Sec1',
@@ -75,8 +60,23 @@ export const employess = [
     },
     {
         nombre: 'Empleado2',
-        apellidos: 'Geller',
-        email: 'Marta@correo.com',
+        apellidos: 'Empleado2',
+        email: 'Empleado2@correo.com',
+        fechaAlta: '2021-01-01',
+        fechaBaja: '2021-02-01',
+        seccion: 'Sec1',
+        jornada: [
+            {
+                fechaInicio: '2021-01-01',
+                fechaFin: '2021-01-31',
+                horas: 18
+            }
+        ]
+    },
+    {
+        nombre: 'Empleado3',
+        apellidos: 'Empleado3',
+        email: 'Empleado3@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
         seccion: 'Sec2',
@@ -89,9 +89,69 @@ export const employess = [
         ]
     },
     {
-        nombre: 'Empleado3',
-        apellidos: 'Bing',
-        email: 'Chandler@correo.com',
+        nombre: 'Empleado4',
+        apellidos: 'Empleado4',
+        email: 'Empleado4@correo.com',
+        fechaAlta: '2021-01-01',
+        fechaBaja: '2021-02-01',
+        seccion: 'Sec3',
+        jornada: [
+            {
+                fechaInicio: '2021-01-01',
+                fechaFin: '2021-01-31',
+                horas: 36
+            }
+        ]
+    },
+    {
+        nombre: 'Empleado5',
+        apellidos: 'Empleado5',
+        email: 'Empleado5@correo.com',
+        fechaAlta: '2021-01-01',
+        fechaBaja: '2021-02-01',
+        seccion: 'Sec3',
+        jornada: [
+            {
+                fechaInicio: '2021-01-01',
+                fechaFin: '2021-01-31',
+                horas: 36
+            }
+        ]
+    },
+    {
+        nombre: 'Empleado6',
+        apellidos: 'Empleado6',
+        email: 'Empleado6@correo.com',
+        fechaAlta: '2021-01-01',
+        fechaBaja: '2021-02-01',
+        seccion: 'Sec3',
+        jornada: [
+            {
+                fechaInicio: '2021-01-01',
+                fechaFin: '2021-01-31',
+                horas: 36
+            }
+        ]
+    },
+    {
+        nombre: 'Empleado7',
+        apellidos: 'Empleado7',
+        email: 'Empleado7@correo.com',
+        fechaAlta: '2021-01-01',
+        fechaBaja: '2021-02-01',
+        seccion: 'Sec3',
+        jornada: [
+            {
+                fechaInicio: '2021-01-01',
+                fechaFin: '2021-01-31',
+                horas: 36
+            }
+        ]
+    },
+    {
+        nombre: 'Empleado8',
+        apellidos: 'Empleado8',
+        email: 'Empleado8@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
         seccion: 'Sec3',

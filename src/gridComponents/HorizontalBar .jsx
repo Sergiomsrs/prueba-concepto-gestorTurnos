@@ -47,7 +47,7 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
       <td className="text-base font-semibold text-gray-800">{username}</td>
       {hours.map((value, index) => (
         <td
-          //className={phours[index+48] !== 0 && phours[index+48] !== undefined ? "bg-green-500" : "bg-red-500"}
+          className="md:w-24 w-12  text-center align-bottom"
           key={index}
           onMouseDown={() => handleMouseDown(index)}
           onMouseEnter={() => handleMouseEnter(index)}
@@ -56,18 +56,18 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
           <input
               type="checkbox"
               className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl ${
-                isInputDisabled(index) ? 'cursor-not-allowed opacity-30' : 'cursor-pointer'
+                isInputDisabled(index) || value === "NP" ? 'cursor-not-allowed opacity-30' : 'cursor-pointer'
               } ${
-                value !== 0 ? 'bg-indigo-500' : 'bg-neutral-200'
+                value !== 0 && value !== "NP" ?  'bg-indigo-500' : 'bg-neutral-200'
               } relative`}
-              checked={value !== 0}
+              checked={value !== 0 && value !== "NP"}
               onChange={(event) => handleClick(index, event.target.checked)}
-              disabled={isInputDisabled(index)}
+              disabled={isInputDisabled(index) || value === "NP"}
             />
    
         </td>
       ))}
-      <td>{totales}</td>
+      <td className="w-12 pl-2 align-bottom">{totales}</td>
     </>
   );
 };
