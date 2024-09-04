@@ -26,11 +26,33 @@ export const Daily = () => {
   };
 
   const handlePrint = () => {
+
+    //console.log(JSON.stringify(data[1].employees[0].horas))
+    console.log(JSON.stringify(data))
+    /*
     console.log(
-      JSON.stringify(data)
+      JSON.stringify(data[0].employees[0].horas)
     );
     console.log(date.start)
 
+    
+
+    fetch('http://localhost:8081/api/ws/add', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        employeeId: 1,
+        hours: data[0].employees[0].horas,
+        date :"2024-09-24"
+      
+      }),
+  })
+  .then(response => response.json())
+  .then(data => console.log('Success:', data))
+  .catch((error) => console.error('Error:', error));
+*/
   };
   const handlReset = () => {
     setData(generateData());

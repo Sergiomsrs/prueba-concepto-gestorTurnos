@@ -21,7 +21,7 @@ dataWeek.forEach(day => {
 
         // Sumar las horas del empleado en este día
         //const totalHoursForDay = employee.horas.reduce((acc, curr) => acc + (curr / 4), 0);
-        const totalHoursForDay = employee.horas.filter(item => item !== 0).length * 0.25;
+        const totalHoursForDay = employee.horas.filter(item => item !== "Null").length * 0.25;
         totalHoursByEmployee[employeeName] += totalHoursForDay;
     });
 });

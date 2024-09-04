@@ -7,7 +7,7 @@ export const splitIntoBlocks = (arr) => {
   let currentBlock = [];
 
   arr.forEach(item => {
-    if (item !== 0) {
+    if (item !== "Null") {
       currentBlock.push(item);
     } else if (currentBlock.length > 0) {
       blocks.push(currentBlock);

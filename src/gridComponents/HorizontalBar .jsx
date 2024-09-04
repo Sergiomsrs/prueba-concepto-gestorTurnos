@@ -18,10 +18,10 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
     if (isSelecting && startSelection !== null) {
       const selectionStart = Math.min(startSelection, index);
       const selectionEnd = Math.max(startSelection, index);
-      const isStartSelected = hours[startSelection] !== 0;
+      const isStartSelected = hours[startSelection] !== "Null";
 
       for (let i = selectionStart; i <= selectionEnd; i++) {
-        onHourChange(i, isStartSelected ? entrada[i] : 0);
+        onHourChange(i, isStartSelected ? entrada[i] : "Null");
       }
     }
   };
@@ -32,7 +32,7 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
   };
 
   const handleClick = (index, isChecked) => {
-    onHourChange(index, isChecked ? entrada[index] : 0);
+    onHourChange(index, isChecked ? entrada[index] : "Null");
   };
 
 
@@ -58,9 +58,9 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
               className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl ${
                 isInputDisabled(index) || value === "NP" ? 'cursor-not-allowed opacity-30' : 'cursor-pointer'
               } ${
-                value !== 0 && value !== "NP" ?  'bg-indigo-500' : 'bg-neutral-200'
+                value !== "Null" && value !== "NP" ?  'bg-indigo-500' : 'bg-neutral-200'
               } relative`}
-              checked={value !== 0 && value !== "NP"}
+              checked={value !== "Null" && value !== "NP"}
               onChange={(event) => handleClick(index, event.target.checked)}
               disabled={isInputDisabled(index) || value === "NP"}
             />

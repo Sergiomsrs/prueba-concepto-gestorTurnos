@@ -10,7 +10,7 @@ export const generateData = () => {
     employees: employess.map(emp => ({
       nombre: emp.nombre,
       seccion: emp.seccion,
-      horas: Array(62).fill(0),
+      horas: Array(62).fill("Null"),
       total: '00:00'
     }))
   }));
@@ -25,7 +25,7 @@ export const generateDatawithDate = (dates) => {
       employees: employess.map(emp => ({
         nombre: emp.nombre,
         seccion: emp.seccion,
-        horas: Array(62).fill(0),
+        horas: Array(62).fill("Null"),
         total: '00:00'
       }))
     }));
@@ -53,7 +53,7 @@ export const generateDays = (date) => {
 }
 
 export const calcularTotal = (h) => {
-  const totalInMinutes = h.filter(item => item !== 0).length * 15;
+  const totalInMinutes = h.filter(item => item !== "Null").length * 15;
   const hoursTotal = Math.floor(totalInMinutes / 60);
   const minutesTotal = totalInMinutes % 60;
   const totalFormatted = `${String(hoursTotal).padStart(2, "0")}:${String(minutesTotal).padStart(2, "0")}`;
@@ -72,7 +72,7 @@ export const addMinutes = (time, minsToAdd) => {
 
 export const getHighestNonZeroIndex = (array) => {
   for (let i = array.length - 1; i >= 0; i--) {
-    if (array[i] !== 0) {
+    if (array[i] !== "Null") {
       return i;
     }
   }
