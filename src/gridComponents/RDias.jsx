@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
 
 export const RDias = () => {
@@ -6,6 +6,8 @@ export const RDias = () => {
   const dataWeek = data.slice(1, data.length);
 
   const empleados = dataWeek[0].employees;
+
+
 
 
 
