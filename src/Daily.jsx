@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { JobHourApp } from "./JobHourApp";
-import { calcularTotal, generateData } from "./utils/function";
+import { calcularTotal, generateData, generateDatawithDate } from "./utils/function";
 import { employess } from "./utils/data";
 import { Resumen } from "./gridComponents/Resumen";
 import { DatePicker } from "./utilComponents/DatePicker";
@@ -29,9 +29,9 @@ export const Daily = () => {
 
     //console.log(JSON.stringify(data[1].employees[0].horas))
     console.log(JSON.stringify(data))
-    /*
+    
     console.log(
-      JSON.stringify(data[0].employees[0].horas)
+      JSON.stringify(data[1].employees[0].horas)
     );
     console.log(date.start)
 
@@ -43,8 +43,8 @@ export const Daily = () => {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({ 
-        employeeId: 1,
-        hours: data[0].employees[0].horas,
+        employeeId: data[0].employees[0].id,
+        hours: data[1].employees[0].horas,
         date :"2024-09-24"
       
       }),
@@ -52,10 +52,10 @@ export const Daily = () => {
   .then(response => response.json())
   .then(data => console.log('Success:', data))
   .catch((error) => console.error('Error:', error));
-*/
+
   };
   const handlReset = () => {
-    setData(generateData());
+    setData(generateDatawithDate(date.start));
   };
 
   const obtenerPreviousDay = (dayIndex) => {
