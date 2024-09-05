@@ -45,11 +45,11 @@ dataWeek.forEach(day => {
         <tr key={name}>
           <td >{name}</td>
           <td>
-            {employess.find((emp) => emp.name === name)?.wwh[0].workShift}
+          {data[0]?.employees.find((emp) => emp.name === name)?.wwh}
           </td>
           <td>{total}</td>
           <td>
-            {employess.find((emp) => emp.name === name)?.wwh[0].workShift - total}
+            {data[0]?.employees.find((emp) => emp.name === name)?.wwh - total}
           </td>
         </tr>
       ))}
