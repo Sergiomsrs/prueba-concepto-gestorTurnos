@@ -8,9 +8,9 @@ export const generateData = () => {
     id: day.id,
     day: day.dia,
     employees: employess.map(emp => ({
-      nombre: emp.nombre,
-      seccion: emp.seccion,
-      horas: Array(62).fill("Null"),
+      name: emp.name,
+      teamWork: emp.teamWork,
+      workShift: Array(62).fill("Null"),
       total: '00:00'
     }))
   }));
@@ -23,9 +23,9 @@ export const generateDatawithDate = (dates) => {
       id: day,
       day: new Intl.DateTimeFormat('es-ES', { weekday: 'long' }).format(new Date(day)),
       employees: employess.map(emp => ({
-        nombre: emp.nombre,
-        seccion: emp.seccion,
-        horas: Array(62).fill("Null"),
+        name: emp.name,
+        teamWork: emp.teamWork,
+        workShift: Array(62).fill("Null"),
         total: '00:00'
       }))
     }));

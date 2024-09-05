@@ -3,7 +3,7 @@ import { AppContext } from "../context/AppContext";
 import { entrada } from "../utils/data";
 import { getHighestNonZeroIndex } from "../utils/function";
 
-export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales, phours }) => {
+export const HorizontalBar = ({ username, hours, onHourChange, teamWork, totales, phours }) => {
 
   const [startSelection, setStartSelection] = useState(null);
   const [isSelecting, setIsSelecting] = useState(false);
@@ -43,7 +43,7 @@ export const HorizontalBar = ({ username, hours, onHourChange, seccion, totales,
 
   return (
     <>
-      <td className="text-base font-semibold text-gray-800">{seccion}</td>
+      <td className="text-base font-semibold text-gray-800">{teamWork}</td>
       <td className="text-base font-semibold text-gray-800">{username}</td>
       {hours.map((value, index) => (
         <td

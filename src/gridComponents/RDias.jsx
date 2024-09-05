@@ -21,13 +21,13 @@ export const RDias = () => {
         </thead>
         <tbody>
           {empleados.map((empleado) => (
-            <tr key={empleado.nombre}
+            <tr key={empleado.name}
             >
               {dataWeek.map((item) => (
                 <td key={item.id}
                 
                 >
-                  {item.employees.find((e) => e.nombre === empleado.nombre)?.total}
+                  {item.employees.find((e) => e.name === empleado.name)?.total}
                 </td>
               ))}
             </tr>

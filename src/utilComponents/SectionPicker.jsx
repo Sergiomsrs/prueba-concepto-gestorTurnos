@@ -13,8 +13,8 @@ export const SectionPicker = () => {
       };
       
       const uniqueSections = employess.reduce((acc, emp) => {
-        if (!acc.includes(emp.seccion)) {
-          acc.push(emp.seccion);
+        if (!acc.includes(emp.teamWork)) {
+          acc.push(emp.teamWork);
         }
         return acc;
       }, []);

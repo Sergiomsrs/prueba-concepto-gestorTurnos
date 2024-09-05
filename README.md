@@ -13,7 +13,7 @@ Este proyecto es una prueba de concepto de una aplicación para gestionar turnos
 - **Notificaciones**: Alertas para recordar a los empleados sus turnos próximos.
 - **Roles y Permisos**: Diferentes niveles de acceso según el rol (administrador, empleado).
 - **Historial de Cambios**: Registro de modificaciones en los turnos.
-- **Reportes**: Generación de reportes de horas trabajadas por empleado.
+- **Reportes**: Generación de reportes de workShift trabajadas por empleado.
 
 ## Tecnologías Propuestas
 

@@ -14,11 +14,11 @@ export const EmployeeWeek = () => {
   };
 
 
-  // Obtener array de horas del empleado seleccionado
+  // Obtener array de workShift del empleado seleccionado
   const empleadoData = data.slice(1, data.length+1).map(day => ({
     id: day.id,
     day: day.day,
-    horas: day.employees.find(emp => emp.nombre === selectedEmployee)?.horas || []
+    workShift: day.employees.find(emp => emp.name === selectedEmployee)?.workShift || []
   }));
 
 
@@ -33,8 +33,8 @@ export const EmployeeWeek = () => {
 
       <div className="border rounded-lg shadow-md overflow-x-auto p-4">
         {empleadoData.map((day, index) => {
-          const { horas } = day;
-          const blocks = splitIntoBlocks(horas);
+          const { workShift } = day;
+          const blocks = splitIntoBlocks(workShift);
           const minMaxValues = findMinMaxOfBlocks(blocks);
 
           return (

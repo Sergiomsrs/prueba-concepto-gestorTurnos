@@ -1,11 +1,11 @@
 export const DistributionBar = ({ day }) => {
-    let sumaPorIndice = new Array(day.employees[0].horas.length).fill(0);
+    let sumaPorIndice = new Array(day.employees[0].workShift.length).fill(0);
 
     // Iterar sobre los empleados y sumar los valores por índice
     day.employees.forEach(empleado => {
-        empleado.horas.forEach((horas, indice) => {
+        empleado.workShift.forEach((workShift, indice) => {
           // Sumar 1 si el valor es distinto de 0
-          if (horas !== 0) {
+          if (workShift !== 0) {
             sumaPorIndice[indice] += 1;
           }
         });

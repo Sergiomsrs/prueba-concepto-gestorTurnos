@@ -20,18 +20,18 @@ export const Daily = () => {
 
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
-    newData[dayIndex].employees[employeeIndex].horas[hourIndex] = value;
-    newData[dayIndex].employees[employeeIndex].total = calcularTotal(newData[dayIndex].employees[employeeIndex].horas);
+    newData[dayIndex].employees[employeeIndex].workShift[hourIndex] = value;
+    newData[dayIndex].employees[employeeIndex].total = calcularTotal(newData[dayIndex].employees[employeeIndex].workShift);
     setData(newData);
   };
 
   const handlePrint = () => {
 
-    //console.log(JSON.stringify(data[1].employees[0].horas))
+    //console.log(JSON.stringify(data[1].employees[0].workShift))
     console.log(JSON.stringify(data))
     
     console.log(
-      JSON.stringify(data[1].employees[0].horas)
+      JSON.stringify(data[1].employees[0].workShift)
     );
     console.log(date.start)
 
@@ -44,8 +44,8 @@ export const Daily = () => {
       },
       body: JSON.stringify({ 
         employeeId: data[0].employees[0].id,
-        hours: data[1].employees[0].horas,
-        date :"2024-09-24"
+        hours: data[1].employees[3].workShift,
+        date :"2024-09-25"
       
       }),
   })

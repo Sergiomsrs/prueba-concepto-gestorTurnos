@@ -7,8 +7,8 @@ export const HeadRow = () => {
   return (
     <thead className="w-auto h-auto mb-3">
     <tr>
-    <th className="md:w-20 md:text-base sm:w-16 sm:text-sm text-start align-bottom ">Seccion</th>
-    <th className="md:w-24 w-12  align-bottom">Nombre</th>
+    <th className="md:w-20 md:text-base sm:w-16 sm:text-sm text-start align-bottom ">Team</th>
+    <th className="md:w-24 w-12  align-bottom">Name</th>
     {hours.entrada.map((entrada, index) => (
       <th className="
       w-2 h-36 text-xs
