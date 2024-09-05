@@ -5,7 +5,7 @@ export const DistributionBar = ({ day }) => {
     day.employees.forEach(empleado => {
         empleado.horas.forEach((horas, indice) => {
           // Sumar 1 si el valor es distinto de 0
-          if (horas !== "Null") {
+          if (horas !== "Null" && horas !== "NP") {
             sumaPorIndice[indice] += 1;
           }
         });
