@@ -9,7 +9,7 @@ import { DistributionBar } from "./gridComponents/DistributionBar";
 export const JobHourApp = ({ employees, onHourChange, day, dayIndex, eh }) => {
   
   const {selectedOption } = useContext(AppContext);
-  //console.log(employees.workShift);
+  console.log(employees[0].teamWork);
 
 
 

@@ -16,7 +16,7 @@ import { RDias } from "./gridComponents/RDias";
 export const Daily = () => {
 
 
-  const { data, setData, date, setDate } = useContext(AppContext);
+  const { data, setData, date, setDate, setSelectedOption } = useContext(AppContext);
 
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
@@ -55,8 +55,29 @@ export const Daily = () => {
 
   };
   const handlReset = () => {
-    setData(generateDatawithDate(date.start));
-  };
+    fetch('http://localhost:8081/day/2024-09-24/2024-09-27', {
+        method: 'GET',
+        // 'Content-Type': 'application/json' // No necesario en GET
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Asegúrate de que `setData` está definido en tu contexto
+        setData(data);
+        console.log(JSON.stringify(data));
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+    setSelectedOption('todos');
+
+    
+};
 
   const obtenerPreviousDay = (dayIndex) => {
     if (dayIndex === 0) {

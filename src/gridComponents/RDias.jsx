@@ -1,15 +1,16 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { AppContext } from "../context/AppContext";
 
 export const RDias = () => {
   const { data } = useContext(AppContext);
-  const dataWeek = data.slice(1, data.length);
+  const dataWeek = useMemo(() => data.slice(1, data.length), [data]);
 
-  const empleados = dataWeek[0].employees;
-
-
-
-
+  const empleados = useMemo(() => {
+    if (dataWeek.length > 0) {
+      return dataWeek[0].employees;
+    }
+    return [];
+  }, [dataWeek]);
 
   return (
     <div className="overflow-x-auto mt-4">
@@ -23,12 +24,9 @@ export const RDias = () => {
         </thead>
         <tbody>
           {empleados.map((empleado) => (
-            <tr key={empleado.name}
-            >
+            <tr key={empleado.name}>
               {dataWeek.map((item) => (
-                <td key={item.id}
-                
-                >
+                <td key={item.id}>
                   {item.employees.find((e) => e.name === empleado.name)?.total}
                 </td>
               ))}

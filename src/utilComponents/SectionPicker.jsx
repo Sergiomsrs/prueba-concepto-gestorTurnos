@@ -6,16 +6,18 @@ import { employess } from "../utils/data";
 
 export const SectionPicker = () => {
 
-    const {selectedOption, setSelectedOption} = useContext(AppContext);
+    const {data, selectedOption, setSelectedOption} = useContext(AppContext);
 
     const handleChange = (event) => {
         setSelectedOption(event.target.value);
       };
       
-      const uniqueSections = employess.reduce((acc, emp) => {
-        if (!acc.includes(emp.teamWork)) {
-          acc.push(emp.teamWork);
-        }
+      const uniqueSections = data.reduce((acc, day) => {
+        day.employees.forEach(emp => {
+          if (!acc.includes(emp.teamWork)) {
+            acc.push(emp.teamWork);
+          }
+        });
         return acc;
       }, []);
 
