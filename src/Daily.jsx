@@ -55,7 +55,7 @@ export const Daily = () => {
 
   };
   const handlReset = () => {
-    fetch('http://localhost:8081/day/2024-09-24/2024-09-27', {
+    fetch(`http://localhost:8081/day/${date.start}/${date.end}`, {
         method: 'GET',
         // 'Content-Type': 'application/json' // No necesario en GET
     })
