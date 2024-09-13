@@ -18,10 +18,10 @@ export const DistributionBar = ({ day }) => {
             <td className="text-base font-semibold text-gray-800"></td>
             {sumaPorIndice.map((valor, indice) => (
                 <td
-                    className="w-2 p-0 m-0 truncate"
+                    className="w-2 p-0 m-0 truncate text-center"
                     key={indice} // Usamos `indice` como clave única
                 >
-                    <span>{valor}</span>
+                    <span className="font-sans font-semibold">{valor}</span>
                 </td>
             ))}
             <td></td>

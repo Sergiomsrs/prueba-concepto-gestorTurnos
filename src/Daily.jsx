@@ -99,7 +99,7 @@ export const Daily = () => {
 
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
           <div key={day.id}>
-            <div className="text-center text-lg font-bold mt-4">
+            <div className="text-center text-lg font-bold mt-4 mb-4">
             <div className="text-center text-lg font-bold mt-4">
   <div className="inline-block bg-gray-800 text-white text-sm font-semibold px-2 py-1 rounded-full">
     {formatDate(day)}
