@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { entrada } from "../utils/data";
-import { getHighestNonZeroIndex } from "../utils/function";
+import { formatTime, getHighestNonZeroIndex } from "../utils/function";
 
-export const HorizontalBar = ({ username, hours, onHourChange, teamWork, totales, phours }) => {
+export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDurationes, phours }) => {
 
   const [startSelection, setStartSelection] = useState(null);
   const [isSelecting, setIsSelecting] = useState(false);
@@ -67,7 +67,7 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, totales
    
         </td>
       ))}
-      <td className="w-12 pl-2 align-bottom">{totales}</td>
+      <td className="w-12 pl-2 align-bottom">{formatTime(shiftDurationes)}</td>
     </>
   );
 };

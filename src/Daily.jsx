@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { JobHourApp } from "./JobHourApp";
-import { calcularTotal, generateData, generateDatawithDate } from "./utils/function";
+import { calcularshiftDuration, generateData, generateDatawithDate, obtenerPreviousDay } from "./utils/function";
 import { employess } from "./utils/data";
 import { Resumen } from "./gridComponents/Resumen";
 import { DatePicker } from "./utilComponents/DatePicker";
@@ -21,71 +21,58 @@ export const Daily = () => {
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
     newData[dayIndex].employees[employeeIndex].workShift[hourIndex] = value;
-    newData[dayIndex].employees[employeeIndex].total = calcularTotal(newData[dayIndex].employees[employeeIndex].workShift);
+    newData[dayIndex].employees[employeeIndex].shiftDuration = calcularshiftDuration(newData[dayIndex].employees[employeeIndex].workShift);
     setData(newData);
   };
 
-  const handlePrint = () => {
+  const generateShiftData = (dt) => {
+    const shiftData = [];
 
-    //console.log(JSON.stringify(data[1].employees[0].workShift))
-    console.log(JSON.stringify(data))
-    
-    console.log(
-      JSON.stringify(data[1].employees[0].workShift)
-    );
-    console.log(date.start)
-
-    
-
-    fetch('http://localhost:8081/api/ws/add', {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ 
-        employeeId: data[0].employees[0].id,
-        hours: data[1].employees[3].workShift,
-        date :"2024-09-25"
-      
-      }),
-  })
-  .then(response => response.json())
-  .then(data => console.log('Success:', data))
-  .catch((error) => console.error('Error:', error));
-
-  };
-  const handlReset = () => {
-    fetch(`http://localhost:8081/day/${date.start}/${date.end}`, {
-        method: 'GET',
-        // 'Content-Type': 'application/json' // No necesario en GET
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Asegúrate de que `setData` está definido en tu contexto
-        setData(data);
-        console.log(JSON.stringify(data));
-    })
-    .catch((error) => {
-        console.error('Error:', error);
+    dt.slice(1).forEach(day => {
+      day.employees.forEach(employee => {
+        shiftData.push({
+          employeeId: employee.id,
+          hours: employee.workShift,
+          date: day.id,
+          shiftDuration: employee.shiftDuration
+        });
+      });
     });
 
-    setSelectedOption('todos');
+    return shiftData;
+  };
 
-    
-};
 
-  const obtenerPreviousDay = (dayIndex) => {
-    if (dayIndex === 0) {
-      return data[data.length - 7];
-    } else {
-      return data[dayIndex - 1];
-    }
-  }
+  const handlePrint = () => {
+
+    const shiftData = generateShiftData(data);
+
+
+    fetch('http://localhost:8081/api/ws/saveAll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(shiftData
+
+      ),
+    })
+      .then(response => response.json())
+      .then(data => console.log('Success:', data))
+      .catch((error) => console.error('Error:', error));
+
+
+  };
+
+
+
+  const handlReset = () => {
+
+    console.log(data[2].employees[0].workShift.id);
+
+  };
+
+
 
 
 
@@ -94,15 +81,15 @@ export const Daily = () => {
     <section className="p-7">
 
 
-      <DatePicker date={date} setDate={setDate} setData={setData} />
+      <DatePicker  data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
 
 
 
-       <div className="border rounded-lg shadow-md overflow-x-auto p-4 ">  {/*incorporar zoom en este div*/}
+      <div className="border rounded-lg shadow-md overflow-x-auto p-4 ">  {/*incorporar zoom en este div*/}
 
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
-          <div  key={day.id}>
+          <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
             <DayGrid>
 
@@ -112,7 +99,7 @@ export const Daily = () => {
               <JobHourApp
                 day={day}
                 dayIndex={dayIndex}
-                eh={obtenerPreviousDay(dayIndex).employees}
+                eh={obtenerPreviousDay(dayIndex, data).employees}
                 employees={day.employees}
                 onHourChange={(employeeIndex, hourIndex, value) =>
                   handleHourChange(dayIndex, employeeIndex, hourIndex, value)

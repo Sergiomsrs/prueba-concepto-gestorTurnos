@@ -9,12 +9,8 @@ import { DistributionBar } from "./gridComponents/DistributionBar";
 export const JobHourApp = ({ employees, onHourChange, day, dayIndex, eh }) => {
   
   const {selectedOption } = useContext(AppContext);
-  console.log(employees[0].teamWork);
-
-
-
-
   
+
 
   // Filtrar empleados por la sección seleccionada
   const filteredEmployees = employees.filter(employee => employee.teamWork === selectedOption);
@@ -30,7 +26,7 @@ export const JobHourApp = ({ employees, onHourChange, day, dayIndex, eh }) => {
               day={day}
               dayIndex={dayIndex}
               username={employee.name}
-              totales= {employee.total}
+              shiftDurationes= {employee.shiftDuration}
               phours= {eh[employeeIndex].workShift}
               hours={employee.workShift}
               onHourChange={(hourIndex, value) =>

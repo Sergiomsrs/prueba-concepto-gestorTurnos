@@ -11,7 +11,7 @@ export const generateData = () => {
       name: emp.name,
       teamWork: emp.teamWork,
       workShift: Array(62).fill("Null"),
-      total: '00:00'
+      shiftDuration: '00:00'
     }))
   }));
 };
@@ -26,7 +26,7 @@ export const generateDatawithDate = (dates) => {
         name: emp.name,
         teamWork: emp.teamWork,
         workShift: Array(62).fill("Null"),
-        total: '00:00'
+        shiftDuration: '00:00'
       }))
     }));
 };
@@ -52,12 +52,20 @@ export const generateDays = (date) => {
 
 }
 
-export const calcularTotal = (h) => {
-  const totalInMinutes = h.filter(item => item !== "Null").length * 15;
-  const hoursTotal = Math.floor(totalInMinutes / 60);
-  const minutesTotal = totalInMinutes % 60;
-  const totalFormatted = `${String(hoursTotal).padStart(2, "0")}:${String(minutesTotal).padStart(2, "0")}`;
-  return totalFormatted;
+export const obtenerPreviousDay = (dayIndex, data) => {
+  if (dayIndex === 0) {
+    return data[data.length - 7];
+  } else {
+    return data[dayIndex - 1];
+  }
+}
+
+export const calcularshiftDuration = (h) => {
+  const shiftDurationInMinutes = h.filter(item => item !== "Null").length * 15;
+  const hoursshiftDuration = Math.floor(shiftDurationInMinutes / 60);
+  const minutesshiftDuration = shiftDurationInMinutes % 60;
+  const shiftDurationFormatted = `${String(hoursshiftDuration).padStart(2, "0")}:${String(minutesshiftDuration).padStart(2, "0")}`;
+  return shiftDurationFormatted;
 };
 
 
@@ -78,6 +86,15 @@ export const getHighestNonZeroIndex = (array) => {
   }
   return -1; // Devuelve -1 si todos los elementos son 0
 };
+
+
+export function formatTime(timeString) {
+  // Verifica si el tiempo está en el formato HH:mm:ss
+  if (timeString.length === 8) {
+      return timeString.substring(0, 5); // Remueve los segundos
+  }
+  return timeString; // Retorna tal cual si ya está en el formato correcto
+}
 
 
 

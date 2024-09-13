@@ -70,7 +70,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
             "Null",
             "Null"
         ],
-         "total": "00:00"
+         "shiftDuration": "05:00"
     },
     {
         "id": 3,
@@ -141,7 +141,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
             "Null",
             "Null"
         ],
-         "total": "00:00"
+         "shiftDuration": "05:00"
     },
     {
         "id": 5,
@@ -212,7 +212,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
             "Null",
             "Null"
         ],
-         "total": "00:00"
+         "shiftDuration": "05:00"
     },
     {
         "id": 6,
@@ -283,7 +283,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
             "Null",
             "Null"
         ],
-         "total": "00:00"
+         "shiftDuration": "00:70"
     },
     {
         "id": 7,
@@ -354,7 +354,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
             "Null",
             "Null"
         ],
-         "total": "00:00"
+         "shiftDuration": "00:00"
     }]},
     {"id":"31-12-2023","day":"Domingo","employees":[
         {
@@ -426,7 +426,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
                 "Null",
                 "Null"
             ],
-             "total": "00:00"
+             "shiftDuration": "00:00"
         },
         {
             "id": 3,
@@ -497,7 +497,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
                 "Null",
                 "Null"
             ],
-             "total": "00:00"
+             "shiftDuration": "00:00"
         },
         {
             "id": 5,
@@ -568,7 +568,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
                 "Null",
                 "Null"
             ],
-             "total": "00:00"
+             "shiftDuration": "00:00"
         },
         {
             "id": 6,
@@ -639,7 +639,7 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
                 "Null",
                 "Null"
             ],
-             "total": "00:00"
+             "shiftDuration": "00:00"
         },
         {
             "id": 7,
@@ -710,5 +710,5 @@ export const apiMockData = [{"id":"30-12-2023","day":"Domingo","employees":[
                 "Null",
                 "Null"
             ],
-             "total": "00:00"
+             "shiftDuration": "05:00"
         }]}]

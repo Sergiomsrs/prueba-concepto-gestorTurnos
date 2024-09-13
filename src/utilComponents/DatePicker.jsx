@@ -1,7 +1,7 @@
 import { generateDatawithDate, generateDays } from "../utils/function";
 
 
-export const DatePicker = ({ setDate, date, setData }) => {
+export const DatePicker = ({data, setDate, date, setData, setSelectedOption }) => {
 
   const handleChange = (event, type) => {
     const newValue = event.target.value;
@@ -14,10 +14,41 @@ export const DatePicker = ({ setDate, date, setData }) => {
 
 
   const handleClick = () => {
+
+    fetch(`http://localhost:8081/day/${date.start}/${date.end}`, {
+      method: 'GET',
+      // 'Content-Type': 'application/json' // No necesario en GET
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+  })
+  .then(data => {
+      // Asegúrate de que `setData` está definido en tu contexto
+      setData(data);
+      console.log(JSON.stringify(data));
+  })
+  .catch((error) => {
+      console.error('Error:', error);
+  });
+
+  setSelectedOption('todos');
+
+  }
+
+
+
+
+
+
+/*
+  const handleClick = () => {
     const dates = generateDays(date.start)
     setData(generateDatawithDate(dates))
   }
-
+*/
   
 
   return (

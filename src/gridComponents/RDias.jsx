@@ -1,10 +1,19 @@
 import { useContext, useEffect, useState, useMemo } from "react";
 import { AppContext } from "../context/AppContext";
+import { formatTime } from "../utils/function";
 
 export const RDias = () => {
   const { data } = useContext(AppContext);
+  
+  // Verifica los cambios en `data`
+  useEffect(() => {
+    console.log('Data changed:', data);
+  }, [data]);
+
+  // Memoriza dataWeek solo si `data` cambia
   const dataWeek = useMemo(() => data.slice(1, data.length), [data]);
 
+  // Memoriza empleados solo si `dataWeek` cambia
   const empleados = useMemo(() => {
     if (dataWeek.length > 0) {
       return dataWeek[0].employees;
@@ -27,7 +36,7 @@ export const RDias = () => {
             <tr key={empleado.name}>
               {dataWeek.map((item) => (
                 <td key={item.id}>
-                  {item.employees.find((e) => e.name === empleado.name)?.total}
+                  {formatTime(item.employees.find((e) => e.name === empleado.name)?.shiftDuration)}
                 </td>
               ))}
             </tr>
@@ -37,4 +46,5 @@ export const RDias = () => {
     </div>
   );
 };
+
 

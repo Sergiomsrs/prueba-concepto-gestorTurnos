@@ -4,26 +4,26 @@ import { AppContext } from "../context/AppContext";
 
 export const Resumen = () => {
   const { data } = useContext(AppContext);
-  const [totalHoursByEmployee, setTotalHoursByEmployee] = useState({});
+  const [shiftDurationHoursByEmployee, setshiftDurationHoursByEmployee] = useState({});
 
   useEffect(() => {
     const dataWeek = data.slice(1, data.length + 1);
-    const totalHours = {};
+    const shiftDurationHours = {};
 
     dataWeek.forEach(day => {
       day.employees.forEach(employee => {
         const employeeName = employee.name;
 
-        if (!totalHours[employeeName]) {
-          totalHours[employeeName] = 0;
+        if (!shiftDurationHours[employeeName]) {
+          shiftDurationHours[employeeName] = 0;
         }
 
-        const totalHoursForDay = employee.workShift.filter(item => item !== "Null").length * 0.25;
-        totalHours[employeeName] += totalHoursForDay;
+        const shiftDurationHoursForDay = employee.workShift.filter(item => item !== "Null").length * 0.25;
+        shiftDurationHours[employeeName] += shiftDurationHoursForDay;
       });
     });
 
-    setTotalHoursByEmployee(totalHours);
+    setshiftDurationHoursByEmployee(shiftDurationHours);
   }, [data]);
 
   return (
@@ -38,12 +38,12 @@ export const Resumen = () => {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(totalHoursByEmployee).map(([name, total]) => (
+          {Object.entries(shiftDurationHoursByEmployee).map(([name, shiftDuration]) => (
             <tr key={name}>
               <td>{name}</td>
               <td>{data[0]?.employees.find((emp) => emp.name === name)?.wwh}</td>
-              <td>{total}</td>
-              <td>{data[0]?.employees.find((emp) => emp.name === name)?.wwh - total}</td>
+              <td>{shiftDuration}</td>
+              <td>{(data[0]?.employees.find((emp) => emp.name === name)?.wwh ?? 0) - shiftDuration}</td>
             </tr>
           ))}
         </tbody>
