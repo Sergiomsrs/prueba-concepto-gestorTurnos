@@ -11,10 +11,6 @@ export const JobHourApp = ({ employees, onHourChange, day, dayIndex, eh }) => {
   const {selectedOption } = useContext(AppContext);
   
 
-
-  // Filtrar empleados por la sección seleccionada
-  const filteredEmployees = employees.filter(employee => employee.teamWork === selectedOption);
-
   return (
     <>
       <tbody>

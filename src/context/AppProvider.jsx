@@ -1,7 +1,5 @@
 import { useState } from "react"
 import { AppContext } from "./AppContext"
-import { generateData, generateDatawithDate } from "../utils/function"
-import { datamock, datamock2, datamock3, datamock4 } from "../utils/mock";
 import { apiMockData } from "../utils/apiMock";
 
 

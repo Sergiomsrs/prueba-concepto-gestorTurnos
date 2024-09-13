@@ -3,7 +3,7 @@ import { AppContext } from "../context/AppContext";
 import { formatTime } from "../utils/function";
 
 export const RDias = () => {
-  const { data } = useContext(AppContext);
+  const { data, selectedOption } = useContext(AppContext);
   
   // Verifica los cambios en `data`
   useEffect(() => {
@@ -32,16 +32,22 @@ export const RDias = () => {
           </tr>
         </thead>
         <tbody>
-          {empleados.map((empleado) => (
-            <tr key={empleado.name}>
-              {dataWeek.map((item) => (
-                <td key={item.id}>
-                  {formatTime(item.employees.find((e) => e.name === empleado.name)?.shiftDuration)}
-                </td>
-              ))}
-            </tr>
+  {empleados.map((empleado) => {
+    const employeeData = dataWeek[0]?.employees.find((e) => e.name === empleado.name);
+    if (selectedOption === "todos" || selectedOption === employeeData?.teamWork) {
+      return (
+        <tr key={empleado.name}>
+          {dataWeek.map((item) => (
+            <td key={item.id}>
+              {formatTime(item.employees.find((e) => e.name === empleado.name)?.shiftDuration)}
+            </td>
           ))}
-        </tbody>
+        </tr>
+      );
+    }
+    return null;
+  })}
+</tbody>
       </table>
     </div>
   );

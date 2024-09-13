@@ -25,3 +25,6 @@ const handleMouseDown = (index) => {
   const handleMouseUp = () => {
     setIsSelecting(false);
   };
+
+  
+  

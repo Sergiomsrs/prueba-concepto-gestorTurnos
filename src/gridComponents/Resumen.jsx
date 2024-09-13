@@ -3,7 +3,7 @@ import { AppContext } from "../context/AppContext";
 
 
 export const Resumen = () => {
-  const { data } = useContext(AppContext);
+  const { data, selectedOption } = useContext(AppContext);
   const [shiftDurationHoursByEmployee, setshiftDurationHoursByEmployee] = useState({});
 
   useEffect(() => {
@@ -38,15 +38,21 @@ export const Resumen = () => {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(shiftDurationHoursByEmployee).map(([name, shiftDuration]) => (
-            <tr key={name}>
-              <td>{name}</td>
-              <td>{data[0]?.employees.find((emp) => emp.name === name)?.wwh}</td>
-              <td>{shiftDuration}</td>
-              <td>{(data[0]?.employees.find((emp) => emp.name === name)?.wwh ?? 0) - shiftDuration}</td>
-            </tr>
-          ))}
-        </tbody>
+  {Object.entries(shiftDurationHoursByEmployee).map(([name, shiftDuration]) => {
+    const employee = data[0]?.employees.find((emp) => emp.name === name);
+    if (selectedOption === "todos" || selectedOption === employee?.teamWork) {
+      return (
+        <tr key={name}>
+          <td>{name}</td>
+          <td>{employee?.wwh}</td>
+          <td>{shiftDuration}</td>
+          <td>{(employee?.wwh ?? 0) - shiftDuration}</td>
+        </tr>
+      );
+    }
+    return null;
+  })}
+</tbody>
       </table>
     </div>
   );
