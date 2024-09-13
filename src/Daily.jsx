@@ -73,6 +73,15 @@ export const Daily = () => {
   };
 
 
+  const formatDate = (day) => {
+    const date = new Date(day.id);
+    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
+    return `${day.day.charAt(0).toUpperCase() + day.day.slice(1)} ${formattedDate}`;
+  };
+  
+
+
 
 
 
@@ -90,7 +99,15 @@ export const Daily = () => {
 
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
           <div key={day.id}>
-            <div className="text-center text-lg font-bold mt-4 "><div className="badge text-white bg-gray-800 w-36">{day.day}</div></div>
+            <div className="text-center text-lg font-bold mt-4">
+            <div className="text-center text-lg font-bold mt-4">
+  <div className="inline-block bg-gray-800 text-white text-sm font-semibold px-2 py-1 rounded-full">
+    {formatDate(day)}
+  </div>
+</div>
+
+
+</div>
             <DayGrid>
 
 

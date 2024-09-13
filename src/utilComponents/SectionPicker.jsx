@@ -23,18 +23,19 @@ export const SectionPicker = () => {
 
 
   return (
-    <div>
-      <label htmlFor="options">Select an option:</label>
-      <select id="options"  value={selectedOption} onChange={handleChange}>
-      <option value="todos">Todos</option>
-        {   
-          uniqueSections.map(emp =>(
-            <option key={emp} value={emp}>{emp}</option>
-
-          ))
-        }
-        
-      </select>
-    </div>
+    <div className="mb-4">
+  <label htmlFor="options" className="block text-gray-700 mb-2">Equipo de trabajo:</label>
+  <select 
+    id="options" 
+    value={selectedOption} 
+    onChange={handleChange} 
+    className="block w-auto p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+  >
+    <option value="todos">Todos</option>
+    {uniqueSections.map(emp => (
+      <option key={emp} value={emp}>{emp}</option>
+    ))}
+  </select>
+</div>
 )
 }
