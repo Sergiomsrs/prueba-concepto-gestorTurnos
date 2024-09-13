@@ -27,7 +27,7 @@ export const RDias = () => {
         <thead>
           <tr>
             {dataWeek.map((item) => (
-              <th key={item.id}>{item.day}</th>
+              <th key={item.id}>{item.day.charAt(0).toUpperCase() + item.day.slice(1) }</th>
             ))}
           </tr>
         </thead>
