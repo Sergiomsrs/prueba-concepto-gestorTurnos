@@ -1,13 +1,15 @@
+
+
 export const DistributionBar = ({ day }) => {
     let sumaPorIndice = new Array(day.employees[0].workShift.length).fill(0);
 
     // Iterar sobre los empleados y sumar los valores por índice
     day.employees.forEach(empleado => {
         empleado.workShift.forEach((workShift, indice) => {
-          // Sumar 1 si el valor es distinto de 0
-          if (workShift !== "Null") {
-            sumaPorIndice[indice] += 1;
-          }
+            // Sumar 1 si el valor es distinto de "Null"
+            if (workShift !== "Null") {
+                sumaPorIndice[indice] += 1;
+            }
         });
     });
 
@@ -19,7 +21,7 @@ export const DistributionBar = ({ day }) => {
             {sumaPorIndice.map((valor, indice) => (
                 <td
                     className="w-2 p-0 m-0 truncate text-center"
-                    key={indice} // Usamos `indice` como clave única
+                    key={indice}
                 >
                     <span className="font-sans font-semibold">{valor}</span>
                 </td>

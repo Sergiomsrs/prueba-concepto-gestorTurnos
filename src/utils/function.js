@@ -1,8 +1,6 @@
 import { days, employess } from "./data";
 
 
-
-
 export const generateData = () => {
   return days.map(day => ({
     id: day.id,
@@ -35,12 +33,9 @@ export const generateDatawithDate = (dates) => {
 export const generateDays = (date) => {
 
   const date2 = new Date(date);
-  
   const date2MinusOneDay = new Date(date2);
   date2MinusOneDay.setDate(date2.getDate() - 1);
-  
   const days = [date2MinusOneDay];
-
 
   for (let i = 0; i < 7; i++) {
     const newDate = new Date(date2);
@@ -48,8 +43,6 @@ export const generateDays = (date) => {
     days.push(newDate.toISOString().split('T')[0]);
   }
   return days;
-
-
 }
 
 export const obtenerPreviousDay = (dayIndex, data) => {
@@ -84,16 +77,16 @@ export const getHighestNonZeroIndex = (array) => {
       return i;
     }
   }
-  return -1; // Devuelve -1 si todos los elementos son 0
+  return -1; // Devuelve -1 si todos los elementos son Null
 };
 
-
+// Formatea de HH:mm:ss a HH:mm
 export function formatTime(timeString) {
-  // Verifica si el tiempo está en el formato HH:mm:ss
+ 
   if (timeString.length === 8) {
-      return timeString.substring(0, 5); // Remueve los segundos
+      return timeString.substring(0, 5); 
   }
-  return timeString; // Retorna tal cual si ya está en el formato correcto
+  return timeString; 
 }
 
 
@@ -111,7 +104,6 @@ export const generateShiftData = (dt) => {
       });
     });
   });
-
   return shiftData;
 };
 
@@ -121,6 +113,13 @@ export const formatDate = (day) => {
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
   return `${day.day.charAt(0).toUpperCase() + day.day.slice(1)} ${formattedDate}`;
+};
+
+export const formatToDate = (day) => {
+  const date = new Date(day.id);
+  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
+  return formattedDate;
 };
 
 

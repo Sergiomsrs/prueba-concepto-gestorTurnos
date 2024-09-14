@@ -1,5 +1,3 @@
-
-
 export const apiMockData = [
     {
         "id": "2024-09-01",

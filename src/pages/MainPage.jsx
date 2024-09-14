@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom"
-
 import { Landing } from "./Landing"
 import { Navbar } from "../utilComponents/Navbar"
 import { FormUser } from "./FormUser"

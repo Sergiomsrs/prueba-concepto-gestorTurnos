@@ -84,7 +84,7 @@ export const Daily = () => {
         ))}
         <div className="w-full flex  flex-row">
           <div className="flex-1">
-            <Resumen employess={employess} />
+            <Resumen employess={employess}/>
           </div>
           <div className="flex-1">
             <RDias />
