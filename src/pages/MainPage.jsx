@@ -1,9 +1,10 @@
 import { Route, Routes } from "react-router-dom"
-import { Daily } from "../Daily"
+
 import { Landing } from "./Landing"
 import { Navbar } from "../utilComponents/Navbar"
 import { FormUser } from "./FormUser"
 import { EmployeeWeek } from "./EmployeeWeek"
+import { Daily } from "../gridComponents/Daily"
 
 export const MainPage = () => {
   return (

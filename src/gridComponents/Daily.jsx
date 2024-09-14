@@ -1,14 +1,15 @@
 import { useContext } from "react";
+
+import { calcularshiftDuration, generateData, generateDatawithDate, obtenerPreviousDay } from "../utils/function";
+import { employess } from "../utils/data";
+import { Resumen } from "../gridComponents/Resumen";
+import { DatePicker } from "../utilComponents/DatePicker";
+import { HeadRow } from "../gridComponents/HeadRow";
+import { DayGrid } from "../gridComponents/DayGrid";
+import { AppContext } from "../context/AppContext";
+import { SectionPicker } from "../utilComponents/SectionPicker";
+import { RDias } from "../gridComponents/RDias";
 import { JobHourApp } from "./JobHourApp";
-import { calcularshiftDuration, generateData, generateDatawithDate, obtenerPreviousDay } from "./utils/function";
-import { employess } from "./utils/data";
-import { Resumen } from "./gridComponents/Resumen";
-import { DatePicker } from "./utilComponents/DatePicker";
-import { HeadRow } from "./gridComponents/HeadRow";
-import { DayGrid } from "./gridComponents/DayGrid";
-import { AppContext } from "./context/AppContext";
-import { SectionPicker } from "./utilComponents/SectionPicker";
-import { RDias } from "./gridComponents/RDias";
 
 
 

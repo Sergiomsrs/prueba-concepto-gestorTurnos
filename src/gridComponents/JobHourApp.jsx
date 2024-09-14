@@ -1,8 +1,8 @@
 
 import { useContext } from "react";
-import { HorizontalBar } from "./gridComponents/HorizontalBar ";
-import { AppContext } from "./context/AppContext";
-import { DistributionBar } from "./gridComponents/DistributionBar";
+import { HorizontalBar } from "./HorizontalBar ";
+import { AppContext } from "../context/AppContext";
+import { DistributionBar } from "./DistributionBar";
 
 
 
