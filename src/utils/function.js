@@ -98,3 +98,36 @@ export function formatTime(timeString) {
 
 
 
+export const generateShiftData = (dt) => {
+  const shiftData = [];
+
+  dt.slice(1).forEach(day => {
+    day.employees.forEach(employee => {
+      shiftData.push({
+        employeeId: employee.id,
+        hours: employee.workShift,
+        date: day.id,
+        shiftDuration: employee.shiftDuration
+      });
+    });
+  });
+
+  return shiftData;
+};
+
+
+export const formatDate = (day) => {
+  const date = new Date(day.id);
+  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
+  return `${day.day.charAt(0).toUpperCase() + day.day.slice(1)} ${formattedDate}`;
+};
+
+
+
+
+
+
+
+
+

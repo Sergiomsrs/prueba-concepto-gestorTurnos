@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { calcularshiftDuration, generateData, generateDatawithDate, obtenerPreviousDay } from "../utils/function";
+import { calcularshiftDuration, obtenerPreviousDay, generateShiftData, formatDate } from "../utils/function";
 import { employess } from "../utils/data";
 import { Resumen } from "../gridComponents/Resumen";
 import { DatePicker } from "../utilComponents/DatePicker";
@@ -12,10 +12,7 @@ import { RDias } from "../gridComponents/RDias";
 import { JobHourApp } from "./JobHourApp";
 
 
-
-
 export const Daily = () => {
-
 
   const { data, setData, date, setDate, setSelectedOption } = useContext(AppContext);
 
@@ -26,28 +23,9 @@ export const Daily = () => {
     setData(newData);
   };
 
-  const generateShiftData = (dt) => {
-    const shiftData = [];
-
-    dt.slice(1).forEach(day => {
-      day.employees.forEach(employee => {
-        shiftData.push({
-          employeeId: employee.id,
-          hours: employee.workShift,
-          date: day.id,
-          shiftDuration: employee.shiftDuration
-        });
-      });
-    });
-
-    return shiftData;
-  };
-
-
   const handlePrint = () => {
 
     const shiftData = generateShiftData(data);
-
 
     fetch('http://localhost:8081/api/ws/saveAll', {
       method: 'POST',
@@ -55,65 +33,43 @@ export const Daily = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(shiftData
-
       ),
     })
       .then(response => response.json())
       .then(data => console.log('Success:', data))
       .catch((error) => console.error('Error:', error));
-
-
   };
-
-
 
   const handlReset = () => {
-
-    console.log(data[2].employees[0].workShift.id);
-
+    setData(prevData =>
+      prevData.map(day => ({
+        ...day,
+        employees: day.employees.map(employee => ({
+          ...employee,
+          workShift: Array(62).fill("Null"),
+          shiftDuration: '00:00'
+        }))
+      }))
+    );
   };
-
-
-  const formatDate = (day) => {
-    const date = new Date(day.id);
-    const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
-    return `${day.day.charAt(0).toUpperCase() + day.day.slice(1)} ${formattedDate}`;
-  };
-  
-
-
-
-
 
 
   return (
     <section className="p-7">
-
-
-      <DatePicker  data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
+      <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
-
-
-
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 ">  {/*incorporar zoom en este div*/}
-
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 mb-4">
-            <div className="text-center text-lg font-bold mt-4">
-  <div className="inline-block bg-gray-800 text-white text-sm font-semibold px-2 py-1 rounded-full">
-    {formatDate(day)}
-  </div>
-</div>
-
-
-</div>
+              <div className="text-center text-lg font-bold mt-4">
+                <div className="inline-block bg-gray-800 text-white text-sm font-semibold px-2 py-1 rounded-full">
+                  {formatDate(day)}
+                </div>
+              </div>
+            </div>
             <DayGrid>
-
-
               <HeadRow />
-
               <JobHourApp
                 day={day}
                 dayIndex={dayIndex}
@@ -123,14 +79,10 @@ export const Daily = () => {
                   handleHourChange(dayIndex, employeeIndex, hourIndex, value)
                 }
               />
-
             </DayGrid>
           </div>
         ))}
-
-
         <div className="w-full flex  flex-row">
-
           <div className="flex-1">
             <Resumen employess={employess} />
           </div>
@@ -138,22 +90,11 @@ export const Daily = () => {
             <RDias />
           </div>
         </div>
-
         <div className="flex gap-4">
-
-
           <button onClick={handlePrint} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
-
-
           <button onClick={handlReset} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded min-w-32">Reset</button>
-
         </div>
-
       </div>
-
-
-
     </section>
-
   );
 };

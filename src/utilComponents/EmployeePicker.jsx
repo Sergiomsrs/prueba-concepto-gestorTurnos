@@ -6,14 +6,13 @@ export const EmployeePicker = ({ value, onChange }) => {
 
     const uniqueNames = new Set();
 
-    // Recolectar names únicos
     data.forEach((day) => {
         day.employees.forEach((employee) => {
             uniqueNames.add(employee.name);
         });
     });
 
-    // Manejar cambio de selección
+
     const handleSelectChange = (e) => {
         onChange(e.target.value);
     };
@@ -27,8 +26,8 @@ export const EmployeePicker = ({ value, onChange }) => {
                     <select
                         id="name"
                         name="name"
-                        value={value} // Asignar el valor seleccionado
-                        onChange={handleSelectChange} // Manejar el cambio de selección
+                        value={value}
+                        onChange={handleSelectChange}
                         className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                     >
                         {[...uniqueNames].map((name, index) => (

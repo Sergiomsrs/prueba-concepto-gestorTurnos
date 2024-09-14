@@ -7,7 +7,6 @@ export const RDias = () => {
   
   // Verifica los cambios en `data`
   useEffect(() => {
-    console.log('Data changed:', data);
   }, [data]);
 
   // Memoriza dataWeek solo si `data` cambia
