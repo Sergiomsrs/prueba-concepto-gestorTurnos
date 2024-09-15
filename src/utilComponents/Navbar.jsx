@@ -7,17 +7,17 @@ export const Navbar = () => {
       <div className="flex items-center justify-between h-16">
         <div className="flex items-center">
           <Link to="/landing" className="text-gray-300 text-lg hover:text-white px-3 py-2 font-medium">
-            Home
+            Información
           </Link>
           <Link to="/" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
-            Create
+            Horarios
           </Link>
           <Link to="/employeeweek" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
-            WbyE
+            Resumen Semanal
           </Link>
-          <Link to="/adduser" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
+          {/*<Link to="/adduser" className="text-gray-300 hover:text-white px-3 py-2 text-lg font-medium">
             AddUser
-          </Link>
+          </Link>*/}
         </div>
         <div className="flex flex-col items-end text-white px-3 py-2">
           <h1 className="text-2xl font-bold tracking-wide">WorkSchedFlow</h1>

@@ -1,3 +1,4 @@
+import { generateDatawithDate, generateDays } from "../utils/function";
 
 
 export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
@@ -11,7 +12,7 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
     }
   };
 
-
+/* 
   const handleClick = () => {
 
     fetch(`http://localhost:8081/day/${date.start}/${date.end}`, {
@@ -35,13 +36,13 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
 
   }
 
-
-  /*
+*/
+  
     const handleClick = () => {
       const dates = generateDays(date.start)
       setData(generateDatawithDate(dates))
     }
-  */
+  
 
 
   return (
