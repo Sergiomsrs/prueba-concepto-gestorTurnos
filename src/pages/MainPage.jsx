@@ -4,6 +4,8 @@ import { Navbar } from "../utilComponents/Navbar"
 import { FormUser } from "./FormUser"
 import { EmployeeWeek } from "./EmployeeWeek"
 import { Daily } from "../gridComponents/Daily"
+import { TechInfo } from "./TechInfo"
+import { ScrollToTop } from "../landing/ScrollToTop "
 
 export const MainPage = () => {
   return (
@@ -15,13 +17,14 @@ export const MainPage = () => {
         <header className="mb-8">
           <Navbar />
         </header>
-
+        <ScrollToTop />
         <main className="">
           <Routes>
             <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/adduser" element={<FormUser />} />
+            <Route path="/techinfo" element={<TechInfo />} />
           </Routes>
         </main>
 

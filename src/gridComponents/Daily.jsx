@@ -24,7 +24,7 @@ export const Daily = () => {
   };
 
   const handlePrint = () => {
-
+/*
     const shiftData = generateShiftData(data);
 
     fetch('http://localhost:8081/api/ws/saveAll', {
@@ -38,7 +38,9 @@ export const Daily = () => {
       .then(response => response.json())
       .then(data => console.log('Success:', data))
       .catch((error) => console.error('Error:', error));
-  };
+  
+  */
+      };
 
   const handlReset = () => {
     setData(prevData =>

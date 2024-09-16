@@ -1,4 +1,7 @@
+
+import { LinkButton } from "../landing/LinkButton"
 import { Projects } from "../landing/Projects"
+
 
 export const Landing = () => {
   return (
@@ -29,15 +32,9 @@ export const Landing = () => {
             >
           </h2>
         </section>
-
-
       </div>
       <div className="bg-gray-100">
-
-
-        {/* Main Content */}
         <main className="">
-          {/* Section 1: App Overview */}
           <section className="">
             <h2 className="text-3xl font-bold mb-4">Sobre WorkSchedFlow</h2>
             <p className="text-lg text-gray-700 mb-6 text-pretty">
@@ -53,19 +50,13 @@ export const Landing = () => {
               con persistencia de datos en una base de datos MySQL.
             </p>
             <p className="text-lg text-gray-700 mb-6 text-pretty">
-              Además, en la pestaña "Crear" podrás acceder a una versión demo de la aplicación, donde podrás experimentar su funcionamiento con datos simulados.
+              Además, en la pestaña "Horarios" podrás acceder a una versión demo de la aplicación, donde podrás experimentar su funcionamiento con datos simulados.
               Esto te permitirá explorar cómo gestiona y visualiza los turnos, ayudándote a comprender las ventajas que ofrece en situaciones reales.
             </p>
           </section>
-
-
-
-
-          {/* Section 2: Features */}
           <section className="mt-10">
             <h3 className="text-2xl font-semibold mb-4">Características Principales</h3>
-            <ul className="list-disc list-inside text-left text-gray-700">
-
+            <ul className="list-disc list-inside text-left text-lg text-gray-700">
               <li>Interfaz moderna y fácil de usar, creada con React y Tailwind CSS.</li>
               <li>Generación de turnos personalizados y cálculo automático de la duración.</li>
               <li>Línea temporal intuitiva y fácil de visualizar.</li>
@@ -78,11 +69,16 @@ export const Landing = () => {
               <li>Persistencia de datos eficiente con MySQL y Spring Boot.</li>
             </ul>
           </section>
-
         </main>
-        <section className="mt-10">
-          <h3 className="text-2xl font-semibold mb-4">Más sobre la App</h3>
 
+
+
+        <section className="mt-10">
+          <h3 className="text-2xl font-semibold mb-4">Conoce la App: Versión Demo</h3>
+        <section className="flex justify-start gap-4 mb-4">
+          <LinkButton to={"/"}>Ir a la Demo</LinkButton>
+          <LinkButton to={"/techinfo"}>Detrás del Desarrollo</LinkButton>
+        </section>
           <Projects
             title={"Barra de Navegación"}
             description={"Desde la barra de navegación, podrás acceder a la información de la aplicación, una versión de demostración, y la vista de resumen por empleado."}
@@ -114,15 +110,11 @@ export const Landing = () => {
             image={"/resumenSemanal.webp"}
           />
         </section>
-
       </div>
-      {/* Section 3: About the Developer */}
       <section className="mt-10">
         <h3 className="text-2xl font-semibold mb-4">Sobre el Desarrollador</h3>
         <p className="text-lg text-gray-700 mb-6">
-          Hola, soy el creador de WorkSchedFlow. Mi pasión por la programación y el desarrollo web me ha llevado a crear esta herramienta
-          para simplificar la gestión de horarios en el entorno laboral. Con experiencia en tecnologías como React, Spring Boot, y MySQL,
-          estoy comprometido en desarrollar soluciones que hagan el día a día más eficiente.
+        Hola, soy el creador de WorkSchedFlow. Mi pasión por la programación y el desarrollo web me ha llevado a crear esta prueba de concepto para simplificar la gestión de horarios en el entorno laboral a la vez que me permite practicar con tecnologías como React, Spring Boot, y MySQL. Estoy comprometido en seguir mejorando para desarrollar soluciones que hagan el día a día más eficiente.
         </p>
       </section>
     </section>
