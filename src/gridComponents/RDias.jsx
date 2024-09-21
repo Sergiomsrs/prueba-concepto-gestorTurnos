@@ -18,7 +18,7 @@ export const RDias = () => {
   }, [dataWeek]);
 
   return (
-    <div className="overflow-x-auto mt-4">
+    
       <table className="table table-hover text-center">
         <thead>
           <tr>
@@ -45,7 +45,7 @@ export const RDias = () => {
           })}
         </tbody>
       </table>
-    </div>
+    
   );
 };
 

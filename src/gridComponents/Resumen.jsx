@@ -27,8 +27,8 @@ export const Resumen = () => {
   }, [data]);
 
   return (
-    <div className="overflow-x-auto mt-4">
-      <table className="table table-hover table-fixed text-center">
+    
+      <table className="table table-hover text-center">
         <thead>
           <tr>
             <th>Empleado</th>
@@ -54,6 +54,6 @@ export const Resumen = () => {
   })}
 </tbody>
       </table>
-    </div>
+    
   );
 };
