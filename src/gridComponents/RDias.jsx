@@ -19,7 +19,7 @@ export const RDias = () => {
 
   return (
     
-      <table className="table table-hover text-center">
+      <table className="table table-hover text-center table-fixed">
         <thead>
           <tr>
             {dataWeek.map((item) => (

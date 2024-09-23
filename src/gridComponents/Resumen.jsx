@@ -28,7 +28,7 @@ export const Resumen = () => {
 
   return (
     
-      <table className="table table-hover text-center">
+      <table className="table table-hover text-center table-fixed">
         <thead>
           <tr>
             <th>Empleado</th>
