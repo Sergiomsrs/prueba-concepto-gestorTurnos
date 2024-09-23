@@ -26,7 +26,7 @@ export const EmployeeWeek = () => {
   console.log(empleadoData);
 
   return (
-    <section className="p-7">
+    <section className="w-3/4">
       <EmployeePicker value={selectedEmployee} onChange={handleEmployeeChange} />
 
       <span className="inline-flex items-center rounded-md bg-gray-800 px-2 py-1 text-sm font-bold text-white ring-1 ring-inset ring-gray-500/10 mb-4">

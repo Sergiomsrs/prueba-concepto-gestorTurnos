@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom"
 import { Landing } from "./Landing"
 import { Navbar } from "../utilComponents/Navbar"
-import { FormUser } from "./FormUser"
 import { EmployeeWeek } from "./EmployeeWeek"
 import { Daily } from "../gridComponents/Daily"
+import { Add } from "./Add"
 
 export const MainPage = () => {
   return (
@@ -16,12 +16,12 @@ export const MainPage = () => {
           <Navbar />
         </header>
 
-        <main className="flex flex-col">
+        <main className="flex flex-col items-center">
           <Routes>
             <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
             <Route path="/landing" element={<Landing />} />
-            <Route path="/adduser" element={<FormUser />} />
+            <Route path="/adduser" element={<Add />} />
           </Routes>
         </main>
 
