@@ -11,12 +11,10 @@ export const JobHourApp = ({ employees, onHourChange, day, dayIndex, eh }) => {
     <>
       <tbody>
         {employees.map((employee, employeeIndex) => (
-          <tr key={employee.name}>
+          <tr key={employee.id}>
             {(selectedOption === "todos" || selectedOption === employee.teamWork) && (
               <HorizontalBar
                 teamWork={employee.teamWork}
-                day={day}
-                dayIndex={dayIndex}
                 username={employee.name}
                 shiftDurationes={employee.shiftDuration}
                 phours={eh[employeeIndex].workShift}
