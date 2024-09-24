@@ -36,7 +36,7 @@ export const AddUSer = () => {
     }
 
     const handleSave = (e) => {
-        fetch('http://localhost:8081/api/emp/creates', {
+        fetch('http://localhost:8081/api/emp/create', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -71,6 +71,19 @@ export const AddUSer = () => {
             .then(response => response.json())
             .then(data => console.log('Success:', data))
             .catch((error) => console.error('Error:', error));
+    }
+
+    const handleDelete = () => {
+        fetch(`http://localhost:8081/api/emp/delete/${createForm.id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch((error) => console.error('Error:', error));
+
     }
 
 
@@ -169,7 +182,12 @@ export const AddUSer = () => {
             <div className="mt-6 flex items-center justify-end gap-x-6">
                 <button onClick={handleCancel} type="button" className="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
                 {
-                  isExistingEmployee? <button onClick={handleUpdate} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Update</button>  
+                  isExistingEmployee? 
+                 <>
+                      <button onClick={handleUpdate} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Update</button>  
+                      <button onClick={handleDelete} className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Delete</button>  
+                 </>
+                
                   :<button onClick={handleSave} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
                 }
             </div>

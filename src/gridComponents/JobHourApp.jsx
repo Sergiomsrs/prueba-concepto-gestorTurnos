@@ -17,7 +17,7 @@ export const JobHourApp = ({ employees, onHourChange, day, dayIndex, eh }) => {
                 teamWork={employee.teamWork}
                 username={employee.name}
                 shiftDurationes={employee.shiftDuration}
-                phours={eh[employeeIndex].workShift}
+                phours={eh[employeeIndex].workShift }
                 hours={employee.workShift}
                 onHourChange={(hourIndex, value) =>
                   onHourChange(employeeIndex, hourIndex, value)

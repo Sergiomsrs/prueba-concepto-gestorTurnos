@@ -46,11 +46,7 @@ export const generateDays = (date) => {
 }
 
 export const obtenerPreviousDay = (dayIndex, data) => {
-  if (dayIndex === 0) {
-    return data[data.length - 7];
-  } else {
     return data[dayIndex - 1];
-  }
 }
 
 export const calcularshiftDuration = (h) => {
@@ -72,6 +68,7 @@ export const addMinutes = (time, minsToAdd) => {
 }
 
 export const getHighestNonZeroIndex = (array) => {
+  if(array == null) return -1;
   for (let i = array.length - 1; i >= 0; i--) {
     if (array[i] !== "Null") {
       return i;
