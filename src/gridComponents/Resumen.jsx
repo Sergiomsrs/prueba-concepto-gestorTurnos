@@ -1,63 +1,59 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 
-export const Resumen = ({ employess }) => {
 
-  const {data} = useContext(AppContext);
+export const Resumen = () => {
+  const { data, selectedOption } = useContext(AppContext);
+  const [shiftDurationHoursByEmployee, setshiftDurationHoursByEmployee] = useState({});
 
-  const dataWeek = data.slice(1, data.length+1);
+  useEffect(() => {
+    const dataWeek = data.slice(1, data.length + 1);
+    const shiftDurationHours = {};
 
-  const totalHoursByEmployee = {};
+    dataWeek.forEach(day => {
+      day.employees.forEach(employee => {
+        const employeeName = employee.name;
 
-// Iterar sobre los datos
-dataWeek.forEach(day => {
-    day.employees.forEach(employee => {
-        const employeeName = employee.nombre;
-
-        // Verificar si el nombre del empleado ya existe en totalHoursByEmployee
-        if (!totalHoursByEmployee[employeeName]) {
-            totalHoursByEmployee[employeeName] = 0;
+        if (!shiftDurationHours[employeeName]) {
+          shiftDurationHours[employeeName] = 0;
         }
 
-        // Sumar las horas del empleado en este día
-        //const totalHoursForDay = employee.horas.reduce((acc, curr) => acc + (curr / 4), 0);
-        const totalHoursForDay = employee.horas.filter(item => item !== "Null").length * 0.25;
-        totalHoursByEmployee[employeeName] += totalHoursForDay;
+        const shiftDurationHoursForDay = employee.workShift.filter(item => item !== "Null").length * 0.25;
+        shiftDurationHours[employeeName] += shiftDurationHoursForDay;
+      });
     });
-});
 
-
+    setshiftDurationHoursByEmployee(shiftDurationHours);
+  }, [data]);
 
   return (
-    <div className="overflow-x-auto mt-4">
-  <table className="table table-hover table-fixed text-center">
- 
-    <thead>
-      <tr>
-        <th>Empleado</th>
-        <th>Jornada</th>
-        <th>Total</th>
-        <th>Var</th>
-      </tr>
-    </thead>
-    <tbody>
-      {Object.entries(totalHoursByEmployee).map(([nombre, total]) => (
-        <tr key={nombre}>
-          <td >{nombre}</td>
-          <td>
-            {employess.find((emp) => emp.nombre === nombre)?.jornada[0].horas}
-          </td>
-          <td>{total}</td>
-          <td>
-            {employess.find((emp) => emp.nombre === nombre)?.jornada[0].horas - total}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
-
     
-  )
-}
+      <table className="table table-hover text-center table-fixed">
+        <thead>
+          <tr>
+            <th>Empleado</th>
+            <th>wwh</th>
+            <th>Total</th>
+            <th>Var</th>
+          </tr>
+        </thead>
+        <tbody>
+  {Object.entries(shiftDurationHoursByEmployee).map(([name, shiftDuration]) => {
+    const employee = data[0]?.employees.find((emp) => emp.name === name);
+    if (selectedOption === "todos" || selectedOption === employee?.teamWork) {
+      return (
+        <tr key={name}>
+          <td>{name}</td>
+          <td>{employee?.wwh}</td>
+          <td>{shiftDuration}</td>
+          <td>{(employee?.wwh ?? 0) - shiftDuration}</td>
+        </tr>
+      );
+    }
+    return null;
+  })}
+</tbody>
+      </table>
+    
+  );
+};

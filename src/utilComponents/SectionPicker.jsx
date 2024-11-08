@@ -1,38 +1,40 @@
 import { useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import { employess } from "../utils/data";
 
 
 
 export const SectionPicker = () => {
 
-    const {selectedOption, setSelectedOption} = useContext(AppContext);
+    const {data, selectedOption, setSelectedOption} = useContext(AppContext);
 
     const handleChange = (event) => {
         setSelectedOption(event.target.value);
       };
       
-      const uniqueSections = employess.reduce((acc, emp) => {
-        if (!acc.includes(emp.seccion)) {
-          acc.push(emp.seccion);
-        }
+      const uniqueSections = data.reduce((acc, day) => {
+        day.employees.forEach(emp => {
+          if (!acc.includes(emp.teamWork)) {
+            acc.push(emp.teamWork);
+          }
+        });
         return acc;
       }, []);
 
 
   return (
-    <div>
-      <label htmlFor="options">Select an option:</label>
-      <select id="options"  value={selectedOption} onChange={handleChange}>
-      <option value="todos">Todos</option>
-        {   
-          uniqueSections.map(emp =>(
-            <option key={emp} value={emp}>{emp}</option>
-
-          ))
-        }
-        
-      </select>
-    </div>
+    <div className="mb-4">
+  <label htmlFor="options" className="block text-gray-700 mb-2">Equipo de trabajo:</label>
+  <select 
+    id="options" 
+    value={selectedOption} 
+    onChange={handleChange} 
+    className="block w-auto p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+  >
+    <option value="todos">Todos</option>
+    {uniqueSections.map(emp => (
+      <option key={emp} value={emp}>{emp}</option>
+    ))}
+  </select>
+</div>
 )
 }

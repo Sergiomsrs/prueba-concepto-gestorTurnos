@@ -1,7 +1,6 @@
-import { generateDatawithDate, generateDays } from "../utils/function";
 
 
-export const DatePicker = ({ setDate, date, setData }) => {
+export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
 
   const handleChange = (event, type) => {
     const newValue = event.target.value;
@@ -14,11 +13,36 @@ export const DatePicker = ({ setDate, date, setData }) => {
 
 
   const handleClick = () => {
-    const dates = generateDays(date.start)
-    setData(generateDatawithDate(dates))
+
+    fetch(`http://localhost:8081/day/${date.start}/${date.end}`, {
+      method: 'GET',
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setData(data);
+        console.log(JSON.stringify(data));
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+
+    setSelectedOption('todos');
+
   }
 
-  
+
+  /*
+    const handleClick = () => {
+      const dates = generateDays(date.start)
+      setData(generateDatawithDate(dates))
+    }
+  */
+
 
   return (
     <div className="flex items-center mb-4">
@@ -27,7 +51,6 @@ export const DatePicker = ({ setDate, date, setData }) => {
           <svg
             className="w-4 h-4 text-gray-500 dark:text-gray-400"
             aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             viewBox="0 0 20 20"
           >
@@ -39,8 +62,8 @@ export const DatePicker = ({ setDate, date, setData }) => {
           type="date"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date start"
-          value={date.start} // Asignamos el valor del estado
-          onChange={(event) => handleChange(event, "start")} // Pasamos el tipo de fecha
+          value={date.start}
+          onChange={(event) => handleChange(event, "start")}
         />
       </div>
       <span className="mx-4 text-gray-500">to</span>
@@ -61,14 +84,14 @@ export const DatePicker = ({ setDate, date, setData }) => {
           type="date"
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date end"
-          value={date.end} 
-          onChange={(event) => handleChange(event, "end")} 
+          value={date.end}
+          onChange={(event) => handleChange(event, "end")}
         />
       </div>
 
       <div className="ml-4">
         <button
-        onClick={handleClick}
+          onClick={handleClick}
           className="bg-sky-600
     border dark:border-sky-900 border-sky-900
     rounded-full

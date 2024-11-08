@@ -1,7 +1,7 @@
 import { addMinutes } from "./function";
 
 
-// Función para dividir el array en bloques basados en los ceros
+// Función para dividir el array en bloques basados en el valor "Null"
 export const splitIntoBlocks = (arr) => {
   const blocks = [];
   let currentBlock = [];
@@ -22,7 +22,7 @@ export const splitIntoBlocks = (arr) => {
   return blocks;
 };
 
-// Función para encontrar el mínimo y máximo de cada bloque
+// Obtener los valores maximo y minimo de cada bloque
 export const findMinMaxOfBlocks = (blocks) => {
   return blocks.map(block => ({
     min: block[0],
@@ -30,19 +30,16 @@ export const findMinMaxOfBlocks = (blocks) => {
   }));
 };
 
-
+// Obtener el texto a mostrar segun los bloques resultantes
 export const getStringBlock = (day, minMaxValues) => {
 
   switch (true) {
 
-    case minMaxValues.length === 0: { return `${day.id}  --> ${day.day} Libre`; }
-    case minMaxValues.length === 1: { return `${day.id}  --> ${day.day} de:  ${minMaxValues[0].min} a ${addMinutes(minMaxValues[0].max, 15)}`; }
-    case minMaxValues.length === 2: { return `${day.id}  --> ${day.day} de:  ${minMaxValues[0].min} a ${addMinutes(minMaxValues[0].max, 15)} y de ${minMaxValues[1].min} a ${addMinutes(minMaxValues[1].max, 15)}`; }
-    case minMaxValues.length >= 3: { return `${day.id}  --> ${day.day} Revisar error`;}
+    case minMaxValues.length === 0: { return `Libre`; }
+    case minMaxValues.length === 1: { return `De ${minMaxValues[0].min} a ${addMinutes(minMaxValues[0].max, 15)}`; }
+    case minMaxValues.length === 2: { return `De ${minMaxValues[0].min} a ${addMinutes(minMaxValues[0].max, 15)} y de ${minMaxValues[1].min} a ${addMinutes(minMaxValues[1].max, 15)}`; }
+    case minMaxValues.length >= 3: { return `${day.day} Revisar error`; }
   }
 
   console.log(minMaxValues[1].min);
-
-
-
 };

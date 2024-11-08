@@ -1,5 +1,3 @@
-
-
 export const hours = {
     entrada: [
         "07:15", "07:30", "07:45", "08:00", "08:15", "08:30", "08:45", "09:00",
@@ -51,122 +49,122 @@ export const entrada2 = [
 
 export const employess = [
     {
-        nombre: 'Empleado1',
+        name: 'Empleado1',
         apellidos: 'Empleado1',
         email: 'Empleado1@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
-        seccion: 'Sec1',
-        jornada: [
+        teamWork: 'Sec1',
+        wwh: [
             {
                 fechaInicio: '2021-01-01',
                 fechaFin: '2021-01-31',
-                horas: 18
+                workShift: 18
             }
         ]
     },
     {
-        nombre: 'Empleado2',
+        name: 'Empleado2',
         apellidos: 'Empleado2',
         email: 'Empleado2@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
-        seccion: 'Sec1',
-        jornada: [
+        teamWork: 'Sec1',
+        wwh: [
             {
                 fechaInicio: '2021-01-01',
                 fechaFin: '2021-01-31',
-                horas: 18
+                workShift: 18
             }
         ]
     },
     {
-        nombre: 'Empleado3',
+        name: 'Empleado3',
         apellidos: 'Empleado3',
         email: 'Empleado3@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
-        seccion: 'Sec2',
-        jornada: [
+        teamWork: 'Sec2',
+        wwh: [
             {
                 fechaInicio: '2021-01-01',
                 fechaFin: '2021-01-31',
-                horas: 24
+                workShift: 24
             }
         ]
     },
     {
-        nombre: 'Empleado4',
+        name: 'Empleado4',
         apellidos: 'Empleado4',
         email: 'Empleado4@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
-        seccion: 'Sec3',
-        jornada: [
+        teamWork: 'Sec3',
+        wwh: [
             {
                 fechaInicio: '2021-01-01',
                 fechaFin: '2021-01-31',
-                horas: 36
+                workShift: 36
             }
         ]
     },
     {
-        nombre: 'Empleado5',
+        name: 'Empleado5',
         apellidos: 'Empleado5',
         email: 'Empleado5@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
-        seccion: 'Sec3',
-        jornada: [
+        teamWork: 'Sec3',
+        wwh: [
             {
                 fechaInicio: '2021-01-01',
                 fechaFin: '2021-01-31',
-                horas: 36
+                workShift: 36
             }
         ]
     },
     {
-        nombre: 'Empleado6',
+        name: 'Empleado6',
         apellidos: 'Empleado6',
         email: 'Empleado6@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
-        seccion: 'Sec3',
-        jornada: [
+        teamWork: 'Sec3',
+        wwh: [
             {
                 fechaInicio: '2021-01-01',
                 fechaFin: '2021-01-31',
-                horas: 36
+                workShift: 36
             }
         ]
     },
     {
-        nombre: 'Empleado7',
+        name: 'Empleado7',
         apellidos: 'Empleado7',
         email: 'Empleado7@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
-        seccion: 'Sec3',
-        jornada: [
+        teamWork: 'Sec3',
+        wwh: [
             {
                 fechaInicio: '2021-01-01',
                 fechaFin: '2021-01-31',
-                horas: 36
+                workShift: 36
             }
         ]
     },
     {
-        nombre: 'Empleado8',
+        name: 'Empleado8',
         apellidos: 'Empleado8',
         email: 'Empleado8@correo.com',
         fechaAlta: '2021-01-01',
         fechaBaja: '2021-02-01',
-        seccion: 'Sec3',
-        jornada: [
+        teamWork: 'Sec3',
+        wwh: [
             {
                 fechaInicio: '2021-01-01',
                 fechaFin: '2021-01-31',
-                horas: 36
+                workShift: 36
             }
         ]
     }
