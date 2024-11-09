@@ -34,7 +34,7 @@ export const Resumen = () => {
     <table className="table table-hover text-center w-1/3">
       <thead>
         <tr>
-          <th>Empleado</th>
+          <th className="text-left">Empleado</th>
           <th>wwh</th>
           <th>Total</th>
           <th>Var</th>
@@ -58,7 +58,7 @@ export const Resumen = () => {
             (selectedOption === "todos" || selectedOption === 
               data.flatMap(day => day.employees).find(employee => employee.name === employeeName)?.teamWork) && (
               <tr key={employeeName}>
-                <td>{employeeName}</td>
+                <td className="text-left">{employeeName}</td>
                 <td>{wwh}</td>
                 <td>{totalShiftDuration}</td>
                 <td>{variation.toFixed(2)}</td> {/* Muestra la variación con dos decimales */}
