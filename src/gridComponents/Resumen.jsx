@@ -4,56 +4,78 @@ import { AppContext } from "../context/AppContext";
 
 export const Resumen = () => {
   const { data, selectedOption } = useContext(AppContext);
-  const [shiftDurationHoursByEmployee, setshiftDurationHoursByEmployee] = useState({});
 
-  useEffect(() => {
-    const dataWeek = data.slice(1, data.length + 1);
-    const shiftDurationHours = {};
+  // Creamos un Set para almacenar nombres únicos de empleados
+  const employeeNamesSet = new Set();
 
-    dataWeek.forEach(day => {
-      day.employees.forEach(employee => {
-        const employeeName = employee.name;
+  // Iteramos sobre cada día en el array data
+  data.forEach(day => {
+    // Iteramos sobre cada empleado en el día actual
+    day.employees.forEach(employee => {
+      // Agregamos el nombre del empleado al Set
+      employeeNamesSet.add(employee.name);
+    });
+  });
 
-        if (!shiftDurationHours[employeeName]) {
-          shiftDurationHours[employeeName] = 0;
-        }
+  // Convertimos el Set a un array, si necesitas el resultado en formato array
+  const uniqueEmployeeNames = Array.from(employeeNamesSet);
 
-        const shiftDurationHoursForDay = employee.workShift.filter(item => item !== "Null").length * 0.25;
-        shiftDurationHours[employeeName] += shiftDurationHoursForDay;
-      });
+  // Función para calcular la duración total en formato decimal
+  const getTotalShiftDuration = (employeeName) => {
+    let totalMinutes = 0;
+
+    // Iteramos sobre los días para obtener la duración de cada turno del empleado
+    data.forEach(day => {
+      const employee = day.employees.find(emp => emp.name === employeeName);
+      if (employee && employee.shiftDuration) {
+        // Aquí asumimos que shiftDuration está en formato "HH:mm"
+        const [hours, minutes] = employee.shiftDuration.split(":").map(Number);
+        totalMinutes += hours * 60 + minutes; // Convertimos todo a minutos
+      }
     });
 
-    setshiftDurationHoursByEmployee(shiftDurationHours);
-  }, [data]);
+    // Convertimos los minutos totales a horas decimales
+    const totalHoursDecimal = totalMinutes / 60;
+    return totalHoursDecimal.toFixed(2); // Retornamos con dos decimales
+  };
 
   return (
-    
-      <table className="table table-hover text-center table-fixed">
-        <thead>
-          <tr>
-            <th>Empleado</th>
-            <th>wwh</th>
-            <th>Total</th>
-            <th>Var</th>
-          </tr>
-        </thead>
-        <tbody>
-  {Object.entries(shiftDurationHoursByEmployee).map(([name, shiftDuration]) => {
-    const employee = data[0]?.employees.find((emp) => emp.name === name);
-    if (selectedOption === "todos" || selectedOption === employee?.teamWork) {
-      return (
-        <tr key={name}>
-          <td>{name}</td>
-          <td>{employee?.wwh}</td>
-          <td>{shiftDuration}</td>
-          <td>{(employee?.wwh ?? 0) - shiftDuration}</td>
+    <table className="table table-hover text-center table-fixed">
+      <thead>
+        <tr>
+          <th>Empleado</th>
+          <th>wwh</th>
+          <th>Total</th>
+          <th>Var</th>
         </tr>
-      );
-    }
-    return null;
-  })}
-</tbody>
-      </table>
-    
+      </thead>
+      <tbody>
+        {uniqueEmployeeNames.map(employeeName => {
+          // Calculamos las horas trabajadas (wwh) para cada empleado
+          const wwh = data
+            .flatMap(day => day.employees)
+            .find(employee => employee.name === employeeName)?.wwh || 0;
+
+          // Calculamos la duración total de los turnos del empleado
+          const totalShiftDuration = getTotalShiftDuration(employeeName);
+
+          // Calculamos la variación entre wwh y totalShiftDuration
+          const variation = wwh - totalShiftDuration;
+
+          // Condición para mostrar la fila de acuerdo al filtro de teamWork
+          return (
+            (selectedOption === "todos" || selectedOption === 
+              data.flatMap(day => day.employees).find(employee => employee.name === employeeName)?.teamWork) && (
+              <tr key={employeeName}>
+                <td>{employeeName}</td>
+                <td>{wwh}</td>
+                <td>{totalShiftDuration}</td>
+                <td>{variation.toFixed(2)}</td> {/* Muestra la variación con dos decimales */}
+              </tr>
+            )
+          );
+        })}
+      </tbody>
+    </table>
   );
 };
