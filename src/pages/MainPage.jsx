@@ -16,7 +16,7 @@ export const MainPage = () => {
           <Navbar />
         </header>
 
-        <main className="flex flex-col ">
+        <main className="flex flex-col items-center">
           <Routes>
             <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
