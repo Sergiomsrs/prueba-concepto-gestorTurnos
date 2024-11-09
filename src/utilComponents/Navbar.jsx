@@ -6,16 +6,16 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row items-center justify-between h-full"> {/* Usa h-full para ocupar la altura completa */}
           <div className="flex flex-wrap items-center space-x-2 sm:space-x-4">
-            <Link to="/landing" className="text-gray-300 text-xs sm:text-sm md:text-base hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
+            <Link to="/landing" className="text-gray-300 text-xs sm:text-sm md:text-lg hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
               Home
             </Link>
-            <Link to="/" className="text-gray-300 text-xs sm:text-sm md:text-base hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
+            <Link to="/" className="text-gray-300 text-xs sm:text-sm md:text-lg hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
               Create
             </Link>
-            <Link to="/employeeweek" className="text-gray-300 text-xs sm:text-sm md:text-base hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
+            <Link to="/employeeweek" className="text-gray-300 text-xs sm:text-sm md:text-lg hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
               WbyE
             </Link>
-            <Link to="/adduser" className="text-gray-300 text-xs sm:text-sm md:text-base hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
+            <Link to="/adduser" className="text-gray-300 text-xs sm:text-sm md:text-lg hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
              Add
             </Link>
             {/*<Link to="/adduser" className="text-gray-300 text-xs sm:text-sm md:text-base hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
