@@ -79,12 +79,13 @@ export const getHighestNonZeroIndex = (array) => {
 
 // Formatea de HH:mm:ss a HH:mm
 export function formatTime(timeString) {
- 
-  if (timeString.length === 8) {
-      return timeString.substring(0, 5); 
+  // Verifica si timeString es una cadena de texto y tiene una longitud válida
+  if (typeof timeString === 'string' && timeString.length === 8) {
+    return timeString.substring(0, 5); // Formatea el tiempo si es válido
   }
-  return timeString; 
+  return timeString || "N/A"; // Devuelve timeString o un valor predeterminado si es undefined o null
 }
+
 
 
 
@@ -118,6 +119,26 @@ export const formatToDate = (day) => {
   const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
   return formattedDate;
 };
+
+
+export const uniqueEmployeeName = (data) => {
+    // Creamos un Set para almacenar nombres únicos de empleados
+    const employeeNamesSet = new Set();
+
+    // Iteramos sobre cada día en el array data
+    data.forEach(day => {
+      // Iteramos sobre cada empleado en el día actual
+      day.employees.forEach(employee => {
+        // Agregamos el nombre del empleado al Set
+        employeeNamesSet.add(employee.name);
+      });
+    });
+  
+    // Convertimos el Set a un array, si necesitas el resultado en formato array
+    const uniqueEmployeeNames = Array.from(employeeNamesSet);
+
+    return uniqueEmployeeNames;
+}
 
 
 

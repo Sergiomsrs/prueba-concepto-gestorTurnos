@@ -1,24 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
+import { uniqueEmployeeName } from "../utils/function";
 
 
 export const Resumen = () => {
   const { data, selectedOption } = useContext(AppContext);
 
-  // Creamos un Set para almacenar nombres únicos de empleados
-  const employeeNamesSet = new Set();
 
-  // Iteramos sobre cada día en el array data
-  data.forEach(day => {
-    // Iteramos sobre cada empleado en el día actual
-    day.employees.forEach(employee => {
-      // Agregamos el nombre del empleado al Set
-      employeeNamesSet.add(employee.name);
-    });
-  });
 
-  // Convertimos el Set a un array, si necesitas el resultado en formato array
-  const uniqueEmployeeNames = Array.from(employeeNamesSet);
+  
+  const uniqueEmployeeNames = uniqueEmployeeName(data);
 
   // Función para calcular la duración total en formato decimal
   const getTotalShiftDuration = (employeeName) => {
@@ -40,7 +31,7 @@ export const Resumen = () => {
   };
 
   return (
-    <table className="table table-hover text-center table-fixed">
+    <table className="table table-hover text-center w-1/3">
       <thead>
         <tr>
           <th>Empleado</th>

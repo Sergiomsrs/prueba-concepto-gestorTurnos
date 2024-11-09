@@ -84,12 +84,12 @@ export const Daily = () => {
             </DayGrid>
           </div>
         ))}
-        <div className="w-full flex mt-4 flex-row px-2">
+        <div className="flex flex-row w-full mt-0 pt-0 gap-2">
           
-            <Resumen employess={employess}/>
+            <Resumen className="flex-grow" employess={employess}/>
           
           
-            <RDias />
+            <RDias  className="flex-none w-1/3" />
           
         </div>
         <div className="flex gap-4">

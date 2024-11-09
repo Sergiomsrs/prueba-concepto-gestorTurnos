@@ -8,7 +8,7 @@ import { Add } from "./Add"
 export const MainPage = () => {
   return (
     
-    <div className="bg-gray-100 text-gray-900 min-h-screen w-full  overflow-x-hidden px-1 sm:px-8 lg:px-16">
+    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden px-1 sm:px-8 lg:px-16">
       
       <div className="container w-full py-8" >
 
@@ -16,7 +16,7 @@ export const MainPage = () => {
           <Navbar />
         </header>
 
-        <main className="flex flex-col items-center">
+        <main className="flex flex-col ">
           <Routes>
             <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
