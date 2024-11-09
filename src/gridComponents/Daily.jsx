@@ -53,6 +53,8 @@ export const Daily = () => {
     );
   };
 
+  
+
 
   return (
     <section className="p-4">
