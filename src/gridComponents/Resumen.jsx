@@ -6,9 +6,6 @@ import { uniqueEmployeeName } from "../utils/function";
 export const Resumen = () => {
   const { data, selectedOption } = useContext(AppContext);
 
-
-
-  
   const uniqueEmployeeNames = uniqueEmployeeName(data);
 
   // Función para calcular la duración total en formato decimal
@@ -19,15 +16,13 @@ export const Resumen = () => {
     data.forEach(day => {
       const employee = day.employees.find(emp => emp.name === employeeName);
       if (employee && employee.shiftDuration) {
-        // Aquí asumimos que shiftDuration está en formato "HH:mm"
         const [hours, minutes] = employee.shiftDuration.split(":").map(Number);
         totalMinutes += hours * 60 + minutes; // Convertimos todo a minutos
       }
     });
 
-    // Convertimos los minutos totales a horas decimales
     const totalHoursDecimal = totalMinutes / 60;
-    return totalHoursDecimal.toFixed(2); // Retornamos con dos decimales
+    return totalHoursDecimal.toFixed(2);
   };
 
   return (
@@ -42,26 +37,27 @@ export const Resumen = () => {
       </thead>
       <tbody>
         {uniqueEmployeeNames.map(employeeName => {
-          // Calculamos las horas trabajadas (wwh) para cada empleado
+          const employeeNameTrimmed = employeeName.trim(); // Limpiar espacios
           const wwh = data
             .flatMap(day => day.employees)
-            .find(employee => employee.name === employeeName)?.wwh || 0;
+            .find(employee => employee.name === employeeNameTrimmed)?.wwh || 0;
 
-          // Calculamos la duración total de los turnos del empleado
-          const totalShiftDuration = getTotalShiftDuration(employeeName);
+          const totalShiftDuration = getTotalShiftDuration(employeeNameTrimmed);
 
-          // Calculamos la variación entre wwh y totalShiftDuration
           const variation = wwh - totalShiftDuration;
 
-          // Condición para mostrar la fila de acuerdo al filtro de teamWork
+          // Filtramos por equipo de trabajo si se ha seleccionado un filtro
+          const selectedEmployeeTeam = data
+            .flatMap(day => day.employees)
+            .find(employee => employee.name === employeeNameTrimmed)?.teamWork;
+
           return (
-            (selectedOption === "todos" || selectedOption === 
-              data.flatMap(day => day.employees).find(employee => employee.name === employeeName)?.teamWork) && (
-              <tr key={employeeName}>
-                <td className="text-left">{employeeName}</td>
+            (selectedOption === "todos" || selectedOption === selectedEmployeeTeam) && (
+              <tr key={employeeNameTrimmed}>
+                <td className="text-left">{employeeNameTrimmed}</td>
                 <td>{wwh}</td>
                 <td>{totalShiftDuration}</td>
-                <td>{variation.toFixed(2)}</td> {/* Muestra la variación con dos decimales */}
+                <td>{variation.toFixed(2)}</td> 
               </tr>
             )
           );
