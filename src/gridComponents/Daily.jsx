@@ -74,7 +74,6 @@ export const Daily = () => {
               <HeadRow />
               <JobHourApp
                 day={day}
-                dayIndex={dayIndex}
                 eh={obtenerPreviousDay(dayIndex, data).employees}
                 employees={day.employees}
                 onHourChange={(employeeIndex, hourIndex, value) =>

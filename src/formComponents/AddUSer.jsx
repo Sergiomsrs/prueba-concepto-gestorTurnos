@@ -115,6 +115,9 @@ export const AddUSer = () => {
             setCreateForm(selectedEmployee);
             setIsExistingEmployee(true);
             setMessage("");
+        } else {
+            setCreateForm(initialState);
+            setIsExistingEmployee(false);
         }
     };
 

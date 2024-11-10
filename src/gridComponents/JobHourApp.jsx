@@ -3,9 +3,8 @@ import { HorizontalBar } from "./HorizontalBar ";
 import { AppContext } from "../context/AppContext";
 import { DistributionBar } from "./DistributionBar";
 
-export const JobHourApp = ({ employees, onHourChange, day, dayIndex, eh }) => {
+export const JobHourApp = ({ employees, onHourChange, day, eh }) => {
 
-  console.log(eh);
 
   const { selectedOption } = useContext(AppContext);
 
