@@ -26,6 +26,7 @@ export const JobHourApp = ({ employees, onHourChange, day, eh }) => {
             <tr key={employee.id} onMouseLeave={handleMouseUp}>
               {(selectedOption === "todos" || selectedOption === employee.teamWork) && (
                 <HorizontalBar
+                id={employee.id}
                   teamWork={employee.teamWork}
                   username={employee.name}
                   shiftDurationes={employee.shiftDuration}

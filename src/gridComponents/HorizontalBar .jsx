@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { entrada } from "../utils/data";
 import { formatTime, getHighestNonZeroIndex } from "../utils/function";
 
-export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp }) => {
+export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
 
   const handleMouseDown = (index) => {
     setStartSelection(index);
@@ -39,7 +39,10 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
   return (
     <>
       <td className="text-base font-semibold text-gray-800">{teamWork}</td>
-      <td className="text-base font-semibold text-gray-800">{username}</td>
+      <td 
+      className="text-base font-semibold text-gray-800">
+        <button onClick={()=>console.log(username, teamWork, id)} >{username}</button>
+        </td>
       {hours && hours.map((value, index) => (
         <td
           className={`relative md:w-24 w-12 text-center align-bottom ${index % 4 === 3 ? 'border-45-height' : ''}`}
