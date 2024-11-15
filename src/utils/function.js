@@ -42,6 +42,15 @@ export const generatePtoWithDate = (id, dates) => {
   }));
 };
 
+export const generatePtoNullWithDate = (id, dates) => {
+  return dates.map(date => ({
+    employeeId: id,
+    hours: Array(62).fill("Null"),
+    date: date,
+    shiftDuration: '00:00'
+  }));
+};
+
 
 export const generateDatawithDate = (dates) => {
 
@@ -99,7 +108,7 @@ export const addMinutes = (time, minsToAdd) => {
 export const getHighestNonZeroIndex = (array) => {
   if(array == null) return -1;
   for (let i = array.length - 1; i >= 0; i--) {
-    if (array[i] !== "Null") {
+    if (array[i] !== "Null" && array[i] !== "PTO") {
       return i;
     }
   }

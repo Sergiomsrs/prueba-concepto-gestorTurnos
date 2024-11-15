@@ -7,7 +7,7 @@ export const splitIntoBlocks = (arr) => {
   let currentBlock = [];
 
   arr.forEach(item => {
-    if (item !== "Null" && item !== "NP") {
+    if (item !== "Null" && item !== "PTO") {
       currentBlock.push(item);
     } else if (currentBlock.length > 0) {
       blocks.push(currentBlock);
@@ -40,6 +40,4 @@ export const getStringBlock = (day, minMaxValues) => {
     case minMaxValues.length === 2: { return `De ${minMaxValues[0].min} a ${addMinutes(minMaxValues[0].max, 15)} y de ${minMaxValues[1].min} a ${addMinutes(minMaxValues[1].max, 15)}`; }
     case minMaxValues.length >= 3: { return `${day.day} Revisar error`; }
   }
-
-  console.log(minMaxValues[1].min);
 };

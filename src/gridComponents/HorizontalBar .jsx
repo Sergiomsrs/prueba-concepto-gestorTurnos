@@ -33,7 +33,7 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
 
   const isInputDisabled = (index) => {
     const highestIndex = getHighestNonZeroIndex(phours);
-    return highestIndex >= (index + 48) || index == "PTO" ? true : false;
+    return highestIndex >= (index + 48) ? true : false;
   }
 
   return (

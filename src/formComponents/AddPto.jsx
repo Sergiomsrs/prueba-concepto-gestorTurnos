@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { generatePtoWithDate, getDatesInRange } from "../utils/function";
+import { generatePtoNullWithDate, generatePtoWithDate, getDatesInRange } from "../utils/function";
 
 export const AddPto = () => {
     const initialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
@@ -90,7 +90,7 @@ export const AddPto = () => {
             },
             body: JSON.stringify({
                 employeeId: createForm.id,
-                absenceReason: "pordeterminar",
+                absenceReason: newPto.absenceReason,
                 startDate: newPto.ptoStartDate,
                 terminationDate: newPto.ptoTerminationDate,
             }),
@@ -99,6 +99,52 @@ export const AddPto = () => {
             .then(data => console.log('Success:', data))
             .catch((error) => console.error('Error:', error));
     };
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+
+        const dates = getDatesInRange(newPto.ptoStartDate, newPto.ptoTerminationDate);
+        const pto = generatePtoNullWithDate(createForm.id, dates);
+
+        fetch('http://localhost:8081/api/ws/saveAll', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pto),
+        })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch((error) => console.error('Error:', error));
+         
+    }
+
+    const handleDeletePto = (ptoId, starDate, terminationDate) => {
+
+        const dates = getDatesInRange(starDate, terminationDate);
+        const pto = generatePtoNullWithDate(createForm.id, dates);
+
+        
+        fetch('http://localhost:8081/api/ws/saveAll', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pto),
+        })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch((error) => console.error('Error:', error));
+
+        fetch(`http://localhost:8081/api/pto/delete/${ptoId}`, {
+            method: 'DELETE',
+        })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch((error) => console.error('Error:', error));
+
+            
+    }
 
     return (
         <form className="space-y-6">
@@ -132,6 +178,7 @@ export const AddPto = () => {
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Inicio</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Término</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Motivo</th>
+                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700"></th>
                             </tr>
                         </thead>
                         <tbody className="text-sm">
@@ -141,6 +188,12 @@ export const AddPto = () => {
                                     <td className="px-4 py-2">{workHour.startDate}</td>
                                     <td className="px-4 py-2">{workHour.terminationDate || "N/A"}</td>
                                     <td className="px-4 py-2">{workHour.absenceReason}</td>
+                                    <td className="px-4 py-2">
+                                        <button
+                                        onClick={()=>handleDeletePto(workHour.id, workHour.startDate, workHour.terminationDate)}
+                                        className="rounded-md bg-red-600 px-2 py-1 text-sm font-semibold text-white"
+                                        >Eliminar</button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -151,6 +204,20 @@ export const AddPto = () => {
             {/* Formulario para añadir nueva jornada */}
             <div className="mt-6 space-y-4 ">
                 <h3 className="text-lg font-semibold text-gray-900">Añadir Nueva Ausencia</h3>
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+
+                    <div className="sm:col-span-3 mb-4">
+                        <label htmlFor="absenceReason" className="block text-sm font-medium text-gray-700 mb-2">Tipo de Ausencia</label>
+                        <input
+                            type="text"
+                            name="absenceReason"
+                            id="absenceReason"
+                            value={newPto.absenceReason}
+                            onChange={handleInputChange}
+                            className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                            />
+                    </div>
+                            </div>
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-3">
                         <label htmlFor="ptoStartDate" className="block text-sm font-medium text-gray-700 mb-2">Fecha de Inicio</label>
