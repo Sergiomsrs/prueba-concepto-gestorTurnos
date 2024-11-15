@@ -14,6 +14,35 @@ export const generateData = () => {
   }));
 };
 
+export const getDatesInRange = (startDate, endDate) => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const dates = [];
+
+  // Validar las fechas
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+    console.error("Fechas inválidas:", startDate, endDate);
+    return [];
+  }
+
+  // Iterar desde la fecha de inicio hasta la de fin
+  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
+    dates.push(new Date(currentDate).toISOString().split('T')[0]); // Formato YYYY-MM-DD
+  }
+
+  return dates;
+};
+
+export const generatePtoWithDate = (id, dates) => {
+  return dates.map(date => ({
+    employeeId: id,
+    hours: Array(62).fill("PTO"),
+    date: date,
+    shiftDuration: '00:00'
+  }));
+};
+
+
 export const generateDatawithDate = (dates) => {
 
   return dates.map(day => (
@@ -85,6 +114,12 @@ export function formatTime(timeString) {
   }
   return timeString || "N/A"; // Devuelve timeString o un valor predeterminado si es undefined o null
 }
+
+
+export const generatePtoShift = (id, startDate, endDate) => {
+  const shifts = [];
+
+};
 
 
 

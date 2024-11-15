@@ -26,6 +26,7 @@ export const Daily = () => {
   const handlePrint = () => {
 
     const shiftData = generateShiftData(data);
+    console.log(shiftData);
 
     fetch('http://localhost:8081/api/ws/saveAll', {
       method: 'POST',

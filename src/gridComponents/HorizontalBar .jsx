@@ -4,9 +4,6 @@ import { formatTime, getHighestNonZeroIndex } from "../utils/function";
 
 export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp }) => {
 
-
-
-
   const handleMouseDown = (index) => {
     setStartSelection(index);
     setIsSelecting(true);
