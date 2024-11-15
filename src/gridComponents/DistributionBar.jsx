@@ -7,7 +7,7 @@ export const DistributionBar = ({ day }) => {
     day.employees.forEach(empleado => {
         empleado.workShift.forEach((workShift, indice) => {
             // Sumar 1 si el valor es distinto de "Null"
-            if (workShift !== "Null") {
+            if (workShift !== "Null" && workShift !== "PTO") {
                 sumaPorIndice[indice] += 1;
             }
         });

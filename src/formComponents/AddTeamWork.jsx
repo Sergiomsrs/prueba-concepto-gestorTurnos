@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react"
 import { Selector } from "./Selector";
 
-export const AddWwh = () => {
+export const AddTeamWork = () => {
     const initialState = { name: '', lastName: '', email: '', hireDate: '', terminationDate: '' };
     const [createForm, setCreateForm] = useState(initialState);
     const [message, setMessage] = useState("");
     const [employees, setEmployees] = useState([]); // Estado para la lista de empleados
+    const [teamWork, setteamWork] = useState([]);
+    const [newTeamWork, setNewTeamWork] = useState({ teamWork: "", twStartDate: "" }); // Estado para la nueva jornada
     const [isExistingEmployee, setIsExistingEmployee] = useState(false);
-    const [workHours, setWorkHours] = useState([]);
-    
-    const [newWorkHours, setNewWorkHours] = useState({ weeklyWorkHoursData: "", wwhStartDate: "" }); // Estado para la nueva jornada
 
     // Cargar todos los empleados cuando el componente se monta
     useEffect(() => {
@@ -27,11 +26,11 @@ export const AddWwh = () => {
             setCreateForm(selectedEmployee);
             setMessage("");
 
-            fetch(`http://localhost:8081/api/wwh/${selectedId}`)
+            fetch(`http://localhost:8081/api/teamwork/${selectedId}`)
                 .then(response => {
                     if (response.status === 204) {
                         setMessage("No hay jornadas registradas.");
-                        setWorkHours([]);
+                        setteamWork([]);
                         return null;
                     }
                     if (!response.ok) {
@@ -42,7 +41,7 @@ export const AddWwh = () => {
                 .then(data => {
                     if (data) {
                         setMessage("");
-                        setWorkHours(data);
+                        setteamWork(data);
                     }
                 })
                 .catch(error => {
@@ -52,27 +51,27 @@ export const AddWwh = () => {
         } else {
             setCreateForm(initialState);
             setIsExistingEmployee(false);
-            setWorkHours([]);
+            setteamWork([]);
         }
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewWorkHours(prevState => ({
+        setNewTeamWork(prevState => ({
             ...prevState,
             [name]: value
         }));
     };
 
-    const handleSubmitNewWorkHours = (e) => {
+    const handleSubmitNewTeamWork = (e) => {
         e.preventDefault();
         
-        if (!newWorkHours.weeklyWorkHoursData || !newWorkHours.wwhStartDate) {
+        if (!newTeamWork.teamWork || !newTeamWork.twStartDate) {
             setMessage("Por favor, completa todos los campos.");
             return;
         }
 
-        fetch(`http://localhost:8081/api/wwh/create?employeeId=${createForm.id}&weeklyWorkHoursData=${newWorkHours.weeklyWorkHoursData}&wwhStartDate=${newWorkHours.wwhStartDate}`, {
+        fetch(`http://localhost:8081/api/teamwork/create?employeeId=${createForm.id}&teamWork=${newTeamWork.teamWork}&twStartDate=${newTeamWork.twStartDate}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -83,7 +82,7 @@ export const AddWwh = () => {
                     throw new Error("Error al crear la jornada.");
                 }
                 setMessage("Jornada añadida exitosamente.");
-                setNewWorkHours({ weeklyWorkHoursData: "", wwhStartDate: "" });
+                setNewTeamWork({ teamWork: "", twStartDate: "" });
                 handleEmployeeSelect({ target: { value: createForm.id } });
             })
             .catch(error => {
@@ -115,63 +114,64 @@ export const AddWwh = () => {
             {message && <p className="text-red-500 text-sm">{message}</p>}
 
             {/* Tabla de jornadas */}
-            {workHours.length > 0 && (
+           
                 <div className="overflow-x-auto bg-white shadow-md rounded-lg">
                     <table className="min-w-full table-auto">
                         <thead className="bg-gray-100">
                             <tr>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Inicio</th>
-                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Término</th>
-                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Horas Semanales</th>
+                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Fin</th>
+                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Equipo de trabajo</th>
                             </tr>
                         </thead>
                         <tbody className="text-sm">
-                            {workHours.map((workHour) => (
-                                <tr key={workHour.id} className="border-b hover:bg-gray-50">
-                                    <td className="px-4 py-2">{workHour.id}</td>
-                                    <td className="px-4 py-2">{workHour.wwhStartDate}</td>
-                                    <td className="px-4 py-2">{workHour.wwhTerminationDate || "N/A"}</td>
-                                    <td className="px-4 py-2">{workHour.weeklyWorkHoursData}</td>
+                            {teamWork.map((teamWork) => (
+                                <tr key={teamWork.id} className="border-b hover:bg-gray-50">
+                                    <td className="px-4 py-2">{teamWork.id}</td>
+                                    <td className="px-4 py-2">{teamWork.twStartDate}</td>
+                                    <td className="px-4 py-2">{teamWork.twTerminationDate || "N/A"}</td>
+                                    <td className="px-4 py-2">{teamWork.teamWork}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                 </div>
-            )}
+         
+                        
 
             {/* Formulario para añadir nueva jornada */}
             <div className="mt-6 space-y-4 ">
-                <h3 className="text-lg font-semibold text-gray-900">Añadir Nueva Jornada</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Añadir Equipo de Trabajo</h3>
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 
                 <div className="sm:col-span-3">
-                    <label htmlFor="weeklyWorkHoursData" className="block text-sm font-medium text-gray-700 mb-2">Jornada (horas semanales)</label>
+                    <label htmlFor="teamWork" className="block text-sm font-medium text-gray-700 mb-2">Equipo</label>
                     <input
-                        type="number"
-                        name="weeklyWorkHoursData"
-                        id="weeklyWorkHoursData"
-                        value={newWorkHours.weeklyWorkHoursData}
+                  
+                        name="teamWork"
+                        id="teamWork"
+                        value={newTeamWork.teamWork}
                         onChange={handleInputChange}
                         className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
                 </div>
                 <div className="sm:col-span-3">
-                    <label htmlFor="wwhStartDate" className="block text-sm font-medium text-gray-700 mb-2">Fecha de Inicio</label>
+                    <label htmlFor="twStartDate" className="block text-sm font-medium text-gray-700 mb-2">Fecha de Inicio</label>
                     <input
                         type="date"
-                        name="wwhStartDate"
+                        name="twStartDate"
                         id="wwhStartDate"
-                        value={newWorkHours.wwhStartDate}
+                        value={newTeamWork.twStartDate}
                         onChange={handleInputChange}
-                        className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                        className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 px-2"
                         />
                 </div>
                         </div>
                 <div className="mt-6 flex items-center justify-end gap-x-6">
                 <button  type="button" className="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
            
-                    <button  onClick={handleSubmitNewWorkHours}  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white">Save</button>
+                    <button  onClick={handleSubmitNewTeamWork}  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white">Save</button>
                
             </div>
                

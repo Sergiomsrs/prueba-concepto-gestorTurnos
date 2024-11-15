@@ -10,12 +10,8 @@ const initialState = {
     terminationDate: ""
 }
 
-
-
-
 export const AddUSer = () => {
 
-    const initialState = { name: '', lastName: '', email: '', hireDate: '', terminationDate: '' };
     const [createForm, setCreateForm] = useState(initialState);
     const [email, setEmail] = useState("");
     const [isExistingEmployee, setIsExistingEmployee] = useState(false);

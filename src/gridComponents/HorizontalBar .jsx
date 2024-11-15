@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { entrada } from "../utils/data";
 import { formatTime, getHighestNonZeroIndex } from "../utils/function";
 
-export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDurationes, phours }) => {
+export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp }) => {
 
-  const [startSelection, setStartSelection] = useState(null);
-  const [isSelecting, setIsSelecting] = useState(false);
+
 
 
   const handleMouseDown = (index) => {
@@ -20,15 +19,15 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
       const isStartSelected = hours[startSelection] !== "Null";
 
       for (let i = selectionStart; i <= selectionEnd; i++) {
+        if (isInputDisabled(i)) {
+          continue;
+        }
         onHourChange(i, isStartSelected ? entrada[i] : "Null");
       }
     }
   };
 
-  const handleMouseUp = () => {
-    setIsSelecting(false);
-    setStartSelection(null);
-  };
+
 
   const handleClick = (index, isChecked) => {
     onHourChange(index, isChecked ? entrada[index] : "Null");
@@ -37,7 +36,7 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
 
   const isInputDisabled = (index) => {
     const highestIndex = getHighestNonZeroIndex(phours);
-    return highestIndex >= (index + 48) ? true : false;
+    return highestIndex >= (index + 48) || index == "PTO" ? true : false;
   }
 
   return (
@@ -54,12 +53,12 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
         >
           <input
             type="checkbox"
-            className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl ${isInputDisabled(index) || value === "NP" ? 'cursor-not-allowed opacity-30' : 'cursor-pointer'
+            className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl ${isInputDisabled(index) || value === "PTO" ? 'cursor-not-allowed opacity-30' : 'cursor-pointer'
               } ${value !== "Null" && value !== "NP" ? 'bg-indigo-500' : 'bg-neutral-200'
               } relative`}
             checked={value !== "Null" && value !== "NP"}
             onChange={(event) => handleClick(index, event.target.checked)}
-            disabled={isInputDisabled(index) || value === "NP"}
+            disabled={isInputDisabled(index) || value === "PTO"}
           />
           {index % 4 === 3 && (
             <div className="absolute right-0 top-1/2 h-1/2 bg-slate-400" style={{ zIndex: -1, width: 1 }}></div>

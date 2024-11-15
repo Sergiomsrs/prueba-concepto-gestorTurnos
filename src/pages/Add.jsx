@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { AddUSer } from '../formComponents/AddUSer';
 import { AddWwh } from '../formComponents/AddWwh';
+import { AddTeamWork } from '../formComponents/AddTeamWork';
 
 
 
@@ -21,6 +22,9 @@ export const Add = () => {
       break;
     case 1:
       content = <AddWwh />;
+      break;
+      case 2:
+      content = <AddTeamWork />;
       break;
     default:
       content = null; // o cualquier contenido predeterminado
