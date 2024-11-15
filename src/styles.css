@@ -2,3 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Scrollbar */
+.scrollbar-custom::-webkit-scrollbar {
+    height: 8px; /* Altura de la barra de desplazamiento horizontal */
+    width: 8px;  /* Ancho de la barra de desplazamiento vertical */
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: rgb(121, 166, 238);  /* Color de la parte deslizante */
+    border-radius: 10px;  /* Bordes redondeados */
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: #f1f1f1;  /* Fondo de la pista de desplazamiento */
+    border-radius: 10px;
+  }
+  
+  .scrollbar-custom::-webkit-scrollbar-corner {
+    background: transparent; /* Eliminando la esquina de la barra de desplazamiento */
+  }
+  

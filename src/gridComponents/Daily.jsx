@@ -58,7 +58,7 @@ export const Daily = () => {
 
 
   return (
-    <section className="p-4">
+    <section className="max-w-full p-4">
       <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 ">  {/*incorporar zoom en este div*/}
@@ -84,14 +84,13 @@ export const Daily = () => {
             </DayGrid>
           </div>
         ))}
-        <div className="flex flex-row w-full my-8 gap-2">
-          
-            <Resumen className="flex-grow" employess={employess}/>
-          
-          
-            <RDias  className="flex-none w-1/3" />
-          
+
+         <div className="flex flex-row my-8 gap-2 overflow-x-auto scrollbar-custom w-full">
+          <Resumen className="flex-none w-1/3" employess={employess} />
+          <RDias className="flex-none w-1/3" />
         </div>
+
+
         <div className="flex gap-4">
           <button onClick={handlePrint} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
           <button onClick={handlReset} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded min-w-32">Reset</button>

@@ -38,9 +38,15 @@ export const Resumen = () => {
       <tbody>
         {uniqueEmployeeNames.map(employeeName => {
           const employeeNameTrimmed = employeeName.trim(); // Limpiar espacios
-          const wwh = data
-            .flatMap(day => day.employees)
-            .find(employee => employee.name === employeeNameTrimmed)?.wwh || 0;
+          const wwh = Math.round(
+            (data.slice(1).reduce((acc, day) => {
+                const employee = day.employees.find(emp => emp.name === employeeNameTrimmed);
+                if (employee) {
+                    return acc + (employee.wwh / 7);
+                }
+                return acc;
+            }, 0) * 2) / 2
+        );
 
           const totalShiftDuration = getTotalShiftDuration(employeeNameTrimmed);
 
