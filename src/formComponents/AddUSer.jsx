@@ -123,7 +123,7 @@ export const AddUSer = () => {
     };
 
     return (
-        <form>
+        <form className="space-y-6">
             {/* Dropdown para seleccionar empleado */}
             <div className="flex flex-row gap-4 mb-2">
                 <div className="w-3/4">

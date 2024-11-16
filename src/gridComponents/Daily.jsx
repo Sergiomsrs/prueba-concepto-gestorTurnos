@@ -10,9 +10,16 @@ import { AppContext } from "../context/AppContext";
 import { SectionPicker } from "../utilComponents/SectionPicker";
 import { RDias } from "../gridComponents/RDias";
 import { JobHourApp } from "./JobHourApp";
+import { generateSplitWorkShift } from "../utils/timeManager";
 
 
 export const Daily = () => {
+
+  const workShiftArray = generateSplitWorkShift([
+    [{ hour: 10, minute: 0 }, { hour: 13, minute: 45 }] // Segundo bloque
+  ]);
+  
+  console.log(workShiftArray);
 
   const { data, setData, date, setDate, setSelectedOption } = useContext(AppContext);
 
@@ -85,7 +92,7 @@ export const Daily = () => {
           </div>
         ))}
 
-         <div className="flex flex-row my-8 gap-2 overflow-x-auto scrollbar-custom w-full">
+         <div className="flex flex-row my-8 gap-2 overflow-x-auto scrollbar-custom w-full bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500">
           <Resumen className="flex-none w-1/3" employess={employess} />
           <RDias className="flex-none w-1/3" />
         </div>

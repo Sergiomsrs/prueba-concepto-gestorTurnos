@@ -90,48 +90,60 @@ console.log(formattedDifference);
   console.log(empleadoData);
 
   return (
-    <section className="w-3/4">
+    <section className="w-full max-w-6xl mx-auto px-4">
   <EmployeePicker value={selectedEmployee} onChange={handleEmployeeChange} />
 
   <span className="inline-flex items-center rounded-md bg-gray-800 px-2 py-1 text-sm font-bold text-white ring-1 ring-inset ring-gray-500/10 mb-4">
     {`Semana del ${empleadoData[0].id} al ${empleadoData[empleadoData.length - 1].id}`}
   </span>
 
-  <div className="border rounded-lg shadow-md overflow-x-auto p-2">
-    <table className="min-w-full divide-y divide-gray-200">
-      <thead className="bg-gray-50">
-        <tr>
-          <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Día</th>
-          <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-          <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Turno de Trabajo</th>
-          <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duración</th>
-        </tr>
-      </thead>
-      <tbody className="bg-white divide-y divide-gray-200">
-        {empleadoData.map((day, index) => {
-          const { workShift } = day;
-          const blocks = splitIntoBlocks(workShift);
-          const minMaxValues = findMinMaxOfBlocks(blocks);
+  {/* Tarjeta para Totales */}
+  <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border-t-4 border-blue-500">
+    <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumen de la Semana</h3>
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="p-4 bg-gray-100 rounded-lg shadow-sm">
+        <h4 className="text-sm font-medium text-gray-500">Jornada</h4>
+        <p className="text-xl font-bold text-gray-900">{wwh}h</p>
+      </div>
+      <div className="p-4 bg-gray-100 rounded-lg shadow-sm">
+        <h4 className="text-sm font-medium text-gray-500">Horas Trabajadas</h4>
+        <p className="text-xl font-bold text-gray-900">{formattedTime}</p>
+      </div>
+      <div className="p-4 bg-gray-100 rounded-lg shadow-sm">
+        <h4 className="text-sm font-medium text-gray-500">Horas Complementarias</h4>
+        <p className="text-xl font-bold text-gray-900">{formattedDifference}</p>
+      </div>
+    </div>
+  </div>
 
-          return (
-            <tr key={index}>
-              <td className="px-4 py-2 w-6 whitespace-nowrap text-sm font-medium text-gray-900">{formatToDate(day)}</td>
-              <td className="px-4 py-2 w-6 whitespace-nowrap text-sm font-medium text-gray-900">{`${day.day.charAt(0).toUpperCase() + day.day.slice(1)}`}</td>
-              <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{getStringBlock(day, minMaxValues)}</td>
-              <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">{day.duration}</td>
-            </tr>
-          );
-        })}
-        
-        {/* Fila con los resultados finales */}
-        <tr>
-          <td className="px-4 py-2 w-6 whitespace-nowrap text-sm font-medium text-gray-900">Totales</td>
-          <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500">Jornada: {wwh}h</td>
-          <td className="px-4 py-2 w-6 whitespace-nowrap text-sm font-medium text-gray-900">Trabajadas: {formattedTime}</td>
-          <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-500">Complementarias: {formattedDifference}</td>
+  {/* Tabla de los días de la semana */}
+  <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border-t-4 border-blue-500">
+  <table className="min-w-full divide-y divide-gray-200 table-auto">
+  <thead className="bg-gray-50">
+    <tr>
+      <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Día</th>
+      <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"> </th>
+      <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Turno de Trabajo</th>
+      <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duración</th>
+    </tr>
+  </thead>
+  <tbody className="bg-white divide-y divide-gray-200">
+    {empleadoData.map((day, index) => {
+      const { workShift } = day;
+      const blocks = splitIntoBlocks(workShift);
+      const minMaxValues = findMinMaxOfBlocks(blocks);
+
+      return (
+        <tr key={index}>
+          <td className="px-4 py-2 text-left text-sm font-medium text-gray-900">{formatToDate(day)}</td>
+          <td className="px-4 py-2 text-left text-sm font-medium text-gray-900">{`${day.day.charAt(0).toUpperCase() + day.day.slice(1)}`}</td>
+          <td className="px-4 py-2 text-left text-sm text-gray-500">{getStringBlock(day, minMaxValues)}</td>
+          <td className="px-4 py-2 text-left text-sm text-gray-500">{day.duration.slice(0, 5)}</td>
         </tr>
-      </tbody>
-    </table>
+      );
+    })}
+  </tbody>
+</table>
   </div>
 </section>
   );

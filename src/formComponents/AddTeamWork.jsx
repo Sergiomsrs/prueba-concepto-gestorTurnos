@@ -114,7 +114,7 @@ export const AddTeamWork = () => {
             {message && <p className="text-red-500 text-sm">{message}</p>}
 
             {/* Tabla de jornadas */}
-           
+            {teamWork.length > 0 && (
                 <div className="overflow-x-auto bg-white shadow-md rounded-lg">
                     <table className="min-w-full table-auto">
                         <thead className="bg-gray-100">
@@ -137,6 +137,7 @@ export const AddTeamWork = () => {
                         </tbody>
                     </table>
                 </div>
+            )}
          
                         
 

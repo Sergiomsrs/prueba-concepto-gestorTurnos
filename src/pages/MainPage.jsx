@@ -10,7 +10,7 @@ export const MainPage = () => {
     
     <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden px-1 sm:px-8 lg:px-16">
       
-      <div className="container w-full py-8" >
+      <div className="container grid min-h-[100dvh] grid-rows-[auto_1fr_auto]" >
 
         <header className="mb-8">
           <Navbar />
@@ -25,7 +25,7 @@ export const MainPage = () => {
           </Routes>
         </main>
 
-        <footer className="mt-8">
+        <footer className="mt-8 mb-2">
           <p className="text-center">© 2024 My Website. All rights reserved.</p>
         </footer>
 
