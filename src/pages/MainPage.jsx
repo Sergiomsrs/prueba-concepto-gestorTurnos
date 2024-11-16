@@ -4,6 +4,7 @@ import { Navbar } from "../utilComponents/Navbar"
 import { EmployeeWeek } from "./EmployeeWeek"
 import { Daily } from "../gridComponents/Daily"
 import { Add } from "./Add"
+import { Report } from "./Report"
 
 export const MainPage = () => {
   return (
@@ -22,6 +23,7 @@ export const MainPage = () => {
             <Route path="/employeeweek" element={<EmployeeWeek />} />
             <Route path="/landing" element={<Landing />} />
             <Route path="/adduser" element={<Add />} />
+            <Route path="/report" element={<Report />} />
           </Routes>
         </main>
 

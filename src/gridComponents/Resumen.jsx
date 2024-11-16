@@ -4,7 +4,7 @@ import { uniqueEmployeeName } from "../utils/function";
 
 
 export const Resumen = () => {
-  const { data, selectedOption } = useContext(AppContext);
+  const { data, selectedOption,holidayDates } = useContext(AppContext);
 
   const uniqueEmployeeNames = uniqueEmployeeName(data);
 

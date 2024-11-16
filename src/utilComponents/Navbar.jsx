@@ -18,6 +18,9 @@ export const Navbar = () => {
             <Link to="/adduser" className="text-gray-300 text-xs sm:text-sm md:text-lg hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
              Add
             </Link>
+            <Link to="/report" className="text-gray-300 text-xs sm:text-sm md:text-lg hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
+             Report
+            </Link>
             {/*<Link to="/adduser" className="text-gray-300 text-xs sm:text-sm md:text-base hover:text-white px-2 py-1 sm:px-3 sm:py-2 font-medium">
               AddUser
             </Link>*/}

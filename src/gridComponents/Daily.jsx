@@ -10,7 +10,7 @@ import { AppContext } from "../context/AppContext";
 import { SectionPicker } from "../utilComponents/SectionPicker";
 import { RDias } from "../gridComponents/RDias";
 import { JobHourApp } from "./JobHourApp";
-import { generateSplitWorkShift } from "../utils/timeManager";
+import { MenuIcon } from "../icon/MenuIcon";
 
 
 export const Daily = () => {
@@ -64,6 +64,7 @@ export const Daily = () => {
       <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 ">  {/*incorporar zoom en este div*/}
+        <MenuIcon/>
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 mb-4">
