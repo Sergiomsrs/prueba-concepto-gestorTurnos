@@ -3,7 +3,7 @@ import { AppContext } from "../context/AppContext";
 import { formatTime, uniqueEmployeeName } from "../utils/function";
 
 export const RDias = () => {
-  const { data, selectedOption } = useContext(AppContext);
+  const { data, selectedOption, holidayDates } = useContext(AppContext);
   const uniqueEmployeeNames = uniqueEmployeeName(data);  // Obtenemos los empleados únicos
 
   useEffect(() => {}, [data]);
@@ -47,8 +47,9 @@ export const RDias = () => {
             return (
               <tr key={employeeName}>
                 {dataWeek.map((item) => (
+                  
                   <td key={item.id}>
-                    {formatTime(item.employees.find((e) => e.name === employeeName)?.shiftDuration)}
+                    {formatTime(item.employees.find((e) => e.name === employeeName)?.shiftDuration)}{holidayDates.includes(item.id)? "🎉" : ""}
                   </td>
                 ))}
               </tr>

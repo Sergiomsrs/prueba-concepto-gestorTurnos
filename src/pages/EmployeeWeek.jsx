@@ -5,7 +5,7 @@ import { findMinMaxOfBlocks, getStringBlock, splitIntoBlocks } from "../utils/bl
 import { formatDate, formatToDate } from "../utils/function";
 
 export const EmployeeWeek = () => {
-  const { data } = useContext(AppContext);
+  const { data, holidayDates } = useContext(AppContext);
   
   const [selectedEmployee, setSelectedEmployee] = useState(data[0].employees[0].name);
 
@@ -26,13 +26,19 @@ export const EmployeeWeek = () => {
 
   const wwh = Math.round(
     (data.slice(1).reduce((acc, day) => {
-        const employee = day.employees.find(emp => emp.name === selectedEmployee);
-        if (employee) {
-            return acc + (employee.wwh / 7);
-        }
-        return acc;
+      const employee = day.employees.find(emp => emp.name === selectedEmployee);
+      
+      // Verificar si el día es festivo
+      const isHoliday = holidayDates.includes(day.id);
+  
+      // Solo sumar las horas si el día no es festivo y el empleado existe
+      if (employee && !isHoliday) {
+        return acc + (employee.wwh / 7);
+      }
+      return acc;
     }, 0) * 2) / 2
-);
+  );
+
 
 const totalShiftDuration = empleadoData.reduce((acc, day) => {
   const [hours, minutes] = day.duration.split(":").map(Number);

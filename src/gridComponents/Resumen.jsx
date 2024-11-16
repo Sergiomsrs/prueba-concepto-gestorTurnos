@@ -4,7 +4,7 @@ import { uniqueEmployeeName } from "../utils/function";
 
 
 export const Resumen = () => {
-  const { data, selectedOption,holidayDates } = useContext(AppContext);
+  const { data, selectedOption, holidayDates } = useContext(AppContext);
 
   const uniqueEmployeeNames = uniqueEmployeeName(data);
 
@@ -40,13 +40,18 @@ export const Resumen = () => {
           const employeeNameTrimmed = employeeName.trim(); // Limpiar espacios
           const wwh = Math.round(
             (data.slice(1).reduce((acc, day) => {
-                const employee = day.employees.find(emp => emp.name === employeeNameTrimmed);
-                if (employee) {
-                    return acc + (employee.wwh / 7);
-                }
-                return acc;
+              const employee = day.employees.find(emp => emp.name === employeeNameTrimmed);
+              
+              // Verificar si el día es festivo
+              const isHoliday = holidayDates.includes(day.id);
+          
+              // Solo sumar las horas si el día no es festivo y el empleado existe
+              if (employee && !isHoliday) {
+                return acc + (employee.wwh / 7);
+              }
+              return acc;
             }, 0) * 2) / 2
-        );
+          );
 
           const totalShiftDuration = getTotalShiftDuration(employeeNameTrimmed);
 

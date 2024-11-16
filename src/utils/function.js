@@ -150,11 +150,17 @@ export const generateShiftData = (dt) => {
 };
 
 
-export const formatDate = (day) => {
+export const formatDate = (day, hol) => {
   const date = new Date(day.id);
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
-  return `${day.day.charAt(0).toUpperCase() + day.day.slice(1)} ${formattedDate}`;
+  const isHoliday = hol.includes(day.id);
+  
+  console.log(day.id);
+  console.log(hol);
+  console.log(isHoliday);
+  return `${day.day.charAt(0).toUpperCase() + day.day.slice(1)} ${formattedDate} ${isHoliday ? '🎉' : ''}`;
+
 };
 
 export const formatToDate = (day) => {

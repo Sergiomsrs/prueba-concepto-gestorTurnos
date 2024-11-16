@@ -16,7 +16,7 @@ import { MenuIcon } from "../icon/MenuIcon";
 export const Daily = () => {
 
 
-  const { data, setData, date, setDate, setSelectedOption } = useContext(AppContext);
+  const { data, setData, date, setDate, setSelectedOption, holidayDates } = useContext(AppContext);
 
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
@@ -70,7 +70,7 @@ export const Daily = () => {
             <div className="text-center text-lg font-bold mt-4 mb-4">
               <div className="text-center text-lg font-bold mt-4">
                 <div className="inline-block bg-gray-800 text-white text-sm font-semibold px-2 py-1 rounded-full">
-                  {formatDate(day)}
+                  {formatDate(day, holidayDates)}
                 </div>
               </div>
             </div>
