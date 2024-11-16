@@ -56,15 +56,15 @@ export const Daily = () => {
     );
   };
 
-  
+
 
 
   return (
     <section className="max-w-full p-4">
       <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
-      <div className="border rounded-lg shadow-md overflow-x-auto p-4 ">  {/*incorporar zoom en este div*/}
-        <MenuIcon/>
+      <div className="border rounded-lg shadow-md overflow-x-auto max-w-full p-4">  {/*incorporar zoom en este div*/}
+        <MenuIcon />
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 mb-4">
@@ -88,9 +88,9 @@ export const Daily = () => {
           </div>
         ))}
 
-         <div className="flex flex-row my-8 gap-2 overflow-x-auto scrollbar-custom w-full bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500">
-          <Resumen className="flex-none w-1/3s" employess={employess} />
-          <RDias className="flex-none w-1/3" />
+        <div className="flex flex-row my-8 gap-2 overflow-x-auto max-w-screen-xl bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500">
+          <Resumen className="flex-none w-max" employess={employess} />
+          <RDias className="flex-none w-max" />
         </div>
 
 

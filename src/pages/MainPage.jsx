@@ -11,13 +11,13 @@ export const MainPage = () => {
     
     <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden px-1 sm:px-8 lg:px-16">
       
-      <div className="container grid min-h-[100dvh] grid-rows-[auto_1fr_auto]" >
+      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto]" >
 
         <header className="mb-8">
           <Navbar />
         </header>
 
-        <main className="flex flex-col items-center">
+        <main className="flex flex-col items-center max-w-full">
           <Routes>
             <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />

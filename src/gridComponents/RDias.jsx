@@ -30,11 +30,11 @@ export const RDias = () => {
   };
 
   return (
-    <table className="table table-hover text-center w-2/3 mb-0  ">
+    <table className="table table-hover text-center w-2/3 mb-0">
       <thead>
         <tr>
           {dataWeek.map((item) => (
-            <th key={item.id}>{`${item.day.charAt(0).toUpperCase() + item.day.slice(1)} (${item.id.slice(8)})`}</th>
+            <th key={item.id} className="whitespace-nowrap">{`${item.day.charAt(0).toUpperCase() + item.day.slice(1)}`}<span className="text-xs">{` (${item.id.slice(8)})`}</span></th>
           ))}
         </tr>
       </thead>
@@ -45,10 +45,10 @@ export const RDias = () => {
           // Mostramos el empleado solo si debe ser incluido según el `selectedOption`
           if (selectedOption === "todos" || selectedOption === teamWork) {
             return (
-              <tr key={employeeName}>
+              <tr key={employeeName} >
                 {dataWeek.map((item) => (
                   
-                  <td key={item.id}>
+                  <td key={item.id} className="whitespace-nowrap">
                     {formatTime(item.employees.find((e) => e.name === employeeName)?.shiftDuration)}{holidayDates.includes(item.id)? "🎉" : ""}
                   </td>
                 ))}
