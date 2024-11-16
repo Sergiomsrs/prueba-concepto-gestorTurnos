@@ -70,3 +70,20 @@ const result = generateWorkShiftArray(startTime, endTime);
 console.log(result);
 */
 
+export const generateWorkShiftPto = (startTime, endTime, interval = 15, startHour = 7) => {
+  const workShift = Array(62).fill("Null"); // Array de 62 posiciones para 07:00 a 22:30
+  const [startHourInput, startMinutes] = startTime.split(":").map(Number);
+  const [endHourInput, endMinutes] = endTime.split(":").map(Number);
+
+  // Calcular índices ajustados según el rango de 07:00 a 22:30
+  const startIndex = Math.round(((startHourInput * 60 + startMinutes) - (startHour * 60)) / interval);
+  const endIndex = Math.round(((endHourInput * 60 + endMinutes) - (startHour * 60)) / interval);
+
+  // Llenar el array con "PTO" en lugar de las horas
+  for (let i = startIndex; i <= endIndex - 1; i++) {
+    workShift[i] = "PTO";
+  }
+
+  return workShift;
+};
+

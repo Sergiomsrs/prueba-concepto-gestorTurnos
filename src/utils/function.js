@@ -88,7 +88,7 @@ export const obtenerPreviousDay = (dayIndex, data) => {
 }
 
 export const calcularshiftDuration = (h) => {
-  const shiftDurationInMinutes = h.filter(item => item !== "Null").length * 15;
+  const shiftDurationInMinutes = h.filter(item => item !== "Null" && item !== "PTO" ).length * 15;
   const hoursshiftDuration = Math.floor(shiftDurationInMinutes / 60);
   const minutesshiftDuration = shiftDurationInMinutes % 60;
   const shiftDurationFormatted = `${String(hoursshiftDuration).padStart(2, "0")}:${String(minutesshiftDuration).padStart(2, "0")}`;

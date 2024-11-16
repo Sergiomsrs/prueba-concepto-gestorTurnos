@@ -77,7 +77,7 @@ export const Add = () => {
             href="#"
             onClick={() => handleTabClick(3)}
           >
-            PTO
+            Pto
           </a>
         </li>
         <li className="mr-1">

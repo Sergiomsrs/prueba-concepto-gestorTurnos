@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { generatePtoNullWithDate, generatePtoWithDate, getDatesInRange } from "../utils/function";
+import { generateWorkShiftPto } from "../utils/blockHours";
 
 export const AddDisp = () => {
     const initialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
@@ -24,13 +25,7 @@ export const AddDisp = () => {
     }, []);
 
 
-    console.log("Data to send:", {
-        employeeId: createForm.id,
-        absenceReason: newPto.absenceReason,
-        date: newPto.date,
-        startHour: newPto.startHour,
-        terminationHour: newPto.terminationHour,  // Verifica que esto tiene un valor válido
-      });
+
 
 
 
@@ -85,21 +80,29 @@ export const AddDisp = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        const dates = getDatesInRange(newPto.ptoStartDate, newPto.ptoTerminationDate);
-        const pto = generatePtoWithDate(createForm.id, dates);
+        const pto = generateWorkShiftPto(newPto.startHour, newPto.terminationHour);
+        
+        const shift = [{
+            employeeId: createForm.id,
+            hours: pto,
+            date: newPto.date,
+            shiftDuration: '00:00',
+        }];
 
-       /* // Primero, guardar los turnos
+        console.log(shift);
+
+        // Primero, guardar los turnos
         fetch('http://localhost:8081/api/ws/saveAll', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(pto),
+            body: JSON.stringify(shift),
         })
             .then(response => response.json())
             .then(data => console.log('Success:', data))
             .catch((error) => console.error('Error:', error));
-*/
+
         // Luego, guardar la ausencia
         fetch('http://localhost:8081/api/disp/add', {
             method: 'POST',
@@ -121,7 +124,23 @@ export const AddDisp = () => {
 
     const handleDelete = () => {}
 
-    const handleDeleteDisp = (dispId) => {
+    const handleDeleteDisp = (dispId, date) => {
+
+
+            const dates = getDatesInRange(date, date);
+            const pto = generatePtoNullWithDate(createForm.id, dates);
+    
+            
+            fetch('http://localhost:8081/api/ws/saveAll', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(pto),
+            })
+                .then(response => response.json())
+                .then(data => console.log('Success:', data))
+                .catch((error) => console.error('Error:', error));
 
         fetch(`http://localhost:8081/api/disp/delete/${dispId}`, {
             method: 'DELETE',
@@ -177,7 +196,7 @@ export const AddDisp = () => {
                                     <td className="px-4 py-2">{workHour.absenceReason}</td>
                                     <td className="px-4 py-2">
                                         <button
-                                        onClick={()=>handleDeleteDisp(workHour.id)}
+                                        onClick={()=>handleDeleteDisp(workHour.id, workHour.date)}
                                         className="rounded-md bg-red-600 px-2 py-1 text-sm font-semibold text-white"
                                         >Eliminar</button>
                                     </td>

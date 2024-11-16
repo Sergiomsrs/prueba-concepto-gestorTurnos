@@ -88,7 +88,7 @@ export const Daily = () => {
         ))}
 
          <div className="flex flex-row my-8 gap-2 overflow-x-auto scrollbar-custom w-full bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500">
-          <Resumen className="flex-none w-1/3" employess={employess} />
+          <Resumen className="flex-none w-1/3s" employess={employess} />
           <RDias className="flex-none w-1/3" />
         </div>
 
