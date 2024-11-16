@@ -23,10 +23,10 @@ export const generateSplitWorkShift = (ranges) => {
   };
   
   // Ejemplo de uso
-  const workShiftArray = generateSplitWorkShift([
+  /*const workShiftArray = generateSplitWorkShift([
     [{ hour: 10, minute: 0 }, { hour: 13, minute: 45 }], // Primer bloque
     [{ hour: 17, minute: 0 }, { hour: 20, minute: 45 }]  // Segundo bloque
   ]);
   
   console.log(workShiftArray);
-  
+  */

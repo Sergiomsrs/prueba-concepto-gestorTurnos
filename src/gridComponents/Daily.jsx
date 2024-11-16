@@ -15,11 +15,6 @@ import { generateSplitWorkShift } from "../utils/timeManager";
 
 export const Daily = () => {
 
-  const workShiftArray = generateSplitWorkShift([
-    [{ hour: 10, minute: 0 }, { hour: 13, minute: 45 }] // Segundo bloque
-  ]);
-  
-  console.log(workShiftArray);
 
   const { data, setData, date, setDate, setSelectedOption } = useContext(AppContext);
 

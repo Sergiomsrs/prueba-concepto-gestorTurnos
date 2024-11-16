@@ -62,11 +62,11 @@ const generateWorkShiftArray = (startTime, endTime, interval = 15, startHour = 7
 
   return workShift;
 };
-
+/*
 // Ejemplo de uso
 const startTime = "10:00";
 const endTime = "16:00";
 const result = generateWorkShiftArray(startTime, endTime);
 console.log(result);
-
+*/
 

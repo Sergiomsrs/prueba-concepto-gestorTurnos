@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Selector } from "./Selector";
+
 
 export const AddTeamWork = () => {
     const initialState = { name: '', lastName: '', email: '', hireDate: '', terminationDate: '' };
