@@ -178,7 +178,6 @@ export const AddDisp = () => {
                     <table className="min-w-full table-auto">
                         <thead className="bg-gray-100">
                             <tr>
-                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Hora de Inicio</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Hora de Fin</th>
@@ -189,7 +188,6 @@ export const AddDisp = () => {
                         <tbody className="text-sm">
                             {workHours.map((workHour) => (
                                 <tr key={workHour.id} className="border-b hover:bg-gray-50">
-                                    <td className="px-4 py-2">{workHour.id}</td>
                                     <td className="px-4 py-2">{workHour.date}</td>
                                     <td className="px-4 py-2">{workHour.startHour || "N/A"}</td>
                                     <td className="px-4 py-2">{workHour.terminationHour || "N/A"}</td>

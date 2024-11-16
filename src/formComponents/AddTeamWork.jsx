@@ -119,7 +119,6 @@ export const AddTeamWork = () => {
                     <table className="min-w-full table-auto">
                         <thead className="bg-gray-100">
                             <tr>
-                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Inicio</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Fin</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Equipo de trabajo</th>
@@ -128,7 +127,6 @@ export const AddTeamWork = () => {
                         <tbody className="text-sm">
                             {teamWork.map((teamWork) => (
                                 <tr key={teamWork.id} className="border-b hover:bg-gray-50">
-                                    <td className="px-4 py-2">{teamWork.id}</td>
                                     <td className="px-4 py-2">{teamWork.twStartDate}</td>
                                     <td className="px-4 py-2">{teamWork.twTerminationDate || "N/A"}</td>
                                     <td className="px-4 py-2">{teamWork.teamWork}</td>

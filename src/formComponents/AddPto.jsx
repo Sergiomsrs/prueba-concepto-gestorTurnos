@@ -174,7 +174,6 @@ export const AddPto = () => {
                     <table className="min-w-full table-auto">
                         <thead className="bg-gray-100">
                             <tr>
-                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Inicio</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Término</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Motivo</th>
@@ -184,7 +183,6 @@ export const AddPto = () => {
                         <tbody className="text-sm">
                             {workHours.map((workHour) => (
                                 <tr key={workHour.id} className="border-b hover:bg-gray-50">
-                                    <td className="px-4 py-2">{workHour.id}</td>
                                     <td className="px-4 py-2">{workHour.startDate}</td>
                                     <td className="px-4 py-2">{workHour.terminationDate || "N/A"}</td>
                                     <td className="px-4 py-2">{workHour.absenceReason}</td>

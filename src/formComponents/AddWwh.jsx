@@ -120,7 +120,6 @@ export const AddWwh = () => {
                     <table className="min-w-full table-auto">
                         <thead className="bg-gray-100">
                             <tr>
-                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Inicio</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Término</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Horas Semanales</th>
@@ -129,7 +128,6 @@ export const AddWwh = () => {
                         <tbody className="text-sm">
                             {workHours.map((workHour) => (
                                 <tr key={workHour.id} className="border-b hover:bg-gray-50">
-                                    <td className="px-4 py-2">{workHour.id}</td>
                                     <td className="px-4 py-2">{workHour.wwhStartDate}</td>
                                     <td className="px-4 py-2">{workHour.wwhTerminationDate || "N/A"}</td>
                                     <td className="px-4 py-2">{workHour.weeklyWorkHoursData}</td>
