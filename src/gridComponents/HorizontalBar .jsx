@@ -36,6 +36,18 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
     return highestIndex >= (index + 48) ? true : false;
   }
 
+  const getCursorClass = (isDisabled, value) => {
+    if (isDisabled) return 'cursor-not-allowed opacity-30';
+    if (value == "PTO")  return 'cursor-not-allowed opacity-30';
+    return 'cursor-pointer';
+  };
+  
+  const getBackgroundClass = (value) => {
+    if (value === "PTO") return 'bg-red-200 '; 
+    if (value === "Null") return 'bg-neutral-200';
+    return 'bg-indigo-500'; 
+  };
+
   return (
     <>
       <td className="text-base font-semibold text-gray-800">{teamWork}</td>
@@ -50,9 +62,10 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
         >
           <input
             type="checkbox"
-            className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl ${isInputDisabled(index) || value === "PTO" ? 'cursor-not-allowed opacity-30' : 'cursor-pointer'
-              } ${value !== "Null" && value !== "PTO" ? 'bg-indigo-500' : 'bg-neutral-200'
-              } relative`}
+            className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl 
+              ${getCursorClass(isInputDisabled(index), value)} 
+              ${getBackgroundClass(value)} 
+              relative`}
             checked={value !== "Null" && value !== "PTO"}
             onChange={(event) => handleClick(index, event.target.checked)}
             disabled={isInputDisabled(index) || value === "PTO"}
