@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import { entrada } from "../utils/data";
 import { formatTime, getHighestNonZeroIndex } from "../utils/function";
+import { Modal } from "./Modal";
 
-export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
+export const HorizontalBar = ({username, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
 
   const handleMouseDown = (index) => {
     setStartSelection(index);
@@ -53,7 +65,7 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
       <td className="text-base font-semibold text-gray-800">{teamWork}</td>
       <td 
       className="text-base font-semibold text-gray-800">
-        <button onClick={()=>console.log(username, teamWork, id)} >{username}</button>
+        <button onClick={handleOpenModal} >{username}</button>
         </td>
       {hours && hours.map((value, index) => (
         <td
@@ -79,6 +91,7 @@ export const HorizontalBar = ({ username, hours, onHourChange, teamWork, shiftDu
         </td>
       ))}
       <td className="w-12 pl-2 align-bottom">{formatTime(shiftDurationes)}</td>
+      {isModalOpen && <Modal username={username} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id}/>}
     </>
   );
 };

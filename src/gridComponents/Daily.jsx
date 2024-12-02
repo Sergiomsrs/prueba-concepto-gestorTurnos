@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import { calcularshiftDuration, obtenerPreviousDay, generateShiftData, formatDate } from "../utils/function";
 import { employess } from "../utils/data";
@@ -11,12 +11,23 @@ import { SectionPicker } from "../utilComponents/SectionPicker";
 import { RDias } from "../gridComponents/RDias";
 import { JobHourApp } from "./JobHourApp";
 import { MenuIcon } from "../icon/MenuIcon";
+import { SideBar } from "./SideBar";
 
 
 export const Daily = () => {
 
 
   const { data, setData, date, setDate, setSelectedOption, holidayDates } = useContext(AppContext);
+
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
 
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
@@ -63,8 +74,9 @@ export const Daily = () => {
     <section className="max-w-full p-4">
       <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
-      <div className="border rounded-lg shadow-md overflow-x-auto max-w-full p-4">  {/*incorporar zoom en este div*/}
-        <MenuIcon />
+      <div className="border rounded-lg shadow-md overflow-x-auto max-w-full p-4 relative">  {/*incorporar zoom en este div*/}
+        <MenuIcon sideBarClick={handleOpenModal}/>
+        {isModalOpen && <SideBar sideBarClick={handleCloseModal} isOpen={isModalOpen}/>}
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 mb-4">

@@ -1,8 +1,8 @@
 import React from 'react'
 
-export const MenuIcon = () => {
+export const MenuIcon = ({sideBarClick}) => {
         return (
-          <button className="p-2 bg-transparent border-none cursor-pointer">
+          <button onClick={sideBarClick} className="p-2 bg-transparent border-none cursor-pointer">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
