@@ -4,7 +4,7 @@ import { CloseIcon } from '../icon/CloseIcon';
 export const SideBar = ({ sideBarClick, isOpen }) => {
     return (
         <aside
-            className={`absolute top-0 left-0 z-50 flex flex-col w-96 h-full px-4 py-4 overflow-y-auto border border-slate-600  rounded-lg shadow-md bg-gray-200 transition-transform duration-300 ease-out ${isOpen ? 'transform translate-x-0' : 'transform -translate-x-full'
+            className={`absolute top-0 left-0 z-50 flex flex-col w-96 h-full px-4 py-4 overflow-y-auto border border-slate-600  rounded-lg shadow-md bg-gray-200 bg-opacity-95 transition-transform duration-300 ease-out ${isOpen ? 'transform translate-x-0' : 'transform -translate-x-full'
                 }`}
         >
             <CloseIcon sideBarClick={sideBarClick} />

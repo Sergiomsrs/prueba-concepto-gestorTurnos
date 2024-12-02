@@ -100,13 +100,17 @@ export const Daily = () => {
           </div>
         ))}
 
-        <div className="flex flex-row my-8 gap-2 overflow-x-auto max-w-screen-xl bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500">
-          <Resumen className="flex-none w-max" employess={employess} />
-          <RDias className="flex-none w-max" />
+  
+
+        <div className="flex overflow-x-auto py-8 my-8 bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500">
+
+        <Resumen className="flex-none w-max" employess={employess} />
+        <RDias className="flex-none w-max" />
+
         </div>
 
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 over">
           <button onClick={handlePrint} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
           <button onClick={handlReset} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded min-w-32">Reset</button>
         </div>
