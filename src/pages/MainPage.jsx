@@ -5,6 +5,9 @@ import { EmployeeWeek } from "./EmployeeWeek"
 import { Daily } from "../gridComponents/Daily"
 import { Add } from "./Add"
 import { Report } from "./Report"
+import { AddTimeTrack } from "../timeTrack/pages/AddTimeTrack"
+import { TimeTrackView } from "../timeTrack/pages/TimeTrackView"
+import { Login } from "../timeTrack/pages/Login"
 
 export const MainPage = () => {
   return (
@@ -24,6 +27,9 @@ export const MainPage = () => {
             <Route path="/landing" element={<Landing />} />
             <Route path="/adduser" element={<Add />} />
             <Route path="/report" element={<Report />} />
+            <Route path="/fichar" element={<AddTimeTrack />} />
+            <Route path="/revisar" element={<TimeTrackView />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </main>
 

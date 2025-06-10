@@ -155,10 +155,6 @@ export const formatDate = (day, hol) => {
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
   const isHoliday = hol.includes(day.id);
-  
-  console.log(day.id);
-  console.log(hol);
-  console.log(isHoliday);
   return `${day.day.charAt(0).toUpperCase() + day.day.slice(1)} ${formattedDate} ${isHoliday ? '🎉' : ''}`;
 
 };
