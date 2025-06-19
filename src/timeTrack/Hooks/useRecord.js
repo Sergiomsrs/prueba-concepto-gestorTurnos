@@ -17,7 +17,7 @@ export const useRecord = () => {
   const fetchEmployees = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8080/api/user/active', {
+      const response = await fetch('http://localhost:8081/api/emp/active', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export const useRecord = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:8080/api/timestamp/employee/${(auth.role == "ADMIN" || auth.role == "GUEST") ? selectedEmployeeId : auth.user.id}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
+        `http://localhost:8081/api/timestamp/employee/${(auth.role == "ADMIN" || auth.role == "GUEST") ? selectedEmployeeId : auth.user.id}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export const useRecord = () => {
 
   const fetchLastThree = async () => {
   try {
-    const res = await fetch("http://localhost:8080/api/timestamp/last3"); 
+    const res = await fetch("http://localhost:8081/api/timestamp/last3"); 
     const data = await res.json();
     setLastThree(data);
   } catch (err) {

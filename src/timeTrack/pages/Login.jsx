@@ -26,7 +26,7 @@ export const Login = () => {
     e.preventDefault();
     // Se hace la peticion de login con los datos del formulario
     try {
-      const loginResponse = await fetch('http://localhost:8080/api/auth/login', {
+      const loginResponse = await fetch('http://localhost:8081/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -38,7 +38,7 @@ export const Login = () => {
       const token = loginData.token;
       const role = loginData.role; // Se obtiene el role de la primera respuesta
       // Si el login es exitoso, se hace una peticion para obtener los datos del usuario
-      const meResponse = await fetch('http://localhost:8080/api/user/me', {
+      const meResponse = await fetch('http://localhost:8081/api/emp/me', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

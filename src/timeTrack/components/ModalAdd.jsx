@@ -38,7 +38,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
     }
 
     try {
-      const response = await fetch('http://localhost:8080/api/timestamp/timestamp', {
+      const response = await fetch('http://localhost:8081/api/timestamp/timestamp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
       }
 
       const updatedRecordsResponse = await fetch(
-        `http://localhost:8080/api/timestamp/employee/${selectedEmployeeId}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
+        `http://localhost:8081/api/timestamp/employee/${selectedEmployeeId}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
         {
           headers: {
             "Content-Type": "application/json",

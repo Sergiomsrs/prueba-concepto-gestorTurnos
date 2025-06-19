@@ -7,7 +7,11 @@ const initialState = {
     lastName: "",
     email: "",
     hireDate: "",
-    terminationDate: ""
+    terminationDate: "",
+    secondLastName: "",
+    dni: "",
+    password: "",
+    role: "",
 }
 
 export const AddUSer = () => {
@@ -70,21 +74,21 @@ export const AddUSer = () => {
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => {
-            if (response.ok) {
-                console.log('Usuario eliminado exitosamente');
-                setMessage("Usuario eliminado exitosamente");
-                setCreateForm(initialState); // Reiniciar el formulario
-                setIsExistingEmployee(false);
-            } else {
-                console.error('Error al eliminar el usuario');
+            .then(response => {
+                if (response.ok) {
+                    console.log('Usuario eliminado exitosamente');
+                    setMessage("Usuario eliminado exitosamente");
+                    setCreateForm(initialState); // Reiniciar el formulario
+                    setIsExistingEmployee(false);
+                } else {
+                    console.error('Error al eliminar el usuario');
+                    setMessage("Error al eliminar el usuario");
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
                 setMessage("Error al eliminar el usuario");
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-            setMessage("Error al eliminar el usuario");
-        });
+            });
     };
 
     const handleSearch = async () => {
@@ -174,33 +178,58 @@ export const AddUSer = () => {
                         <div className="sm:col-span-3">
                             <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">First name</label>
                             <div className="mt-2">
-                                <input onChange={handleInputCreateChange} type="text" name="name" value={createForm.name || ""}  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <input onChange={handleInputCreateChange} type="text" name="name" value={createForm.name || ""} className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                             </div>
                         </div>
 
                         <div className="sm:col-span-3">
                             <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Last name</label>
                             <div className="mt-2">
-                                <input onChange={handleInputCreateChange} type="text" name="lastName" value={createForm.lastName || ""}  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <input onChange={handleInputCreateChange} type="text" name="lastName" value={createForm.lastName || ""} className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                             </div>
                         </div>
                         <div className="sm:col-span-3">
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email address</label>
                             <div className="mt-2">
-                                <input onChange={handleInputCreateChange}  name="email" value={createForm.email || ""} type="email"  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <input onChange={handleInputCreateChange} name="email" value={createForm.email || ""} type="email" className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                             </div>
                         </div>
 
                         <div className="sm:col-span-3">
                             <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Hire Date</label>
                             <div className="mt-2">
-                                <input onChange={handleInputCreateChange} type="date" name="hireDate" value={createForm.hireDate || ""}  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <input onChange={handleInputCreateChange} type="date" name="hireDate" value={createForm.hireDate || ""} className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                             </div>
                         </div>
                         <div className="sm:col-span-3">
                             <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">Termination Date</label>
                             <div className="mt-2">
-                                <input onChange={handleInputCreateChange} type="date" name="terminationDate" value={createForm.terminationDate || ""}  className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                <input onChange={handleInputCreateChange} type="date" name="terminationDate" value={createForm.terminationDate || ""} className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                            </div>
+                        </div>
+                        <div className="sm:col-span-3">
+                            <label htmlFor="secondLastName" className="block text-sm font-medium leading-6 text-gray-900">Second Last Name</label>
+                            <div className="mt-2">
+                                <input onChange={handleInputCreateChange} type="text" name="secondLastName" value={createForm.secondLastName || ""} className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                            </div>
+                        </div>
+                        <div className="sm:col-span-3">
+                            <label htmlFor="dni" className="block text-sm font-medium leading-6 text-gray-900">DNI</label>
+                            <div className="mt-2">
+                                <input onChange={handleInputCreateChange} type="text" name="dni" value={createForm.dni || ""} className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                            </div>
+                        </div>
+
+                        <div className="sm:col-span-3">
+                            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                            <div className="mt-2">
+                                <input onChange={handleInputCreateChange} type="text" name="password" value={createForm.password || ""} className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                            </div>
+                        </div>
+                        <div className="sm:col-span-3">
+                            <label htmlFor="role" className="block text-sm font-medium leading-6 text-gray-900">Rol</label>
+                            <div className="mt-2">
+                                <input onChange={handleInputCreateChange} type="text" name="role" value={createForm.role || ""} className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                             </div>
                         </div>
 

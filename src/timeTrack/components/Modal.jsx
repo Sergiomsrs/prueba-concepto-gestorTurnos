@@ -100,8 +100,8 @@ const handleSaveRecord = async (recordId) => {
     try {
       const isNew = String(recordId).startsWith('temp');
       const url = isNew
-        ? 'http://localhost:8080/api/timestamp/timestamp'
-        : `http://localhost:8080/api/timestamp/${recordId}`;
+        ? 'http://localhost:8081/api/timestamp/timestamp'
+        : `http://localhost:8081/api/timestamp/${recordId}`;
       const method = isNew ? 'POST' : 'PATCH';
 
       const response = await fetch(url, {
@@ -195,7 +195,7 @@ const handleSaveRecord = async (recordId) => {
     }
     // Se lanza la consulta
     try {
-      const res = await fetch(`http://localhost:8080/api/timestamp/${recordId}`, {
+      const res = await fetch(`http://localhost:8081/api/timestamp/${recordId}`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json',
           Authorization: `Bearer ${auth.token}`,
