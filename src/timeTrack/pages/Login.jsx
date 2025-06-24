@@ -7,7 +7,7 @@ export const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState({text: '', type: ''});
+  const [errorMessage, setErrorMessage] = useState({ text: '', type: '' });
 
   const [formData, setFormData] = useState({
     dni: '',
@@ -20,11 +20,10 @@ export const Login = () => {
       ...prevData,
       [name]: value,
     }));
-  }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Se hace la peticion de login con los datos del formulario
     try {
       const loginResponse = await fetch('http://localhost:8081/api/auth/login', {
         method: 'POST',
@@ -36,8 +35,8 @@ export const Login = () => {
 
       const loginData = await loginResponse.json();
       const token = loginData.token;
-      const role = loginData.role; // Se obtiene el role de la primera respuesta
-      // Si el login es exitoso, se hace una peticion para obtener los datos del usuario
+      const role = loginData.role;
+
       const meResponse = await fetch('http://localhost:8081/api/emp/me', {
         method: 'GET',
         headers: {
@@ -49,14 +48,12 @@ export const Login = () => {
       if (!meResponse.ok) throw new Error('Error al obtener datos del usuario');
 
       const userData = await meResponse.json();
-      // Se pasan los datos obtenidos a la funcion login del contexto
-      login(token, role, userData); // Se pasa el token, el role y los datos del usuario
-      navigate("/report")      
+      login(token, role, userData);
+      navigate("/report");
       setFormData({ dni: '', password: '' });
 
     } catch (error) {
       setError(true);
-
       let err = error.message === 'Failed to fetch' ? 'Error de conexión' : error.message;
       setErrorMessage({
         text: err,
@@ -69,59 +66,55 @@ export const Login = () => {
   };
 
   return (
-<div className="flex  items-center justify-center bg-gradient-to-br mt-36 px-4">
-  <div className="w-full max-w-sm rounded-2xl shadow-2xl p-8">
-    <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">
-      Acceso al sistema
-    </h2>
-    <p className="mb-4 text-lg text-gray-600 text-center">Introduce tus credenciales</p>
-
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div>
-        <label htmlFor="dni" className="block text-sm font-medium text-gray-700 mb-1">
-          DNI
-        </label>
-        <input
-          onChange={handleInputChange}
-          value={formData.dni}
-          type="text"
-          name="dni"
-          id="dni"
-          required
-          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-        />
+    <section className="w-3/4 min-h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center w-full h-full px-6 py-8 bg-[url('src/images/bg-image-loginForm.webp')] bg-cover bg-center bg-no-repeat">
+        <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              Acceso al sistema
+            </h1>
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="dni" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">DNI</label>
+                <input
+                  type="text"
+                  name="dni"
+                  id="dni"
+                  value={formData.dni}
+                  onChange={handleInputChange}
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                  placeholder="Introduce tu DNI"
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="••••••••"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
+              >
+                Iniciar sesión
+              </button>
+              {error && (
+                <div className="mt-2">
+                  <AlertMessage isOpen={error} message={errorMessage} />
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
       </div>
-
-      <div>
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-          Contraseña
-        </label>
-        <input
-          onChange={handleInputChange}
-          value={formData.password}
-          type="password"
-          name="password"
-          id="password"
-          required
-          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="w-full text-white bg-indigo-600 hover: bg-indigo-500 font-medium py-2 rounded-md transition"
-      >
-        Iniciar sesión
-      </button>
-    </form>
-
-    {error && (
-      <div className="mt-5">
-        <AlertMessage isOpen={error} message={errorMessage} />
-      </div>
-    )}
-  </div>
-</div>
-
+    </section>
   );
 };

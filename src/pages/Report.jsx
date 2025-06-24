@@ -33,8 +33,8 @@ export const Report = () => {
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="https://tailwindui.com/plus/img/component-images/bento-03-security.png"
+                  className="w-36 h-36 object-cover rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  src="revision.webp"
                   alt="Gestión Registros"
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Gestión Registros</h3>

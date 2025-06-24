@@ -10,7 +10,7 @@ export const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate('/login');
   };
 
   return (
@@ -30,19 +30,19 @@ export const Navbar = () => {
             <div className="flex divide-x divide-indigo-700 bg-gray-800 rounded-lg overflow-hidden shadow">
               <Link
                 to="/"
-                className="px-6 py-3 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
+                className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
               >
                 Cuadrantes
               </Link>
               <Link
                 to="/employeeweek"
-                className="px-6 py-3 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
+                className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
               >
                 Resumen
               </Link>
               <Link
                 to="/report"
-                className="px-6 py-3 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
+                className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
               >
                 Admin
               </Link>
