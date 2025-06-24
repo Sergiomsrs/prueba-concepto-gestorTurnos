@@ -29,22 +29,22 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center">
             <div className="flex divide-x divide-indigo-700 bg-gray-800 rounded-lg overflow-hidden shadow">
               <Link
-                to="/report"
-                className="px-6 py-3 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
-              >
-                Home
-              </Link>
-              <Link
                 to="/"
                 className="px-6 py-3 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
               >
-                Create
+                Cuadrantes
               </Link>
               <Link
                 to="/employeeweek"
                 className="px-6 py-3 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
               >
-                WbyE
+                Resumen
+              </Link>
+              <Link
+                to="/report"
+                className="px-6 py-3 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
+              >
+                Admin
               </Link>
             </div>
           </div>
@@ -103,9 +103,9 @@ export const Navbar = () => {
       {menuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-gray-900 border-t border-gray-800 shadow-lg px-6 py-4 space-y-4 z-50">
           <div className="flex flex-col gap-3">
-            <Link to="/report" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Home</Link>
-            <Link to="/" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Create</Link>
-            <Link to="/employeeweek" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>WbyE</Link>
+            <Link to="/" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Cuadrantes</Link>
+            <Link to="/employeeweek" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Resumen</Link>
+            <Link to="/report" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Admin</Link>
           </div>
           <div className="mt-4 border-t border-gray-700 pt-4 flex flex-col gap-2">
             {auth.isAuthenticated ? (
