@@ -51,7 +51,7 @@ export const Report = () => {
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
                   className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="https://img.icons8.com/ios-filled/100/add-user-group-man-man.png"
+                  src="usuarios.webp"
                   alt="Añadir Usuario"
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Gestión Usuarios</h3>
