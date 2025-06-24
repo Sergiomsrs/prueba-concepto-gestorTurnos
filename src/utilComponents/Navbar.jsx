@@ -16,12 +16,12 @@ export const Navbar = () => {
   return (
     <nav className="bg-gray-900 border-b border-gray-800 shadow-sm relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center">
-        {/* Bloque Izquierdo: Branding */}
+        {/* Bloque Izquierdo: Branding (clicable) */}
         <div className="w-1/3 flex items-center">
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-indigo-400 leading-tight">WorkSchedFlow</h1>
-            <h2 className="text-sm lg:text-base font-light text-gray-400 leading-tight">Gestión de equipos de trabajo</h2>
-          </div>
+          <Link to="/report" className="group cursor-pointer">
+            <h1 className="text-2xl lg:text-3xl font-bold text-indigo-400 leading-tight group-hover:text-indigo-300 transition">WorkSchedFlow</h1>
+            <h2 className="text-sm lg:text-base font-light text-gray-400 leading-tight group-hover:text-indigo-200 transition">Gestión de equipos de trabajo</h2>
+          </Link>
         </div>
 
         {/* Bloque Central: Navegación */}
