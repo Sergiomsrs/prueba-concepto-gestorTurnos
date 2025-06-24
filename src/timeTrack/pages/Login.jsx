@@ -51,7 +51,7 @@ export const Login = () => {
       const userData = await meResponse.json();
       // Se pasan los datos obtenidos a la funcion login del contexto
       login(token, role, userData); // Se pasa el token, el role y los datos del usuario
-      navigate("/fichajes")      
+      navigate("/report")      
       setFormData({ dni: '', password: '' });
 
     } catch (error) {
