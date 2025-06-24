@@ -256,7 +256,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
       {schedules.length === 0 && (
         <button
           onClick={() => asignarHorarioPorDefecto()}
-          className="mb-6 w-full sm:w-auto px-4 py-2 text-sm font-semibold bg-violet-100 text-violet-700 rounded-md hover:bg-violet-200 transition"
+          className="mb-6 w-full sm:w-auto px-4 py-2 text-sm font-semibold bg-indigo-100 text-indigo-700 rounded-md hover:bg-indigo-200 transition"
         >
           Asignar horario por defecto
         </button>
@@ -273,7 +273,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
               name="dayNumber"
               value={newSchedule.dayNumber}
               onChange={handleNewScheduleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               {Object.entries(dayNames).map(([num, name]) => (
                 <option key={num} value={num}>{name}</option>
@@ -293,12 +293,12 @@ export const HourlyForm = ({ employeeToDelete }) => {
                 name="hora"
                 value={newSchedule.hora}
                 onChange={handleNewScheduleChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
 
                 <button
                   onClick={handleAddSchedule}
-                  className="rounded-md cursor-pointer bg-violet-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-600 "
+                  className="rounded-md cursor-pointer bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 "
                 >
                   Añadir
                 </button>
@@ -335,7 +335,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
                     type="time"
                     value={schedule.hora || ""}
                     onChange={(e) => handleChange(schedule.index, e.target.value)}
-                    className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500 text-sm text-gray-900"
+                    className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
                   />
                   <button
                     onClick={() => handleDeleteSchedule(schedule.id)}
@@ -355,7 +355,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
         disabled={isSaving}
         className={`w-full sm:w-auto px-4 py-2 rounded-md font-semibold text-sm transition cursor-pointer ${isSaving
           ? "bg-gray-400 text-white cursor-not-allowed"
-          : "bg-violet-600 hover:bg-violet-700 text-white"
+          : "bg-indigo-600 hover: bg-indigo-500 text-white"
           }`}
       >
         {isSaving ? "Guardando..." : "Guardar cambios"}

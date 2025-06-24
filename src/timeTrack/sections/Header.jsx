@@ -33,7 +33,7 @@ export const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
           <img src="/Logo.svg" alt="Logo" className="h-10 w-auto" />
-          <span className="text-xl font-bold text-violet-700">TimeTrack</span>
+          <span className="text-xl font-bold text-indigo-700">TimeTrack</span>
         </Link>
 
         {/* Navegación principal (escritorio) */}
@@ -52,7 +52,7 @@ export const Header = () => {
               </span>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 px-4 py-1.5 rounded transition"
+                className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover: bg-indigo-500 px-4 py-1.5 rounded transition"
               >
                 Log out
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
@@ -66,7 +66,7 @@ export const Header = () => {
           ) : (
             <Link
               to="/login"
-              className="flex items-center gap-2 text-sm font-medium text-white bg-violet-600 hover:bg-violet-700 px-4 py-1.5 rounded transition"
+              className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover: bg-indigo-500 px-4 py-1.5 rounded transition"
             >
               Log in
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
@@ -82,7 +82,7 @@ export const Header = () => {
         {/* Botón menú hamburguesa (móvil) */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="inline-flex items-center justify-center p-2 text-violet-700 rounded hover:bg-violet-100 focus:outline-none focus:ring-2 focus:ring-violet-500 lg:hidden"
+          className="inline-flex items-center justify-center p-2 text-indigo-700 rounded hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 lg:hidden"
           aria-label="Toggle menu"
         >
           <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -103,13 +103,13 @@ export const Header = () => {
                   handleLogout();
                   setMenuOpen(false);
                 }}
-                className="block w-full text-left text-base font-medium text-violet-700 hover:underline cursor-pointer mt-2"
+                className="block w-full text-left text-base font-medium text-indigo-700 hover:underline cursor-pointer mt-2"
               >
                 Log out
               </button>
             </>
           ) : (
-            <Link to="/login" className="block text-base font-medium text-violet-700" onClick={() => setMenuOpen(false)}>Log in</Link>
+            <Link to="/login" className="block text-base font-medium text-indigo-700" onClick={() => setMenuOpen(false)}>Log in</Link>
           )}
         </div>
       )}
@@ -117,7 +117,7 @@ export const Header = () => {
       {/* Estilos para los enlaces */}
       <style>{`
         .nav-link {
-          @apply text-sm font-medium text-gray-700 hover:text-violet-600 transition block lg:inline;
+          @apply text-sm font-medium text-gray-700 hover:text-indigo-600 transition block lg:inline;
         }
       `}</style>
     </header>

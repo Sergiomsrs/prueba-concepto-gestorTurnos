@@ -15,7 +15,7 @@ export const ConfirmModal = ({ isOpen, message, onConfirm, onCancel }) => {
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 rounded-md bg-violet-600 hover:bg-violet-500 text-white font-medium"
+            className="px-4 py-2 rounded-md bg-indigo-600 hover:bg-indigo-500 text-white font-medium"
           >
             Confirmar
           </button>

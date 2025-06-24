@@ -66,13 +66,13 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
 
 
   return (
-    <div className="rounded-lg border border-violet-200 bg-white p-4 w-3/4 mx-1 flex flex-wrap gap-4 h-fit mb-4">
+    <div className="rounded-lg border border-indigo-200 bg-white p-4 w-3/4 mx-1 flex flex-wrap gap-4 h-fit mb-4">
       <div className='w-full'>
 
         <select
           value={activeTab.year ?? currentYear}
           onChange={handleYearChange}
-          className="w-full cursor-pointer rounded-md py-2 text-center text-xs sm:text-sm font-medium md:text-base  bg-violet-600 text-white shadow-md focus:outline-none focus:ring-2  focus:ring-violet-500"
+          className="w-full cursor-pointer rounded-md py-2 text-center text-xs sm:text-sm font-medium md:text-base  bg-indigo-600 text-white shadow-md focus:outline-none focus:ring-2  focus:ring-indigo-500"
         >
           {years.map((year) => (
             <option key={year} value={year}>{year}</option>
@@ -86,7 +86,7 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
         <select
           value={activeTab.month ?? currentMonth}
           onChange={handleMonthChange}
-          className="w-full rounded-md border py-2 text-sm md:text-base text-center text-violet-600 focus:outline-none focus:ring-2 focus:ring-violet-500 cursor-pointer"
+          className="w-full rounded-md border py-2 text-sm md:text-base text-center text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
         >
           {months.map((month, index) => (
             <option key={index} value={index}>{month}</option>
@@ -98,7 +98,7 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
       <div className='w-full'>
 
           <button
-            className="w-full text-sm rounded-md border px-4 py-2 text-violet-600 hover:text-amber-50 hover:bg-violet-600 cursor-pointer"
+            className="w-full text-sm rounded-md border px-4 py-2 text-indigo-600 hover:text-amber-50 hover:bg-indigo-600 cursor-pointer"
             onClick={() => setIsModalAddOpen(true)}
           >
             Añadir registro
@@ -112,7 +112,7 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
         {(auth.role == "ADMIN" || auth.role == "GUEST") &&
 
           <button
-            className="w-full text-sm rounded-md border px-4 py-2 text-violet-600 hover:text-amber-50 hover:bg-violet-600 cursor-pointer"
+            className="w-full text-sm rounded-md border px-4 py-2 text-indigo-600 hover:text-amber-50 hover:bg-indigo-600 cursor-pointer"
             onClick={() => downloadMonthlyReportPdf(selectedEmployeeId, activeTab.year, activeTab.month)}
           >
             Descargar PDF
