@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { EmployeePicker } from "../utilComponents/EmployeePicker";
 import { findMinMaxOfBlocks, getStringBlock, splitIntoBlocks } from "../utils/blockHours";
@@ -138,6 +138,7 @@ console.log(formattedDifference);
       const { workShift } = day;
       const blocks = splitIntoBlocks(workShift);
       const minMaxValues = findMinMaxOfBlocks(blocks);
+      console.log(minMaxValues)
 
       return (
         <tr key={index}>
