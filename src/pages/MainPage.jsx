@@ -8,6 +8,7 @@ import { Report } from "./Report"
 import { AddTimeTrack } from "../timeTrack/pages/AddTimeTrack"
 import { TimeTrackView } from "../timeTrack/pages/TimeTrackView"
 import { Login } from "../timeTrack/pages/Login"
+import { LogList } from "../timeTrack/pages/LogList"
 
 export const MainPage = () => {
   return (
@@ -30,6 +31,7 @@ export const MainPage = () => {
             <Route path="/fichar" element={<AddTimeTrack />} />
             <Route path="/revisar" element={<TimeTrackView />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/loglist" element={<LogList />} />
           </Routes>
         </main>
 

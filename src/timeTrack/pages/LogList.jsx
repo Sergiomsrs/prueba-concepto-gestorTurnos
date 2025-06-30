@@ -13,11 +13,11 @@ export const LogList = () => {
     useEffect(() => {
         const fetchLast10Records = async () => {
             try {
-                const response = await fetch("http://localhost:8080/api/horarios/last10", {
+                const response = await fetch("http://localhost:8081/api/ws/last100", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${auth.token}`,
+                   
                 },
             });
                 if (!response.ok) throw new Error("Error al obtener los datos");
@@ -38,14 +38,14 @@ export const LogList = () => {
 
 
     return (
-  <div className="flex flex-col items-center justify-center w-full h-full p-4">
+  <div className="flex flex-col items-center w-full h-full p-20">
   <div className="w-full max-w-3xl">
     <h1 className="text-xl font-bold mb-2  text-gray-800">Últimas Notificaciones</h1>
     <p className="text-md  mb-6 text-gray-600">Fichajes previstos no registrados</p>
 
 
     {lastRecords && lastRecords.length > 0 ? (
-      <div className="space-y-4">
+      <div className="space-y-4 max-h-96">
         {lastRecords.map((record, index) => (
           <div
             key={index}
