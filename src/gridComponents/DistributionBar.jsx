@@ -16,14 +16,14 @@ export const DistributionBar = ({ day }) => {
 
     return (
         <tr>
-            <td className="text-base font-semibold text-gray-800"></td>
-            <td className="text-base font-semibold text-gray-800"></td>
+            <td className="sm:text-base text-xs font-semibold text-gray-800"></td>
+            <td className="sm:text-base text-xs font-semibold text-gray-800"></td>
             {sumaPorIndice.map((valor, indice) => (
                 <td
-                    className="w-2 p-0 m-0 truncate text-center"
+                    className="w-2 p-0 m-0 truncate text-center sm:text-base text-xs"
                     key={indice}
                 >
-                    <span className="font-sans font-semibold">{valor}</span>
+                    <span className="font-sans font-semibold sm:text-base text-xs">{valor}</span>
                 </td>
             ))}
             <td></td>

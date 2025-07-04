@@ -60,13 +60,11 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
     return 'bg-indigo-500'; 
   };
 
-  console.log("lastName", lastName);
-
   return (
     <>
-      <td className="text-base font-semibold text-gray-800  whitespace-nowrap">{teamWork}</td>
+      <td className="sm:text-base text-xs font-semibold text-gray-800  whitespace-nowrap">{teamWork}</td>
       <td 
-      className="text-base font-semibold text-gray-800 whitespace-nowrap max-w-none">
+      className="sm:text-base text-xs font-semibold text-gray-800 whitespace-nowrap max-w-none">
         <button onClick={handleOpenModal} className="mr-2" >{username} {lastName}</button>
         </td>
       {hours && hours.map((value, index) => (
@@ -76,7 +74,7 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
         >
           <input
             type="checkbox"
-            className={`w-4 h-4 p-0 m-0 appearance-none border border-gray-400 rounded-3xl 
+            className={`sm:w-4 sm:h-4 w-2 h-2 p-0 m-0 appearance-none border border-gray-400 rounded-3xl 
               ${getCursorClass(isInputDisabled(index), value)} 
               ${getBackgroundClass(value)} 
               relative`}
@@ -92,7 +90,7 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
           )}
         </td>
       ))}
-      <td className="w-12 pl-2 align-bottom">{formatTime(shiftDurationes)}</td>
+      <td className="sm:text-base text-xs w-12 pl-2 align-bottom">{formatTime(shiftDurationes)}</td>
       {isModalOpen && <Modal username={username} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id}/>}
     </>
   );
