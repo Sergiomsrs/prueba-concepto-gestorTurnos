@@ -235,7 +235,7 @@ export const AddDisp = () => {
                             </div>
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-3">
-                        <label htmlFor="startHour" className="block text-sm font-medium text-gray-700 mb-2">Fecha de Inicio</label>
+                        <label htmlFor="startHour" className="block text-sm font-medium text-gray-700 mb-2">Hora de Inicio</label>
                         <input
                             type="time"
                             name="startHour"
@@ -246,7 +246,7 @@ export const AddDisp = () => {
                         />
                     </div>
                     <div className="sm:col-span-3">
-                        <label htmlFor="terminationHour" className="block text-sm font-medium text-gray-700 mb-2">Fecha de Fin</label>
+                        <label htmlFor="terminationHour" className="block text-sm font-medium text-gray-700 mb-2">Hora de Fin</label>
                         <input
                             type="time"
                             name="terminationHour"
