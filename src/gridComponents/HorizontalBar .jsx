@@ -3,7 +3,7 @@ import { entrada } from "../utils/data";
 import { formatTime, getHighestNonZeroIndex } from "../utils/function";
 import { Modal } from "./Modal";
 
-export const HorizontalBar = ({username, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
+export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -60,12 +60,14 @@ export const HorizontalBar = ({username, hours, onHourChange, teamWork, shiftDur
     return 'bg-indigo-500'; 
   };
 
+  console.log("lastName", lastName);
+
   return (
     <>
-      <td className="text-base font-semibold text-gray-800">{teamWork}</td>
+      <td className="text-base font-semibold text-gray-800  whitespace-nowrap">{teamWork}</td>
       <td 
-      className="text-base font-semibold text-gray-800">
-        <button onClick={handleOpenModal} >{username}</button>
+      className="text-base font-semibold text-gray-800 whitespace-nowrap max-w-none">
+        <button onClick={handleOpenModal} className="mr-2" >{username} {lastName}</button>
         </td>
       {hours && hours.map((value, index) => (
         <td
