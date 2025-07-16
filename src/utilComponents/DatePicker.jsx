@@ -25,7 +25,7 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
       })
       .then(data => {
         setData(data);
-        console.log(JSON.stringify(data));
+        console.log(data);
       })
       .catch((error) => {
         console.error('Error:', error);

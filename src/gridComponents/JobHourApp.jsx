@@ -5,8 +5,6 @@ import { DistributionBar } from "./DistributionBar";
 
 export const JobHourApp = ({ employees, onHourChange, day, eh }) => {
 
-  console.log("employees", employees);
-
 
   const { selectedOption } = useContext(AppContext);
   const [startSelection, setStartSelection] = useState(null);
