@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import { Landing } from "./Landing"
+import { LoginPage } from "./LoginPage"
 import { Navbar } from "../utilComponents/Navbar"
 import { EmployeeWeek } from "./EmployeeWeek"
 import { Daily } from "../gridComponents/Daily"
@@ -9,6 +9,8 @@ import { AddTimeTrack } from "../timeTrack/pages/AddTimeTrack"
 import { TimeTrackView } from "../timeTrack/pages/TimeTrackView"
 import { Login } from "../timeTrack/pages/Login"
 import { LogList } from "../timeTrack/pages/LogList"
+import { Landing } from "./Landing"
+import { TechInfo } from "./TechInfo"
 
 export const MainPage = () => {
   return (
@@ -25,13 +27,15 @@ export const MainPage = () => {
           <Routes>
             <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
-            <Route path="/landing" element={<Landing />} />
+            <Route path="/landing" element={<LoginPage />} />
             <Route path="/adduser" element={<Add />} />
             <Route path="/report" element={<Report />} />
             <Route path="/fichar" element={<AddTimeTrack />} />
             <Route path="/revisar" element={<TimeTrackView />} />
             <Route path="/login" element={<Login />} />
             <Route path="/loglist" element={<LogList />} />
+            <Route path="/info" element={<Landing />} />
+            <Route path="/techinfo" element={<TechInfo />} />
           </Routes>
         </main>
 
