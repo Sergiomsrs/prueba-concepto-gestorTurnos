@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom"
+import { Route, Routes, Link } from "react-router-dom"
 import { LoginPage } from "./LoginPage"
 import { Navbar } from "../utilComponents/Navbar"
 import { EmployeeWeek } from "./EmployeeWeek"
@@ -11,17 +11,58 @@ import { Login } from "../timeTrack/pages/Login"
 import { LogList } from "../timeTrack/pages/LogList"
 import { Landing } from "./Landing"
 import { TechInfo } from "./TechInfo"
+import { useState } from "react"
 
 export const MainPage = () => {
-  return (
-    
-    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden px-1 sm:px-8 lg:px-16">
-      
-      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto]" >
+  const [showDemoBanner, setShowDemoBanner] = useState(true)
 
-        <header className="mb-8">
+  return (
+    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden px-1 sm:px-8 lg:px-16">
+      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative">
+        <header>
           <Navbar />
         </header>
+
+        {/* Banner DEMO debajo de la navbar */}
+        {showDemoBanner && (
+          <div
+            className="absolute right-6 z-30 flex items-center gap-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-5 py-3 rounded-lg shadow-lg mt-2"
+            style={{ top: "4.5rem" }} 
+          >
+            <div>
+              <span className="font-semibold block">
+                ¡Estás usando una versión DEMO sin conexión a la API!
+              </span>
+              <span className="text-sm">
+                Puedes explorar la app libremente. Si quieres más información,&nbsp;
+                <Link
+                  to="/info"
+                  className="underline text-indigo-700 hover:text-indigo-900 font-semibold"
+                >
+                  haz clic aquí
+                </Link>
+                .
+              </span>
+            </div>
+            <button
+              onClick={() => setShowDemoBanner(false)}
+              className="ml-2 text-yellow-700 hover:text-yellow-900 font-bold text-lg leading-none"
+              aria-label="Cerrar aviso demo"
+            >
+              ×
+            </button>
+          </div>
+        )}
+        {!showDemoBanner && (
+          <button
+            onClick={() => setShowDemoBanner(true)}
+            className="absolute right-6 z-30 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-1 rounded-full shadow hover:bg-yellow-200 transition"
+            style={{ top: "4.5rem" }}
+            aria-label="Mostrar aviso demo"
+          >
+            Mostrar aviso DEMO
+          </button>
+        )}
 
         <main className="flex flex-col items-center max-w-full overflow-auto">
           <Routes>
@@ -42,7 +83,6 @@ export const MainPage = () => {
         <footer className="mt-8 mb-2">
           <p className="text-center">© 2024 My Website. All rights reserved.</p>
         </footer>
-
       </div>
     </div>
   )
