@@ -3,6 +3,7 @@ import { formatMillisecondsToTime, processTimeStamps } from '../utilities/timeMa
 import { Modal } from './Modal';
 import { ModalAdd } from './ModalAdd';
 import { AuthContext } from '../context/AuthContext';
+import { timestampMockData } from '../../utils/apiMock';
 
 
 export const TimetrackList = ({
@@ -42,7 +43,9 @@ export const TimetrackList = ({
 
 
     // Procesar los registros para el renderizado
-    const processedRecords = processTimeStamps(records, selectedEmployeeId);
+    const processedRecords = auth?.user
+  ? processTimeStamps(records, selectedEmployeeId)
+  : timestampMockData;
 
 
     // Manejar el cambio en el dropdown de empleados
@@ -55,6 +58,8 @@ export const TimetrackList = ({
         setSelectedDayRecords(dayRecords);
         setIsOpen(true);
     };
+
+    console.log(processedRecords)
 
 
 
@@ -72,7 +77,7 @@ export const TimetrackList = ({
                     setRecords={setRecords} />}
 
             {/* Dropdown de empleados */}
-            {(auth.role == "ADMIN" || auth.role == "GUEST") && <div className="mb-6 w-2/4">
+            {(auth.role == "ADMIN" || auth.role == "GUEST" ) && <div className="mb-6 w-2/4">
                 <label htmlFor="employee-select" className="block text-sm font-medium text-gray-700 mb-2">
                     Seleccionar Empleado
                 </label>
@@ -177,7 +182,7 @@ export const TimetrackList = ({
                                     <td className="py-3 px-4 text-center text-sm text-gray-500">
                                         {record.data.recordsCount}
                                     </td>
-                                    {auth.role == "ADMIN" && <td className="py-3 px-4 text-center">
+                                    {auth.role == "ADMIN" || auth.role == "DEMO" && <td className="py-3 px-4 text-center">
                                         <button
                                             onClick={() => handleOpenModal(record)}
                                             className="rounded-md cursor-pointer bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"

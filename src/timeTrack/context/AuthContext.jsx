@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       isAuthenticated: false,
       token: null,
       user: null,
-      role: null,
+      role: "DEMO",
     };
   });
 
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }) => {
     setAuth({
       isAuthenticated: false,
       token: null,
-      role: null,
+      role: "DEMO", // Cambiado aquí
       user: null,
     });
   };

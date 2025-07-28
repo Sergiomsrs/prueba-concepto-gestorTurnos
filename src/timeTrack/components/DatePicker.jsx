@@ -94,7 +94,7 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
         </select>
       </div>
 
-        {auth.role == "ADMIN" &&
+        {auth.role == "ADMIN" || auth.role == "DEMO" &&
       <div className='w-full'>
 
           <button
@@ -109,7 +109,7 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
       <div className='w-full'>
 
 
-        {(auth.role == "ADMIN" || auth.role == "GUEST") &&
+        {(auth.role == "ADMIN" || auth.role == "GUEST" || auth.role == "DEMO") &&
 
           <button
             className="w-full text-sm rounded-md border px-4 py-2 text-indigo-600 hover:text-amber-50 hover:bg-indigo-600 cursor-pointer"

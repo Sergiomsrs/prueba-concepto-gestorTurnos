@@ -2888,3 +2888,441 @@ export const apiMockData = [
         ]
     }
 ]
+
+export const timestampMockData = [
+    {
+        "id": "1",
+        "data": {
+            "day": "1/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "2/7/2025",
+            "periods": [
+                {
+                    "entry": "09:00",
+                    "entryIsMod": "true",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 25200000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "7h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "3/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "4/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "durationMs": 0,
+                    "isComplete": false
+                }
+            ],
+            "totalWorked": "--",
+            "recordsCount": 1,
+            "warning": "⚠ Pendiente de revisión"
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "7/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "8/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "9/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "10/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "11/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "14/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "15/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "16/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "17/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "18/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "21/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "22/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "23/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "24/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "25/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "28/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "29/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "30/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    },
+    {
+        "id": "1",
+        "data": {
+            "day": "31/7/2025",
+            "periods": [
+                {
+                    "entry": "08:00",
+                    "entryIsMod": "",
+                    "exit": "16:00",
+                    "exitIsMod": "",
+                    "durationMs": 28800000,
+                    "isComplete": true
+                }
+            ],
+            "totalWorked": "8h 0m",
+            "recordsCount": 2,
+            "warning": null
+        }
+    }
+]
