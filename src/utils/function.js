@@ -186,6 +186,48 @@ export const uniqueEmployeeName = (data) => {
     return uniqueEmployeeNames;
 }
 
+export const selectColor = (teamWork) => {
+  let selectColor;
+
+  switch (teamWork?.toLowerCase()) {
+    case 'red':
+      selectColor = 'bg-red-600';
+      break;
+    case 'black':
+      selectColor = 'bg-gray-900';
+      break;
+    case 'blue':
+      selectColor = 'bg-blue-600';
+      break;
+    case 'green':
+      selectColor = 'bg-emerald-600';
+      break;
+    case 'amarillo':
+      selectColor = 'bg-yellow-500';
+      break;
+    case 'morado':
+      selectColor = 'bg-purple-600';
+      break;
+    case 'naranja':
+      selectColor = 'bg-orange-600';
+      break;
+    case 'rosa':
+      selectColor = 'bg-pink-600';
+      break;
+    case 'turquesa':
+      selectColor = 'bg-teal-600';
+      break;
+    case 'lima':
+      selectColor = 'bg-lime-600';
+      break;
+    default:
+      selectColor = 'bg-slate-400';
+      break;
+  }
+
+  return selectColor;
+};
+
 
 
 

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { entrada } from "../utils/data";
-import { formatTime, getHighestNonZeroIndex } from "../utils/function";
+import { formatTime, getHighestNonZeroIndex, selectColor } from "../utils/function";
 import { Modal } from "./Modal";
 
 export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
+
+  
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -54,10 +56,10 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
     return 'cursor-pointer';
   };
   
-  const getBackgroundClass = (value) => {
+  const getBackgroundClass = (value, team) => {
     if (value === "PTO") return 'bg-red-200 '; 
     if (value === "Null") return 'bg-neutral-200';
-    return 'bg-indigo-500'; 
+    return selectColor(team); 
   };
 
   return (
@@ -76,7 +78,7 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
             type="checkbox"
             className={`sm:w-4 sm:h-4 w-2 h-2 p-0 m-0 appearance-none border border-gray-400 rounded-3xl 
               ${getCursorClass(isInputDisabled(index), value)} 
-              ${getBackgroundClass(value)} 
+              ${getBackgroundClass(value, teamWork)} 
               relative`}
             checked={value !== "Null" && value !== "PTO"}
             onChange={(event) => handleClick(index, event.target.checked)}

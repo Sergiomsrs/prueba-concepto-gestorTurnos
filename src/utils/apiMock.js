@@ -7,7 +7,7 @@ export const apiMockData = [
                 "id": 1,
                 "name": "Ross",
                 "wwh": 20,
-                "teamWork": "Black",
+                "teamWork": "Green",
                 "workShift": [
                     "Null",
                     "Null",
@@ -368,7 +368,7 @@ export const apiMockData = [
                 "id": 1,
                 "name": "Ross",
                 "wwh": 20,
-                "teamWork": "Black",
+                "teamWork": "Green",
                 "workShift": [
                     "PTO",
                     "PTO",
@@ -729,7 +729,7 @@ export const apiMockData = [
                 "id": 1,
                 "name": "Ross",
                 "wwh": 20,
-                "teamWork": "Black",
+                "teamWork": "Green",
                 "workShift": [
                     "Null",
                     "Null",
@@ -1090,7 +1090,7 @@ export const apiMockData = [
                 "id": 1,
                 "name": "Ross",
                 "wwh": 20,
-                "teamWork": "Black",
+                "teamWork": "Green",
                 "workShift": [
                     "Null",
                     "Null",
@@ -1451,7 +1451,7 @@ export const apiMockData = [
                 "id": 1,
                 "name": "Ross",
                 "wwh": 20,
-                "teamWork": "Black",
+                "teamWork": "Green",
                 "workShift": [
                     "Null",
                     "Null",
@@ -1812,7 +1812,7 @@ export const apiMockData = [
                 "id": 1,
                 "name": "Ross",
                 "wwh": 20,
-                "teamWork": "Black",
+                "teamWork": "Green",
                 "workShift": [
                     "Null",
                     "Null",
@@ -2173,7 +2173,7 @@ export const apiMockData = [
                 "id": 1,
                 "name": "Ross",
                 "wwh": 20,
-                "teamWork": "Black",
+                "teamWork": "Green",
                 "workShift": [
                     "Null",
                     "Null",
@@ -2534,7 +2534,7 @@ export const apiMockData = [
                 "id": 1,
                 "name": "Ross",
                 "wwh": 20,
-                "teamWork": "Black",
+                "teamWork": "Green",
                 "workShift": [
                     "Null",
                     "Null",
