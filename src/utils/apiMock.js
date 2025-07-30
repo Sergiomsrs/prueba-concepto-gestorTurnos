@@ -3326,3 +3326,330 @@ export const timestampMockData = [
         }
     }
 ]
+
+export const lastRecordData = [
+    {
+        "userId": 29,
+        "fecha": "2025-07-30",
+        "dia": "WEDNESDAY",
+        "hora": "13:00:00",
+        "enviadoEn": "2025-07-30T13:00:00.082128",
+        "nombre": "John ",
+        "apellido": "Roe"
+    },
+    {
+        "userId": 19,
+        "fecha": "2025-07-30",
+        "dia": "WEDNESDAY",
+        "hora": "13:00:00",
+        "enviadoEn": "2025-07-30T13:00:00.065131",
+        "nombre": "Jhon",
+        "apellido": "Doe"
+    },
+    {
+        "userId": 29,
+        "fecha": "2025-07-30",
+        "dia": "WEDNESDAY",
+        "hora": "09:30:00",
+        "enviadoEn": "2025-07-30T12:46:28.744682",
+        "nombre": "John ",
+        "apellido": "Roe"
+    },
+    {
+        "userId": 19,
+        "fecha": "2025-07-30",
+        "dia": "WEDNESDAY",
+        "hora": "09:30:00",
+        "enviadoEn": "2025-07-30T12:46:28.732683",
+        "nombre": "Jhon",
+        "apellido": "Doe"
+    },
+    {
+        "userId": 5,
+        "fecha": "2025-07-30",
+        "dia": "WEDNESDAY",
+        "hora": "11:00:00",
+        "enviadoEn": "2025-07-30T12:46:28.714279",
+        "nombre": "Chandler",
+        "apellido": "Bing"
+    },
+    {
+        "userId": 5,
+        "fecha": "2025-07-30",
+        "dia": "WEDNESDAY",
+        "hora": "08:00:00",
+        "enviadoEn": "2025-07-30T12:46:28.702811",
+        "nombre": "Chandler",
+        "apellido": "Bing"
+    },
+    {
+        "userId": 3,
+        "fecha": "2025-07-30",
+        "dia": "WEDNESDAY",
+        "hora": "11:00:00",
+        "enviadoEn": "2025-07-30T12:46:28.688811",
+        "nombre": "Monica",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 3,
+        "fecha": "2025-07-30",
+        "dia": "WEDNESDAY",
+        "hora": "08:00:00",
+        "enviadoEn": "2025-07-30T12:46:28.653469",
+        "nombre": "Monica",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 1,
+        "fecha": "2025-07-28",
+        "dia": "MONDAY",
+        "hora": "11:00:00",
+        "enviadoEn": "2025-07-28T11:28:32.632011",
+        "nombre": "Ross",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 5,
+        "fecha": "2025-07-24",
+        "dia": "THURSDAY",
+        "hora": "17:00:00",
+        "enviadoEn": "2025-07-24T17:35:52.955486",
+        "nombre": "Chandler",
+        "apellido": "Bing"
+    },
+    {
+        "userId": 1,
+        "fecha": "2025-07-24",
+        "dia": "THURSDAY",
+        "hora": "17:00:00",
+        "enviadoEn": "2025-07-24T17:35:52.914485",
+        "nombre": "Ross",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 1,
+        "fecha": "2025-07-24",
+        "dia": "THURSDAY",
+        "hora": "13:00:00",
+        "enviadoEn": "2025-07-24T17:35:52.811096",
+        "nombre": "Ross",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 19,
+        "fecha": "2025-07-16",
+        "dia": "WEDNESDAY",
+        "hora": "09:30:00",
+        "enviadoEn": "2025-07-16T09:48:43.804826",
+        "nombre": "Jhon",
+        "apellido": "Doe"
+    },
+    {
+        "userId": 5,
+        "fecha": "2025-07-16",
+        "dia": "WEDNESDAY",
+        "hora": "08:00:00",
+        "enviadoEn": "2025-07-16T09:46:37.34059",
+        "nombre": "Chandler",
+        "apellido": "Bing"
+    },
+    {
+        "userId": 3,
+        "fecha": "2025-07-16",
+        "dia": "WEDNESDAY",
+        "hora": "08:00:00",
+        "enviadoEn": "2025-07-16T09:46:37.28859",
+        "nombre": "Monica",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 1,
+        "fecha": "2025-07-16",
+        "dia": "WEDNESDAY",
+        "hora": "08:00:00",
+        "enviadoEn": "2025-07-16T09:45:19.565479",
+        "nombre": "Ross",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 1,
+        "fecha": "2025-07-05",
+        "dia": "SATURDAY",
+        "hora": "08:00:00",
+        "enviadoEn": "2025-07-05T08:42:01.14211",
+        "nombre": "Ross",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 19,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "12:00:00",
+        "enviadoEn": "2025-06-30T12:09:18.224212",
+        "nombre": "Jhon",
+        "apellido": "Doe"
+    },
+    {
+        "userId": 29,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "10:00:00",
+        "enviadoEn": "2025-06-30T11:56:50.227702",
+        "nombre": "John ",
+        "apellido": "Roe"
+    },
+    {
+        "userId": 29,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "09:00:00",
+        "enviadoEn": "2025-06-30T11:56:50.2157",
+        "nombre": "John ",
+        "apellido": "Roe"
+    },
+    {
+        "userId": 29,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "07:15:00",
+        "enviadoEn": "2025-06-30T11:56:50.2027",
+        "nombre": "John ",
+        "apellido": "Roe"
+    },
+    {
+        "userId": 19,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "09:00:00",
+        "enviadoEn": "2025-06-30T11:56:50.1887",
+        "nombre": "Jhon",
+        "apellido": "Doe"
+    },
+    {
+        "userId": 7,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "09:30:00",
+        "enviadoEn": "2025-06-30T11:56:50.173692",
+        "nombre": "Joey",
+        "apellido": "Tribiani"
+    },
+    {
+        "userId": 6,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "10:00:00",
+        "enviadoEn": "2025-06-30T11:56:50.155173",
+        "nombre": "Rachel",
+        "apellido": "Green"
+    },
+    {
+        "userId": 6,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "08:30:00",
+        "enviadoEn": "2025-06-30T11:56:50.142801",
+        "nombre": "Rachel",
+        "apellido": "Green"
+    },
+    {
+        "userId": 6,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "07:15:00",
+        "enviadoEn": "2025-06-30T11:56:50.131314",
+        "nombre": "Rachel",
+        "apellido": "Green"
+    },
+    {
+        "userId": 5,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "10:00:00",
+        "enviadoEn": "2025-06-30T11:56:50.115804",
+        "nombre": "Chandler",
+        "apellido": "Bing"
+    },
+    {
+        "userId": 5,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "08:45:00",
+        "enviadoEn": "2025-06-30T11:56:50.104768",
+        "nombre": "Chandler",
+        "apellido": "Bing"
+    },
+    {
+        "userId": 5,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "07:15:00",
+        "enviadoEn": "2025-06-30T11:56:50.093768",
+        "nombre": "Chandler",
+        "apellido": "Bing"
+    },
+    {
+        "userId": 3,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "09:00:00",
+        "enviadoEn": "2025-06-30T11:56:50.078767",
+        "nombre": "Monica",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 1,
+        "fecha": "2025-06-30",
+        "dia": "MONDAY",
+        "hora": "10:15:00",
+        "enviadoEn": "2025-06-30T11:56:50.040682",
+        "nombre": "Ross",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 6,
+        "fecha": "2025-06-28",
+        "dia": "SATURDAY",
+        "hora": "17:00:00",
+        "enviadoEn": "2025-06-28T18:06:18.536374",
+        "nombre": "Rachel",
+        "apellido": "Green"
+    },
+    {
+        "userId": 6,
+        "fecha": "2025-06-28",
+        "dia": "SATURDAY",
+        "hora": "12:00:00",
+        "enviadoEn": "2025-06-28T18:06:18.258382",
+        "nombre": "Rachel",
+        "apellido": "Green"
+    },
+    {
+        "userId": 3,
+        "fecha": "2025-06-28",
+        "dia": "SATURDAY",
+        "hora": "14:00:00",
+        "enviadoEn": "2025-06-28T18:05:20.022831",
+        "nombre": "Monica",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 1,
+        "fecha": "2025-06-28",
+        "dia": "SATURDAY",
+        "hora": "17:00:00",
+        "enviadoEn": "2025-06-28T18:05:19.762552",
+        "nombre": "Ross",
+        "apellido": "Geller"
+    },
+    {
+        "userId": 1,
+        "fecha": "2025-06-28",
+        "dia": "SATURDAY",
+        "hora": "13:00:00",
+        "enviadoEn": "2025-06-28T18:05:19.474994",
+        "nombre": "Ross",
+        "apellido": "Geller"
+    }
+]
