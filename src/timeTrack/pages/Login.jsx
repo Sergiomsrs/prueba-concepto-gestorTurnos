@@ -67,7 +67,12 @@ export const Login = () => {
 
   return (
     <section className="w-3/4 min-h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center w-full h-full px-6 py-8 bg-[url('src/images/bg-image-loginForm.webp')] bg-cover bg-center bg-no-repeat">
+      <div 
+        className="flex flex-col items-center justify-center w-full min-h-[60vh] md:min-h-[70vh] px-6 py-8 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('${import.meta.env.BASE_URL}bg-image-loginForm.webp')`
+        }}
+      >
         <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
