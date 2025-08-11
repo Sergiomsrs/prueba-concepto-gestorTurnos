@@ -64,9 +64,9 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
 
   return (
     <>
-      <td className="sm:text-base text-xs font-semibold text-gray-800 py-0 whitespace-nowrap">{teamWork}</td>
+      <td className="sm:text-base text-sm font-semibold text-gray-800 py-0 whitespace-nowrap">{teamWork}</td>
       <td 
-      className="sm:text-base text-xs font-semibold text-gray-800 whitespace-nowrap max-w-none">
+      className="sm:text-base text-sm font-semibold text-gray-800 whitespace-nowrap max-w-none">
         <button onClick={handleOpenModal} className="mr-2 py-0" >{username} {lastName}</button>
         </td>
       {hours && hours.map((value, index) => (
