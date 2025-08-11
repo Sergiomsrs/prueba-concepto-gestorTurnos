@@ -64,19 +64,19 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
 
   return (
     <>
-      <td className="sm:text-base text-xs font-semibold text-gray-800  whitespace-nowrap">{teamWork}</td>
+      <td className="sm:text-base text-xs font-semibold text-gray-800 py-0 whitespace-nowrap">{teamWork}</td>
       <td 
       className="sm:text-base text-xs font-semibold text-gray-800 whitespace-nowrap max-w-none">
-        <button onClick={handleOpenModal} className="mr-2" >{username} {lastName}</button>
+        <button onClick={handleOpenModal} className="mr-2 py-0" >{username} {lastName}</button>
         </td>
       {hours && hours.map((value, index) => (
         <td
-          className={`relative md:w-24 w-12 text-center align-bottom ${index % 4 === 3 ? 'border-45-height' : ''}`}
+          className={`relative md:w-24 w-12 text-center align-middle py-0 ${index % 4 === 3 ? 'border-45-height' : ''}`}
           key={index}
         >
           <input
             type="checkbox"
-            className={`sm:w-4 sm:h-4 w-2 h-2 p-0 m-0 appearance-none border border-gray-400 rounded-3xl 
+            className={`sm:w-4 sm:h-4 w-3 h-3 p-0 m-0 appearance-none border align-middle border-gray-400 rounded-3xl 
               ${getCursorClass(isInputDisabled(index), value)} 
               ${getBackgroundClass(value, teamWork)} 
               relative`}
@@ -92,7 +92,7 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
           )}
         </td>
       ))}
-      <td className="sm:text-base text-xs w-12 pl-2 align-bottom">{formatTime(shiftDurationes)}</td>
+      <td className="sm:text-base text-xs w-12 pl-2 align-middle py-0.5 ">{formatTime(shiftDurationes)}</td>
       {isModalOpen && <Modal username={username} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id}/>}
     </>
   );
