@@ -17,7 +17,7 @@ export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
 
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden p-4 sm:px-8 lg:px-16">
+    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden sm:px-8">
       <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0">
         <header className="mb-6">
           <Navbar />
