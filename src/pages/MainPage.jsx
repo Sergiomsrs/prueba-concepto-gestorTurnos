@@ -17,9 +17,9 @@ export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
 
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden px-1 sm:px-8 lg:px-16">
-      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative">
-        <header>
+    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden p-4 sm:px-8 lg:px-16">
+      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0">
+        <header className="mb-6">
           <Navbar />
         </header>
 
@@ -64,7 +64,7 @@ export const MainPage = () => {
           </button>
         )}
 
-        <main className="flex flex-col items-center max-w-full overflow-auto">
+        <main className="flex flex-col w-full max-w-full overflow-x-auto pl-0">
           <Routes>
             <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
@@ -81,7 +81,7 @@ export const MainPage = () => {
         </main>
 
         <footer className="mt-8 mb-2">
-          <p className="text-center">© 2024 My Website. All rights reserved.</p>
+          <p className="text-center">© 2025 My Website. All rights reserved.</p>
         </footer>
       </div>
     </div>

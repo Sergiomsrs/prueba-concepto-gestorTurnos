@@ -45,7 +45,7 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
 
 
   return (
-    <div className="flex items-center mb-4">
+    <div className="sm:flex sm:items-center mb-4">
       <div className="relative">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
           <svg
@@ -60,7 +60,7 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
         <input
           name="start"
           type="date"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/3 sm:w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date start"
           value={date.start}
           onChange={(event) => handleChange(event, "start")}
@@ -82,14 +82,14 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
         <input
           name="end"
           type="date"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/3  sm:w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date end"
           value={date.end}
           onChange={(event) => handleChange(event, "end")}
         />
       </div>
 
-      <div className="ml-4">
+      <div className="my-2 sm:my-0 sm:mx-4">
         <button
           onClick={handleClick}
           className="bg-sky-600

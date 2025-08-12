@@ -71,10 +71,10 @@ export const Daily = () => {
 
 
   return (
-    <section className="max-w-full p-4">
+    <section className="flex flex-col min-w-[900px] sm:min-w-full ">
       <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
-      <div className="border rounded-lg shadow-md overflow-x-auto max-w-full p-4 relative">  {/*incorporar zoom en este div*/}
+      <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">  {/*incorporar zoom en este div*/}
         <MenuIcon sideBarClick={handleOpenModal}/>
         {isModalOpen && <SideBar sideBarClick={handleCloseModal} isOpen={isModalOpen}/>}
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
@@ -102,7 +102,7 @@ export const Daily = () => {
 
   
 
-        <div className="flex overflow-x-auto py-8 my-8 bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500">
+        <div className="flex overflow-x-auto py-8 my-8 bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500 w-[1030px] sm:w-full">
 
         <Resumen className="flex-none w-max" employess={employess} />
         <RDias className="flex-none w-max" />
