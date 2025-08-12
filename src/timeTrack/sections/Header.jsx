@@ -52,7 +52,7 @@ export const Header = () => {
               </span>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover: bg-indigo-500 px-4 py-1.5 rounded transition"
+                className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-1.5 rounded transition"
               >
                 Log out
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
@@ -66,7 +66,7 @@ export const Header = () => {
           ) : (
             <Link
               to="/login"
-              className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover: bg-indigo-500 px-4 py-1.5 rounded transition"
+              className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-1.5 rounded transition"
             >
               Log in
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
