@@ -8,7 +8,7 @@ export const Landing = () => {
   return (
     <div className="flex flex-col justify-center items-center w-full">
 
-      <section className=" bg-gray-100 w-4/5 ">
+      <section className=" bg-gray-100 w-full sm:w-4/5 px-2 ">
 
         <div className="bg-gray-100 mt-10">
           <main className="w3/4">

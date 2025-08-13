@@ -60,7 +60,7 @@ export const AddTimeTrack = () => {
 
     return (
         <div className="min-h-full flex items-center justify-center">
-            <div className='-mt-40'>
+            <div className='-mt-30'>
 
             <div className="mx-auto max-w-2xl text-center">
                 <h1 className="mb-4 text-3xl  md:text-5xl lg:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-indigo-600 to-blue-500">Time Track</h1>

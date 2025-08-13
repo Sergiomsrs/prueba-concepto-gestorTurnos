@@ -41,8 +41,8 @@ export const LogList = () => {
     }, [auth]);
 
     return (
-        <div className="flex flex-col items-center w-full h-full p-20">
-            <div className="w-full max-w-3xl">
+        <div className="flex flex-col items-center w-full h-full py-8">
+            <div className="w-full max-w-3xl px-2 ">
                 <h1 className="text-xl font-bold mb-2 text-gray-800">Últimas Notificaciones</h1>
                 <p className="text-md mb-6 text-gray-600">Fichajes previstos no registrados</p>
 

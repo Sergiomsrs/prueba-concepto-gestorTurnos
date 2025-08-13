@@ -22,7 +22,7 @@ export const SectionPicker = () => {
 
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 ">
   <label htmlFor="options" className="block text-gray-700 mb-2">Equipo de trabajo:</label>
   <select 
     id="options" 

@@ -17,9 +17,9 @@ export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
 
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden sm:px-8">
-      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0">
-        <header className="mb-6">
+    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden ">
+      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0 ">
+        <header>
           <Navbar />
         </header>
 
@@ -64,7 +64,8 @@ export const MainPage = () => {
           </button>
         )}
 
-        <main className="flex flex-col w-full max-w-full overflow-x-auto pl-0">
+        <main className="flex flex-col w-full max-w-full overflow-x-auto py-6 sm:px-16">
+
           <Routes>
             <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />

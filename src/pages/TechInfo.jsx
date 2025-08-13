@@ -4,9 +4,9 @@ import { Projects } from "../formComponents/Projects"
 export const TechInfo = () => {
   return (
     
-    <div className="flex flex-col justify-center items-center w-full">
+    <div className="flex flex-col  w-full">
 
-    <section className=" bg-gray-100 w-4/5 ">
+    <section className=" bg-gray-100  ">
       <div className="bg-gray-100">
         <main className="">
           <section className="">

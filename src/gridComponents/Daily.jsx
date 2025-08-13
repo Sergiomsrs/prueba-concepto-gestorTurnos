@@ -71,7 +71,7 @@ export const Daily = () => {
 
 
   return (
-    <section className="flex flex-col min-w-[900px] sm:min-w-full ">
+    <section className="flex flex-col mx-2 sm:mx-0 ">
       <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">  {/*incorporar zoom en este div*/}
