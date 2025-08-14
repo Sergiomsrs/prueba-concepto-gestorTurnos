@@ -1,7 +1,4 @@
-
-
 export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
-
   const handleChange = (event, type) => {
     const newValue = event.target.value;
     if (type === "start") {
@@ -11,42 +8,31 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
     }
   };
 
-
   const handleClick = () => {
-
     fetch(`http://localhost:8081/day/${date.start}/${date.end}`, {
-      method: 'GET',
+      method: "GET",
     })
-      .then(response => {
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json();
       })
-      .then(data => {
+      .then((data) => {
         setData(data);
         console.log(data);
       })
       .catch((error) => {
-        console.error('Error:', error);
+        console.error("Error:", error);
       });
 
-    setSelectedOption('todos');
-
-  }
-
-
-  /*
-    const handleClick = () => {
-      const dates = generateDays(date.start)
-      setData(generateDatawithDate(dates))
-    }
-  */
-
+    setSelectedOption("todos");
+  };
 
   return (
-    <div className="sm:flex sm:items-center mb-4">
-      <div className="relative w-full">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4 w-full">
+      {/* Input de fecha de inicio */}
+      <div className="relative w-full sm:w-auto sm:flex-1 max-w-[200px]">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
           <svg
             className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -60,14 +46,18 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
         <input
           name="start"
           type="date"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block sm:w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date start"
           value={date.start}
           onChange={(event) => handleChange(event, "start")}
         />
       </div>
-      <span className="mx-4 text-gray-500">to</span>
-      <div className="relative w-full">
+
+      {/* Separador */}
+      <span className="hidden sm:block mx-4 text-gray-500">to</span>
+
+      {/* Input de fecha de fin */}
+      <div className="relative w-full sm:w-auto sm:flex-1 max-w-[200px]">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
           <svg
             className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -82,24 +72,21 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
         <input
           name="end"
           type="date"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  sm:w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date end"
           value={date.end}
           onChange={(event) => handleChange(event, "end")}
         />
       </div>
 
+      {/* Botón */}
       <div className="my-2 sm:my-0 sm:mx-4">
         <button
           onClick={handleClick}
-          className="bg-sky-600
-    border dark:border-sky-900 border-sky-900
-    rounded-full
-    inline-flex justify-center items-center gap-x-2
-    py-1 px-2 md:py-2 md:px-4
-    text-xs md:text-base text-white
-    transition
-    hover:scale-110 hover:bg-white/10">Refrescar</button>
+          className="bg-sky-600 border dark:border-sky-900 border-sky-900 rounded-full inline-flex justify-center items-center gap-x-2 py-1 px-2 md:py-2 md:px-4 text-xs md:text-base text-white transition hover:scale-110 hover:bg-white/10"
+        >
+          Refrescar
+        </button>
       </div>
     </div>
   );
