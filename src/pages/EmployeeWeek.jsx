@@ -96,7 +96,7 @@ console.log(formattedDifference);
   console.log(empleadoData);
 
   return (
-    <section className="w-full max-w-6xl mx-auto px-4">
+    <section className="w-full max-w-6xl mx-auto px-2 mt-6">
   <EmployeePicker value={selectedEmployee} onChange={handleEmployeeChange} />
 
   <span className="inline-flex items-center rounded-md bg-gray-800 px-2 py-1 text-sm font-bold text-white ring-1 ring-inset ring-gray-500/10 mb-4">
@@ -123,7 +123,7 @@ console.log(formattedDifference);
   </div>
 
   {/* Tabla de los días de la semana */}
-  <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border-t-4 border-blue-500">
+  <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border-t-4 border-blue-500 overflow-x-auto">
   <table className="min-w-full divide-y divide-gray-200 table-auto">
   <thead className="bg-gray-50">
     <tr>
@@ -142,7 +142,7 @@ console.log(formattedDifference);
 
       return (
         <tr key={index}>
-          <td className="px-4 py-2 text-left text-sm font-medium text-gray-900">{formatToDate(day)}</td>
+          <td className="px-4 py-2 text-left text-sm font-medium text-gray-900 whitespace-nowrap ">{formatToDate(day)}</td>
           <td className="px-4 py-2 text-left text-sm font-medium text-gray-900">{`${day.day.charAt(0).toUpperCase() + day.day.slice(1)}`}</td>
           <td className="px-4 py-2 text-left text-sm text-gray-500">{getStringBlock(day, minMaxValues)}</td>
           <td className="px-4 py-2 text-left text-sm text-gray-500">{day.duration.slice(0, 5)}</td>
