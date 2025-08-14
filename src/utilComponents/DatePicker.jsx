@@ -30,7 +30,7 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center gap-2 my-4 w-full">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-2 my-2 w-full">
       {/* Input de fecha de inicio */}
       <div className="relative w-full sm:w-auto sm:flex-1 max-w-[200px]">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
