@@ -2,7 +2,7 @@
 export const LoginForm = () => {
   return (
 
-    <section className="w-3/4 bg-gray-50 dark:bg-gray-900 ">
+    <section className="w-full  bg-gray-50 dark:bg-gray-900 ">
   <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto bg-[url('/bg-image-loginForm.webp')] bg-cover bg-center bg-no-repeat">
 
       

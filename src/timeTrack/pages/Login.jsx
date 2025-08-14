@@ -66,7 +66,7 @@ export const Login = () => {
   };
 
   return (
-    <section className="w-3/4 min-h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <section className="w-full min-h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div 
         className="flex flex-col items-center justify-center w-full min-h-[60vh] md:min-h-[70vh] px-6 py-8 bg-cover bg-center bg-no-repeat"
         style={{
