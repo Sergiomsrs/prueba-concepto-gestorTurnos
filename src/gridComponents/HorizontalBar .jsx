@@ -41,7 +41,11 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
 
 
   const handleClick = (index, isChecked) => {
-    onHourChange(index, isChecked ? entrada[index] : "Null");
+    if (hours[index] === "CONFLICT") {
+      onHourChange(index, "PTO");
+    } else {
+      onHourChange(index, isChecked ? entrada[index] : "Null");
+    }
   };
 
 
@@ -59,6 +63,8 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
   const getBackgroundClass = (value, team) => {
     if (value === "PTO") return 'bg-red-200 '; 
     if (value === "Null") return 'bg-neutral-200';
+    if (value === "CONFLICT") return 'bg-amber-500 animate-pulse';
+
     return selectColor(team); 
   };
 
