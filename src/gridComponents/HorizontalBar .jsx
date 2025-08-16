@@ -17,7 +17,6 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
     setModalOpen(false);
   };
 
-
   const handleMouseDown = (index) => {
     setStartSelection(index);
     setIsSelecting(true);
@@ -27,12 +26,26 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
     if (isSelecting && startSelection !== null) {
       const selectionStart = Math.min(startSelection, index);
       const selectionEnd = Math.max(startSelection, index);
-      const isStartSelected = hours[startSelection] !== "Null" || hours[startSelection] === "PTO";
+      const isStartSelected = hours[startSelection] !== "Null" && hours[startSelection] !== "PTO";
 
       for (let i = selectionStart; i <= selectionEnd; i++) {
         if (isInputDisabled(i)) {
+          // Saltar si el input está deshabilitado
           continue;
         }
+
+        if (hours[i] === "CONFLICT") {
+          // Si el valor es "CONFLICT", cambiarlo a "PTO"
+          onHourChange(i, "PTO");
+          continue;
+        }
+
+        if (hours[i] === "PTO") {
+          // Saltar si el valor es "PTO"
+          continue;
+        }
+
+        // Cambiar el valor según el estado inicial de selección
         onHourChange(i, isStartSelected ? entrada[i] : "Null");
       }
     }
