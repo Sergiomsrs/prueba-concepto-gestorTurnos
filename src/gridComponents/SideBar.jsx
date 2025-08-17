@@ -28,7 +28,7 @@ export const SideBar = ({ sideBarClick, isOpen }) => {
     const handleSave = async (e) => {
       e.preventDefault();
       try {
-        const response = await fetch('http://localhost:8081/api/ws/copy-week', {
+        const response = await fetch('http://localhost:8081/api/schedule/copy-week', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
