@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { EmployeePicker } from "../utilComponents/EmployeePicker";
-import { findMinMaxOfBlocks, getStringBlock, splitIntoBlocks } from "../utils/blockHours";
-import { formatDate, formatToDate } from "../utils/function";
+import { getStringBlock, splitIntoBlocksByIndex, convertBlocksToTimes } from "../utils/blockHours";
+import { formatToDate } from "../utils/function";
 
 export const EmployeeWeek = () => {
   const { data, holidayDates } = useContext(AppContext);
@@ -133,23 +133,30 @@ console.log(formattedDifference);
       <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duración</th>
     </tr>
   </thead>
-  <tbody className="bg-white divide-y divide-gray-200">
-    {empleadoData.map((day, index) => {
-      const { workShift } = day;
-      const blocks = splitIntoBlocks(workShift);
-      const minMaxValues = findMinMaxOfBlocks(blocks);
-      console.log(minMaxValues)
+<tbody className="bg-white divide-y divide-gray-200">
+  {empleadoData.map((day, index) => {
+    const { workShift } = day;
 
-      return (
-        <tr key={index}>
-          <td className="px-4 py-2 text-left text-sm font-medium text-gray-900 whitespace-nowrap ">{formatToDate(day)}</td>
-          <td className="px-4 py-2 text-left text-sm font-medium text-gray-900">{`${day.day.charAt(0).toUpperCase() + day.day.slice(1)}`}</td>
-          <td className="px-4 py-2 text-left text-sm text-gray-500">{getStringBlock(day, minMaxValues)}</td>
-          <td className="px-4 py-2 text-left text-sm text-gray-500">{day.duration.slice(0, 5)}</td>
-        </tr>
-      );
-    })}
-  </tbody>
+    // 1. indices de bloques
+    const blocks = splitIntoBlocksByIndex(workShift);
+
+    // 2. convertir indices → horas
+    const minMaxValues = convertBlocksToTimes(blocks);
+
+    console.log(minMaxValues); 
+    // Ejemplo: [{min: "09:00", max: "13:00"}, {min: "15:00", max: "18:00"}]
+
+    return (
+      <tr key={index}>
+        <td className="px-4 py-2">{formatToDate(day)}</td>
+        <td className="px-4 py-2">{day.day.charAt(0).toUpperCase() + day.day.slice(1)}</td>
+        <td className="px-4 py-2">{getStringBlock(day, minMaxValues)}</td>
+        <td className="px-4 py-2">{day.duration.slice(0, 5)}</td>
+      </tr>
+    );
+  })}
+</tbody>
+
 </table>
   </div>
 </section>

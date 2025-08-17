@@ -41,18 +41,27 @@ export const Daily = () => {
     const shiftData = generateShiftData(data);
     console.log(shiftData);
 
-    fetch('http://localhost:8081/api/ws/saveAll', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(shiftData
-      ),
-    })
-      .then(response => response.json())
-      .then(data => console.log('Success:', data))
-      .catch((error) => console.error('Error:', error));
-  };
+fetch('http://localhost:8081/api/ws/saveAll', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(shiftData),
+})
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === "success") {
+      // Mostrar alerta de éxito
+      alert(data.message);
+    } else {
+      // Mostrar alerta de error
+      alert("⚠️ " + data.message + "\nDetalles: " + (data.data || ""));
+    }
+  })
+  .catch(error => {
+    console.error('Error de red:', error);
+    alert("❌ Error de red al conectar con el servidor");
+  });
+
+}
 
   const handlReset = () => {
     setData(prevData =>

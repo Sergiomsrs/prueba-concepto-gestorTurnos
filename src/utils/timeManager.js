@@ -31,36 +31,20 @@ export const generateSplitWorkShift = (ranges) => {
   console.log(workShiftArray);
   */
 
-  export const getTimeFromIndex = (index) => {
+
+
+/* console.log(getTimeFromIndex(0));  // "07:00" */
+
+// 1. Utilidad para convertir índice → hora
+export const getTimeFromIndex = (index) => {
   const startHour = 7; // hora de inicio
   const interval = 15; // minutos por bloque
-
-  // calcular minutos totales desde la medianoche
   const totalMinutes = startHour * 60 + index * interval;
 
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
 
-  // formatear con dos dígitos
   return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
-};
-
-/* console.log(getTimeFromIndex(0));  // "07:00" */
-
-  export const getIndexFromTime = (timeStr) => {
-  const startHour = 7; // hora de inicio
-  const interval = 15; // minutos por bloque
-
-  const [hours, minutes] = timeStr.split(":").map(Number);
-
-  // minutos totales desde la hora de inicio
-  const totalMinutes = (hours * 60 + minutes) - (startHour * 60);
-
-  // calcular índice
-  const index = Math.floor(totalMinutes / interval);
-
-  // asegurar que el índice está dentro del array
-  return index < 0 ? 0 : index;
 };
 
 /* console.log(getIndexFromTime("07:00"));  */

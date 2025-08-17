@@ -46,7 +46,7 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
         }
 
         // Cambiar el valor según el estado inicial de selección
-        onHourChange(i, isStartSelected ? entrada[i] : "Null");
+        onHourChange(i, isStartSelected ? "WORK" : "Null");
       }
     }
   };
@@ -57,7 +57,7 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
     if (hours[index] === "CONFLICT") {
       onHourChange(index, "PTO");
     } else {
-      onHourChange(index, isChecked ? entrada[index] : "Null");
+      onHourChange(index, isChecked ? "WORK" : "Null");
     }
   };
 

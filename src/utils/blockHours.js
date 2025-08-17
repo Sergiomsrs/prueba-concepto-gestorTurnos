@@ -1,46 +1,57 @@
 import { addMinutes } from "./function";
+import { getTimeFromIndex } from "./timeManager";
 
 
-// Función para dividir el array en bloques basados en el valor "Null"
-export const splitIntoBlocks = (arr) => {
+// 2. Detectar bloques "WORK" por índices
+export const splitIntoBlocksByIndex = (arr) => {
   const blocks = [];
-  let currentBlock = [];
+  let startIndex = null;
+  let lastValidIndex = null;
 
-  arr.forEach(item => {
-    if (item !== "Null" && item !== "PTO") {
-      currentBlock.push(item);
-    } else if (currentBlock.length > 0) {
-      blocks.push(currentBlock);
-      currentBlock = [];
+  arr.forEach((item, i) => {
+    if (item === "WORK") {
+      if (startIndex === null) startIndex = i;
+      lastValidIndex = i;
+    } else {
+      if (startIndex !== null && lastValidIndex !== null) {
+        blocks.push([startIndex, lastValidIndex]);
+      }
+      startIndex = null;
+      lastValidIndex = null;
     }
   });
 
-  if (currentBlock.length > 0) {
-    blocks.push(currentBlock);
+  if (startIndex !== null && lastValidIndex !== null) {
+    blocks.push([startIndex, lastValidIndex]);
   }
 
   return blocks;
 };
 
-// Obtener los valores maximo y minimo de cada bloque
-export const findMinMaxOfBlocks = (blocks) => {
-  return blocks.map(block => ({
-    min: block[0],
-    max: block[block.length - 1]
+// 3. Convertir bloques de índices → horas
+export const convertBlocksToTimes = (blocks) => {
+  return blocks.map(([start, end]) => ({
+    min: getTimeFromIndex(start),
+    max: getTimeFromIndex(end + 1) // sumamos +15 min al final
   }));
 };
 
-// Obtener el texto a mostrar segun los bloques resultantes
+// 4. Texto legible
 export const getStringBlock = (day, minMaxValues) => {
-
   switch (true) {
-
-    case minMaxValues.length === 0: { return `Libre`; }
-    case minMaxValues.length === 1: { return `De ${minMaxValues[0].min} a ${addMinutes(minMaxValues[0].max, 15)}`; }
-    case minMaxValues.length === 2: { return `De ${minMaxValues[0].min} a ${addMinutes(minMaxValues[0].max, 15)} y de ${minMaxValues[1].min} a ${addMinutes(minMaxValues[1].max, 15)}`; }
-    case minMaxValues.length >= 3: { return `${day.day} Revisar error`; }
+    case minMaxValues.length === 0:
+      return `Libre`;
+    case minMaxValues.length === 1:
+      return `De ${minMaxValues[0].min} a ${minMaxValues[0].max}`;
+    case minMaxValues.length === 2:
+      return `De ${minMaxValues[0].min} a ${minMaxValues[0].max} y de ${minMaxValues[1].min} a ${minMaxValues[1].max}`;
+    case minMaxValues.length >= 3:
+      return `${day.day} Revisar error`;
+    default:
+      return "";
   }
 };
+
 
 
 const generateWorkShiftArray = (startTime, endTime, interval = 15, startHour = 7) => {
