@@ -1,19 +1,22 @@
-import { useContext, useState } from "react";
-import { calcularshiftDuration, obtenerPreviousDay, generateShiftData, formatDate } from "../utils/function";
-import { employess } from "../utils/data";
-import { Resumen } from "../gridComponents/Resumen";
-import { DatePicker } from "../utilComponents/DatePicker";
-import { HeadRow } from "../gridComponents/HeadRow";
-import { DayGrid } from "../gridComponents/DayGrid";
+import { AlertMessage } from "../timeTrack/components/AlertMessage";
 import { AppContext } from "../context/AppContext";
-import { SectionPicker } from "../utilComponents/SectionPicker";
-import { RDias } from "../gridComponents/RDias";
+import { calcularshiftDuration, obtenerPreviousDay, generateShiftData, formatDate } from "../utils/function";
+import { DatePicker } from "../utilComponents/DatePicker";
+import { DayGrid } from "../gridComponents/DayGrid";
+import { employess } from "../utils/data";
+import { HeadRow } from "../gridComponents/HeadRow";
 import { JobHourApp } from "./JobHourApp";
 import { MenuIcon } from "../icon/MenuIcon";
+import { RDias } from "../gridComponents/RDias";
+import { Resumen } from "../gridComponents/Resumen";
+import { SectionPicker } from "../utilComponents/SectionPicker";
 import { SideBar } from "./SideBar";
-import { AlertMessage } from "../timeTrack/components/AlertMessage";
+import { useContext, useState } from "react";
 
 export const Daily = () => {
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const { data, setData, date, setDate, setSelectedOption, holidayDates } = useContext(AppContext);
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -33,7 +36,7 @@ export const Daily = () => {
   const handlePrint = () => {
     const shiftData = generateShiftData(data);
 
-    fetch('http://localhost:8081/api/ws/saveAll', {
+    fetch(`${API_URL}/ws/saveAll`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(shiftData),
