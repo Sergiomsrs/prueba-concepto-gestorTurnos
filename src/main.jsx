@@ -10,7 +10,7 @@ import { AuthProvider } from './timeTrack/context/AuthContext'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <HashRouter>
+    <HashRouter future={{ v7_startTransition: true }} >
       <AppProvider>
     <AuthProvider>
         <MainPage />

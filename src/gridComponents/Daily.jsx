@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-
 import { calcularshiftDuration, obtenerPreviousDay, generateShiftData, formatDate } from "../utils/function";
 import { employess } from "../utils/data";
 import { Resumen } from "../gridComponents/Resumen";
@@ -12,22 +11,17 @@ import { RDias } from "../gridComponents/RDias";
 import { JobHourApp } from "./JobHourApp";
 import { MenuIcon } from "../icon/MenuIcon";
 import { SideBar } from "./SideBar";
-
+import { AlertMessage } from "../timeTrack/components/AlertMessage";
 
 export const Daily = () => {
-
-
   const { data, setData, date, setDate, setSelectedOption, holidayDates } = useContext(AppContext);
-
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setModalOpen(true);
-  };
+  // Estado para la alerta
+  const [alert, setAlert] = useState({ isOpen: false, message: null });
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
 
   const handleHourChange = (dayIndex, employeeIndex, hourIndex, value) => {
     const newData = [...data];
@@ -37,31 +31,36 @@ export const Daily = () => {
   };
 
   const handlePrint = () => {
-
     const shiftData = generateShiftData(data);
-    console.log(shiftData);
 
-fetch('http://localhost:8081/api/ws/saveAll', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(shiftData),
-})
-  .then(response => response.json())
-  .then(data => {
-    if (data.status === "success") {
-      // Mostrar alerta de éxito
-      alert(data.message);
-    } else {
-      // Mostrar alerta de error
-      alert("⚠️ " + data.message + "\nDetalles: " + (data.data || ""));
-    }
-  })
-  .catch(error => {
-    console.error('Error de red:', error);
-    alert("❌ Error de red al conectar con el servidor");
-  });
-
-}
+    fetch('http://localhost:8081/api/ws/saveAll', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(shiftData),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "success") {
+          setAlert({
+            isOpen: true,
+            message: { type: "success", text: data.message }
+          });
+        } else {
+          setAlert({
+            isOpen: true,
+            message: { type: "error", text: "⚠️ " + data.message + "\nDetalles: " + (data.data || "") }
+          });
+        }
+        setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
+      })
+      .catch(error => {
+        setAlert({
+          isOpen: true,
+          message: { type: "error", text: "Error de red al conectar con el servidor" }
+        });
+        setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
+      });
+  };
 
   const handlReset = () => {
     setData(prevData =>
@@ -76,14 +75,11 @@ fetch('http://localhost:8081/api/ws/saveAll', {
     );
   };
 
-
-
-
   return (
     <section className="flex flex-col mx-2 sm:mx-0 ">
       <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
-      <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">  {/*incorporar zoom en este div*/}
+      <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">
         <MenuIcon sideBarClick={handleOpenModal}/>
         {isModalOpen && <SideBar sideBarClick={handleCloseModal} isOpen={isModalOpen}/>}
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
@@ -109,21 +105,23 @@ fetch('http://localhost:8081/api/ws/saveAll', {
           </div>
         ))}
 
-  
-
         <div className="flex overflow-x-auto py-8 my-8 bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500 w-[1030px] sm:w-full">
-
-        <Resumen className="flex-none w-max" employess={employess} />
-        <RDias className="flex-none w-max" />
-
+          <Resumen className="flex-none w-max" employess={employess} />
+          <RDias className="flex-none w-max" />
         </div>
-
 
         <div className="flex gap-4 over">
           <button onClick={handlePrint} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
           <button onClick={handlReset} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded min-w-32">Reset</button>
         </div>
       </div>
+
+      {/* Alerta centrada */}
+      {alert.isOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/10">
+          <AlertMessage isOpen={alert.isOpen} message={alert.message} />
+        </div>
+      )}
     </section>
   );
 };
