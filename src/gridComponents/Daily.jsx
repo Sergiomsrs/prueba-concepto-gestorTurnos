@@ -83,8 +83,8 @@ export const Daily = () => {
       <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
       <SectionPicker />
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">
-        <MenuIcon sideBarClick={handleOpenModal}/>
-        {isModalOpen && <SideBar sideBarClick={handleCloseModal} isOpen={isModalOpen}/>}
+        <MenuIcon sideBarClick={handleOpenModal} />
+        {isModalOpen && <SideBar sideBarClick={handleCloseModal} isOpen={isModalOpen} />}
         {data.map((day, dayIndex) => (dayIndex !== 0 &&
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 mb-4">
