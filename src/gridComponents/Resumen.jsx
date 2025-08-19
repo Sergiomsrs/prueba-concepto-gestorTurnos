@@ -6,6 +6,8 @@ import { uniqueEmployeeName } from "../utils/function";
 export const Resumen = () => {
   const { data, selectedOption, holidayDates } = useContext(AppContext);
 
+  console.log(data)
+
   const uniqueEmployeeNames = uniqueEmployeeName(data);
 
   // Función para calcular la duración total en formato decimal

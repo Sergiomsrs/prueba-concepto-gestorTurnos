@@ -48,3 +48,40 @@ export const getTimeFromIndex = (index) => {
 };
 
 /* console.log(getIndexFromTime("07:00"));  */
+
+export function getMonthRange(year, month) {
+  // month es 1-12
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0); // día 0 del siguiente mes = último día del actual
+
+  return {
+    start: startDate.toISOString().split("T")[0], // formato YYYY-MM-DD
+    end: endDate.toISOString().split("T")[0],
+  };
+}
+
+export const getSchedules = (baseUrl, start, end) => {
+  return fetch(`${baseUrl}/day/${start}/${end}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    });
+};
+
+export const fetchAbsences = (baseUrl, selectedId) => {
+  return fetch(`http://localhost:8081/api/disp/${selectedId}`)
+    .then(response => {
+      if (response.status === 204) {
+        // No hay contenido
+        return { status: 204, data: null };
+      }
+      if (!response.ok) {
+        throw new Error(`Error en la respuesta del servidor: ${response.status}`);
+      }
+      return response.json().then(data => ({ status: response.status, data }));
+    });
+};

@@ -8,6 +8,7 @@ import { TimetrackList } from '../components/TimetrackList';
 export const TimeTrackView = () => {
 
   const [isModalAddOpen, setIsModalAddOpen] = useState(false);
+  
 
   const { 
           fetchRecords, 

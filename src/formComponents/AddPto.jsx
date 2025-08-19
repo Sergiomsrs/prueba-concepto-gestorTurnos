@@ -70,17 +70,6 @@ export const AddPto = () => {
         const dates = getDatesInRange(newPto.ptoStartDate, newPto.ptoTerminationDate);
         const pto = generatePtoWithDate(createForm.id, dates);
 
-        // Primero, guardar los turnos
-        fetch('http://localhost:8081/api/ws/saveAll', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(pto),
-        })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
 
         // Luego, guardar la ausencia
         fetch('http://localhost:8081/api/pto/add', {
@@ -100,24 +89,6 @@ export const AddPto = () => {
             .catch((error) => console.error('Error:', error));
     };
 
-    const handleDelete = (e) => {
-        e.preventDefault();
-
-        const dates = getDatesInRange(newPto.ptoStartDate, newPto.ptoTerminationDate);
-        const pto = generatePtoNullWithDate(createForm.id, dates);
-
-        fetch('http://localhost:8081/api/ws/saveAll', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(pto),
-        })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
-         
-    }
 
     const handleDeletePto = (ptoId, starDate, terminationDate) => {
 
@@ -125,25 +96,13 @@ export const AddPto = () => {
         const pto = generatePtoNullWithDate(createForm.id, dates);
 
         
-        fetch('http://localhost:8081/api/ws/saveAll', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(pto),
-        })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
 
         fetch(`http://localhost:8081/api/pto/delete/${ptoId}`, {
             method: 'DELETE',
         })
             .then(response => response.json())
             .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
-
-            
+            .catch((error) => console.error('Error:', error));        
     }
 
     return (

@@ -205,8 +205,8 @@ export const selectColor = (teamWork) => {
     case 'amarillo':
       selectColor = 'bg-yellow-500';
       break;
-    case 'morado':
-      selectColor = 'bg-purple-600';
+    case 'purple':
+      selectColor = 'bg-fuchsia-700';
       break;
     case 'naranja':
       selectColor = 'bg-orange-600';
