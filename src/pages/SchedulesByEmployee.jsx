@@ -4,16 +4,19 @@ import { EmployeeSelector } from "../utilComponents/EmployeeSelector";
 import { fetchAbsences } from "../utils/timeManager";
 import { DispTable } from "../formComponents/utils/DispTable";
 import { activeEmployeesMock, dispMockData } from "../utils/apiMock";
-
+import { useSchedules } from "../Hooks/useSchedules";
+//http://localhost:8081/api/schedule/employee/1/schedules?startDate=2025-08-01&endDate=2025-08-31
 export const SchedulesByEmployee = () => {
     const [employees, setEmployees] = useState(activeEmployeesMock);
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(1);
     const [workHours, setWorkHours] = useState(dispMockData)
 
-
     const selectedEmployee = employees.find(emp => emp.id === Number(selectedEmployeeId));
+    
+    
+    const { data, loading, error } = useSchedules(selectedEmployeeId, '2025-08-01', '2025-08-31');
 
-    console.log(workHours)
+    console.log(data)
 
     useEffect(() => {
         if (!selectedEmployeeId) return;

@@ -19,3 +19,18 @@ Ejemplo de uso
       .then(data => setEmployees(data))
       .catch(error => setError(error.message));
 }, []); */
+
+
+export const searchSchedulesByEmployesAndDate = async () => {
+    try {
+        const response = await fetch('http://localhost:8081/api/schedule/employee/1/schedules?startDate=2025-08-01&endDate=2025-08-31');
+        if (!response.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${response.status}`);
+        }
+        const employees = await response.json();
+        return employees; // Devuelve el array de empleados
+    } catch (error) {
+        console.error('Error al buscar empleados activos:', error);
+        throw error; // Permite manejar el error en el componente que llama
+    }
+};
