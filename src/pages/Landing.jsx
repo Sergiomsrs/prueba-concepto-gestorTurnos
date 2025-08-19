@@ -13,7 +13,7 @@ export const Landing = () => {
         <div className="bg-gray-100 mt-10">
           <main className="w3/4">
             <section className="">
-              <h1 className="text-3xl font-bold mb-4">Sobre WorkSchedFlow V.001</h1>
+              <h1 className="text-3xl font-bold mb-4">Sobre WorkSchedFlow V.002</h1>
               <p className="text-lg text-gray-700 mb-6 text-pretty">
                 WorkSchedFlow es una prueba de concepto diseñada para facilitar la gestión de turnos de trabajo.
                 Su objetivo principal es cubrir las necesidades de los gestores de equipos,
