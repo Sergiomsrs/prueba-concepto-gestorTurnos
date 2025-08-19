@@ -27997,3 +27997,126 @@ export const SchedulesMock = [
         ]
     }
 ]
+
+export const activeEmployeesMock = [
+    {
+        "id": 1,
+        "name": "Ross",
+        "lastName": "Geller",
+        "dni": "12345677",
+        "password": "$2a$10$eyFFi8xx1oYzPFbdNXqGxOsBBC5Aw0IHPsh/YTuCOZdK7riQyhmJq",
+        "secondLastName": "Geller",
+        "role": "ADMIN",
+        "email": "ross@correo.com",
+        "hireDate": "2024-01-01",
+        "terminationDate": "2025-12-31"
+    },
+    {
+        "id": 3,
+        "name": "Monica",
+        "lastName": "Geller",
+        "dni": "1414",
+        "password": "$2a$10$sS7eC7oNWrpmBJgyhUgTfu78dzXx7RZBKxOqYgScRcrsh0GulhZGi",
+        "secondLastName": "Geller",
+        "role": "ADMIN",
+        "email": "monica@correo.com",
+        "hireDate": "2024-01-01",
+        "terminationDate": "2025-12-31"
+    },
+    {
+        "id": 5,
+        "name": "Chandler",
+        "lastName": "Bing",
+        "dni": "",
+        "password": "",
+        "secondLastName": null,
+        "role": null,
+        "email": "chandler@correo.com",
+        "hireDate": "2024-01-01",
+        "terminationDate": "2025-12-31"
+    },
+    {
+        "id": 6,
+        "name": "Rachel",
+        "lastName": "Green",
+        "dni": "",
+        "password": "",
+        "secondLastName": null,
+        "role": null,
+        "email": "rachel@correo.com",
+        "hireDate": "2024-01-01",
+        "terminationDate": "2025-12-31"
+    },
+    {
+        "id": 7,
+        "name": "Joey",
+        "lastName": "Tribiani",
+        "dni": "123456",
+        "password": "$2a$10$TEHMCslLa0r5YzbtIyegZuTNWVYNidctzyl8cU9pf/JOx8Sz20/Ka",
+        "secondLastName": null,
+        "role": null,
+        "email": "joey@correo.com",
+        "hireDate": "2024-01-01",
+        "terminationDate": "2025-12-31"
+    },
+    {
+        "id": 19,
+        "name": "Jhon",
+        "lastName": "Doe",
+        "dni": "",
+        "password": "",
+        "secondLastName": null,
+        "role": null,
+        "email": "jhon@correo.com",
+        "hireDate": "2024-09-02",
+        "terminationDate": "2025-12-31"
+    },
+    {
+        "id": 29,
+        "name": "Abel",
+        "lastName": "Hernandez",
+        "dni": "1234",
+        "password": "$2a$10$mJu1uobUAhnbxsMH2Wbr7OsmMrP.jkpcYseFW4jNZKGvxhPVJCZgu",
+        "secondLastName": "",
+        "role": "ADMIN",
+        "email": "abel@correo.com",
+        "hireDate": "2025-06-16",
+        "terminationDate": "2025-12-18"
+    },
+    {
+        "id": 30,
+        "name": "Lucas",
+        "lastName": "Luis",
+        "dni": "00000009",
+        "password": "$2a$10$StxYVFHeqMnrrIHae5g2xOmPuvikzB6zEwsv.3EW8bIkI.VgRAjNK",
+        "secondLastName": "",
+        "role": "ADMIN",
+        "email": "luis@luis.com",
+        "hireDate": "2025-07-21",
+        "terminationDate": null
+    },
+    {
+        "id": 31,
+        "name": "Roy",
+        "lastName": "Roy",
+        "dni": "00000010",
+        "password": "$2a$10$eyFFi8xx1oYzPFbdNXqGxOsBBC5Aw0IHPsh/YTuCOZdK7riQyhmJq",
+        "secondLastName": null,
+        "role": "ADMIN",
+        "email": "nuevo1@correo.com",
+        "hireDate": "2025-08-01",
+        "terminationDate": null
+    },
+    {
+        "id": 32,
+        "name": "Ray",
+        "lastName": "Ray",
+        "dni": "00000010",
+        "password": "$2a$10$eyFFi8xx1oYzPFbdNXqGxOsBBC5Aw0IHPsh/YTuCOZdK7riQyhmJq",
+        "secondLastName": null,
+        "role": "ADMIN",
+        "email": "nuevo2@correo.com",
+        "hireDate": "2025-08-01",
+        "terminationDate": null
+    }
+]

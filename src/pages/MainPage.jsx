@@ -12,6 +12,7 @@ import { LogList } from "../timeTrack/pages/LogList"
 import { Landing } from "./Landing"
 import { TechInfo } from "./TechInfo"
 import { useState } from "react"
+import { SchedulesByEmployee } from "./SchedulesByEmployee"
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
@@ -78,6 +79,7 @@ export const MainPage = () => {
             <Route path="/loglist" element={<LogList />} />
             <Route path="/info" element={<Landing />} />
             <Route path="/techinfo" element={<TechInfo />} />
+            <Route path="/schedules" element={<SchedulesByEmployee />} />
           </Routes>
         </main>
 

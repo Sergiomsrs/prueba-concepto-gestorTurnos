@@ -72,7 +72,7 @@ export const getSchedules = (baseUrl, start, end) => {
     });
 };
 
-export const fetchAbsences = (baseUrl, selectedId) => {
+export const fetchAbsences = (selectedId) => {
   return fetch(`http://localhost:8081/api/disp/${selectedId}`)
     .then(response => {
       if (response.status === 204) {
