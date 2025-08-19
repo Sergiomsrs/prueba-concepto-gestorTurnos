@@ -94,23 +94,6 @@ export const Report = () => {
               </div>
             </div>
           </Link>
-           {/* Horarios de los empleados */}
-          <Link to="/employeeScheduleView" className="relative group transition-transform hover:scale-105">
-            <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
-            <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
-              <div className="flex-1 flex flex-col items-center justify-center p-10">
-                <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="info.webp"
-                  alt="Añadir Usuario"
-                />
-                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Horarios</h3>
-                <p className="text-base text-gray-600 text-center">
-                  Informados sobre los turnos de los empleados.
-                </p>
-              </div>
-            </div>
-          </Link>
         </div>
       </div>
     </div>

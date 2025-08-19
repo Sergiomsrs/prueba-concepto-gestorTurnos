@@ -1,5 +1,3 @@
-import React from 'react'
-
 export const DispTable = ({workHours}) => {
   return (
      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
