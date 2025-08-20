@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
+import { timestampSchedulesMock } from '../utils/apiMock';
 
 export const useSchedules = (employeeId, startDate, endDate) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(timestampSchedulesMock);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,6 +25,7 @@ export const useSchedules = (employeeId, startDate, endDate) => {
       } catch (err) {
         setError(err.message || 'Error desconocido');
         console.error('Error al buscar horarios:', err);
+        setData(timestampSchedulesMock)
       } finally {
         setLoading(false);
       }
@@ -33,6 +35,8 @@ export const useSchedules = (employeeId, startDate, endDate) => {
       fetchSchedules();
     }
   }, [employeeId, startDate, endDate]);
+
+  console.log("data", data)
 
   return { data, loading, error };
 };

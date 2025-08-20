@@ -28120,3 +28120,156 @@ export const activeEmployeesMock = [
         "terminationDate": null
     }
 ]
+
+export const timestampSchedulesMock = [
+    {
+        "id": 279,
+        "timestamp": "2025-08-02T11:45:00",
+        "employeeId": 1
+    },
+    {
+        "id": 280,
+        "timestamp": "2025-08-02T14:30:00",
+        "employeeId": 1
+    },
+    {
+        "id": 277,
+        "timestamp": "2025-08-03T16:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 278,
+        "timestamp": "2025-08-03T21:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2316,
+        "timestamp": "2025-08-11T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2317,
+        "timestamp": "2025-08-11T14:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2318,
+        "timestamp": "2025-08-11T18:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2319,
+        "timestamp": "2025-08-11T22:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2314,
+        "timestamp": "2025-08-12T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2315,
+        "timestamp": "2025-08-12T17:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2312,
+        "timestamp": "2025-08-13T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2313,
+        "timestamp": "2025-08-13T17:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2310,
+        "timestamp": "2025-08-14T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2311,
+        "timestamp": "2025-08-14T17:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2308,
+        "timestamp": "2025-08-15T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2309,
+        "timestamp": "2025-08-15T17:15:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2234,
+        "timestamp": "2025-08-18T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2235,
+        "timestamp": "2025-08-18T14:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2232,
+        "timestamp": "2025-08-19T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2233,
+        "timestamp": "2025-08-19T17:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2230,
+        "timestamp": "2025-08-20T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2231,
+        "timestamp": "2025-08-20T17:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2228,
+        "timestamp": "2025-08-21T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2229,
+        "timestamp": "2025-08-21T17:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2226,
+        "timestamp": "2025-08-22T09:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2227,
+        "timestamp": "2025-08-22T17:15:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2026,
+        "timestamp": "2025-08-25T07:30:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2027,
+        "timestamp": "2025-08-25T11:00:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2038,
+        "timestamp": "2025-08-28T07:30:00",
+        "employeeId": 1
+    },
+    {
+        "id": 2039,
+        "timestamp": "2025-08-28T11:00:00",
+        "employeeId": 1
+    }
+]
