@@ -34,3 +34,17 @@ export const searchSchedulesByEmployesAndDate = async () => {
         throw error; // Permite manejar el error en el componente que llama
     }
 };
+
+export const searchPtoByEmployee = async (employeeId) => {
+    try {
+        const response = await fetch(`http://localhost:8081/api/pto/${employeeId}`);
+        if (!response.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${response.status}`);
+        }
+        const ptoList = await response.json();
+        return ptoList; // Devuelve el array de ausencias (PTO)
+    } catch (error) {
+        console.error('Error al buscar ausencias del empleado:', error);
+        throw error;
+    }
+};
