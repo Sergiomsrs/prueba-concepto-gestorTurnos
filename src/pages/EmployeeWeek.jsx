@@ -148,7 +148,7 @@ console.log(formattedDifference);
 
     return (
       <tr key={index}>
-        <td className="px-4 py-2">{formatToDate(day)}</td>
+        <td className="px-4 py-2 whitespace-nowrap">{formatToDate(day)}</td>
         <td className="px-4 py-2">{day.day.charAt(0).toUpperCase() + day.day.slice(1)}</td>
         <td className="px-4 py-2">{getStringBlock(day, minMaxValues)}</td>
         <td className="px-4 py-2">{day.duration.slice(0, 5)}</td>
