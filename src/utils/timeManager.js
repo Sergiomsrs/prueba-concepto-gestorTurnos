@@ -72,16 +72,4 @@ export const getSchedules = (baseUrl, start, end) => {
     });
 };
 
-export const fetchAbsences = (selectedId) => {
-  return fetch(`http://localhost:8081/api/disp/${selectedId}`)
-    .then(response => {
-      if (response.status === 204) {
-        // No hay contenido
-        return { status: 204, data: null };
-      }
-      if (!response.ok) {
-        throw new Error(`Error en la respuesta del servidor: ${response.status}`);
-      }
-      return response.json().then(data => ({ status: response.status, data }));
-    });
-};
+

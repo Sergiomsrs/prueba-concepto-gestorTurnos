@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { searchActiveEmployees } from "../services/employees";
+import { useState } from "react";
 import { EmployeeSelector } from "../utilComponents/EmployeeSelector";
 import { NewDatePicker } from "../utilComponents/NewDatePicker";
-import { fetchAbsences } from "../utils/timeManager";
 import { DispTable } from "../formComponents/utils/DispTable";
 import { activeEmployeesMock, dispMockData } from "../utils/apiMock";
 import { useSchedules } from "../Hooks/useSchedules";
@@ -13,7 +11,7 @@ import { PtoTable } from "../formComponents/utils/PtoTable";
 export const SchedulesByEmployee = () => {
   const [employees, setEmployees] = useState(activeEmployeesMock);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(1);
-  const [workHours, setWorkHours] = useState(dispMockData);
+
 
   const [activeTab, setActiveTab] = useState({
     year: new Date().getFullYear(),
@@ -29,24 +27,10 @@ export const SchedulesByEmployee = () => {
   const endDateObj = new Date(year, month, 0);
   const endDate = `${year}-${String(month).padStart(2, "0")}-${String(endDateObj.getDate()).padStart(2, "0")}`;
 
-  const { data, employeePto } = useSchedules(selectedEmployeeId, startDate, endDate);
+  const { data, employeePto, disponibility } = useSchedules(selectedEmployeeId, startDate, endDate);
 
   const processedRecords = newProcessTimeStamps(data, selectedEmployeeId);
 
-  useEffect(() => {
-    if (!selectedEmployeeId) return;
-    fetchAbsences(selectedEmployeeId)
-      .then(result => {
-        if (result.status !== 200) {
-          setWorkHours(dispMockData);
-        } else {
-          setWorkHours(result.data);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [selectedEmployeeId]);
 
   return (
     <div className="min-h-screen bg-gray-100 py-8 mt-20 ">
@@ -88,10 +72,10 @@ export const SchedulesByEmployee = () => {
             {/* Subtítulo y tabla de no disponibilidad */}
             <h3 className="text-base font-semibold text-emerald-700 mb-2">Peticiones de No Disponibilidad</h3>
             <div className="overflow-y-auto max-h-[32vh] mb-4">
-              {workHours.length === 0 ? (
+              {disponibility.length === 0 ? (
                 <p className="text-gray-500">No hay ausencias registradas.</p>
               ) : (
-                <DispTable workHours={workHours} />
+                <DispTable workHours={disponibility} />
               )}
             </div>
             {/* Subtítulo y tabla de vacaciones */}
