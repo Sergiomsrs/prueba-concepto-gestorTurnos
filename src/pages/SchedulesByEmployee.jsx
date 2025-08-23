@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { EmployeeSelector } from "../utilComponents/EmployeeSelector";
 import { NewDatePicker } from "../utilComponents/NewDatePicker";
 import { DispTable } from "../formComponents/utils/DispTable";
@@ -7,10 +7,13 @@ import { useSchedules } from "../Hooks/useSchedules";
 import { newProcessTimeStamps } from "../timeTrack/utilities/timeManagement";
 import { SchedulesList } from "../utilComponents/SchedulesList";
 import { PtoTable } from "../formComponents/utils/PtoTable";
+import { AuthContext } from "../timeTrack/context/AuthContext";
 
 export const SchedulesByEmployee = () => {
   const [employees, setEmployees] = useState(activeEmployeesMock);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(1);
+
+  const { auth, logout } = useContext(AuthContext);
 
 
   const [activeTab, setActiveTab] = useState({
@@ -41,12 +44,15 @@ export const SchedulesByEmployee = () => {
             <h2 className="text-lg font-bold mb-4 border-b-4 border-blue-400 pb-1 text-blue-800">
               Filtros
             </h2>
+            {
+              (auth.role == "ADMIN" || auth.isAuthenticated == false) &&
             <EmployeeSelector
-              employees={employees}
-              setEmployees={setEmployees}
-              selectedEmployeeId={selectedEmployeeId}
-              setSelectedEmployeeId={setSelectedEmployeeId}
+            employees={employees}
+            setEmployees={setEmployees}
+            selectedEmployeeId={selectedEmployeeId}
+            setSelectedEmployeeId={setSelectedEmployeeId}
             />
+          }
             <NewDatePicker activeTab={activeTab} setActiveTab={setActiveTab} />
           </div>
         </div>
