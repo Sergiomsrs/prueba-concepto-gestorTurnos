@@ -6,16 +6,7 @@ export const RDias = () => {
   const { data, selectedOption, holidayDates } = useContext(AppContext);
   const uniqueEmployeeNames = uniqueEmployeeName(data);  // Obtenemos los empleados únicos
 
-  useEffect(() => {}, [data]);
-
   const dataWeek = useMemo(() => data.slice(1, data.length), [data]);
-
-  const empleados = useMemo(() => {
-    if (dataWeek.length > 0) {
-      return dataWeek[0].employees;  // Tomamos los empleados del primer día
-    }
-    return [];
-  }, [dataWeek]);
 
   // Función para obtener el `teamWork` de un empleado (en cualquiera de los días)
   const getEmployeeTeamWork = (employeeName) => {
@@ -47,9 +38,9 @@ export const RDias = () => {
             return (
               <tr key={employeeName} >
                 {dataWeek.map((item) => (
-                  
+
                   <td key={item.id} className="whitespace-nowrap">
-                    {formatTime(item.employees.find((e) => e.name === employeeName)?.shiftDuration)}{holidayDates.includes(item.id)? "🎉" : ""}
+                    {formatTime(item.employees.find((e) => e.name === employeeName)?.shiftDuration)}{holidayDates.includes(item.id) ? "🎉" : ""}
                   </td>
                 ))}
               </tr>

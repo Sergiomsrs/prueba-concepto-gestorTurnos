@@ -84,11 +84,11 @@ export const generateDays = (date) => {
 }
 
 export const obtenerPreviousDay = (dayIndex, data) => {
-    return data[dayIndex - 1];
+  return data[dayIndex - 1];
 }
 
 export const calcularshiftDuration = (h) => {
-  const shiftDurationInMinutes = h.filter(item => item !== "Null" && item !== "PTO" ).length * 15;
+  const shiftDurationInMinutes = h.filter(item => item !== "Null" && item !== "PTO").length * 15;
   const hoursshiftDuration = Math.floor(shiftDurationInMinutes / 60);
   const minutesshiftDuration = shiftDurationInMinutes % 60;
   const shiftDurationFormatted = `${String(hoursshiftDuration).padStart(2, "0")}:${String(minutesshiftDuration).padStart(2, "0")}`;
@@ -106,7 +106,7 @@ export const addMinutes = (time, minsToAdd) => {
 }
 
 export const getHighestNonZeroIndex = (array) => {
-  if(array == null) return -1;
+  if (array == null) return -1;
   for (let i = array.length - 1; i >= 0; i--) {
     if (array[i] !== "Null" && array[i] !== "PTO") {
       return i;
@@ -168,22 +168,22 @@ export const formatToDate = (day) => {
 
 
 export const uniqueEmployeeName = (data) => {
-    // Creamos un Set para almacenar nombres únicos de empleados
-    const employeeNamesSet = new Set();
+  // Creamos un Set para almacenar nombres únicos de empleados
+  const employeeNamesSet = new Set();
 
-    // Iteramos sobre cada día en el array data
-    data.forEach(day => {
-      // Iteramos sobre cada empleado en el día actual
-      day.employees.forEach(employee => {
-        // Agregamos el nombre del empleado al Set
-        employeeNamesSet.add(employee.name);
-      });
+  // Iteramos sobre cada día en el array data
+  data.forEach(day => {
+    // Iteramos sobre cada empleado en el día actual
+    day.employees.forEach(employee => {
+      // Agregamos el nombre del empleado al Set
+      employeeNamesSet.add(employee.name);
     });
-  
-    // Convertimos el Set a un array, si necesitas el resultado en formato array
-    const uniqueEmployeeNames = Array.from(employeeNamesSet);
+  });
 
-    return uniqueEmployeeNames;
+  // Convertimos el Set a un array, si necesitas el resultado en formato array
+  const uniqueEmployeeNames = Array.from(employeeNamesSet);
+
+  return uniqueEmployeeNames;
 }
 
 export const selectColor = (teamWork) => {
@@ -226,6 +226,23 @@ export const selectColor = (teamWork) => {
   }
 
   return selectColor;
+};
+
+// Función para calcular la duración total en formato decimal
+export const getTotalShiftDuration = (employeeName, data) => {
+  let totalMinutes = 0;
+
+  // Iteramos sobre los días para obtener la duración de cada turno del empleado
+  data.forEach(day => {
+    const employee = day.employees.find(emp => emp.name === employeeName);
+    if (employee && employee.shiftDuration) {
+      const [hours, minutes] = employee.shiftDuration.split(":").map(Number);
+      totalMinutes += hours * 60 + minutes; // Convertimos todo a minutos
+    }
+  });
+
+  const totalHoursDecimal = totalMinutes / 60;
+  return totalHoursDecimal.toFixed(2);
 };
 
 

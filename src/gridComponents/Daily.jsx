@@ -15,13 +15,16 @@ import { useContext, useState } from "react";
 
 export const Daily = () => {
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const { holidayDates, data, setData, fetchShiftWeek, alert, saveData, resetData } = useContext(AppContext);
 
-  const { data, setData, date, setDate, setSelectedOption, holidayDates } = useContext(AppContext);
+  const [date, setDate] = useState({ start: "", end: "" });
+  const [selectedOption, setSelectedOption] = useState("todos");
   const [isModalOpen, setModalOpen] = useState(false);
 
-  // Estado para la alerta
-  const [alert, setAlert] = useState({ isOpen: false, message: null });
+  const handleSearch = () => {
+    if (date.start && date.end) fetchShiftWeek(date.start, date.end);
+    setSelectedOption("todos");
+  };
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
@@ -33,54 +36,10 @@ export const Daily = () => {
     setData(newData);
   };
 
-  const handlePrint = () => {
-    const shiftData = generateShiftData(data);
-
-    fetch(`${API_URL}/ws/saveAll`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(shiftData),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === "success") {
-          setAlert({
-            isOpen: true,
-            message: { type: "success", text: data.message }
-          });
-        } else {
-          setAlert({
-            isOpen: true,
-            message: { type: "error", text: "⚠️ " + data.message + "\nDetalles: " + (data.data || "") }
-          });
-        }
-        setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
-      })
-      .catch(error => {
-        setAlert({
-          isOpen: true,
-          message: { type: "error", text: "Error de red al conectar con el servidor" }
-        });
-        setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
-      });
-  };
-
-  const handlReset = () => {
-    setData(prevData =>
-      prevData.map(day => ({
-        ...day,
-        employees: day.employees.map(employee => ({
-          ...employee,
-          workShift: Array(62).fill("Null"),
-          shiftDuration: '00:00'
-        }))
-      }))
-    );
-  };
 
   return (
     <section className="flex flex-col mx-2 sm:mx-0 ">
-      <DatePicker data={data} date={date} setDate={setDate} setData={setData} setSelectedOption={setSelectedOption} />
+      <DatePicker date={date} setDate={setDate} onSearch={handleSearch} />
       <SectionPicker />
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">
         <MenuIcon sideBarClick={handleOpenModal} />
@@ -114,8 +73,8 @@ export const Daily = () => {
         </div>
 
         <div className="flex gap-4 over">
-          <button onClick={handlePrint} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
-          <button onClick={handlReset} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded min-w-32">Reset</button>
+          <button onClick={saveData} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
+          <button onClick={resetData} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded min-w-32">Reset</button>
         </div>
       </div>
 

@@ -1,11 +1,5 @@
-import { AlertMessage } from "../timeTrack/components/AlertMessage";
-import { useState } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
-export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
-  const [alert, setAlert] = useState({ isOpen: false, message: null });
-
+export const DatePicker = ({ date, setDate, onSearch }) => {
   const handleChange = (event, type) => {
     const newValue = event.target.value;
     if (type === "start") {
@@ -15,34 +9,6 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
     }
   };
 
-  const handleClick = () => {
-    fetch(`${API_URL}/day/${date.start}/${date.end}`, {
-      method: "GET",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setData(data);
-        setAlert({
-          isOpen: true,
-          message: { type: "success", text: "Datos cargados correctamente" },
-        });
-        setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
-      })
-      .catch(() => {
-        setAlert({
-          isOpen: true,
-          message: { type: "error", text: "Error al cargar los datos" },
-        });
-        setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
-      });
-
-    setSelectedOption("todos");
-  };
 
   return (
     <>
@@ -98,18 +64,13 @@ export const DatePicker = ({ setDate, date, setData, setSelectedOption }) => {
         {/* Botón */}
         <div className="my-2 sm:my-0 sm:mx-4">
           <button
-            onClick={handleClick}
+            onClick={onSearch}
             className="bg-sky-600 border dark:border-sky-900 border-sky-900 rounded-full inline-flex justify-center items-center gap-x-2 py-1 px-2 md:py-2 md:px-4 text-xs md:text-base text-white transition hover:scale-110 hover:bg-white/10"
           >
             Refrescar
           </button>
         </div>
       </div>
-      {alert.isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/10">
-          <AlertMessage isOpen={alert.isOpen} message={alert.message} />
-        </div>
-      )}
     </>
   );
 };

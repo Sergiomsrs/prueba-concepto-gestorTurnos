@@ -3,11 +3,10 @@ import { entrada } from "../utils/data";
 import { formatTime, getHighestNonZeroIndex, selectColor } from "../utils/function";
 import { Modal } from "./Modal";
 
-export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
+export const HorizontalBar = ({ username, lastName, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
 
-  
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -69,25 +68,25 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
 
   const getCursorClass = (isDisabled, value) => {
     if (isDisabled) return 'cursor-not-allowed opacity-30';
-    if (value == "PTO")  return 'cursor-not-allowed opacity-30';
+    if (value == "PTO") return 'cursor-not-allowed opacity-30';
     return 'cursor-pointer';
   };
-  
+
   const getBackgroundClass = (value, team) => {
-    if (value === "PTO") return 'bg-red-200 '; 
+    if (value === "PTO") return 'bg-red-200 ';
     if (value === "Null") return 'bg-neutral-200';
     if (value === "CONFLICT") return 'bg-amber-500 animate-pulse';
 
-    return selectColor(team); 
+    return selectColor(team);
   };
 
   return (
     <>
       <td className="sm:text-base text-sm font-semibold text-gray-800 py-0 whitespace-nowrap">{teamWork}</td>
-      <td 
-      className="sm:text-base text-sm font-semibold text-gray-800 whitespace-nowrap max-w-none">
+      <td
+        className="sm:text-base text-sm font-semibold text-gray-800 whitespace-nowrap max-w-none">
         <button onClick={handleOpenModal} className="mr-2 py-0" >{username} {lastName}</button>
-        </td>
+      </td>
       {hours && hours.map((value, index) => (
         <td
           className={`relative md:w-24 w-12 text-center align-middle py-0 ${index % 4 === 3 ? 'border-45-height' : ''}`}
@@ -112,7 +111,7 @@ export const HorizontalBar = ({username, lastName, hours, onHourChange, teamWork
         </td>
       ))}
       <td className="sm:text-base text-xs w-12 px-2 align-middle py-0.5 ">{formatTime(shiftDurationes)}</td>
-      {isModalOpen && <Modal username={username} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id}/>}
+      {isModalOpen && <Modal username={username} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id} />}
     </>
   );
 };
