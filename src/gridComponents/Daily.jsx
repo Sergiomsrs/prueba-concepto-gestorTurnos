@@ -39,6 +39,7 @@ export const Daily = () => {
 
   return (
     <section className="flex flex-col mx-2 sm:mx-0 ">
+      <button className="btn btn-primary">Hola Mundo</button>
       <DatePicker date={date} setDate={setDate} onSearch={handleSearch} />
       <SectionPicker />
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">
