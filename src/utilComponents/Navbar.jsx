@@ -14,7 +14,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-900 border-b border-gray-800 shadow-sm relative z-50">
+    <nav className="bg-gray-900 border-b border-gray-800 shadow-xs relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center">
         {/* Bloque Izquierdo: Branding (clicable) */}
         <div className="w-1/3 flex items-center">
@@ -27,7 +27,7 @@ export const Navbar = () => {
         {/* Bloque Central: Navegación */}
         <div className="w-1/3 flex justify-center">
           <div className="hidden md:flex items-center">
-            <div className="flex divide-x divide-indigo-700 bg-gray-800 rounded-lg overflow-hidden shadow">
+            <div className="flex divide-x divide-indigo-700 bg-gray-800 rounded-lg overflow-hidden shadow-sm">
               <Link
                 to="/"
                 className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
@@ -55,12 +55,12 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center gap-4">
             {auth.isAuthenticated ? (
               <>
-                <span className="text-base text-gray-200 font-bold bg-gray-700 px-3 py-1 rounded">
+                <span className="text-base text-gray-200 font-bold bg-gray-700 px-3 py-1 rounded-sm">
                   <strong>{saludo()},</strong> {auth.user?.name} {auth.user?.lastName}
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded transition"
+                  className="flex items-center gap-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded-sm transition"
                 >
                   Log out
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
@@ -74,7 +74,7 @@ export const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="flex items-center gap-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded transition"
+                className="flex items-center gap-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded-sm transition"
               >
                 Log in
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
@@ -89,7 +89,7 @@ export const Navbar = () => {
           {/* Menú hamburguesa (móvil) */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden ml-2 p-2 rounded text-indigo-400 hover:bg-gray-800 focus:outline-none"
+            className="md:hidden ml-2 p-2 rounded-sm text-indigo-400 hover:bg-gray-800 focus:outline-hidden"
             aria-label="Abrir menú"
           >
             <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -110,7 +110,7 @@ export const Navbar = () => {
           <div className="mt-4 border-t border-gray-700 pt-4 flex flex-col gap-2">
             {auth.isAuthenticated ? (
               <>
-                <span className="text-sm text-gray-200 font-bold bg-gray-700 px-3 py-1 rounded">
+                <span className="text-sm text-gray-200 font-bold bg-gray-700 px-3 py-1 rounded-sm">
                   <strong>{saludo()},</strong> {auth.user?.name} {auth.user?.lastName}
                 </span>
                 <button
@@ -118,7 +118,7 @@ export const Navbar = () => {
                     handleLogout();
                     setMenuOpen(false);
                   }}
-                  className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded transition"
+                  className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded-sm transition"
                 >
                   Log out
                 </button>
@@ -126,7 +126,7 @@ export const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded transition"
+                className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded-sm transition"
                 onClick={() => setMenuOpen(false)}
               >
                 Log in

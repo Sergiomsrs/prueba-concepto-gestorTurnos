@@ -15,7 +15,7 @@ export const Report = () => {
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow-sm mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
                   src="timetrack.webp"
                   alt="Registro de Jornada"
                 />
@@ -32,7 +32,7 @@ export const Report = () => {
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
-                  className="w-36 h-36 object-cover rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  className="w-36 h-36 object-cover rounded-full border-4 border-indigo-100 shadow-sm mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
                   src="revision.webp"
                   alt="Gestión Registros"
                 />
@@ -49,7 +49,7 @@ export const Report = () => {
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow-sm mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
                   src="usuarios.webp"
                   alt="Añadir Usuario"
                 />
@@ -66,7 +66,7 @@ export const Report = () => {
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow-sm mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
                   src="logList.webp"
                   alt="Añadir Usuario"
                 />
@@ -84,7 +84,7 @@ export const Report = () => {
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow-sm mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
                   src="horarios.webp"
                   alt="Añadir Usuario"
                 />
@@ -101,7 +101,7 @@ export const Report = () => {
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow-sm mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
                   src="info.webp"
                   alt="Añadir Usuario"
                 />

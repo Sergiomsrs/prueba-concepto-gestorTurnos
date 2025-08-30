@@ -252,7 +252,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
   };
 
   return (
-    <div className="border border-gray-200 rounded-2xl shadow bg-white p-4">
+    <div className="border border-gray-200 rounded-2xl shadow-sm bg-white p-4">
       {schedules.length === 0 && (
         <button
           onClick={() => asignarHorarioPorDefecto()}
@@ -262,7 +262,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
         </button>
       )}
 
-      <div className="mb-8 p-6 border border-gray-200 rounded-2xl shadow bg-white">
+      <div className="mb-8 p-6 border border-gray-200 rounded-2xl shadow-sm bg-white">
         <h2 className="text-xl font-bold text-gray-800 mb-4">Añadir nuevo horario</h2>
         <div className="grid sm:grid-cols-3 gap-4 justify-center">
           <div>
@@ -273,7 +273,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
               name="dayNumber"
               value={newSchedule.dayNumber}
               onChange={handleNewScheduleChange}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
             >
               {Object.entries(dayNames).map(([num, name]) => (
                 <option key={num} value={num}>{name}</option>
@@ -293,12 +293,12 @@ export const HourlyForm = ({ employeeToDelete }) => {
                 name="hora"
                 value={newSchedule.hora}
                 onChange={handleNewScheduleChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
               />
 
                 <button
                   onClick={handleAddSchedule}
-                  className="rounded-md cursor-pointer bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600 "
+                  className="rounded-md cursor-pointer bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-hidden focus:ring-2 focus:ring-indigo-600 "
                 >
                   Añadir
                 </button>
@@ -312,7 +312,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
         </div>
       </div>
       <div className="mb-6">
-        <span className="text- font-semibold text-gray-900 bg-gray-100 px-3 py-1 rounded shadow-sm">
+        <span className="text- font-semibold text-gray-900 bg-gray-100 px-3 py-1 rounded-sm shadow-xs">
           <strong>Empleado:  </strong> {employeeToDelete.name} {employeeToDelete.lastName}
         </span>
 
@@ -323,7 +323,7 @@ export const HourlyForm = ({ employeeToDelete }) => {
         {sortedDays.map((dayNum) => (
           <div
             key={dayNum}
-            className="p-5 border border-gray-200 rounded-2xl shadow bg-white"
+            className="p-5 border border-gray-200 rounded-2xl shadow-sm bg-white"
           >
             <h3 className="text-lg font-semibold text-gray-800 mb-3">
               {dayNames[dayNum]}
@@ -335,11 +335,11 @@ export const HourlyForm = ({ employeeToDelete }) => {
                     type="time"
                     value={schedule.hora || ""}
                     onChange={(e) => handleChange(schedule.index, e.target.value)}
-                    className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
+                    className="p-2 border border-gray-300 rounded-md focus:outline-hidden focus:ring-2 focus:ring-indigo-500 text-sm text-gray-900"
                   />
                   <button
                     onClick={() => handleDeleteSchedule(schedule.id)}
-                    className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300shadow-lg shadow-red-500/50 font-medium rounded-lg text-sm px-2 py-0.5 text-center me-0 mb-0 cursor-pointer"
+                    className="text-white bg-linear-to-r from-red-400 via-red-500 to-red-600 hover:bg-linear-to-br focus:ring-4 focus:outline-hidden focus:ring-red-300shadow-lg shadow-red-500/50 font-medium rounded-lg text-sm px-2 py-0.5 text-center me-0 mb-0 cursor-pointer"
                   >
                     X
                   </button>

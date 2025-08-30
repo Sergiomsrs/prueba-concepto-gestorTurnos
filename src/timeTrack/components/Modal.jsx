@@ -234,7 +234,7 @@ const handleSaveRecord = async (recordId) => {
 
 
       <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-lg">
-        <div className="relative bg-white rounded-lg shadow">
+        <div className="relative bg-white rounded-lg shadow-sm">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
             <h3 className="text-xl font-semibold text-gray-900">Detalles del día</h3>
             <button
@@ -266,7 +266,7 @@ const handleSaveRecord = async (recordId) => {
                   <div className="flex justify-between items-center">
                     <span className="font-medium">Turno {index + 1}</span>
                     {!period.isComplete && (
-                      <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded">
+                      <span className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-sm">
                         Falta salida
                       </span>
                     )}
@@ -283,14 +283,14 @@ const handleSaveRecord = async (recordId) => {
             <h4 className="text-lg font-medium mt-6">Registros del día:</h4>
             <div className="space-y-2 w-fit">
               {editableRecords.map((record, index) => (
-                <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded">
+                <div key={index} className="flex items-center justify-between bg-gray-100 p-2 rounded-sm">
                   <div className="w-full">
                     <div className="text-sm text-gray-500  flex justify-between">
                       <span>Fecha: {record.dateStr}</span>
                       
                       <button
                         onClick={() => onOpenModal(record.id, "delete")}
-                        className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300shadow-lg shadow-red-500/50 font-medium rounded-lg text-sm px-2 py-1 text-center me-0 mb-0 cursor-pointer"
+                        className="text-white bg-linear-to-r from-red-400 via-red-500 to-red-600 hover:bg-linear-to-br focus:ring-4 focus:outline-hidden focus:ring-red-300shadow-lg shadow-red-500/50 font-medium rounded-lg text-sm px-2 py-1 text-center me-0 mb-0 cursor-pointer"
                       >X</button>
 
 
@@ -300,7 +300,7 @@ const handleSaveRecord = async (recordId) => {
                         type="time"
                         value={record.time}
                         onChange={e => handleTimeChange(index, e.target.value)}
-                        className="w-fit px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white  text-gray-900 "
+                        className="w-fit px-3 py-2 border border-gray-300 rounded-lg shadow-xs bg-white  text-gray-900 "
                       />
                       <button
                         onClick={() =>onOpenModal(record.id, "save")}
@@ -315,7 +315,7 @@ const handleSaveRecord = async (recordId) => {
               {/* 
               <button
                 onClick={handleAddRecord}
-                className="mt-3 px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg shadow transition duration-150"
+                className="mt-3 px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg shadow-sm transition duration-150"
               >
                 + Añadir nuevo registro
               </button>
@@ -326,7 +326,7 @@ const handleSaveRecord = async (recordId) => {
           <div className="flex items-center justify-between p-4 md:p-5 border-t border-gray-200 rounded-b">
             <button
               onClick={() => setIsOpen(false)}
-              className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
+              className="text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-hidden focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
             >
               Cerrar
             </button>

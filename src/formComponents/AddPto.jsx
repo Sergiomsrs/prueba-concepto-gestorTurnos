@@ -113,7 +113,7 @@ export const AddPto = () => {
                 <select
                     id="employee-select"
                     onChange={handleEmployeeSelect}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5"
+                    className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5"
                 >
                     <option value="">-- Seleccione un empleado --</option>
                     {employees.map(employee => (
@@ -171,7 +171,7 @@ export const AddPto = () => {
                             id="absenceReason"
                             value={newPto.absenceReason}
                             onChange={handleInputChange}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                            className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                             />
                     </div>
                             </div>
@@ -184,7 +184,7 @@ export const AddPto = () => {
                             id="ptoStartDate"
                             value={newPto.ptoStartDate}
                             onChange={handleInputChange}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                            className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
                     </div>
                     <div className="sm:col-span-3">
@@ -195,7 +195,7 @@ export const AddPto = () => {
                             id="ptoTerminationDate"
                             value={newPto.ptoTerminationDate}
                             onChange={handleInputChange}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                            className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
                     </div>
                 </div>

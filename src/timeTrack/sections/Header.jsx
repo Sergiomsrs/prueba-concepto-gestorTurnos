@@ -28,7 +28,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-[#f9fafb] border-b border-gray-200 shadow-sm mb-8 relative z-50">
+    <header className="bg-[#f9fafb] border-b border-gray-200 shadow-xs mb-8 relative z-50">
       <nav className="flex items-center justify-between p-4 mx-6" aria-label="Global">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
@@ -47,12 +47,12 @@ export const Header = () => {
         <div className="hidden lg:flex items-center gap-x-4">
           {auth.isAuthenticated ? (
             <>
-              <span className="text-sm text-gray-700 font-bold bg-gray-200 px-3 py-1 rounded">
+              <span className="text-sm text-gray-700 font-bold bg-gray-200 px-3 py-1 rounded-sm">
                 <strong>{saludo()},</strong> {auth.user?.name} {auth.user?.lastName}
               </span>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-1.5 rounded transition"
+                className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-1.5 rounded-sm transition"
               >
                 Log out
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
@@ -66,7 +66,7 @@ export const Header = () => {
           ) : (
             <Link
               to="/login"
-              className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-1.5 rounded transition"
+              className="flex items-center gap-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 px-4 py-1.5 rounded-sm transition"
             >
               Log in
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="stroke-current">
@@ -82,7 +82,7 @@ export const Header = () => {
         {/* Botón menú hamburguesa (móvil) */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="inline-flex items-center justify-center p-2 text-indigo-700 rounded hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 lg:hidden"
+          className="inline-flex items-center justify-center p-2 text-indigo-700 rounded-sm hover:bg-indigo-100 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 lg:hidden"
           aria-label="Toggle menu"
         >
           <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

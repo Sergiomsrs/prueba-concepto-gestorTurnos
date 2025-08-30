@@ -104,18 +104,18 @@ console.log(formattedDifference);
   </span>
 
   {/* Tarjeta para Totales */}
-  <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border-t-4 border-blue-500">
+  <div className="bg-white rounded-lg shadow-xs p-4 mb-6 border-t-4 border-blue-500">
     <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumen de la Semana</h3>
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div className="p-4 bg-gray-100 rounded-lg shadow-sm">
+      <div className="p-4 bg-gray-100 rounded-lg shadow-xs">
         <h4 className="text-sm font-medium text-gray-500">Jornada</h4>
         <p className="text-xl font-bold text-gray-900">{wwh}h</p>
       </div>
-      <div className="p-4 bg-gray-100 rounded-lg shadow-sm">
+      <div className="p-4 bg-gray-100 rounded-lg shadow-xs">
         <h4 className="text-sm font-medium text-gray-500">Horas Trabajadas</h4>
         <p className="text-xl font-bold text-gray-900">{formattedTime}</p>
       </div>
-      <div className="p-4 bg-gray-100 rounded-lg shadow-sm">
+      <div className="p-4 bg-gray-100 rounded-lg shadow-xs">
         <h4 className="text-sm font-medium text-gray-500">Horas Complementarias</h4>
         <p className="text-xl font-bold text-gray-900">{formattedDifference}</p>
       </div>
@@ -123,7 +123,7 @@ console.log(formattedDifference);
   </div>
 
   {/* Tabla de los días de la semana */}
-  <div className="bg-white rounded-lg shadow-sm p-4 mb-6 border-t-4 border-blue-500 overflow-x-auto">
+  <div className="bg-white rounded-lg shadow-xs p-4 mb-6 border-t-4 border-blue-500 overflow-x-auto">
   <table className="min-w-full divide-y divide-gray-200 table-auto">
   <thead className="bg-gray-50">
     <tr>

@@ -28,7 +28,7 @@ export const SectionPicker = () => {
     id="options" 
     value={selectedOption} 
     onChange={handleChange} 
-    className="block w-auto p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+    className="block w-auto p-2 border border-gray-300 rounded-md bg-gray-50 text-gray-700 focus:outline-hidden focus:ring-2 focus:ring-gray-400"
   >
     <option value="todos">Todos</option>
     {uniqueSections.map(emp => (

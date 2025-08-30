@@ -9,7 +9,7 @@ export const SchedulesList = ({ processedRecords }) => {
     };
 
     return (
-        <div className="overflow-x-auto border rounded">
+        <div className="overflow-x-auto border rounded-sm">
             <table className="w-full border-separate border-spacing-0">
                 <thead>
                     <tr>

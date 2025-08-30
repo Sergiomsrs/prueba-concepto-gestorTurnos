@@ -94,7 +94,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
       <ConfirmModal isOpen={isConOpen} onConfirm={onConfirmSave} onCancel={onCancel} message={message} />
 
       <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-lg">
-        <div className="relative bg-white rounded-lg shadow">
+        <div className="relative bg-white rounded-lg shadow-sm">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t">
             <h3 className="text-xl font-semibold text-gray-900 ">Entrada manual de fichaje</h3>
             <button
@@ -133,7 +133,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
                 <input
                   type="date"
                   onChange={handleDateChange}
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                   />
               </div>
 
@@ -142,7 +142,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
                 <input
                   type="time"
                   onChange={handleTimeChange}
-                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-hidden focus:ring-2 focus:ring-indigo-500"
                   />
               </div>
                
@@ -151,7 +151,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
 
           <div className="flex items-center justify-between p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
             <button
-              className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
+              className="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-hidden focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 cursor-pointer"
               onClick={onOpenModal}
             >
               Enviar

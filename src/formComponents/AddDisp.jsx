@@ -159,7 +159,7 @@ export const AddDisp = () => {
                 <select
                     id="employee-select"
                     onChange={handleEmployeeSelect}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5"
+                    className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5"
                 >
                     <option value="">-- Seleccione un empleado --</option>
                     {employees.map(employee => (
@@ -191,7 +191,7 @@ export const AddDisp = () => {
                             id="absenceReason"
                             value={newPto.absenceReason}
                             onChange={handleInputChange}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                            className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                             />
                     </div>
                     <div className="sm:col-span-3">
@@ -202,7 +202,7 @@ export const AddDisp = () => {
                             id="date"
                             value={newPto.date}
                             onChange={handleInputChange}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                            className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
                     </div>
                             </div>
@@ -215,7 +215,7 @@ export const AddDisp = () => {
                             id="startHour"
                             value={newPto.startHour}
                             onChange={handleInputChange}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                            className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
                     </div>
                     <div className="sm:col-span-3">
@@ -226,7 +226,7 @@ export const AddDisp = () => {
                             id="terminationHour"
                             value={newPto.terminationHour}
                             onChange={handleInputChange}
-                            className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
+                            className="block w-full rounded-md border-gray-300 shadow-xs focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
                     </div>
                 </div>

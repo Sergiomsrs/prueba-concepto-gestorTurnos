@@ -37,7 +37,7 @@ export const NewDatePicker = ({ activeTab, setActiveTab}) => {
         <select
           value={activeTab.year ?? currentYear}
           onChange={handleYearChange}
-          className="w-full cursor-pointer rounded-md py-2 text-center text-xs sm:text-sm font-medium md:text-base  bg-indigo-600 text-white shadow-md focus:outline-none focus:ring-2  focus:ring-indigo-500"
+          className="w-full cursor-pointer rounded-md py-2 text-center text-xs sm:text-sm font-medium md:text-base  bg-indigo-600 text-white shadow-md focus:outline-hidden focus:ring-2  focus:ring-indigo-500"
         >
           {years.map((year) => (
             <option key={year} value={year}>{year}</option>
@@ -51,7 +51,7 @@ export const NewDatePicker = ({ activeTab, setActiveTab}) => {
         <select
           value={activeTab.month ?? currentMonth}
           onChange={handleMonthChange}
-          className="w-full rounded-md border py-2 text-sm md:text-base text-center text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+          className="w-full rounded-md border py-2 text-sm md:text-base text-center text-indigo-600 focus:outline-hidden focus:ring-2 focus:ring-indigo-500 cursor-pointer"
         >
           {months.map((month, index) => (
             <option key={index} value={index}>{month}</option>

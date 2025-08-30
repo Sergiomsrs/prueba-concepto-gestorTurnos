@@ -19,7 +19,7 @@ export const MainPage = () => {
 
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden ">
-      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0 ">
+      <div className="container grid min-h-dvh max-w-full grid-rows-[auto_1fr_auto] relative px-0 ">
         <header>
           <Navbar />
         </header>
@@ -57,7 +57,7 @@ export const MainPage = () => {
         {!showDemoBanner && (
           <button
             onClick={() => setShowDemoBanner(true)}
-            className="absolute right-6 z-30 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-1 rounded-full shadow hover:bg-yellow-200 transition"
+            className="absolute right-6 z-30 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-1 rounded-full shadow-sm hover:bg-yellow-200 transition"
             style={{ top: "4.5rem" }}
             aria-label="Mostrar aviso demo"
           >

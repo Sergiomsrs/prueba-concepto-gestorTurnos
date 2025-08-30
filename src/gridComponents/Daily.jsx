@@ -74,8 +74,8 @@ export const Daily = () => {
         </div>
 
         <div className="flex gap-4 over">
-          <button onClick={saveData} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
-          <button onClick={resetData} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded min-w-32">Reset</button>
+          <button onClick={saveData} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-sm min-w-32">Guardar</button>
+          <button onClick={resetData} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded-sm min-w-32">Reset</button>
         </div>
       </div>
 

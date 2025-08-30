@@ -53,7 +53,7 @@ export const LogList = () => {
                         {lastRecords.map((record, index) => (
                             <div
                                 key={index}
-                                className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 hover:shadow-md transition"
+                                className="bg-white border border-gray-200 rounded-xl shadow-xs p-4 hover:shadow-md transition"
                             >
                                 <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                                     <div>
