@@ -18,7 +18,7 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center">
         {/* Bloque Izquierdo: Branding (clicable) */}
         <div className="w-1/3 flex items-center">
-          <Link to="/report" className="group cursor-pointer">
+          <Link to="/admin" className="group cursor-pointer">
             <h1 className="text-2xl lg:text-3xl font-bold text-indigo-400 leading-tight group-hover:text-indigo-300 transition">WorkSchedFlow</h1>
             <h2 className="text-sm lg:text-base font-light text-gray-400 leading-tight group-hover:text-indigo-200 transition">Gestión de equipos de trabajo</h2>
           </Link>
@@ -41,7 +41,7 @@ export const Navbar = () => {
                 Resumen
               </Link>
               <Link
-                to="/report"
+                to="/admin"
                 className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
               >
                 Admin
@@ -105,7 +105,7 @@ export const Navbar = () => {
           <div className="flex flex-col gap-3">
             <Link to="/" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Cuadrantes</Link>
             <Link to="/employeeweek" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Resumen</Link>
-            <Link to="/report" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Admin</Link>
+            <Link to="/admin" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Admin</Link>
           </div>
           <div className="mt-4 border-t border-gray-700 pt-4 flex flex-col gap-2">
             {auth.isAuthenticated ? (

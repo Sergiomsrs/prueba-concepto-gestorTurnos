@@ -4,7 +4,6 @@ import { Navbar } from "../utilComponents/Navbar"
 import { EmployeeWeek } from "./EmployeeWeek"
 import { Daily } from "../gridComponents/Daily"
 import { Add } from "./Add"
-import { Report } from "./Report"
 import { AddTimeTrack } from "../timeTrack/pages/AddTimeTrack"
 import { TimeTrackView } from "../timeTrack/pages/TimeTrackView"
 import { Login } from "../timeTrack/pages/Login"
@@ -13,6 +12,8 @@ import { Landing } from "./Landing"
 import { TechInfo } from "./TechInfo"
 import { useState } from "react"
 import { SchedulesByEmployee } from "./SchedulesByEmployee"
+import { AdminPage } from "./AdminPage"
+import { GenerateShift } from "./GenerateShift"
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
@@ -28,7 +29,7 @@ export const MainPage = () => {
         {showDemoBanner && (
           <div
             className="absolute right-6 z-30 flex items-center gap-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-5 py-3 rounded-lg shadow-lg mt-2"
-            style={{ top: "4.5rem" }} 
+            style={{ top: "4.5rem" }}
           >
             <div>
               <span className="font-semibold block">
@@ -72,7 +73,7 @@ export const MainPage = () => {
             <Route path="/employeeweek" element={<EmployeeWeek />} />
             <Route path="/landing" element={<LoginPage />} />
             <Route path="/adduser" element={<Add />} />
-            <Route path="/report" element={<Report />} />
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="/fichar" element={<AddTimeTrack />} />
             <Route path="/revisar" element={<TimeTrackView />} />
             <Route path="/login" element={<Login />} />
@@ -80,6 +81,7 @@ export const MainPage = () => {
             <Route path="/info" element={<Landing />} />
             <Route path="/techinfo" element={<TechInfo />} />
             <Route path="/schedules" element={<SchedulesByEmployee />} />
+            <Route path="/generate" element={<GenerateShift />} />
           </Routes>
         </main>
 

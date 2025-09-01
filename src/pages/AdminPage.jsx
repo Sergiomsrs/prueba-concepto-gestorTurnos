@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export const Report = () => {
+export const AdminPage = () => {
   return (
     <div className="bg-gray-50">
       <div className="mx-auto max-w-2xl px-2 lg:max-w-7xl lg:px-8 mt-16">
@@ -8,7 +8,7 @@ export const Report = () => {
         <p className="mx-auto mt-2 max-w-lg text-balance text-center text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
           Panel de Administración
         </p>
-        <div className="mt-6 grid gap-8 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
+        <div className="my-6 grid h-full gap-8 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
           {/* Registro de Jornada */}
           <Link to="/fichar" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
@@ -60,7 +60,7 @@ export const Report = () => {
               </div>
             </div>
           </Link>
-           {/* Ver Ausencias */}
+          {/* Ver Ausencias */}
           <Link to="/loglist" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
@@ -78,7 +78,7 @@ export const Report = () => {
             </div>
           </Link>
 
-           {/* Ver Ausencias */}
+          {/* Ver Ausencias */}
           <Link to="/schedules" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
@@ -95,7 +95,24 @@ export const Report = () => {
               </div>
             </div>
           </Link>
-                     {/* Ver Ausencias */}
+          {/* Generar turnos */}
+          <Link to="/generate" className="relative group transition-transform hover:scale-105">
+            <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
+            <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
+              <div className="flex-1 flex flex-col items-center justify-center p-10">
+                <img
+                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  src="info.webp"
+                  alt="Añadir Usuario"
+                />
+                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Generador de Turnos</h3>
+                <p className="text-base text-gray-600 text-center">
+                  Generación y asignación de turnos genericos
+                </p>
+              </div>
+            </div>
+          </Link>
+          {/* Ver Ausencias */}
           <Link to="/info" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
