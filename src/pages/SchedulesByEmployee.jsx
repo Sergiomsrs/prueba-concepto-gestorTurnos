@@ -21,8 +21,6 @@ export const SchedulesByEmployee = () => {
     month: new Date().getMonth(), // 0-11
   });
 
-  const selectedEmployee = employees.find(emp => emp.id === Number(selectedEmployeeId));
-
   const year = activeTab.year;
   const month = activeTab.month + 1; // 0-11 a 1-12
 
