@@ -1,4 +1,4 @@
-import { EmployeeWek } from "../pages/EmployeeWek"
+import { EmployeeWeek } from "../pages/EmployeeWeek"
 
 export const Modal = ({ username, teamWork, handleCloseModal, id, lastName }) => {
   return (
@@ -18,7 +18,7 @@ export const Modal = ({ username, teamWork, handleCloseModal, id, lastName }) =>
 
         <div>
           <div>
-            <EmployeeWek id={id} />
+            <EmployeeWeek id={id} />
           </div>
 
           <button
