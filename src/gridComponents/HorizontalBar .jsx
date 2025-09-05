@@ -111,7 +111,7 @@ export const HorizontalBar = ({ username, lastName, hours, onHourChange, teamWor
         </td>
       ))}
       <td className="sm:text-base text-xs w-12 px-2 align-middle py-0.5 ">{formatTime(shiftDurationes)}</td>
-      {isModalOpen && <Modal username={username} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id} />}
+      {isModalOpen && <Modal username={username} lastName={lastName} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id} />}
     </>
   );
 };
