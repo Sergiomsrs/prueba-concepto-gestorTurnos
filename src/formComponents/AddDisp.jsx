@@ -11,12 +11,14 @@ export const AddDisp = () => {
     const [employees, setEmployees] = useState([]); // Estado para la lista de empleados
     const [isExistingEmployee, setIsExistingEmployee] = useState(false);
     const [workHours, setWorkHours] = useState([]);
-    const [newPto, setNewPto] = useState({employeeId: "",
+    const [newPto, setNewPto] = useState({
+        employeeId: "",
         absenceReason: "",
         date: "",
         startHour: "",
-        terminationHour: ""}); // Estado para la nueva jornada
-        console.log(newPto)
+        terminationHour: ""
+    }); // Estado para la nueva jornada
+
     // Cargar todos los empleados cuando el componente se monta
     useEffect(() => {
         fetch('http://localhost:8081/api/emp/findall') // URL para obtener todos los empleados
@@ -82,7 +84,7 @@ export const AddDisp = () => {
         e.preventDefault();
 
         const pto = generateWorkShiftPto(newPto.startHour, newPto.terminationHour);
-        
+
         const shift = [{
             employeeId: createForm.id,
             hours: pto,
@@ -123,25 +125,25 @@ export const AddDisp = () => {
             .catch((error) => console.error('Error:', error));
     };
 
-    const handleDelete = () => {}
+    const handleDelete = () => { }
 
     const handleDeleteDisp = (dispId, date) => {
 
 
-            const dates = getDatesInRange(date, date);
-            const pto = generatePtoNullWithDate(createForm.id, dates);
-    
-            
-            fetch('http://localhost:8081/api/ws/saveAll', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(pto),
-            })
-                .then(response => response.json())
-                .then(data => console.log('Success:', data))
-                .catch((error) => console.error('Error:', error));
+        const dates = getDatesInRange(date, date);
+        const pto = generatePtoNullWithDate(createForm.id, dates);
+
+
+        fetch('http://localhost:8081/api/ws/saveAll', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(pto),
+        })
+            .then(response => response.json())
+            .then(data => console.log('Success:', data))
+            .catch((error) => console.error('Error:', error));
 
         fetch(`http://localhost:8081/api/disp/delete/${dispId}`, {
             method: 'DELETE',
@@ -175,7 +177,7 @@ export const AddDisp = () => {
 
             {/* Tabla de jornadas */}
             {workHours.length > 0 && (
-               <DispTable workHours={workHours} />
+                <DispTable workHours={workHours} />
             )}
 
             {/* Formulario para añadir nueva jornada */}
@@ -192,7 +194,7 @@ export const AddDisp = () => {
                             value={newPto.absenceReason}
                             onChange={handleInputChange}
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
-                            />
+                        />
                     </div>
                     <div className="sm:col-span-3">
                         <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">Fecha de Inicio</label>
@@ -205,7 +207,7 @@ export const AddDisp = () => {
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
                     </div>
-                            </div>
+                </div>
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div className="sm:col-span-3">
                         <label htmlFor="startHour" className="block text-sm font-medium text-gray-700 mb-2">Hora de Inicio</label>

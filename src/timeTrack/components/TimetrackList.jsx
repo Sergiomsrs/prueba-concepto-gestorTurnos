@@ -28,7 +28,6 @@ export const TimetrackList = ({
     const { auth } = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
 
-    console.log(records)
 
 
     // Cargar lista de empleados al montar el componente
@@ -46,8 +45,8 @@ export const TimetrackList = ({
 
     // Procesar los registros para el renderizado
     const processedRecords = auth?.user
-  ? processTimeStamps(records, selectedEmployeeId)
-  : timestampMockData;
+        ? processTimeStamps(records, selectedEmployeeId)
+        : timestampMockData;
 
 
     // Manejar el cambio en el dropdown de empleados
@@ -61,7 +60,6 @@ export const TimetrackList = ({
         setIsOpen(true);
     };
 
-    console.log(processedRecords)
 
 
 
@@ -79,7 +77,7 @@ export const TimetrackList = ({
                     setRecords={setRecords} />}
 
             {/* Dropdown de empleados */}
-            {(auth.role == "ADMIN" || auth.role == "GUEST" ) && <div className="mb-6 w-2/4">
+            {(auth.role == "ADMIN" || auth.role == "GUEST") && <div className="mb-6 w-2/4">
                 <label htmlFor="employee-select" className="block text-sm font-medium text-gray-700 mb-2">
                     Seleccionar Empleado
                 </label>

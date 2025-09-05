@@ -104,9 +104,6 @@ export const EmployeeWeek = ({ id }) => {
               // 2. convertir indices → horas
               const minMaxValues = convertBlocksToTimes(blocks);
 
-              console.log(minMaxValues);
-              // Ejemplo: [{min: "09:00", max: "13:00"}, {min: "15:00", max: "18:00"}]
-
               return (
                 <tr key={index}>
                   <td className="px-4 py-2 whitespace-nowrap">{formatToDate(day)}</td>
