@@ -1,21 +1,24 @@
-import { AlertMessage } from "../timeTrack/components/AlertMessage";
-import { AppContext } from "../context/AppContext";
-import { calcularshiftDuration, obtenerPreviousDay, generateShiftData, formatDate } from "../utils/function";
-import { DatePicker } from "../utilComponents/DatePicker";
-import { DayGrid } from "../gridComponents/DayGrid";
-import { employess } from "../utils/data";
-import { HeadRow } from "../gridComponents/HeadRow";
-import { JobHourApp } from "./JobHourApp";
-import { MenuIcon } from "../icon/MenuIcon";
-import { RDias } from "../gridComponents/RDias";
-import { Resumen } from "../gridComponents/Resumen";
-import { SectionPicker } from "../utilComponents/SectionPicker";
-import { SideBar } from "./SideBar";
 import { useContext, useState } from "react";
+import { AppContext } from "../../context/AppContext";
+import { DatePicker } from "../../utilComponents/DatePicker";
+import { SectionPicker } from "../../utilComponents/SectionPicker";
+import { MenuIcon } from "../../icon/MenuIcon";
+import { SideBar } from "../../gridComponents/SideBar";
+import { calcularshiftDuration, formatDate, obtenerPreviousDay } from "../../utils/function";
+import { DayGrid } from "../../gridComponents/DayGrid";
+import { HeadRow } from "../../gridComponents/HeadRow";
+import { JobHourApp } from "../../gridComponents/JobHourApp";
+import { Resumen } from "../../gridComponents/Resumen";
+import { RDias } from "../../gridComponents/RDias";
+import { AlertMessage } from "../../timeTrack/components/AlertMessage";
+import { useCyclesGenerator } from "../../Hooks/useCyclesGenerator";
 
-export const Daily = () => {
 
-  const { holidayDates, data, setData, fetchShiftWeek, alert, saveData, resetData } = useContext(AppContext);
+export const CyclesGenerator = () => {
+
+  const { holidayDates, fetchShiftWeek, alert, saveData, resetData } = useContext(AppContext);
+
+  const { data, setData, handleSaveCycle } = useCyclesGenerator();
 
   const [date, setDate] = useState({ start: "", end: "" });
   const [selectedOption, setSelectedOption] = useState("todos");
@@ -38,8 +41,8 @@ export const Daily = () => {
 
 
   return (
-    <section className="flex flex-col mx-2 sm:mx-0 ">
-      <DatePicker date={date} setDate={setDate} onSearch={handleSearch} />
+    <section className="flex flex-col mx-2 sm:mx-0 mt-6 ">
+
       <SectionPicker data={data} />
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">
         <MenuIcon sideBarClick={handleOpenModal} />
@@ -48,8 +51,8 @@ export const Daily = () => {
           <div key={day.id}>
             <div className="text-center text-lg font-bold mt-4 mb-4">
               <div className="text-center text-lg font-bold mt-4">
-                <div className="inline-block bg-gray-800 text-white text-sm font-semibold px-2 py-1 rounded-full">
-                  {formatDate(day, holidayDates)}
+                <div className="inline-block bg-gray-800 text-white text-sm font-semibold px-2 py-1 rounded-full min-w-32">
+                  {day.day}
                 </div>
               </div>
             </div>
@@ -73,7 +76,7 @@ export const Daily = () => {
         </div>
 
         <div className="flex gap-4 over">
-          <button onClick={saveData} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
+          <button onClick={handleSaveCycle} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
           <button onClick={resetData} type="button" className="bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded min-w-32">Reset</button>
         </div>
       </div>

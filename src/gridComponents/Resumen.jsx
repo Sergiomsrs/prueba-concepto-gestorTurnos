@@ -3,8 +3,8 @@ import { AppContext } from "../context/AppContext";
 import { getTotalShiftDuration, uniqueEmployeeName } from "../utils/function";
 
 
-export const Resumen = () => {
-  const { data, selectedOption, holidayDates } = useContext(AppContext);
+export const Resumen = ({ data }) => {
+  const { selectedOption, holidayDates } = useContext(AppContext);
 
   const uniqueEmployeeNames = uniqueEmployeeName(data);
 

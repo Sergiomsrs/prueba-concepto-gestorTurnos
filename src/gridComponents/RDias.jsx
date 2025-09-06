@@ -2,8 +2,8 @@ import { useContext, useEffect, useMemo } from "react";
 import { AppContext } from "../context/AppContext";
 import { formatTime, uniqueEmployeeName } from "../utils/function";
 
-export const RDias = () => {
-  const { data, selectedOption, holidayDates } = useContext(AppContext);
+export const RDias = ({ data }) => {
+  const { selectedOption, holidayDates } = useContext(AppContext);
   const uniqueEmployeeNames = uniqueEmployeeName(data);  // Obtenemos los empleados únicos
 
   const dataWeek = useMemo(() => data.slice(1, data.length), [data]);

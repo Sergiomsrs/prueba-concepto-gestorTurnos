@@ -13,7 +13,9 @@ import { TechInfo } from "./TechInfo"
 import { useState } from "react"
 import { SchedulesByEmployee } from "./SchedulesByEmployee"
 import { AdminPage } from "./AdminPage"
-import { GenerateShift } from "./GenerateShift"
+import { CyclesGenerator } from "../genericShifts/pages/CyclesGenerator"
+
+
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
@@ -81,7 +83,7 @@ export const MainPage = () => {
             <Route path="/info" element={<Landing />} />
             <Route path="/techinfo" element={<TechInfo />} />
             <Route path="/schedules" element={<SchedulesByEmployee />} />
-            <Route path="/generate" element={<GenerateShift />} />
+            <Route path="/generate" element={<CyclesGenerator />} />
           </Routes>
         </main>
 
