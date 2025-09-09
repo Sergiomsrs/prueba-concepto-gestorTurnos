@@ -23,7 +23,7 @@ export const generateShiftData = (dt, cycle) => {
     dt.slice(1).forEach(day => {
         day.employees.forEach(employee => {
             shiftData.push({
-                employeeId: employee.id,
+                shiftRoleId: employee.id,
                 cycle: cycle,
                 hours: employee.workShift,
                 date: day.id,

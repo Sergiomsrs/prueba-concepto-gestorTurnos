@@ -22,13 +22,13 @@ export const RDias = ({ data }) => {
 
   return (
     <table className="table table-hover text-center w-2/3 mb-0">
-      <thead>
+      {/*       <thead>
         <tr>
           {dataWeek.map((item) => (
-            <th key={item.id} className="whitespace-nowrap">{`${item.day.charAt(0).toUpperCase() + item.day.slice(1)}`}<span className="text-xs">{` (${item.id.slice(8)})`}</span></th>
+            <th key={item.id} className="whitespace-nowrap">{`${item.day?.charAt(0).toUpperCase() + item.day?.slice(1)}`}<span className="text-xs">{` (${item.id?.slice(8)})`}</span></th>
           ))}
         </tr>
-      </thead>
+      </thead> */}
       <tbody>
         {uniqueEmployeeNames.map((employeeName) => {
           const teamWork = getEmployeeTeamWork(employeeName);  // Obtenemos el `teamWork` de cada empleado

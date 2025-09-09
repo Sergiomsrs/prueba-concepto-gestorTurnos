@@ -3,9 +3,11 @@ import { entrada } from "../utils/data";
 import { formatTime, getHighestNonZeroIndex, selectColor } from "../utils/function";
 import { Modal } from "./Modal";
 
-export const HorizontalBar = ({ username, lastName, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
+export const HorizontalBar = ({ data, username, lastName, hours, onHourChange, teamWork, shiftDurationes, phours, isSelecting, setIsSelecting, startSelection, setStartSelection, handleMouseUp, id }) => {
 
   const [isModalOpen, setModalOpen] = useState(false);
+
+  console.log(hours)
 
 
   const handleOpenModal = () => {
@@ -111,7 +113,7 @@ export const HorizontalBar = ({ username, lastName, hours, onHourChange, teamWor
         </td>
       ))}
       <td className="sm:text-base text-xs w-12 px-2 align-middle py-0.5 ">{formatTime(shiftDurationes)}</td>
-      {isModalOpen && <Modal username={username} lastName={lastName} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id} />}
+      {isModalOpen && <Modal data={data} username={username} lastName={lastName} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id} />}
     </>
   );
 };

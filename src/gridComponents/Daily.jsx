@@ -17,6 +17,8 @@ export const Daily = () => {
 
   const { holidayDates, data, setData, fetchShiftWeek, alert, saveData, resetData } = useContext(AppContext);
 
+  console.log("datadesde Daily", data)
+
   const [date, setDate] = useState({ start: "", end: "" });
   const [selectedOption, setSelectedOption] = useState("todos");
   const [isModalOpen, setModalOpen] = useState(false);
@@ -56,6 +58,7 @@ export const Daily = () => {
             <DayGrid>
               <HeadRow />
               <JobHourApp
+                data={data}
                 day={day}
                 eh={obtenerPreviousDay(dayIndex, data).employees}
                 employees={day.employees}

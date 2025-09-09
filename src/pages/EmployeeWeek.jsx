@@ -3,8 +3,8 @@ import { AppContext } from "../context/AppContext";
 import { getStringBlock, splitIntoBlocksByIndex, convertBlocksToTimes } from "../utils/blockHours";
 import { formatToDate } from "../utils/function";
 
-export const EmployeeWeek = ({ id }) => {
-  const { data, holidayDates } = useContext(AppContext);
+export const EmployeeWeek = ({ id, data }) => {
+  const { holidayDates } = useContext(AppContext);
 
   // Obtener array de workShift del empleado seleccionado
   const empleadoData = data.slice(1, data.length + 1).map(day => ({

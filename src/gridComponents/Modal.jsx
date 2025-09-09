@@ -1,6 +1,6 @@
 import { EmployeeWeek } from "../pages/EmployeeWeek"
 
-export const Modal = ({ username, teamWork, handleCloseModal, id, lastName }) => {
+export const Modal = ({ username, teamWork, handleCloseModal, id, lastName, data }) => {
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
@@ -17,7 +17,7 @@ export const Modal = ({ username, teamWork, handleCloseModal, id, lastName }) =>
         </div>
 
         <div>
-          <EmployeeWeek id={id} />
+          <EmployeeWeek data={data} id={id} />
         </div>
 
         <div className="flex justify-end mt-4">

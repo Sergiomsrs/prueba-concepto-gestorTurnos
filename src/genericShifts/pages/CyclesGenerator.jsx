@@ -20,6 +20,8 @@ export const CyclesGenerator = () => {
 
   const { data, setData, handleSaveCycle } = useCyclesGenerator();
 
+  console.log("Data desde cicles", data)
+
   const [date, setDate] = useState({ start: "", end: "" });
   const [selectedOption, setSelectedOption] = useState("todos");
   const [isModalOpen, setModalOpen] = useState(false);
@@ -60,6 +62,7 @@ export const CyclesGenerator = () => {
               <HeadRow />
               <JobHourApp
                 day={day}
+                data={data}
                 eh={obtenerPreviousDay(dayIndex, data).employees}
                 employees={day.employees}
                 onHourChange={(employeeIndex, hourIndex, value) =>
