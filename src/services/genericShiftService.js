@@ -3,7 +3,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const getCycle = async (cycle) => {
     try {
-        const response = await fetch(`${API_URL}/gs/getRoles?cycle=${cycle}`, {
+        const response = await fetch(`${API_URL}/gs/getcycle?cycle=${cycle}`, {
             method: "GET",
         });
 
