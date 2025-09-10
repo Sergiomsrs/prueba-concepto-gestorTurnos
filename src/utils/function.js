@@ -150,14 +150,25 @@ export const generateShiftData = (dt) => {
 };
 
 
-export const formatDate = (day, hol) => {
+export const formatDate = (day, hol, daysOfWeek = []) => {
   const date = new Date(day.id);
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
   const isHoliday = hol.includes(day.id);
-  return `${day.day.charAt(0).toUpperCase() + day.day.slice(1)} ${formattedDate} ${isHoliday ? '🎉' : ''}`;
 
+  // Si day.day existe, lo capitaliza; si no, usa el nombre del array daysOfWeek según el id
+  let dayName;
+  if (day.day) {
+    dayName = day.day.charAt(0).toUpperCase() + day.day.slice(1);
+  } else if (daysOfWeek.length && typeof day.id === "number") {
+    dayName = daysOfWeek[day.id];
+  } else {
+    dayName = ""; // fallback vacío si no hay nada
+  }
+
+  return `${dayName} ${formattedDate} ${isHoliday ? '🎉' : ''}`;
 };
+
 
 export const formatToDate = (day) => {
   const date = new Date(day.id);
@@ -244,6 +255,21 @@ export const getTotalShiftDuration = (employeeName, data) => {
   const totalHoursDecimal = totalMinutes / 60;
   return totalHoursDecimal.toFixed(2);
 };
+
+
+export const getDayName = (num) => {
+  const days = [
+    "Lunes",     // 0
+    "Martes",    // 1
+    "Miércoles", // 2
+    "Jueves",    // 3
+    "Viernes",   // 4
+    "Sábado",    // 5
+    "Domingo"    // 6
+  ];
+
+  return days[num] || "Día inválido";
+}
 
 
 

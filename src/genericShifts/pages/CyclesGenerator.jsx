@@ -4,7 +4,7 @@ import { DatePicker } from "../../utilComponents/DatePicker";
 import { SectionPicker } from "../../utilComponents/SectionPicker";
 import { MenuIcon } from "../../icon/MenuIcon";
 import { SideBar } from "../../gridComponents/SideBar";
-import { calcularshiftDuration, formatDate, obtenerPreviousDay } from "../../utils/function";
+import { calcularshiftDuration, formatDate, getDayName, obtenerPreviousDay } from "../../utils/function";
 import { DayGrid } from "../../gridComponents/DayGrid";
 import { HeadRow } from "../../gridComponents/HeadRow";
 import { JobHourApp } from "../../gridComponents/JobHourApp";
@@ -12,19 +12,21 @@ import { Resumen } from "../../gridComponents/Resumen";
 import { RDias } from "../../gridComponents/RDias";
 import { AlertMessage } from "../../timeTrack/components/AlertMessage";
 import { useCyclesGenerator } from "../../Hooks/useCyclesGenerator";
+import { OptionsPicker } from "../components/OptionsPicker";
 
 
 export const CyclesGenerator = () => {
 
   const { holidayDates, fetchShiftWeek, alert, saveData, resetData } = useContext(AppContext);
 
-  const { data, setData, handleSaveCycle } = useCyclesGenerator();
+  const { data, setData, handleSaveCycle, ciclo, setCiclo, handleGetCycle } = useCyclesGenerator();
 
-  console.log("Data desde cicles", data)
 
   const [date, setDate] = useState({ start: "", end: "" });
   const [selectedOption, setSelectedOption] = useState("todos");
   const [isModalOpen, setModalOpen] = useState(false);
+
+
 
   const handleSearch = () => {
     if (date.start && date.end) fetchShiftWeek(date.start, date.end);
@@ -41,11 +43,16 @@ export const CyclesGenerator = () => {
     setData(newData);
   };
 
+  console.log(ciclo)
+
 
   return (
     <section className="flex flex-col mx-2 sm:mx-0 mt-6 ">
-
-      <SectionPicker data={data} />
+      <div className="flex flex-row gap-4">
+        <SectionPicker data={data} />
+        <OptionsPicker value={ciclo} onChange={setCiclo} />
+        <button onClick={() => handleGetCycle(ciclo)} >Obtener</button>
+      </div>
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">
         <MenuIcon sideBarClick={handleOpenModal} />
         {isModalOpen && <SideBar sideBarClick={handleCloseModal} isOpen={isModalOpen} />}
@@ -54,7 +61,7 @@ export const CyclesGenerator = () => {
             <div className="text-center text-lg font-bold mt-4 mb-4">
               <div className="text-center text-lg font-bold mt-4">
                 <div className="inline-block bg-gray-800 text-white text-sm font-semibold px-2 py-1 rounded-full min-w-32">
-                  {day.day}
+                  {getDayName(day.id - 1)}
                 </div>
               </div>
             </div>

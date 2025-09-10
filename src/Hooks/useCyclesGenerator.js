@@ -1,37 +1,34 @@
 import { useEffect, useState } from "react";
 import { employess, generateData, generateShiftData } from "../utils/shiftGeneratorData";
 import { getGenericShiftWeek } from "../services/shiftService";
+import { getCycle } from "../services/genericShiftService";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const useCyclesGenerator = () => {
 
     const [data, setData] = useState([])
+    const [ciclo, setCiclo] = useState("");
 
     useEffect(() => {
-        // Si necesitas datos locales
-        //setData(generateData(1, employess));
 
-        // Función async dentro del useEffect
-        const fetchData = async () => {
-            try {
-                const dat = await getGenericShiftWeek();
-                console.log(dat); // Aquí ya tienes los datos resueltos
-                // Si quieres actualizar el estado:
-                setData(dat);
-            } catch (error) {
-                console.error("Error fetching generic shifts:", error);
-                setData(generateData(1, employess));
-            }
-        };
+        setData(generateData(1, employess))
 
-        fetchData();
     }, []);
+
+    const handleGetCycle = async (cicle) => {
+        try {
+            const response = await getCycle(cicle); // llamada al fetch
+            setData(response); // guarda en estado
+        } catch (error) {
+            console.error("Error obteniendo ciclo:", error);
+        }
+    };
 
 
 
     const handleSaveCycle = () => {
-        const dataToSave = generateShiftData(data, 2)
+        const dataToSave = generateShiftData(data, ciclo)
         console.log(dataToSave)
 
         fetch(`${API_URL}/gs/saveAll`, {
@@ -56,8 +53,11 @@ export const useCyclesGenerator = () => {
 
     return {
         data,
+        ciclo,
+        setCiclo,
         setData,
         handleSaveCycle,
+        handleGetCycle
     }
 
 }

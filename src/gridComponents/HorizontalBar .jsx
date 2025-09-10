@@ -7,7 +7,18 @@ export const HorizontalBar = ({ data, username, lastName, hours, onHourChange, t
 
   const [isModalOpen, setModalOpen] = useState(false);
 
-  console.log(hours)
+
+
+  function calcularHorasTrabajadasFormato(arr) {
+    const workCount = arr.filter(bloque => bloque === "WORK").length;
+    const totalMinutos = workCount * 15;
+
+    const horas = Math.floor(totalMinutos / 60);
+    const minutos = totalMinutos % 60;
+
+    return `${String(horas).padStart(2, "0")}:${String(minutos).padStart(2, "0")}`;
+  }
+
 
 
   const handleOpenModal = () => {
@@ -112,7 +123,7 @@ export const HorizontalBar = ({ data, username, lastName, hours, onHourChange, t
           )}
         </td>
       ))}
-      <td className="sm:text-base text-xs w-12 px-2 align-middle py-0.5 ">{formatTime(shiftDurationes)}</td>
+      <td className="sm:text-base text-xs w-12 px-2 align-middle py-0.5 ">{calcularHorasTrabajadasFormato(hours)}</td>
       {isModalOpen && <Modal data={data} username={username} lastName={lastName} teamWork={teamWork} handleCloseModal={handleCloseModal} id={id} />}
     </>
   );

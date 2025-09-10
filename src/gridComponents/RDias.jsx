@@ -1,6 +1,7 @@
 import { useContext, useEffect, useMemo } from "react";
 import { AppContext } from "../context/AppContext";
 import { formatTime, uniqueEmployeeName } from "../utils/function";
+import { daysOfWeek } from "../utils/data";
 
 export const RDias = ({ data }) => {
   const { selectedOption, holidayDates } = useContext(AppContext);
@@ -22,13 +23,24 @@ export const RDias = ({ data }) => {
 
   return (
     <table className="table table-hover text-center w-2/3 mb-0">
-      {/*       <thead>
+      <thead>
         <tr>
-          {dataWeek.map((item) => (
-            <th key={item.id} className="whitespace-nowrap">{`${item.day?.charAt(0).toUpperCase() + item.day?.slice(1)}`}<span className="text-xs">{` (${item.id?.slice(8)})`}</span></th>
-          ))}
+          {dataWeek.map((item) => {
+            const day = item.day
+              ? item.day.charAt(0).toUpperCase() + item.day.slice(1)
+              : daysOfWeek[item.id]; // fallback con el id numérico
+
+            return (
+              <th key={item.id} className="whitespace-nowrap">
+                {day}
+                <span className="text-xs">
+                  {` ${typeof item.id === "string" ? `(${item.id.slice(8)})` : ""}`}
+                </span>
+              </th>
+            );
+          })}
         </tr>
-      </thead> */}
+      </thead>
       <tbody>
         {uniqueEmployeeNames.map((employeeName) => {
           const teamWork = getEmployeeTeamWork(employeeName);  // Obtenemos el `teamWork` de cada empleado
