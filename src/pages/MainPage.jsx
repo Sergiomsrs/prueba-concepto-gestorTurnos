@@ -14,6 +14,7 @@ import { useState } from "react"
 import { SchedulesByEmployee } from "./SchedulesByEmployee"
 import { AdminPage } from "./AdminPage"
 import { CyclesGenerator } from "../genericShifts/pages/CyclesGenerator"
+import { SetupWeek } from "../genericShifts/pages/SetupWeek"
 
 
 
@@ -84,6 +85,7 @@ export const MainPage = () => {
             <Route path="/techinfo" element={<TechInfo />} />
             <Route path="/schedules" element={<SchedulesByEmployee />} />
             <Route path="/generate" element={<CyclesGenerator />} />
+            <Route path="/setupweek" element={<SetupWeek />} />
           </Routes>
         </main>
 

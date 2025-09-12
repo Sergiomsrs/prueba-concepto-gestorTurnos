@@ -1,3 +1,7 @@
+
+
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const searchActiveEmployees = async () => {
     try {
         const response = await fetch('http://localhost:8081/api/emp/active');
@@ -50,15 +54,35 @@ export const searchPtoByEmployee = async (employeeId) => {
 };
 
 export const fetchAbsences = (selectedId) => {
-  return fetch(`http://localhost:8081/api/disp/${selectedId}`)
-    .then(response => {
-      if (response.status === 204) {
-        // No hay contenido
-        return { status: 204, data: null };
-      }
-      if (!response.ok) {
-        throw new Error(`Error en la respuesta del servidor: ${response.status}`);
-      }
-      return response.json().then(data => ({ status: response.status, data }));
-    });
+    return fetch(`http://localhost:8081/api/disp/${selectedId}`)
+        .then(response => {
+            if (response.status === 204) {
+                // No hay contenido
+                return { status: 204, data: null };
+            }
+            if (!response.ok) {
+                throw new Error(`Error en la respuesta del servidor: ${response.status}`);
+            }
+            return response.json().then(data => ({ status: response.status, data }));
+        });
+};
+
+
+/* Nueva implementacion servicios + hooks */
+
+export const getAllEmployees = async () => {
+    try {
+        const response = await fetch(`${API_URL}/emp/findall`, {
+            method: "GET",
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw error;
+    }
 };

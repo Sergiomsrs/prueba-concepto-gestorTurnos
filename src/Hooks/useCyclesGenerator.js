@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { employess, generateData, generateShiftData } from "../utils/shiftGeneratorData";
 import { getGenericShiftWeek } from "../services/shiftService";
-import { getCycle } from "../services/genericShiftService";
+import { getCycle, getRoles } from "../services/genericShiftService";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -9,6 +9,7 @@ export const useCyclesGenerator = () => {
 
     const [data, setData] = useState([])
     const [ciclo, setCiclo] = useState("");
+    const [roles, setRoles] = useState([])
 
     useEffect(() => {
 
@@ -49,15 +50,27 @@ export const useCyclesGenerator = () => {
             });
     };
 
+    const handleGetAllRoles = async () => {
+        try {
+            const response = await getRoles();
+            setRoles(response);
+        } catch (error) {
+            console.error("Error obteniendo ciclo:", error);
+        }
+
+    }
+
 
 
     return {
         data,
         ciclo,
+        roles,
         setCiclo,
         setData,
         handleSaveCycle,
-        handleGetCycle
+        handleGetCycle,
+        handleGetAllRoles
     }
 
 }
