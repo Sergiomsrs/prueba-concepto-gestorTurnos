@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
 import { useCyclesGenerator } from "../../Hooks/useCyclesGenerator";
 import { useEmployees } from "../../Hooks/useEmployees";
+import { DateRangePicker } from "../components/DateRangePicker";
+import { OptionsPicker } from "../components/OptionsPicker";
 
 export const SetupWeek = () => {
-    const { roles, handleGetAllRoles } = useCyclesGenerator();
+    const { roles, handleGetAllRoles, ciclo, setCiclo } = useCyclesGenerator();
     const { allEmployees, handleGetAllEmployees } = useEmployees();
 
     // Ahora es un array de objetos { empleadoId, genericShiftId }
     const [selectedEmployees, setSelectedEmployees] = useState([]);
+    const [range, setRange] = useState({ start: "", end: "" });
+    const [config, setConfig] = useState({ range: "", cicle: "", selectedEmployees: "" });
+
 
     console.log(selectedEmployees)
 
@@ -34,24 +39,51 @@ export const SetupWeek = () => {
     }, {});
     const isEmployeeRepeated = (empleadoId) => employeeCounts[empleadoId] > 1;
 
+    const handleGetConfig = () => {
+        const config = {
+            ciclo,                // valor del ciclo seleccionado
+            startDate: range.start,                // objeto { start, end }
+            endDate: range.end,                // objeto { start, end }
+            selectedEmployees     // array de objetos { empleadoId, genericShiftId }
+        };
+        // Aquí puedes usar el objeto config, por ejemplo:
+        console.log(config);
+        // O hacer una llamada a la API con config
+        setConfig(config); // Si quieres guardarlo en el estado
+    }
+
     return (
         <section className="mt-6">
-            <div className="flex flex-wrap gap-4 mb-6">
+            <div className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-xl shadow mb-8 border border-gray-200">
                 <button
                     onClick={handleGetAllRoles}
-                    className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition font-semibold flex items-center justify-center"
+                    aria-label="Recargar"
                 >
-                    Click
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="icon icon-tabler icons-tabler-outline icon-tabler-reload"
+                    >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
+                        <path d="M20 4v5h-5" />
+                    </svg>
                 </button>
+                <DateRangePicker value={range} onChange={setRange} />
+                <OptionsPicker value={ciclo} onChange={setCiclo} />
                 <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
+                    onClick={handleGetConfig}
+                    className="px-4 py-2 bg-emerald-600 text-white rounded-lg shadow hover:bg-emerald-700 transition font-semibold"
                 >
-                    Seleccionar fechas
-                </button>
-                <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition"
-                >
-                    Seleccionar Ciclo
+                    Enviar
                 </button>
             </div>
 

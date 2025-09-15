@@ -1,20 +1,15 @@
 export const OptionsPicker = ({ value, onChange }) => {
     return (
-        <div>
-            <label htmlFor="cycle" className="block mb-1 font-medium text-gray-700">
-                Selecciona ciclo:
-            </label>
-            <select
-                id="cycle"
-                value={value}
-                onChange={e => onChange(Number(e.target.value))}
-                className="border rounded px-3 py-2"
-            >
-                <option value="">-- Selecciona --</option>
-                {[1, 2, 3, 4, 5, 6].map(num => (
-                    <option key={num} value={num}>{num}</option>
-                ))}
-            </select>
-        </div>
+        <select
+            id="cycle"
+            value={value}
+            onChange={e => onChange(Number(e.target.value))}
+            className="px-3 py-2 rounded-lg border border-gray-300 bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition min-w-[120px]"
+        >
+            <option value="">Ciclo</option>
+            {[1, 2, 3, 4, 5, 6].map(num => (
+                <option key={num} value={num}>{num}</option>
+            ))}
+        </select>
     );
 };
