@@ -17,6 +17,8 @@ export const Daily = () => {
 
   const { holidayDates, data, setData, fetchShiftWeek, alert, saveData, resetData } = useContext(AppContext);
 
+  console.log(data)
+
   const [date, setDate] = useState({ start: "", end: "" });
   const [selectedOption, setSelectedOption] = useState("todos");
   const [isModalOpen, setModalOpen] = useState(false);

@@ -5,51 +5,54 @@ import { DateRangePicker } from "../components/DateRangePicker";
 import { OptionsPicker } from "../components/OptionsPicker";
 
 export const SetupWeek = () => {
-    const { roles, handleGetAllRoles, ciclo, setCiclo } = useCyclesGenerator();
+    const { roles, handleGetAllRoles, ciclo, setCiclo, handleCreateByGeneric } = useCyclesGenerator();
     const { allEmployees, handleGetAllEmployees } = useEmployees();
 
-    // Ahora es un array de objetos { empleadoId, genericShiftId }
+    // Ahora es un array de objetos { employeeId, genericShiftId }
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [range, setRange] = useState({ start: "", end: "" });
     const [config, setConfig] = useState({ range: "", cicle: "", selectedEmployees: "" });
 
 
-    console.log(selectedEmployees)
+
+
+    console.log("ss", selectedEmployees)
 
     useEffect(() => {
         handleGetAllEmployees();
     }, []);
 
     // Al seleccionar un empleado
-    const handleSelectEmployee = (genericShiftId, empleadoId) => {
+    const handleSelectEmployee = (genericShiftId, employeeId) => {
         setSelectedEmployees(prev => {
             // Si ya existe ese genericShiftId, reemplaza el objeto
             const filtered = prev.filter(sel => sel.genericShiftId !== genericShiftId);
             // Si no se selecciona ninguno, solo elimina
-            if (!empleadoId) return filtered;
+            if (!employeeId) return filtered;
             // Si se selecciona, agrega el nuevo
-            return [...filtered, { empleadoId, genericShiftId }];
+            return [...filtered, { employeeId, genericShiftId }];
         });
     };
 
     // Saber si un empleado está repetido
     const employeeCounts = selectedEmployees.reduce((acc, obj) => {
-        if (obj.empleadoId) acc[obj.empleadoId] = (acc[obj.empleadoId] || 0) + 1;
+        if (obj.employeeId) acc[obj.employeeId] = (acc[obj.employeeId] || 0) + 1;
         return acc;
     }, {});
-    const isEmployeeRepeated = (empleadoId) => employeeCounts[empleadoId] > 1;
+    const isEmployeeRepeated = (employeeId) => employeeCounts[employeeId] > 1;
 
     const handleGetConfig = () => {
         const config = {
-            ciclo,                // valor del ciclo seleccionado
+            cycle: ciclo,                // valor del ciclo seleccionado
             startDate: range.start,                // objeto { start, end }
             endDate: range.end,                // objeto { start, end }
-            selectedEmployees     // array de objetos { empleadoId, genericShiftId }
+            selectedEmployees     // array de objetos { employeeId, genericShiftId }
         };
         // Aquí puedes usar el objeto config, por ejemplo:
         console.log(config);
         // O hacer una llamada a la API con config
         setConfig(config); // Si quieres guardarlo en el estado
+        handleCreateByGeneric(config)
     }
 
     return (
@@ -111,8 +114,8 @@ export const SetupWeek = () => {
                     <tbody>
                         {roles.map((row) => {
                             // Busca si hay un empleado seleccionado para este genericShiftId (row.name)
-                            const selectedObj = selectedEmployees.find(sel => sel.genericShiftId === row.name);
-                            const selectedId = selectedObj ? selectedObj.empleadoId : "";
+                            const selectedObj = selectedEmployees.find(sel => sel.genericShiftId === row.id);
+                            const selectedId = selectedObj ? selectedObj.employeeId : "";
                             const repeated = selectedId && isEmployeeRepeated(selectedId);
 
                             return (
@@ -135,7 +138,7 @@ export const SetupWeek = () => {
                                                 : "border-gray-300 bg-white"
                                                 }`}
                                             value={selectedId}
-                                            onChange={e => handleSelectEmployee(row.name, e.target.value)}
+                                            onChange={e => handleSelectEmployee(row.id, Number(e.target.value))}
                                         >
                                             <option value="">Selecciona empleado</option>
                                             {allEmployees.map(emp => (
