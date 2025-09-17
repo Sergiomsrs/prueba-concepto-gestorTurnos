@@ -5,7 +5,16 @@ import { DateRangePicker } from "../components/DateRangePicker";
 import { OptionsPicker } from "../components/OptionsPicker";
 
 export const SetupWeek = () => {
-    const { roles, handleGetAllRoles, ciclo, setCiclo, handleCreateByGeneric } = useCyclesGenerator();
+    const {
+        ciclo,
+        defaultRoles,
+        roles,
+        handleCreateByGeneric,
+        handleGetAllRoles,
+        handleGetRolesByDefault,
+        setCiclo,
+        handleGetAllRolesWihtDefaults,
+    } = useCyclesGenerator();
     const { allEmployees, handleGetAllEmployees } = useEmployees();
 
     // Ahora es un array de objetos { employeeId, genericShiftId }
@@ -13,6 +22,7 @@ export const SetupWeek = () => {
     const [range, setRange] = useState({ start: "", end: "" });
     const [config, setConfig] = useState({ range: "", cicle: "", selectedEmployees: "" });
 
+    console.log(JSON.stringify(defaultRoles))
 
 
 
@@ -21,6 +31,7 @@ export const SetupWeek = () => {
     useEffect(() => {
         handleGetAllEmployees();
     }, []);
+
 
     // Al seleccionar un empleado
     const handleSelectEmployee = (genericShiftId, employeeId) => {
@@ -55,11 +66,23 @@ export const SetupWeek = () => {
         handleCreateByGeneric(config)
     }
 
+    useEffect(() => {
+        if (defaultRoles && defaultRoles.length > 0 && selectedEmployees.length === 0) {
+            // Inicializa selectedEmployees con los valores por defecto
+            setSelectedEmployees(
+                defaultRoles.map(dr => ({
+                    employeeId: dr.employeeId,
+                    genericShiftId: dr.shiftRoleId
+                }))
+            );
+        }
+    }, [defaultRoles]);
+
     return (
         <section className="mt-6">
             <div className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-xl shadow mb-8 border border-gray-200">
                 <button
-                    onClick={handleGetAllRoles}
+                    onClick={handleGetAllRolesWihtDefaults}
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition font-semibold flex items-center justify-center"
                     aria-label="Recargar"
                 >
@@ -87,6 +110,12 @@ export const SetupWeek = () => {
                     className="px-4 py-2 bg-emerald-600 text-white rounded-lg shadow hover:bg-emerald-700 transition font-semibold"
                 >
                     Enviar
+                </button>
+                <button
+                    onClick={() => setSelectedEmployees([])}
+                    className="px-4 py-2 bg-emerald-600 text-white rounded-lg shadow hover:bg-emerald-700 transition font-semibold"
+                >
+                    Resetear
                 </button>
             </div>
 

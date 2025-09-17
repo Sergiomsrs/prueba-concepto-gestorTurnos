@@ -35,6 +35,23 @@ export const getRoles = async () => {
     }
 };
 
+export const getDefaultRoles = async () => {
+    try {
+        const response = await fetch(`${API_URL}/default/get-all`, {
+            method: "GET",
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const createByGenericShift = async (config) => {
     try {
         const response = await fetch(`${API_URL}/gs/create-week`, {
