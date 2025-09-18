@@ -31,10 +31,19 @@ export const SetupWeek = () => {
     // Al seleccionar un empleado
     const handleSelectEmployee = (genericShiftId, employeeId) => {
         setSelectedEmployees(prev => {
-            // Si ya existe ese genericShiftId, reemplaza el objeto
+            const prevObj = prev.find(sel => sel.genericShiftId === genericShiftId);
             const filtered = prev.filter(sel => sel.genericShiftId !== genericShiftId);
+
+            // Si se desasigna (cambio a vacío y antes había empleado)
+            if (!employeeId && prevObj && prevObj.employeeId) {
+                // Llama a la API para desasignar
+                handleSendEmployeeToApi({ employeeId: null, shiftRoleId: genericShiftId });
+                return filtered;
+            }
+
             // Si no se selecciona ninguno, solo elimina
             if (!employeeId) return filtered;
+
             // Si se selecciona, agrega el nuevo
             return [...filtered, { employeeId, genericShiftId }];
         });
@@ -73,12 +82,20 @@ export const SetupWeek = () => {
         }
     }, [defaultRoles]);
 
-    // Función para enviar el empleado y el turno a la API
     const handleSendEmployeeToApi = async (role) => {
-        if (!role.employeeId || !role.shiftRoleId) return;
+        // Convertimos '' a null para employeeId
+        const payload = {
+            ...role,
+            employeeId: role.employeeId === "" ? null : role.employeeId,
+            shiftRoleId: role.shiftRoleId === "" ? null : role.shiftRoleId
+        };
+
+        console.log("Payload a enviar:", payload);
+
+        if (!payload.shiftRoleId) return; // shiftRoleId siempre requerido
         try {
-            await saveDefaultRole(role);
-            console.log(role);
+            await saveDefaultRole(payload);
+            console.log("Enviado correctamente:", payload);
         } catch (error) {
             console.error("Error enviando datos:", error);
         }

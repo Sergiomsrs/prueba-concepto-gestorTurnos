@@ -87,6 +87,10 @@ export const saveDefaultRole = async (role) => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
+        if (response.status === 204) {
+            return null;
+        }
+
         const result = await response.json();
         return result;
     } catch (error) {
