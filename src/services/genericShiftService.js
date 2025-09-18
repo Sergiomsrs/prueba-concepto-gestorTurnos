@@ -67,7 +67,27 @@ export const createByGenericShift = async (config) => {
         }
 
         const result = await response.json();
-        console.log(result)
+        return result;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const saveDefaultRole = async (role) => {
+    try {
+        const response = await fetch(`${API_URL}/default/save`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(role),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
         return result;
     } catch (error) {
         throw error;

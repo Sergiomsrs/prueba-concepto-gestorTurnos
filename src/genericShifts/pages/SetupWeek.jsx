@@ -3,6 +3,7 @@ import { useCyclesGenerator } from "../../Hooks/useCyclesGenerator";
 import { useEmployees } from "../../Hooks/useEmployees";
 import { DateRangePicker } from "../components/DateRangePicker";
 import { OptionsPicker } from "../components/OptionsPicker";
+import { saveDefaultRole } from "../../services/genericShiftService";
 
 export const SetupWeek = () => {
     const {
@@ -21,12 +22,6 @@ export const SetupWeek = () => {
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [range, setRange] = useState({ start: "", end: "" });
     const [config, setConfig] = useState({ range: "", cicle: "", selectedEmployees: "" });
-
-    console.log(JSON.stringify(defaultRoles))
-
-
-
-    console.log("ss", selectedEmployees)
 
     useEffect(() => {
         handleGetAllEmployees();
@@ -77,6 +72,17 @@ export const SetupWeek = () => {
             );
         }
     }, [defaultRoles]);
+
+    // Función para enviar el empleado y el turno a la API
+    const handleSendEmployeeToApi = async (role) => {
+        if (!role.employeeId || !role.shiftRoleId) return;
+        try {
+            await saveDefaultRole(role);
+            console.log(role);
+        } catch (error) {
+            console.error("Error enviando datos:", error);
+        }
+    };
 
     return (
         <section className="mt-6">
@@ -161,7 +167,6 @@ export const SetupWeek = () => {
                     </thead>
                     <tbody>
                         {roles.map((row) => {
-                            // Busca si hay un empleado seleccionado para este genericShiftId (row.name)
                             const selectedObj = selectedEmployees.find(sel => sel.genericShiftId === row.id);
                             const selectedId = selectedObj ? selectedObj.employeeId : "";
                             const repeated = selectedId && isEmployeeRepeated(selectedId);
@@ -179,7 +184,7 @@ export const SetupWeek = () => {
                                     </th>
                                     <td className="px-6 py-4">{row.wwh}</td>
                                     <td className="px-6 py-4">{row.teamwork}</td>
-                                    <td className="px-6 py-4">
+                                    <td className="px-6 py-4 flex items-center gap-2">
                                         <select
                                             className={`border rounded px-2 py-1 transition-colors duration-200 ${repeated
                                                 ? "border-red-500 bg-red-100"
@@ -195,6 +200,31 @@ export const SetupWeek = () => {
                                                 </option>
                                             ))}
                                         </select>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleSendEmployeeToApi({ employeeId: selectedId, shiftRoleId: row.id })}
+                                            className="ml-1 p-1 rounded-full transition-colors duration-200 border border-transparent bg-blue-400 text-white hover:bg-blue-700 focus:ring-2 focus:ring-blue-400"
+                                            aria-label="Asignar empleado a turno"
+                                            tabIndex={0}
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="20"
+                                                height="20"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="2"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                className="icon icon-tabler icons-tabler-outline icon-tabler-settings-check"
+                                            >
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <path d="M11.445 20.913a1.665 1.665 0 0 1 -1.12 -1.23a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.31 .318 1.643 1.79 .997 2.694" />
+                                                <path d="M15 19l2 2l4 -4" />
+                                                <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                                            </svg>
+                                        </button>
                                     </td>
                                     <td className="px-6 py-4">
                                         <a
