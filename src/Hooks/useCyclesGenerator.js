@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { employess, generateData, generateShiftData } from "../utils/shiftGeneratorData";
 import { getGenericShiftWeek } from "../services/shiftService";
-import { createByGenericShift, getCycle, getDefaultRoles, getRoles } from "../services/genericShiftService";
+import { createByGenericShift, getCycle, getDefaultRoles, getRoles, toggleShiftRole } from "../services/genericShiftService";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -92,6 +92,18 @@ export const useCyclesGenerator = () => {
 
     }
 
+    const handleToggle = async (id) => {
+        try {
+            await toggleShiftRole(id); // Ejecuta el toggle
+            console.log("Rol actualizado:", id);
+
+            // Vuelve a cargar los roles
+            await handleGetAllRolesWihtDefaults();
+        } catch (err) {
+            console.error("Error al actualizar el rol:", err);
+        }
+    };
+
 
 
     return {
@@ -99,6 +111,7 @@ export const useCyclesGenerator = () => {
         ciclo,
         roles,
         defaultRoles,
+        handleToggle,
         setCiclo,
         setData,
         handleSaveCycle,

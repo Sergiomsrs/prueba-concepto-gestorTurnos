@@ -72,6 +72,25 @@ export const createByGenericShift = async (config) => {
         throw error;
     }
 };
+export const toggleShiftRole = async (roleId) => {
+    try {
+        const response = await fetch(`${API_URL}/role/${roleId}/toggle-active`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const updatedRole = await response.json();
+        return updatedRole;
+    } catch (error) {
+        throw error;
+    }
+};
 
 export const saveDefaultRole = async (role) => {
     try {

@@ -69,7 +69,7 @@ export const MainPage = () => {
           </button>
         )}
 
-        <main className="flex flex-col w-full max-w-full overflow-x-auto  sm:px-16">
+        <main className="flex flex-col w-full max-w-full overflow-x-auto sm:px-16">
 
           <Routes>
             <Route path="/" element={<Daily />} />
