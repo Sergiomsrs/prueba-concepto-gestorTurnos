@@ -41,8 +41,11 @@ export const Daily = () => {
 
   return (
     <section className="flex flex-col mx-2 sm:mx-0 ">
-      <DatePicker date={date} setDate={setDate} onSearch={handleSearch} />
-      <SectionPicker data={data} />
+      <div className="mb-4">
+
+        <DatePicker date={date} setDate={setDate} onSearch={handleSearch} />
+        <SectionPicker data={data} />
+      </div>
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">
         <MenuIcon sideBarClick={handleOpenModal} />
         {isModalOpen && <SideBar sideBarClick={handleCloseModal} isOpen={isModalOpen} />}

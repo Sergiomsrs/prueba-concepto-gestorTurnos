@@ -48,10 +48,13 @@ export const CyclesGenerator = () => {
 
   return (
     <section className="flex flex-col mx-2 sm:mx-0 mt-6 ">
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row gap-4 items-center mb-4">
         <SectionPicker data={data} />
         <OptionsPicker value={ciclo} onChange={setCiclo} />
-        <button onClick={() => handleGetCycle(ciclo)} >Obtener</button>
+        <button
+          onClick={() => handleGetCycle(ciclo)}
+          className="bg-sky-600 border dark:border-sky-900 border-sky-900 rounded-full inline-flex justify-center items-center gap-x-2 py-1 px-2 md:py-2 md:px-4 text-xs md:text-base text-white transition hover:scale-110 hover:bg-white/10"
+        >Obtener</button>
       </div>
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 relative">
         <MenuIcon sideBarClick={handleOpenModal} />

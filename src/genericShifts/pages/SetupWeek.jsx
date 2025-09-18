@@ -80,7 +80,7 @@ export const SetupWeek = () => {
 
     return (
         <section className="mt-6">
-            <div className="flex flex-wrap items-center gap-4 p-4 bg-white rounded-xl shadow mb-8 border border-gray-200">
+            <div className="flex flex-wrap items-center gap-4 p-4">
                 <button
                     onClick={handleGetAllRolesWihtDefaults}
                     className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition font-semibold flex items-center justify-center"
@@ -111,12 +111,6 @@ export const SetupWeek = () => {
                 >
                     Enviar
                 </button>
-                <button
-                    onClick={() => setSelectedEmployees([])}
-                    className="px-4 py-2 bg-emerald-600 text-white rounded-lg shadow hover:bg-emerald-700 transition font-semibold"
-                >
-                    Resetear
-                </button>
             </div>
 
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -132,8 +126,33 @@ export const SetupWeek = () => {
                             <th scope="col" className="px-6 py-3">
                                 Equipo
                             </th>
-                            <th scope="col" className="px-6 py-3">
+                            <th scope="col" className="px-6 py-3 flex items-center gap-2">
                                 Empleado
+                                <button
+                                    onClick={() => setSelectedEmployees([])}
+                                    className="ml-2 p-1 rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-200 hover:text-emerald-900 focus:outline-none focus:ring-2 focus:ring-emerald-400 transition"
+                                    aria-label="Resetear selección de empleados"
+                                    type="button"
+                                    tabIndex={0}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="2"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="icon icon-tabler icons-tabler-outline icon-tabler-eraser-off"
+                                    >
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M3 3l18 18" />
+                                        <path d="M19 20h-10.5l-4.21 -4.3a1 1 0 0 1 0 -1.41l5 -4.993m2.009 -2.01l3 -3a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41c-1.417 1.431 -2.406 2.432 -2.97 3m-2.02 2.043l-4.211 4.256" />
+                                        <path d="M18 13.3l-6.3 -6.3" />
+                                    </svg>
+                                </button>
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Acción
