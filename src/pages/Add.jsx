@@ -15,6 +15,7 @@ export const Add = () => {
 
   const handleTabClick = (index) => {
     setActiveTab(index);
+    localStorage.setItem("activeTab", index);
   };
 
   let content;

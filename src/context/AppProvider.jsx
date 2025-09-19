@@ -16,7 +16,10 @@ export const AppProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState({ isOpen: false, message: null });
-    const [activeTab, setActiveTab] = useState(0);
+    const [activeTab, setActiveTab] = useState(() => {
+        const saved = localStorage.getItem("activeTab");
+        return saved !== null ? Number(saved) : 0;
+    });
     const fetchShiftWeek = async (startDate, endDate) => {
         setLoading(true);
         setError(null);
