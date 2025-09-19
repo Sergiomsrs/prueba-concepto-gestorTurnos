@@ -15,6 +15,7 @@ import { SchedulesByEmployee } from "./SchedulesByEmployee"
 import { AdminPage } from "./AdminPage"
 import { CyclesGenerator } from "../genericShifts/pages/CyclesGenerator"
 import { SetupWeek } from "../genericShifts/pages/SetupWeek"
+import { ShiftForm } from "./ShiftForm"
 
 
 
@@ -86,6 +87,7 @@ export const MainPage = () => {
             <Route path="/schedules" element={<SchedulesByEmployee />} />
             <Route path="/generate" element={<CyclesGenerator />} />
             <Route path="/setupweek" element={<SetupWeek />} />
+            <Route path="/generate-individual" element={<ShiftForm />} />
           </Routes>
         </main>
 

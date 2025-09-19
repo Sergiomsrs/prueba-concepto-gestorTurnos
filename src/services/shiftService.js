@@ -31,3 +31,20 @@ export const getGenericShiftWeek = async () => {
     }
 
 }
+
+export const fetchShift = {
+    saveIndividualShift: async (config) => {
+        const res = await fetch(`${API_URL}/schedule/create-turn`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(config),
+        });
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        const data = await res.json();
+        return { status: res.status, data };
+    },
+};
