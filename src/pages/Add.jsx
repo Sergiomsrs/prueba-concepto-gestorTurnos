@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AddUSer } from '../formComponents/AddUSer';
 import { AddWwh } from '../formComponents/AddWwh';
 import { AddTeamWork } from '../formComponents/AddTeamWork';
 import { AddPto } from '../formComponents/AddPto';
 import { AddDisp } from '../formComponents/AddDisp';
+import { AppContext } from '../context/AppContext';
 
 
 
 export const Add = () => {
 
 
-  const [activeTab, setActiveTab] = useState(0);
+  const { activeTab, setActiveTab } = useContext(AppContext);
 
   const handleTabClick = (index) => {
     setActiveTab(index);

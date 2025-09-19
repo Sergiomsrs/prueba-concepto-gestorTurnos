@@ -1,5 +1,3 @@
-
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const searchActiveEmployees = async () => {
@@ -15,15 +13,6 @@ export const searchActiveEmployees = async () => {
         throw error; // Permite manejar el error en el componente que llama
     }
 };
-
-/*
-Ejemplo de uso
-  useEffect(() => {
-    searchActiveEmployees()
-      .then(data => setEmployees(data))
-      .catch(error => setError(error.message));
-}, []); */
-
 
 export const searchSchedulesByEmployesAndDate = async () => {
     try {
@@ -88,8 +77,43 @@ export const getAllEmployees = async () => {
 };
 
 export const getEmployeesData = {
-    getDisponibilities: async () => {
+    getDisponibilities: async (selectedId) => {
         const res = await fetch(`${API_URL}/disp/${selectedId}`);
-        return res.json();
-    }
-}
+        if (res.status === 204) {
+            return { status: 204, data: null };
+        }
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        const data = await res.json();
+        return { status: res.status, data };
+    },
+    saveDisponibility: async (disponibilityData) => {
+        const res = await fetch(`${API_URL}/disp/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(disponibilityData),
+        });
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        // El backend responde con JSON (la entidad Disponibility)
+        const data = await res.json();
+        return { status: res.status, data };
+    },
+    deleteDisponibilityById: async (id) => {
+        const res = await fetch(`${API_URL}/disp/delete/${id}`, {
+            method: "DELETE",
+        });
+        if (res.status === 204) {
+            return { status: 204, data: null };
+        }
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        const data = await res.json();
+        return { status: res.status, data };
+    },
+};

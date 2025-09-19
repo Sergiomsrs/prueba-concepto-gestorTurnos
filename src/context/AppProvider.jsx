@@ -16,7 +16,7 @@ export const AppProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState({ isOpen: false, message: null });
-
+    const [activeTab, setActiveTab] = useState(0);
     const fetchShiftWeek = async (startDate, endDate) => {
         setLoading(true);
         setError(null);
@@ -87,24 +87,26 @@ export const AppProvider = ({ children }) => {
 
     return (
         <AppContext.Provider value={{
-            data,
-            selectedOption,
-            date,
-            holidayDates,
-            schedules,
-            loading,
-            error,
+            activeTab,
             alert,
-            setAlert,
-            fetchShiftWeek,
-            saveData,
-            resetData,
+            data,
+            date,
+            error,
+            holidayDates,
+            loading,
+            schedules,
+            selectedOption,
 
+            fetchShiftWeek,
+            resetData,
+            saveData,
+            setActiveTab,
+            setAlert,
             setData,
-            setSelectedOption,
             setDate,
             setHolidayDates,
-            setSchedules
+            setSchedules,
+            setSelectedOption,
         }}>
             {children}
         </AppContext.Provider>

@@ -19,7 +19,6 @@ export const SetupWeek = () => {
     } = useCyclesGenerator();
     const { allEmployees, handleGetAllEmployees } = useEmployees();
 
-    // Ahora es un array de objetos { employeeId, genericShiftId }
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [range, setRange] = useState({ start: "", end: "" });
     const [config, setConfig] = useState({ range: "", cicle: "", selectedEmployees: "" });
@@ -33,28 +32,21 @@ export const SetupWeek = () => {
     }, []);
 
 
-    // Al seleccionar un empleado
     const handleSelectEmployee = (genericShiftId, employeeId) => {
         setSelectedEmployees(prev => {
             const prevObj = prev.find(sel => sel.genericShiftId === genericShiftId);
             const filtered = prev.filter(sel => sel.genericShiftId !== genericShiftId);
 
-            // Si se desasigna (cambio a vacío y antes había empleado)
+
             if (!employeeId && prevObj && prevObj.employeeId) {
-                // Llama a la API para desasignar
                 handleSendEmployeeToApi({ employeeId: null, shiftRoleId: genericShiftId });
                 return filtered;
             }
-
-            // Si no se selecciona ninguno, solo elimina
             if (!employeeId) return filtered;
-
-            // Si se selecciona, agrega el nuevo
             return [...filtered, { employeeId, genericShiftId }];
         });
     };
 
-    // Saber si un empleado está repetido
     const employeeCounts = selectedEmployees.reduce((acc, obj) => {
         if (obj.employeeId) acc[obj.employeeId] = (acc[obj.employeeId] || 0) + 1;
         return acc;
@@ -63,21 +55,17 @@ export const SetupWeek = () => {
 
     const handleGetConfig = () => {
         const config = {
-            cycle: ciclo,                // valor del ciclo seleccionado
-            startDate: range.start,                // objeto { start, end }
-            endDate: range.end,                // objeto { start, end }
-            selectedEmployees     // array de objetos { employeeId, genericShiftId }
+            cycle: ciclo,
+            startDate: range.start,
+            endDate: range.end,
+            selectedEmployees
         };
-        // Aquí puedes usar el objeto config, por ejemplo:
-        console.log(config);
-        // O hacer una llamada a la API con config
-        setConfig(config); // Si quieres guardarlo en el estado
+        setConfig(config);
         handleCreateByGeneric(config)
     }
 
     useEffect(() => {
         if (defaultRoles && defaultRoles.length > 0 && selectedEmployees.length === 0) {
-            // Inicializa selectedEmployees con los valores por defecto
             setSelectedEmployees(
                 defaultRoles.map(dr => ({
                     employeeId: dr.employeeId,
@@ -88,14 +76,13 @@ export const SetupWeek = () => {
     }, [defaultRoles]);
 
     const handleSendEmployeeToApi = async (role) => {
-        // Convertimos '' a null para employeeId
         const payload = {
             ...role,
             employeeId: role.employeeId === "" ? null : role.employeeId,
             shiftRoleId: role.shiftRoleId === "" ? null : role.shiftRoleId
         };
 
-        if (!payload.shiftRoleId) return; // shiftRoleId siempre requerido
+        if (!payload.shiftRoleId) return;
         try {
             await saveDefaultRole(payload);
             console.log("Enviado correctamente:", payload);

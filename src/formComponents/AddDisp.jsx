@@ -3,78 +3,27 @@ import { generatePtoNullWithDate, generatePtoWithDate, getDatesInRange } from ".
 import { generateWorkShiftPto } from "../utils/blockHours";
 import { DispTable } from "./utils/DispTable";
 import { useEmployees } from "../Hooks/useEmployees";
+import { getEmployeesData } from "../services/employees";
 
 export const AddDisp = () => {
-    const initialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
-
-    const [createForm, setCreateForm] = useState(initialState);
-    const [message, setMessage] = useState("");
-    //const [employees, setEmployees] = useState([]); // Estado para la lista de empleados
-    const [isExistingEmployee, setIsExistingEmployee] = useState(false);
-    const [workHours, setWorkHours] = useState([]);
-    const [newPto, setNewPto] = useState({
-        employeeId: "",
-        absenceReason: "",
-        date: "",
-        startHour: "",
-        terminationHour: ""
-    }); // Estado para la nueva jornada
-
-
-    const { allEmployees } = useEmployees();
-
-    /*     // Cargar todos los empleados cuando el componente se monta
-        useEffect(() => {
-            fetch('http://localhost:8081/api/emp/findall') // URL para obtener todos los empleados
-                .then(response => response.json())
-                .then(data => setEmployees(data))
-                .catch(error => console.error("Error al cargar empleados:", error));
-        }, []); */
 
 
 
+    const {
+        allEmployees,
+        createForm,
+        message,
+        newPto,
+        newPtoInicitalState,
+        workHours,
+
+        handleDeleteDisponibility,
+        handleEmployeeSelect,
+        handleSaveDisponibility,
+        setNewPto,
+    } = useEmployees();
 
 
-
-
-
-
-    const handleEmployeeSelect = (e) => {
-        const selectedId = e.target.value;
-        const selectedEmployee = allEmployees.find(emp => emp.id.toString() === selectedId);
-
-        if (selectedEmployee) {
-            setCreateForm(selectedEmployee);
-            setMessage("");
-
-            fetch(`http://localhost:8081/api/disp/${selectedId}`)
-                .then(response => {
-                    if (response.status === 204) {
-                        setMessage("No hay ausencias registradas.");
-                        setWorkHours([]);
-                        return null;
-                    }
-                    if (!response.ok) {
-                        throw new Error(`Error en la respuesta del servidor: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data) {
-                        setMessage("");
-                        setWorkHours(data);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al cargar jornadas:", error);
-                    setMessage("Hubo un problema al cargar las jornadas.");
-                });
-        } else {
-            setCreateForm(initialState);
-            setIsExistingEmployee(false);
-            setWorkHours([]);
-        }
-    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -84,78 +33,22 @@ export const AddDisp = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const pto = generateWorkShiftPto(newPto.startHour, newPto.terminationHour);
-
-        const shift = [{
-            employeeId: createForm.id,
-            hours: pto,
-            date: newPto.date,
-            shiftDuration: '00:00',
-        }];
-
-        console.log(shift);
-
-        // Primero, guardar los turnos
-        fetch('http://localhost:8081/api/ws/saveAll', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(shift),
-        })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
-
-        // Luego, guardar la ausencia
-        fetch('http://localhost:8081/api/disp/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+        try {
+            await handleSaveDisponibility({
                 employeeId: createForm.id,
                 absenceReason: newPto.absenceReason,
                 date: newPto.date,
                 startHour: newPto.startHour,
                 terminationHour: newPto.terminationHour,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
+            });
+            setNewPto(newPtoInicitalState)
+        } catch (error) {
+            console.error('Error:', error);
+        }
     };
 
-    const handleDelete = () => { }
-
-    const handleDeleteDisp = (dispId, date) => {
-
-
-        const dates = getDatesInRange(date, date);
-        const pto = generatePtoNullWithDate(createForm.id, dates);
-
-
-        fetch('http://localhost:8081/api/ws/saveAll', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(pto),
-        })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
-
-        fetch(`http://localhost:8081/api/disp/delete/${dispId}`, {
-            method: 'DELETE',
-        })
-            .then(response => response.json())
-            .then(data => console.log('Success:', data))
-            .catch((error) => console.error('Error:', error));
-    }
 
     return (
         <form className="space-y-6">
@@ -164,7 +57,7 @@ export const AddDisp = () => {
                 <label htmlFor="employee-select" className="text-sm font-medium text-gray-700">Seleccionar Empleado</label>
                 <select
                     id="employee-select"
-                    onChange={handleEmployeeSelect}
+                    onChange={e => handleEmployeeSelect(e.target.value, allEmployees)}
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5"
                 >
                     <option value="">-- Seleccione un empleado --</option>
@@ -181,7 +74,7 @@ export const AddDisp = () => {
 
             {/* Tabla de jornadas */}
             {workHours.length > 0 && (
-                <DispTable workHours={workHours} />
+                <DispTable workHours={workHours} handleDeleteDisponibility={handleDeleteDisponibility} />
             )}
 
             {/* Formulario para añadir nueva jornada */}
