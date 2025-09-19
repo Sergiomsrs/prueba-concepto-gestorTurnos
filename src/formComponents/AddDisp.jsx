@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { generatePtoNullWithDate, generatePtoWithDate, getDatesInRange } from "../utils/function";
 import { generateWorkShiftPto } from "../utils/blockHours";
 import { DispTable } from "./utils/DispTable";
+import { useEmployees } from "../Hooks/useEmployees";
 
 export const AddDisp = () => {
     const initialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
 
     const [createForm, setCreateForm] = useState(initialState);
     const [message, setMessage] = useState("");
-    const [employees, setEmployees] = useState([]); // Estado para la lista de empleados
+    //const [employees, setEmployees] = useState([]); // Estado para la lista de empleados
     const [isExistingEmployee, setIsExistingEmployee] = useState(false);
     const [workHours, setWorkHours] = useState([]);
     const [newPto, setNewPto] = useState({
@@ -19,13 +20,16 @@ export const AddDisp = () => {
         terminationHour: ""
     }); // Estado para la nueva jornada
 
-    // Cargar todos los empleados cuando el componente se monta
-    useEffect(() => {
-        fetch('http://localhost:8081/api/emp/findall') // URL para obtener todos los empleados
-            .then(response => response.json())
-            .then(data => setEmployees(data))
-            .catch(error => console.error("Error al cargar empleados:", error));
-    }, []);
+
+    const { allEmployees } = useEmployees();
+
+    /*     // Cargar todos los empleados cuando el componente se monta
+        useEffect(() => {
+            fetch('http://localhost:8081/api/emp/findall') // URL para obtener todos los empleados
+                .then(response => response.json())
+                .then(data => setEmployees(data))
+                .catch(error => console.error("Error al cargar empleados:", error));
+        }, []); */
 
 
 
@@ -37,7 +41,7 @@ export const AddDisp = () => {
 
     const handleEmployeeSelect = (e) => {
         const selectedId = e.target.value;
-        const selectedEmployee = employees.find(emp => emp.id.toString() === selectedId);
+        const selectedEmployee = allEmployees.find(emp => emp.id.toString() === selectedId);
 
         if (selectedEmployee) {
             setCreateForm(selectedEmployee);
@@ -164,7 +168,7 @@ export const AddDisp = () => {
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5"
                 >
                     <option value="">-- Seleccione un empleado --</option>
-                    {employees.map(employee => (
+                    {allEmployees.map(employee => (
                         <option key={employee.id} value={employee.id}>
                             {employee.name} {employee.lastName}
                         </option>

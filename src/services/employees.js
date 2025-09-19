@@ -86,3 +86,10 @@ export const getAllEmployees = async () => {
         throw error;
     }
 };
+
+export const getEmployeesData = {
+    getDisponibilities: async () => {
+        const res = await fetch(`${API_URL}/disp/${selectedId}`);
+        return res.json();
+    }
+}
