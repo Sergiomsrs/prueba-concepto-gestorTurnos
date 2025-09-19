@@ -2,7 +2,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export const searchActiveEmployees = async () => {
     try {
-        const response = await fetch('http://localhost:8081/api/emp/active');
+        const response = await fetch(`${API_URL}/emp/active`);
         if (!response.ok) {
             throw new Error(`Error en la respuesta del servidor: ${response.status}`);
         }
@@ -16,7 +16,7 @@ export const searchActiveEmployees = async () => {
 
 export const searchSchedulesByEmployesAndDate = async () => {
     try {
-        const response = await fetch('http://localhost:8081/api/schedule/employee/1/schedules?startDate=2025-08-01&endDate=2025-08-31');
+        const response = await fetch(`${API_URL}/schedule/employee/1/schedules?startDate=2025-08-01&endDate=2025-08-31`);
         if (!response.ok) {
             throw new Error(`Error en la respuesta del servidor: ${response.status}`);
         }
@@ -30,7 +30,7 @@ export const searchSchedulesByEmployesAndDate = async () => {
 
 export const searchPtoByEmployee = async (employeeId) => {
     try {
-        const response = await fetch(`http://localhost:8081/api/pto/${employeeId}`);
+        const response = await fetch(`${API_URL}/pto/${employeeId}`);
         if (!response.ok) {
             throw new Error(`Error en la respuesta del servidor: ${response.status}`);
         }
@@ -43,7 +43,7 @@ export const searchPtoByEmployee = async (employeeId) => {
 };
 
 export const fetchAbsences = (selectedId) => {
-    return fetch(`http://localhost:8081/api/disp/${selectedId}`)
+    return fetch(`${API_URL}/disp/${selectedId}`)
         .then(response => {
             if (response.status === 204) {
                 // No hay contenido
@@ -76,7 +76,7 @@ export const getAllEmployees = async () => {
     }
 };
 
-export const getEmployeesData = {
+export const fetchDisponibilities = {
     getDisponibilities: async (selectedId) => {
         const res = await fetch(`${API_URL}/disp/${selectedId}`);
         if (res.status === 204) {
@@ -110,6 +110,46 @@ export const getEmployeesData = {
         if (res.status === 204) {
             return { status: 204, data: null };
         }
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        const data = await res.json();
+        return { status: res.status, data };
+    },
+
+};
+
+
+export const fetchPto = {
+    getPtoList: async (selectedId) => {
+        const res = await fetch(`${API_URL}/pto/${selectedId}`);
+        if (res.status === 204) {
+            return { status: 204, data: null };
+        }
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        const data = await res.json();
+        return { status: res.status, data };
+    },
+    savePto: async (PtoData) => {
+        const res = await fetch(`${API_URL}/pto/add`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(PtoData),
+        });
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        const data = await res.json();
+        return { status: res.status, data };
+    },
+    deletePtoById: async (ptoId) => {
+        const res = await fetch(`${API_URL}/pto/delete/${ptoId}`, {
+            method: "DELETE",
+        });
         if (!res.ok) {
             throw new Error(`Error en la respuesta del servidor: ${res.status}`);
         }

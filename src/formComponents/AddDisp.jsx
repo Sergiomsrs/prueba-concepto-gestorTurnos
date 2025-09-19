@@ -1,33 +1,29 @@
-import { useEffect, useState } from "react";
-import { generatePtoNullWithDate, generatePtoWithDate, getDatesInRange } from "../utils/function";
-import { generateWorkShiftPto } from "../utils/blockHours";
+import { useState } from "react";
 import { DispTable } from "./utils/DispTable";
 import { useEmployees } from "../Hooks/useEmployees";
-import { getEmployeesData } from "../services/employees";
+
+const newDisponibilityInititalState = { employeeId: "", absenceReason: "", date: "", startHour: "", terminationHour: "" };
 
 export const AddDisp = () => {
-
-
 
     const {
         allEmployees,
         createForm,
         message,
-        newPto,
-        newPtoInicitalState,
         workHours,
 
-        handleDeleteDisponibility,
         handleEmployeeSelect,
+        handleDeleteDisponibility,
         handleSaveDisponibility,
-        setNewPto,
     } = useEmployees();
+
+    const [newDisponibility, setNewDisponibility] = useState(newDisponibilityInititalState);
 
 
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewPto(prevState => ({
+        setNewDisponibility(prevState => ({
             ...prevState,
             [name]: value
         }));
@@ -38,12 +34,12 @@ export const AddDisp = () => {
         try {
             await handleSaveDisponibility({
                 employeeId: createForm.id,
-                absenceReason: newPto.absenceReason,
-                date: newPto.date,
-                startHour: newPto.startHour,
-                terminationHour: newPto.terminationHour,
+                absenceReason: newDisponibility.absenceReason,
+                date: newDisponibility.date,
+                startHour: newDisponibility.startHour,
+                terminationHour: newDisponibility.terminationHour,
             });
-            setNewPto(newPtoInicitalState)
+            setNewDisponibility(newDisponibilityInititalState)
         } catch (error) {
             console.error('Error:', error);
         }
@@ -88,7 +84,7 @@ export const AddDisp = () => {
                             type="text"
                             name="absenceReason"
                             id="absenceReason"
-                            value={newPto.absenceReason}
+                            value={newDisponibility.absenceReason}
                             onChange={handleInputChange}
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
@@ -99,7 +95,7 @@ export const AddDisp = () => {
                             type="date"
                             name="date"
                             id="date"
-                            value={newPto.date}
+                            value={newDisponibility.date}
                             onChange={handleInputChange}
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
@@ -112,7 +108,7 @@ export const AddDisp = () => {
                             type="time"
                             name="startHour"
                             id="startHour"
-                            value={newPto.startHour}
+                            value={newDisponibility.startHour}
                             onChange={handleInputChange}
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
@@ -123,7 +119,7 @@ export const AddDisp = () => {
                             type="time"
                             name="terminationHour"
                             id="terminationHour"
-                            value={newPto.terminationHour}
+                            value={newDisponibility.terminationHour}
                             onChange={handleInputChange}
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
                         />
