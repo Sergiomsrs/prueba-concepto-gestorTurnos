@@ -34,7 +34,6 @@ export const JobHourApp = ({ employees, onHourChange, day, eh, data }) => {
                     username={employee.name}
                     lastName={employee.lastName}
                     shiftDurationes={employee.shiftDuration}
-                    // Si no se encuentra, usar un array de 62 elementos "Null"
                     phours={
                       previousShift ? previousShift.workShift : Array(62).fill("Null")
                     }

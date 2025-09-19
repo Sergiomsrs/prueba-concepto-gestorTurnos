@@ -113,7 +113,6 @@ export const HorizontalBar = ({ data, username, lastName, hours, onHourChange, t
             } else if (baseValue === "WORK") {
               handleClick(i, true); // true = "WORK"
             }
-            // Si es otro valor (ej: "CONFLICT"), puedes decidir qué hacer
           }
         }
       }
