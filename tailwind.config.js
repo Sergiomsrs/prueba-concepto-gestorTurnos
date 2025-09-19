@@ -7,10 +7,19 @@ export default {
   theme: {
     extend: {
       borderWidth: {
-        'half-height': '2px', // Asegúrate de que el grosor sea el mismo
+        'half-height': '2px',
       },
       height: {
         'half': '50%',
+      },
+      keyframes: {
+        fadeIn: { // 👈 Keyframes personalizados
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+      },
+      animation: {
+        "fade-in": "fadeIn 0.3s ease-in-out", // 👈 Animación personalizada
       },
     },
   },
@@ -20,11 +29,11 @@ export default {
         '.border-45-height::after': {
           content: '""',
           position: 'absolute',
-          top: '80%', // Empieza desde el 55% de la celda
+          top: '80%',
           right: '0',
-          height: '45%', // Ocupa el 45% de la altura de la celda
-          width: '1.5px', // Grosor del borde
-          backgroundColor: 'rgb(209 213 219)', // Color del borde
+          height: '45%',
+          width: '1.5px',
+          backgroundColor: 'rgb(209 213 219)',
         },
       });
     },

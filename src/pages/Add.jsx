@@ -40,7 +40,7 @@ export const Add = () => {
   }
 
   return (
-    <div className="w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto mt-8">
+    <div className="w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto mt-8 animate-fade-in">
 
 
       <div className="border rounded-lg shadow-md overflow-x-auto p-4 ">
