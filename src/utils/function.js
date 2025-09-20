@@ -202,42 +202,44 @@ export const selectColor = (teamWork) => {
 
   switch (teamWork?.toLowerCase()) {
     case 'red':
-      selectColor = 'bg-red-600';
+      selectColor = 'bg-gradient-to-b from-red-400 to-red-600';
       break;
     case 'black':
-      selectColor = 'bg-gray-900';
+      selectColor = 'bg-gradient-to-b from-gray-700 to-gray-900';
       break;
     case 'blue':
-      selectColor = 'bg-blue-600';
+      selectColor = 'bg-gradient-to-b from-blue-400 to-blue-600';
       break;
     case 'green':
-      selectColor = 'bg-emerald-600';
+      selectColor = 'bg-gradient-to-b from-emerald-400 to-emerald-600';
       break;
     case 'amarillo':
-      selectColor = 'bg-yellow-500';
+      selectColor = 'bg-gradient-to-b from-yellow-300 to-yellow-500';
       break;
     case 'purple':
-      selectColor = 'bg-fuchsia-700';
+      selectColor = 'bg-gradient-to-b from-purple-400 to-purple-600';
       break;
     case 'naranja':
-      selectColor = 'bg-orange-600';
+      selectColor = 'bg-gradient-to-b from-orange-400 to-orange-600';
       break;
     case 'rosa':
-      selectColor = 'bg-pink-600';
+      selectColor = 'bg-gradient-to-b from-pink-400 to-pink-600';
       break;
     case 'turquesa':
-      selectColor = 'bg-teal-600';
+      selectColor = 'bg-gradient-to-b from-teal-400 to-teal-600';
       break;
     case 'lima':
-      selectColor = 'bg-lime-600';
+      selectColor = 'bg-gradient-to-b from-lime-400 to-lime-600';
       break;
     default:
-      selectColor = 'bg-slate-400';
+      selectColor = 'bg-gradient-to-b from-slate-300 to-slate-400';
       break;
   }
 
   return selectColor;
 };
+
+
 
 // Función para calcular la duración total en formato decimal
 export const getTotalShiftDuration = (employeeName, data) => {
