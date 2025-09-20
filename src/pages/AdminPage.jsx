@@ -21,7 +21,7 @@ export const AdminPage = () => {
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Registro de Jornada</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Ficha tu jornada laboral de forma sencilla y rápida.
+                  Marca tu entrada y salida de la jornada laboral de forma ágil y segura.
                 </p>
               </div>
             </div>
@@ -38,7 +38,7 @@ export const AdminPage = () => {
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Gestión Registros</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Revisa y administra los registros de jornada de tu equipo.
+                  Supervisa, valida y corrige los registros de jornada de todos los empleados.
                 </p>
               </div>
             </div>
@@ -55,7 +55,7 @@ export const AdminPage = () => {
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Gestión Usuarios</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Agrega nuevos usuarios y gestiona permisos fácilmente.
+                  Añade nuevos empleados, edita sus datos y gestiona sus permisos de acceso.
                 </p>
               </div>
             </div>
@@ -72,7 +72,7 @@ export const AdminPage = () => {
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Revisar Ausencias</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Revisa la lista con las últimas notificaciones de ausencias y fichajes no registrados.
+                  Consulta las ausencias recientes y los fichajes pendientes de justificar.
                 </p>
               </div>
             </div>
@@ -90,7 +90,7 @@ export const AdminPage = () => {
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Horarios</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Vista de usuario de sus horarios establecidos.
+                  Visualiza los horarios asignados a cada empleado de manera clara y estructurada.
                 </p>
               </div>
             </div>
@@ -102,12 +102,12 @@ export const AdminPage = () => {
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
                   className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="info.webp"
+                  src="genericShifts.webp"
                   alt="Añadir Usuario"
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Generador de Turnos</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Generación y asignación de turnos genericos
+                  Crea y asigna turnos genéricos de forma automática para optimizar la planificación.
                 </p>
               </div>
             </div>
@@ -118,12 +118,12 @@ export const AdminPage = () => {
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
                   className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="info.webp"
+                  src="shiftform.webp"
                   alt="Añadir Usuario"
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Introducir Turno</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Generación y asignación de turnos
+                  Añade turnos personalizados para empleados concretos de manera sencilla.
                 </p>
               </div>
             </div>
@@ -135,12 +135,12 @@ export const AdminPage = () => {
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
                   className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="info.webp"
+                  src="setupweek.webp"
                   alt="Añadir Usuario"
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Configurar Semana</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Generación y asignación de turnos genericos
+                  Define la estructura semanal de turnos y ajusta la planificación según las necesidades del equipo.
                 </p>
               </div>
             </div>
@@ -157,7 +157,7 @@ export const AdminPage = () => {
                 />
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">App Info</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Informacion sobre la aplicación, sus características y tecnologías utilizadas.
+                  Descubre las funcionalidades de la aplicación y la tecnología que la impulsa.
                 </p>
               </div>
             </div>

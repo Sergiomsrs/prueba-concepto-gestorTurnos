@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { fetchShift } from "../services/shiftService";
 import { EmployeeSelector } from "../utilComponents/EmployeeSelector";
 
+function floorToQuarterHour(time) {
+    if (!time) return "";
+    const [hour, minute] = time.split(":").map(Number);
+    const floored = Math.floor(minute / 15) * 15;
+    return `${hour.toString().padStart(2, "0")}:${floored.toString().padStart(2, "0")}`;
+}
+
 export const ShiftForm = () => {
     const [form, setForm] = useState({
         employeeId: "",
@@ -30,12 +37,17 @@ export const ShiftForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage("");
+
+        // Ajusta siempre hacia abajo
+        const flooredStart = floorToQuarterHour(form.startTime);
+        const flooredEnd = floorToQuarterHour(form.endTime);
+
         try {
             await fetchShift.saveIndividualShift({
                 employeeId: Number(form.employeeId),
                 date: form.date,
-                startTime: form.startTime,
-                endTime: form.endTime,
+                startTime: flooredStart,
+                endTime: flooredEnd,
             });
             setMessage("Turno guardado correctamente.");
             setForm({
@@ -50,7 +62,7 @@ export const ShiftForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 space-y-4 ">
+        <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-16 space-y-4 ">
             <EmployeeSelector
                 employees={employees}
                 setEmployees={setEmployees}
