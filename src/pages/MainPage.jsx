@@ -16,6 +16,7 @@ import { AdminPage } from "./AdminPage"
 import { CyclesGenerator } from "../genericShifts/pages/CyclesGenerator"
 import { SetupWeek } from "../genericShifts/pages/SetupWeek"
 import { ShiftForm } from "./ShiftForm"
+import { Reports } from "./Reports"
 
 
 
@@ -88,6 +89,7 @@ export const MainPage = () => {
             <Route path="/generate" element={<CyclesGenerator />} />
             <Route path="/setupweek" element={<SetupWeek />} />
             <Route path="/generate-individual" element={<ShiftForm />} />
+            <Route path="/reports" element={<Reports />} />
           </Routes>
         </main>
 

@@ -79,7 +79,7 @@ export const AdminPage = () => {
           </Link>
 
           {/* Ver Ausencias */}
-          <Link to="/schedules" className="relative group transition-transform hover:scale-105">
+          <Link to="/reports" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
@@ -88,7 +88,7 @@ export const AdminPage = () => {
                   src="horarios.webp"
                   alt="Añadir Usuario"
                 />
-                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Horarios</h3>
+                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Reportes</h3>
                 <p className="text-base text-gray-600 text-center">
                   Visualiza los horarios asignados a cada empleado de manera clara y estructurada.
                 </p>
