@@ -67,32 +67,73 @@ export const HorizontalBar = ({
   const handleKeyDown = (event, colIndex) => {
     setLastFocusedIndex(colIndex);
 
-    const focusNext = (nextIndex) => {
-      if (inputRefs.current[nextIndex]) {
-        inputRefs.current[nextIndex].focus();
+    // Shift + flecha derecha
+    if (event.key === "ArrowRight" && inputRefs.current[colIndex + 1]) {
+      inputRefs.current[colIndex + 1].focus();
+      event.preventDefault();
+
+      if (event.shiftKey && lastFocusedIndex !== null) {
+        const start = Math.min(lastFocusedIndex, colIndex + 1);
+        const end = Math.max(lastFocusedIndex, colIndex + 1);
+        const baseValue = hours[colIndex];
+
+        for (let i = start; i <= end; i++) {
+          if (!isInputDisabled(i) && hours[i] !== "PTO") {
+            handleClick(i, baseValue === "WORK");
+          }
+        }
+      }
+    }
+
+    // Shift + flecha izquierda
+    if (event.key === "ArrowLeft" && inputRefs.current[colIndex - 1]) {
+      inputRefs.current[colIndex - 1].focus();
+      event.preventDefault();
+
+      if (event.shiftKey && lastFocusedIndex !== null) {
+        const start = Math.min(lastFocusedIndex, colIndex - 1);
+        const end = Math.max(lastFocusedIndex, colIndex - 1);
+        const baseValue = hours[colIndex];
+
+        for (let i = start; i <= end; i++) {
+          if (!isInputDisabled(i) && hours[i] !== "PTO") {
+            handleClick(i, baseValue === "WORK");
+          }
+        }
+      }
+    }
+
+    // Flecha abajo
+    if (event.key === "ArrowDown") {
+      if (
+        rowIndex + 1 < numRows &&
+        inputRefsMatrix.current[rowIndex + 1] &&
+        inputRefsMatrix.current[rowIndex + 1][colIndex]
+      ) {
+        inputRefsMatrix.current[rowIndex + 1][colIndex].focus();
         event.preventDefault();
       }
-    };
+    }
 
-    // Navegación con flechas
-    if (event.key === "ArrowRight") focusNext(colIndex + 1);
-    if (event.key === "ArrowLeft") focusNext(colIndex - 1);
-    if (event.key === "ArrowDown") focusNextRow(rowIndex + 1, colIndex);
-    if (event.key === "ArrowUp") focusNextRow(rowIndex - 1, colIndex);
+    // Flecha arriba
+    if (event.key === "ArrowUp") {
+      if (
+        rowIndex - 1 >= 0 &&
+        inputRefsMatrix.current[rowIndex - 1] &&
+        inputRefsMatrix.current[rowIndex - 1][colIndex]
+      ) {
+        inputRefsMatrix.current[rowIndex - 1][colIndex].focus();
+        event.preventDefault();
+      }
+    }
 
-    // Espacio o Enter
+    // Espacio o Enter: alternar solo el actual
     if ((event.key === " " || event.key === "Enter") && !isInputDisabled(colIndex) && hours[colIndex] !== "PTO") {
       handleClick(colIndex, !(hours[colIndex] !== "Null" && hours[colIndex] !== "PTO"));
       event.preventDefault();
     }
-
-    function focusNextRow(rIndex, cIndex) {
-      if (rIndex >= 0 && rIndex < numRows && inputRefsMatrix.current[rIndex]?.[cIndex]) {
-        inputRefsMatrix.current[rIndex][cIndex].focus();
-        event.preventDefault();
-      }
-    }
   };
+
 
   // Detecta inicio y fin de cada bloque WORK para redondear solo los bordes laterales
   const getRoundedClass = (index) => {
