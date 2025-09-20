@@ -10,8 +10,8 @@ export const useSchedules = (employeeId, startDate, endDate) => {
   const [employeePto, setEmployeePto] = useState(ptoMockData);
   const [disponibility, setDisponibility] = useState(dispMockData);
   const { auth } = useContext(AuthContext);
-  
-  
+
+
   const employeeToFecth = (auth.role == "ADMIN" || auth.isAuthenticated == false) ? employeeId : auth.user?.id
 
   useEffect(() => {
@@ -64,20 +64,20 @@ export const useSchedules = (employeeId, startDate, endDate) => {
   }, [employeeId]);
 
 
-    useEffect(() => {
-      if (!employeeId) return;
-      fetchAbsences(employeeToFecth)
-        .then(result => {
-          if (result.status !== 200) {
-            setDisponibility(dispMockData);
-          } else {
-            setDisponibility(result.data);
-          }
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    }, [employeeId]);
+  useEffect(() => {
+    if (!employeeId) return;
+    fetchAbsences(employeeToFecth)
+      .then(result => {
+        if (result.status !== 200) {
+          setDisponibility(dispMockData);
+        } else {
+          setDisponibility(result.data);
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, [employeeId]);
 
   return { data, loading, error, employeePto, disponibility };
 };

@@ -18,8 +18,20 @@ export const useShift = () => {
         }
     };
 
+    const handleCopyWeek = async ({ sourceStartDate, targetStartDate }) => {
+        try {
+            const result = await fetchShift.copyWeek({ sourceStartDate, targetStartDate });
+            setShiftMessage("Semana copiada correctamente");
+            return result;
+        } catch (error) {
+            setShiftMessage(error.message || "Error al copiar semana");
+            throw error;
+        }
+    };
+
     return {
         handleSaveIndividualShift,
         shiftMessage,
+        handleCopyWeek,
     };
 };

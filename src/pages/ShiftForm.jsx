@@ -50,8 +50,7 @@ export const ShiftForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 space-y-4 p-4 bg-white rounded shadow">
-            <h2 className="text-lg font-semibold mb-2">Crear turno individual</h2>
+        <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 space-y-4 ">
             <EmployeeSelector
                 employees={employees}
                 setEmployees={setEmployees}

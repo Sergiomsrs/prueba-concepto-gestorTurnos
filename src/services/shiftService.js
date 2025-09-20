@@ -9,9 +9,9 @@ export const getShiftWeek = async (startDate, endDate) => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        return data; // Devuelve los datos al componente
+        return data;
     } catch (error) {
-        throw error; // El componente decide cómo manejar el error
+        throw error;
     }
 };
 
@@ -25,9 +25,9 @@ export const getGenericShiftWeek = async () => {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        return data; // Devuelve los datos al componente
+        return data;
     } catch (error) {
-        throw error; // El componente decide cómo manejar el error
+        throw error;
     }
 
 }
@@ -46,5 +46,17 @@ export const fetchShift = {
         }
         const data = await res.json();
         return { status: res.status, data };
+    },
+    copyWeek: async ({ sourceStartDate, targetStartDate }) => {
+        const res = await fetch(`${API_URL}/schedule/copy-week`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sourceStartDate, targetStartDate }),
+        });
+        if (!res.ok) {
+            throw new Error("Error al copiar semana");
+        }
+        const text = await res.text();
+        return { status: res.status, data: text };
     },
 };
