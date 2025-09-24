@@ -43,23 +43,7 @@ export const AdminPage = () => {
               </div>
             </div>
           </Link>
-          {/* Añadir Usuario */}
-          <Link to="/adduser" className="relative group transition-transform hover:scale-105">
-            <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
-            <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
-              <div className="flex-1 flex flex-col items-center justify-center p-10">
-                <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="usuarios.webp"
-                  alt="Añadir Usuario"
-                />
-                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Gestión Usuarios</h3>
-                <p className="text-base text-gray-600 text-center">
-                  Añade nuevos empleados, edita sus datos y gestiona sus permisos de acceso.
-                </p>
-              </div>
-            </div>
-          </Link>
+
           {/* Ver Ausencias */}
           <Link to="/loglist" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
@@ -78,23 +62,7 @@ export const AdminPage = () => {
             </div>
           </Link>
 
-          {/* Ver Ausencias */}
-          <Link to="/reports" className="relative group transition-transform hover:scale-105">
-            <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
-            <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
-              <div className="flex-1 flex flex-col items-center justify-center p-10">
-                <img
-                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="horarios.webp"
-                  alt="Añadir Usuario"
-                />
-                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Reportes</h3>
-                <p className="text-base text-gray-600 text-center">
-                  Visualiza los horarios asignados a cada empleado de manera clara y estructurada.
-                </p>
-              </div>
-            </div>
-          </Link>
+
           {/* Generar turnos */}
           <Link to="/generate" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
@@ -108,6 +76,24 @@ export const AdminPage = () => {
                 <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Generador de Turnos</h3>
                 <p className="text-base text-gray-600 text-center">
                   Crea y asigna turnos genéricos de forma automática para optimizar la planificación.
+                </p>
+              </div>
+            </div>
+          </Link>
+
+          {/* Generar turnos */}
+          <Link to="/setupweek" className="relative group transition-transform hover:scale-105">
+            <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
+            <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
+              <div className="flex-1 flex flex-col items-center justify-center p-10">
+                <img
+                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  src="setupweek.webp"
+                  alt="Añadir Usuario"
+                />
+                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Configurar Semana</h3>
+                <p className="text-base text-gray-600 text-center">
+                  Define la estructura semanal de turnos y ajusta la planificación según las necesidades del equipo.
                 </p>
               </div>
             </div>
@@ -128,19 +114,36 @@ export const AdminPage = () => {
               </div>
             </div>
           </Link>
-          {/* Generar turnos */}
-          <Link to="/setupweek" className="relative group transition-transform hover:scale-105">
+          {/* Ver Ausencias */}
+          <Link to="/reports" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">
                 <img
                   className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
-                  src="setupweek.webp"
+                  src="horarios.webp"
                   alt="Añadir Usuario"
                 />
-                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Configurar Semana</h3>
+                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Reportes</h3>
                 <p className="text-base text-gray-600 text-center">
-                  Define la estructura semanal de turnos y ajusta la planificación según las necesidades del equipo.
+                  Visualiza los horarios asignados a cada empleado de manera clara y estructurada.
+                </p>
+              </div>
+            </div>
+          </Link>
+          {/* Añadir Usuario */}
+          <Link to="/adduser" className="relative group transition-transform hover:scale-105">
+            <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
+            <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
+              <div className="flex-1 flex flex-col items-center justify-center p-10">
+                <img
+                  className="w-36 h-36 object-contain rounded-full border-4 border-indigo-100 shadow mb-6 bg-gray-100 transition-all duration-200 group-hover:scale-110"
+                  src="usuarios.webp"
+                  alt="Añadir Usuario"
+                />
+                <h3 className="text-xl font-semibold text-indigo-700 mb-2 text-center">Gestión Usuarios</h3>
+                <p className="text-base text-gray-600 text-center">
+                  Añade nuevos empleados, edita sus datos y gestiona sus permisos de acceso.
                 </p>
               </div>
             </div>
