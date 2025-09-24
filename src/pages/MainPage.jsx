@@ -1,4 +1,4 @@
-import { Route, Routes, Link } from "react-router-dom"
+import { Route, Routes, Link, useLocation } from "react-router-dom"
 import { LoginPage } from "./LoginPage"
 import { Navbar } from "../utilComponents/Navbar"
 import { EmployeeWeek } from "./EmployeeWeek"
@@ -24,15 +24,18 @@ import { Intro } from "./Intro"
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
 
+  const location = useLocation();
+  const isIntroPage = location.pathname === "/";
+
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden ">
       <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0 ">
-        <header>
+        {!isIntroPage && <header>
           <Navbar />
-        </header>
+        </header>}
 
         {/* Banner DEMO debajo de la navbar */}
-        {showDemoBanner && (
+        {!isIntroPage && showDemoBanner && (
           <div
             className="absolute right-6 z-30 flex items-center gap-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-5 py-3 rounded-lg shadow-lg mt-2"
             style={{ top: "4.5rem" }}
@@ -75,8 +78,8 @@ export const MainPage = () => {
         <main className="flex flex-col w-full max-w-full overflow-x-auto">
 
           <Routes>
-            <Route path="/" element={<Daily />} />
-            <Route path="/intro" element={<Intro />} />
+            <Route path="/" element={<Intro />} />
+            <Route path="/daily" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
             <Route path="/landing" element={<LoginPage />} />
             <Route path="/adduser" element={<Add />} />
@@ -95,9 +98,9 @@ export const MainPage = () => {
           </Routes>
         </main>
 
-        <footer className="mt-8 mb-2">
+        {!isIntroPage && <footer className="mt-8 mb-2">
           <p className="text-center">© 2025 My Website. All rights reserved.</p>
-        </footer>
+        </footer>}
       </div>
     </div>
   )
