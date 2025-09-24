@@ -9,7 +9,7 @@ export const Intro = () => {
             {/* Overlay violeta tech */}
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-700 opacity-80"></div>
             {/* Glassmorphism card */}
-            <div className="relative z-10 flex flex-col items-center justify-center w-full">
+            <div className="relative z-10 flex flex-col items-center justify-center w-full px-6">
                 <div className="text-center text-white max-w-lg mx-auto space-y-8 py-12 px-6 rounded-3xl backdrop-blur-md bg-white bg-opacity-10 border border-white border-opacity-20 shadow-2xl">
                     {/* Icono tech */}
                     {/*    <div className="flex justify-center mb-4">
