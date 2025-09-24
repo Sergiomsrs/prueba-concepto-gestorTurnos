@@ -23,7 +23,7 @@ export const Reports = () => {
     };
 
     return (
-        <div className="p-6 space-y-8 mt-12">
+        <div className="p-6 space-y-8 mt-12 sm:px-16">
             {/* Mostrar loader o error */}
 
             {/* Barra de filtrado */}

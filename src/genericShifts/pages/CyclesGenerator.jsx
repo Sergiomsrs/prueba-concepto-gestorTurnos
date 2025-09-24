@@ -47,7 +47,7 @@ export const CyclesGenerator = () => {
 
 
   return (
-    <section className="flex flex-col mx-2 sm:mx-0 mt-6 ">
+    <section className="flex flex-col mx-2 sm:mx-0 mt-6 sm:px-16">
       <div className="flex flex-row gap-4 items-center mb-4">
         <SectionPicker data={data} />
         <OptionsPicker value={ciclo} onChange={setCiclo} />

@@ -40,7 +40,7 @@ export const Daily = () => {
 
 
   return (
-    <section className="flex flex-col mx-2 sm:mx-0 ">
+    <section className="flex flex-col mx-2 sm:mx-0 sm:px-16 ">
       <div className="mb-4">
 
         <DatePicker date={date} setDate={setDate} onSearch={handleSearch} />

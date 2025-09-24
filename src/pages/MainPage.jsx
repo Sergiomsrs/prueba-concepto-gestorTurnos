@@ -17,6 +17,7 @@ import { CyclesGenerator } from "../genericShifts/pages/CyclesGenerator"
 import { SetupWeek } from "../genericShifts/pages/SetupWeek"
 import { ShiftForm } from "./ShiftForm"
 import { Reports } from "./Reports"
+import { Intro } from "./Intro"
 
 
 
@@ -71,10 +72,11 @@ export const MainPage = () => {
           </button>
         )}
 
-        <main className="flex flex-col w-full max-w-full overflow-x-auto sm:px-16">
+        <main className="flex flex-col w-full max-w-full overflow-x-auto">
 
           <Routes>
             <Route path="/" element={<Daily />} />
+            <Route path="/intro" element={<Intro />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
             <Route path="/landing" element={<LoginPage />} />
             <Route path="/adduser" element={<Add />} />
