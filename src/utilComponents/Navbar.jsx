@@ -29,7 +29,7 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center">
             <div className="flex divide-x divide-indigo-700 bg-gray-800 rounded-lg overflow-hidden shadow">
               <Link
-                to="/"
+                to="/daily"
                 className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
               >
                 Cuadrantes
@@ -103,7 +103,7 @@ export const Navbar = () => {
       {menuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-gray-900 border-t border-gray-800 shadow-lg px-6 py-4 space-y-4 z-50">
           <div className="flex flex-col gap-3">
-            <Link to="/" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Cuadrantes</Link>
+            <Link to="/daily" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Cuadrantes</Link>
             <Link to="/schedules" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Mensual</Link>
             <Link to="/admin" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Admin</Link>
           </div>
