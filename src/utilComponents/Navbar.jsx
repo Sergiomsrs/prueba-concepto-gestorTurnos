@@ -18,10 +18,12 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center">
         {/* Bloque Izquierdo: Branding (clicable) */}
         <div className="w-1/3 flex items-center">
-          <Link to="/admin" className="group cursor-pointer">
+          <a href="https://sergiomsrs.github.io/wsf-landing/"
+            target="_blank"
+            className="group cursor-pointer">
             <h1 className="text-2xl lg:text-3xl font-bold text-indigo-400 leading-tight group-hover:text-indigo-300 transition">WorkSchedFlow</h1>
             <h2 className="text-sm lg:text-base font-light text-gray-400 leading-tight group-hover:text-indigo-200 transition">Gestión de equipos de trabajo</h2>
-          </Link>
+          </a>
         </div>
 
         {/* Bloque Central: Navegación */}
@@ -29,7 +31,7 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center">
             <div className="flex divide-x divide-indigo-700 bg-gray-800 rounded-lg overflow-hidden shadow">
               <Link
-                to="/daily"
+                to="/"
                 className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition"
               >
                 Cuadrantes
@@ -103,7 +105,7 @@ export const Navbar = () => {
       {menuOpen && (
         <div className="md:hidden absolute top-full left-0 right-0 bg-gray-900 border-t border-gray-800 shadow-lg px-6 py-4 space-y-4 z-50">
           <div className="flex flex-col gap-3">
-            <Link to="/daily" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Cuadrantes</Link>
+            <Link to="/" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Cuadrantes</Link>
             <Link to="/schedules" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Mensual</Link>
             <Link to="/admin" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Admin</Link>
           </div>
