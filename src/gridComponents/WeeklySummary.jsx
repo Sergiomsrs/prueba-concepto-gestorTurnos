@@ -21,7 +21,7 @@ export const WeeklySummary = ({ data }) => {
     };
 
     return (
-        <div className="overflow-x-auto py-8 my-8 bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500 min-w-[1650px]">
+        <div className="overflow-x-auto py-8 my-8 bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500 w-[1650px]">
             <table className="table table-hover text-center w-full mb-0">
                 <thead>
                     <tr className="bg-gray-100">
