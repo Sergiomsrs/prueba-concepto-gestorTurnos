@@ -12,6 +12,7 @@ import { Resumen } from "../gridComponents/Resumen";
 import { SectionPicker } from "../utilComponents/SectionPicker";
 import { SideBar } from "./SideBar";
 import { useContext, useState } from "react";
+import { WeeklySummary } from "./WeeklySummary";
 
 export const Daily = () => {
 
@@ -73,10 +74,8 @@ export const Daily = () => {
           </div>
         ))}
 
-        <div className="flex overflow-x-auto py-8 my-8 bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500 w-[1030px] sm:w-full">
-          <Resumen data={data} className="flex-none w-max" />
-          <RDias data={data} className="flex-none w-max" />
-        </div>
+        <WeeklySummary data={data} />
+
 
         <div className="flex gap-4 over">
           <button onClick={saveData} type="button" className="bg-emerald-700 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded min-w-32">Guardar</button>
