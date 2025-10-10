@@ -1,8 +1,9 @@
 import { useState } from "react"
 import { reportBetwenDates } from "../services/reportService";
+import { reportMockData } from "../utils/apiMock";
 
 export const UseReportGenerator = () => {
-    const [report, setReport] = useState([]);
+    const [report, setReport] = useState(reportMockData);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 

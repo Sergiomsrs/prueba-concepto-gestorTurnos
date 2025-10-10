@@ -28479,3 +28479,154 @@ export const ptoMockData = [
         "terminationDate": "2025-07-22"
     }
 ]
+
+export const reportMockData = {
+    "totalHours": 2309.5,
+    "totalWorkHours": 304,
+    "totalExtraWorkHours": 0,
+    "baseFte": 6.7948282052,
+    "extraFte": 0,
+    "totalFte": null,
+    "reportRequestDto": [
+        {
+            "employee": {
+                "id": 1,
+                "name": "Ross",
+                "lastName": "Geller",
+                "secondLastName": "Geller",
+                "dni": "1234",
+                "email": "ross@correo.com"
+            },
+            "totalWWH": 348.5,
+            "totalWorkHours": 81.5,
+            "extraHours": -267,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 3,
+                "name": "Monica",
+                "lastName": "Geller",
+                "secondLastName": "Geller",
+                "dni": "12345",
+                "email": "monica@correo.com"
+            },
+            "totalWWH": 348.5,
+            "totalWorkHours": 59.5,
+            "extraHours": -289,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 5,
+                "name": "Chandler",
+                "lastName": "Bing",
+                "secondLastName": null,
+                "dni": "",
+                "email": "chandler@correo.com"
+            },
+            "totalWWH": 218,
+            "totalWorkHours": 6.5,
+            "extraHours": -211.5,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 6,
+                "name": "Rachel",
+                "lastName": "Green",
+                "secondLastName": null,
+                "dni": "",
+                "email": "rachel@correo.com"
+            },
+            "totalWWH": 174.5,
+            "totalWorkHours": 2,
+            "extraHours": -172.5,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 7,
+                "name": "Joey",
+                "lastName": "Tribiani",
+                "secondLastName": null,
+                "dni": "123456",
+                "email": "joey@correo.com"
+            },
+            "totalWWH": 218,
+            "totalWorkHours": 12.5,
+            "extraHours": -205.5,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 19,
+                "name": "Jhon",
+                "lastName": "Doe",
+                "secondLastName": null,
+                "dni": "",
+                "email": "jhon@correo.com"
+            },
+            "totalWWH": 174.5,
+            "totalWorkHours": 17,
+            "extraHours": -157.5,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 29,
+                "name": "Abel",
+                "lastName": "Hernandez",
+                "secondLastName": "",
+                "dni": "12348",
+                "email": "abel@correo.com"
+            },
+            "totalWWH": 218,
+            "totalWorkHours": 18,
+            "extraHours": -200,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 30,
+                "name": "Lucas",
+                "lastName": "Luis",
+                "secondLastName": "",
+                "dni": "00000009",
+                "email": "luis@luis.com"
+            },
+            "totalWWH": 174.5,
+            "totalWorkHours": 6,
+            "extraHours": -168.5,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 31,
+                "name": "Roy",
+                "lastName": "Roy",
+                "secondLastName": null,
+                "dni": "00000010",
+                "email": "nuevo1@correo.com"
+            },
+            "totalWWH": 218,
+            "totalWorkHours": 25.5,
+            "extraHours": -192.5,
+            "totalHolidayHours": 0
+        },
+        {
+            "employee": {
+                "id": 32,
+                "name": "Ray",
+                "lastName": "Ray",
+                "secondLastName": null,
+                "dni": "00000010",
+                "email": "nuevo2@correo.com"
+            },
+            "totalWWH": 218,
+            "totalWorkHours": 77,
+            "extraHours": -141,
+            "totalHolidayHours": 0
+        }
+    ]
+}
