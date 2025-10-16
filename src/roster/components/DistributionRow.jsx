@@ -1,29 +1,33 @@
-export const DistributionRow = ({ day }) => {
-    let sumaPorIndice = new Array(day.employees[0].workShift.length).fill(0);
+import { memo, useMemo } from 'react';
 
-    day.employees.forEach(empleado => {
-        empleado.workShift.forEach((workShift, indice) => {
-            if (workShift !== "Null" && workShift !== "PTO") {
-                sumaPorIndice[indice] += 1;
+export const DistributionRow = memo(({ day }) => {
+    const sumaPorIndice = useMemo(() => {
+        if (!day?.employees?.length) return new Array(62).fill(0);
+
+        const sums = new Array(day.employees[0].workShift.length).fill(0);
+        for (const emp of day.employees) {
+            for (let i = 0; i < emp.workShift.length; i++) {
+                if (emp.workShift[i] === "WORK") sums[i]++;
             }
-        });
-    });
+        }
+        return sums;
+    }, [day.employees]);
 
     return (
-        <tr>
-            <td className="sm:text-base text-xs font-semibold text-gray-800"></td>
-            <td className="sm:text-base text-xs font-semibold text-gray-800"></td>
-            {sumaPorIndice.map((valor, indice) => (
-                <td
-                    className="w-2 p-0 m-0 truncate text-center sm:text-base text-xs"
-                    key={indice}
-                >
-                    <span className="font-sans font-semibold sm:text-base text-xs">
+        <>
+            <div className="bg-gray-300 px-3 py-2 text-sm font-medium text-gray-700 border-r flex items-center">
+                Total
+            </div>
+            <div className="bg-gray-300 px-3 py-2 text-sm font-medium text-gray-700 border-r flex items-center">
+                Personas
+            </div>
+            {sumaPorIndice.map((valor, index) => (
+                <div key={index} className="bg-gray-300 flex items-center justify-center p-0.5">
+                    <span className="text-center font-semibold text-xs text-gray-700">
                         {valor}
                     </span>
-                </td>
+                </div>
             ))}
-            <td></td>
-        </tr>
+        </>
     );
-};
+}, (prevProps, nextProps) => prevProps.day === nextProps.day);

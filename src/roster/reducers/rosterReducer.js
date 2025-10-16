@@ -1,42 +1,60 @@
 export const rosterReducer = (state, action) => {
     switch (action.type) {
+
         case "SET_ROSTER":
-            return action.payload.map(day => ({
-                ...day,
-                employees: day.employees.map(emp => ({
-                    ...emp,
-                    isModified: false
-                }))
-            }));
+            return action.payload;
 
         case "UPDATE_SHIFT": {
             const { dayIndex, employeeIndex, hourIndex } = action.payload;
-            const newState = structuredClone(state);
-            const day = newState[dayIndex];
 
-            // Seguridad: si el día o el empleado no existen aún, devuelve el estado actual
-            if (!day || !day.employees[employeeIndex]) return state;
+            const newState = [...state];
+            const day = { ...newState[dayIndex] };
+            const employees = [...day.employees];
+            const employee = { ...employees[employeeIndex] };
+            const workShift = [...employee.workShift];
 
-            const employee = day.employees[employeeIndex];
-
-            // Seguridad: si el workShift no existe o el índice está fuera de rango
-            if (!employee.workShift || hourIndex >= employee.workShift.length) return state;
-
-            const currentValue = employee.workShift[hourIndex];
+            // Toggle single cell
+            const currentValue = workShift[hourIndex];
             let newValue;
-
-            if (currentValue === null) newValue = "WORK";
+            if (currentValue === "Null") newValue = "WORK";
             else if (currentValue === "WORK" || currentValue === "CONFLICT") newValue = "Null";
-            else newValue = "WORK"; // fallback
+            else newValue = "WORK";
 
-            employee.workShift[hourIndex] = newValue;
+            workShift[hourIndex] = newValue;
+
+            employee.workShift = workShift;
             employee.isModified = true;
+            employees[employeeIndex] = employee;
+            day.employees = employees;
+            newState[dayIndex] = day;
 
             return newState;
         }
 
+        case "UPDATE_SHIFT_RANGE": {
+            const { dayIndex, employeeIndex, startIndex, endIndex, value } = action.payload;
+
+            const newState = [...state];
+            const day = { ...newState[dayIndex] };
+            const employees = [...day.employees];
+            const employee = { ...employees[employeeIndex] };
+            const workShift = [...employee.workShift];
+
+            // Update range
+            for (let i = startIndex; i <= endIndex; i++) {
+                workShift[i] = value ? "WORK" : "Null";
+            }
+
+            employee.workShift = workShift;
+            employee.isModified = true;
+            employees[employeeIndex] = employee;
+            day.employees = employees;
+            newState[dayIndex] = day;
+
+            return newState;
+        }
 
         default:
             return state;
     }
-}
+};
