@@ -9,6 +9,8 @@ export const RosterPage = () => {
     const { getRosterBetweenDates, apiData, saveData } = useRoster();
     const [data, dispatch] = useReducer(rosterReducer, []);
     const inputRefsMatrix = useRef([]); // ✅ Referencias para navigation con teclado
+    const focusMatrixRef = useRef([]);
+
 
     // ✅ Calcular empleados modificados
     const modifiedData = useMemo(
@@ -41,7 +43,7 @@ export const RosterPage = () => {
     );
 
     useEffect(() => {
-        getRosterBetweenDates("2025-09-15", "2025-09-16");
+        getRosterBetweenDates("2025-09-01", "2025-09-02");
     }, [getRosterBetweenDates]);
 
     useEffect(() => {
@@ -110,9 +112,10 @@ export const RosterPage = () => {
                                         employee={employee}
                                         dayIndex={dayIndex}
                                         employeeIndex={employeeIndex}
-                                        dispatch={dispatch}
                                         numRows={day.employees.length}
+                                        numDays={data.length}          // ← aquí estaba el error
                                         inputRefsMatrix={inputRefsMatrix}
+                                        dispatch={dispatch}
                                     />
                                 </div>
                             ))}

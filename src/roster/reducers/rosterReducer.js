@@ -6,21 +6,13 @@ export const rosterReducer = (state, action) => {
 
         case "UPDATE_SHIFT": {
             const { dayIndex, employeeIndex, hourIndex } = action.payload;
-
             const newState = [...state];
             const day = { ...newState[dayIndex] };
             const employees = [...day.employees];
             const employee = { ...employees[employeeIndex] };
             const workShift = [...employee.workShift];
 
-            // Toggle single cell
-            const currentValue = workShift[hourIndex];
-            let newValue;
-            if (currentValue === "Null") newValue = "WORK";
-            else if (currentValue === "WORK" || currentValue === "CONFLICT") newValue = "Null";
-            else newValue = "WORK";
-
-            workShift[hourIndex] = newValue;
+            workShift[hourIndex] = workShift[hourIndex] === "WORK" ? "Null" : "WORK";
 
             employee.workShift = workShift;
             employee.isModified = true;
@@ -34,17 +26,39 @@ export const rosterReducer = (state, action) => {
         case "UPDATE_SHIFT_RANGE": {
             const { dayIndex, employeeIndex, startIndex, endIndex, value } = action.payload;
 
+            return state.map((day, dIndex) => {
+                if (dIndex !== dayIndex) return day;
+
+                return {
+                    ...day,
+                    employees: day.employees.map((emp, eIndex) => {
+                        if (eIndex !== employeeIndex) return emp;
+
+                        return {
+                            ...emp,
+                            workShift: emp.workShift.map((shift, sIndex) => {
+                                // ✅ Aplicar el valor booleano al rango
+                                if (sIndex >= startIndex && sIndex <= endIndex) {
+                                    return value ? "WORK" : "Null"; // ✅ Convertir boolean a string
+                                }
+                                return shift;
+                            }),
+                            isModified: true
+                        };
+                    })
+                };
+            });
+        }
+
+        case "UPDATE_SHIFT_FIXED": {
+            const { dayIndex, employeeIndex, hourIndex, value } = action.payload;
             const newState = [...state];
             const day = { ...newState[dayIndex] };
             const employees = [...day.employees];
             const employee = { ...employees[employeeIndex] };
             const workShift = [...employee.workShift];
 
-            // Update range
-            for (let i = startIndex; i <= endIndex; i++) {
-                workShift[i] = value ? "WORK" : "Null";
-            }
-
+            workShift[hourIndex] = value ? "WORK" : "Null";
             employee.workShift = workShift;
             employee.isModified = true;
             employees[employeeIndex] = employee;
