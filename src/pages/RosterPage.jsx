@@ -4,6 +4,7 @@ import { rosterReducer } from "../roster/reducers/rosterReducer";
 import { DistributionRow } from "../roster/components/DistributionRow";
 import { HeadRow } from "../roster/components/HeadRow";
 import { EmployeeRow } from "../roster/components/EmployeeRow";
+import { RosterRangeSummary } from "../roster/components/RosterRangeSummary";
 
 export const RosterPage = () => {
     const { getRosterBetweenDates, apiData, saveData } = useRoster();
@@ -29,7 +30,7 @@ export const RosterPage = () => {
     );
 
     useEffect(() => {
-        getRosterBetweenDates("2025-09-01", "2025-09-02");
+        getRosterBetweenDates("2025-09-01", "2025-09-30");
     }, [getRosterBetweenDates]);
 
     useEffect(() => {
@@ -53,7 +54,7 @@ export const RosterPage = () => {
                 <h1 className="text-2xl font-bold text-gray-900">ShiftBoardPage</h1>
             </header>
 
-            <main className="space-y-8 w-fit mx-auto">
+            <main className="space-y-8 max-w-[1800px] mx-auto">
                 {data.map((day, dayIndex) => (
                     <div key={day.id} className="bg-gray-50 rounded-lg shadow-sm border overflow-hidden p-4">
                         {/* Header del día */}
@@ -116,7 +117,9 @@ export const RosterPage = () => {
                         </div>
                     </div>
                 ))}
+                <RosterRangeSummary data={data} />
             </main>
+
 
             <footer className="mt-8 flex justify-center">
                 <button
