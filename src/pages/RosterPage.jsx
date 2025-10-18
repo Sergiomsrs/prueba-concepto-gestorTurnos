@@ -28,20 +28,6 @@ export const RosterPage = () => {
         [data]
     );
 
-    // ✅ Calcular horas totales por empleado
-    const employeeHours = useMemo(
-        () =>
-            data.map((day) => ({
-                id: day.id,
-                employees: day.employees.map((emp) => {
-                    const totalWorkBlocks = emp.workShift.filter((w) => w === "WORK").length;
-                    const totalHours = (totalWorkBlocks * 15) / 60;
-                    return { id: emp.id, totalHours };
-                }),
-            })),
-        [data]
-    );
-
     useEffect(() => {
         getRosterBetweenDates("2025-09-01", "2025-09-02");
     }, [getRosterBetweenDates]);

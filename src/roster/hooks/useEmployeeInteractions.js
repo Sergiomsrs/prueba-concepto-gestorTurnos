@@ -1,23 +1,21 @@
-import { useState, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 
 export const useEmployeeInteractions = ({
     employee,
     dayIndex,
     employeeIndex,
-    dispatch,
     numRows,
     numDays,
+    dispatch,
     inputRefsMatrix,
 }) => {
+    const inputRefs = useRef([]);
     const [isSelecting, setIsSelecting] = useState(false);
     const [startSelection, setStartSelection] = useState(null);
     const [baseValue, setBaseValue] = useState(null);
+    const [lastFocusedIndex, setLastFocusedIndex] = useState(null);
 
-    const [keyboardSelecting, setKeyboardSelecting] = useState(false);
-    const [selectionStart, setSelectionStart] = useState(null);
-    const [keyboardBaseValue, setKeyboardBaseValue] = useState(null);
-
-    // 🖱️ Ratón: iniciar selección
+    // 🖱️ MOUSE HANDLERS
     const handleMouseDown = useCallback(
         (index) => {
             const currentValue = employee.workShift[index];
@@ -35,17 +33,21 @@ export const useEmployeeInteractions = ({
         [dispatch, dayIndex, employeeIndex, employee.workShift]
     );
 
-    // 🖱️ Ratón: arrastrar
     const handleMouseEnter = useCallback(
         (index) => {
             if (!isSelecting || startSelection === null) return;
-
             const start = Math.min(startSelection, index);
             const end = Math.max(startSelection, index);
 
             dispatch({
                 type: "UPDATE_SHIFT_RANGE",
-                payload: { dayIndex, employeeIndex, startIndex: start, endIndex: end, value: baseValue },
+                payload: {
+                    dayIndex,
+                    employeeIndex,
+                    startIndex: start,
+                    endIndex: end,
+                    value: baseValue,
+                },
             });
         },
         [isSelecting, startSelection, baseValue, dayIndex, employeeIndex, dispatch]
@@ -56,60 +58,52 @@ export const useEmployeeInteractions = ({
         setStartSelection(null);
     }, []);
 
-    // 🎹 Teclado
+    // 🎹 TECLADO HANDLER
     const handleKeyDown = useCallback(
         (event, colIndex) => {
             const { key, shiftKey } = event;
+            setLastFocusedIndex(colIndex);
 
             const moveFocus = (newDay, newRow, newCol) => {
                 const el = inputRefsMatrix.current?.[newDay]?.[newRow]?.[newCol];
                 if (el) el.focus();
             };
 
-            // ⇧ Shift + Flechas → selección
+            // --- SHIFT + Flechas (selección múltiple)
             if (shiftKey && (key === "ArrowRight" || key === "ArrowLeft")) {
-                event.preventDefault();
-
-                if (!keyboardSelecting) {
-                    setKeyboardSelecting(true);
-                    setSelectionStart(colIndex);
-
-                    const initialBaseValue = employee.workShift[colIndex] === "WORK";
-                    setKeyboardBaseValue(initialBaseValue);
-
-                    dispatch({
-                        type: "UPDATE_SHIFT_FIXED",
-                        payload: { dayIndex, employeeIndex, hourIndex: colIndex, value: initialBaseValue },
-                    });
-                }
-
                 const direction = key === "ArrowRight" ? 1 : -1;
                 const newIndex = colIndex + direction;
 
                 if (newIndex >= 0 && newIndex < employee.workShift.length) {
-                    const start = Math.min(selectionStart ?? colIndex, newIndex);
-                    const end = Math.max(selectionStart ?? colIndex, newIndex);
+                    inputRefs.current[newIndex]?.focus();
+                    event.preventDefault();
 
-                    dispatch({
-                        type: "UPDATE_SHIFT_RANGE",
-                        payload: { dayIndex, employeeIndex, startIndex: start, endIndex: end, value: keyboardBaseValue },
-                    });
+                    if (lastFocusedIndex !== null) {
+                        const start = Math.min(lastFocusedIndex, newIndex);
+                        const end = Math.max(lastFocusedIndex, newIndex);
+                        const baseValue = employee.workShift[colIndex] === "WORK";
 
-                    inputRefsMatrix.current[dayIndex][employeeIndex][newIndex]?.focus();
+                        dispatch({
+                            type: "UPDATE_SHIFT_RANGE",
+                            payload: {
+                                dayIndex,
+                                employeeIndex,
+                                startIndex: start,
+                                endIndex: end,
+                                value: baseValue,
+                            },
+                        });
+                    }
                 }
-            } else {
-                // Flechas normales
-                if (keyboardSelecting) {
-                    setKeyboardSelecting(false);
-                    setSelectionStart(null);
-                    setKeyboardBaseValue(null);
-                }
+            }
 
+            // --- Navegación normal
+            else {
                 if (key === "ArrowRight" && colIndex < employee.workShift.length - 1) {
-                    inputRefsMatrix.current[dayIndex][employeeIndex][colIndex + 1]?.focus();
+                    inputRefs.current[colIndex + 1]?.focus();
                     event.preventDefault();
                 } else if (key === "ArrowLeft" && colIndex > 0) {
-                    inputRefsMatrix.current[dayIndex][employeeIndex][colIndex - 1]?.focus();
+                    inputRefs.current[colIndex - 1]?.focus();
                     event.preventDefault();
                 } else if (key === "ArrowDown") {
                     if (employeeIndex < numRows - 1) {
@@ -142,13 +136,12 @@ export const useEmployeeInteractions = ({
             numRows,
             numDays,
             inputRefsMatrix,
-            keyboardSelecting,
-            selectionStart,
-            keyboardBaseValue,
+            lastFocusedIndex,
         ]
     );
 
     return {
+        inputRefs,
         handleMouseDown,
         handleMouseEnter,
         handleMouseUp,
