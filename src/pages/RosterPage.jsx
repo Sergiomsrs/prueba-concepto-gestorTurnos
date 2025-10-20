@@ -33,9 +33,11 @@ export const RosterPage = () => {
 
     useEffect(() => {
         if (apiData.length > 0) {
-            dispatch({ type: "SET_ROSTER", payload: apiData.slice(1) });
+            // ✅ Mantiene TODOS los días (incluido el previo oculto)
+            dispatch({ type: "SET_ROSTER", payload: apiData });
         }
     }, [apiData]);
+
 
     const handleSaveData = async () => {
         const result = await saveData(modifiedData);
@@ -53,78 +55,84 @@ export const RosterPage = () => {
             </header>
 
             <main className="space-y-8 max-w-[1800px] mx-auto">
-                {data.map((day, dayIndex) => (
-                    <div key={day.id} className="bg-gray-50 rounded-lg shadow-sm border overflow-hidden p-4">
-                        <div className="bg-gray-50 px-4 py-3 border-b">
-                            <h2 className="text-lg font-semibold text-gray-900">
-                                {day.id} <span className="text-gray-600">{day.day?.toUpperCase()}</span>
-                            </h2>
-                        </div>
+                {data.slice(1).map((day, visibleDayIndex) => {
+                    const realDayIndex = visibleDayIndex + 1; // porque data[0] está oculto
 
-                        <div className="overflow-x-auto">
-                            <div
-                                className="grid gap-px bg-gray-200 min-w-max items-center"
-                                style={{
-                                    gridTemplateColumns: "120px 150px repeat(62, 20px) 80px",
-                                }}
-                            >
-                                <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 border-r">
-                                    Equipo
-                                </div>
-                                <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 border-r">
-                                    Empleado
-                                </div>
-
-                                <HeadRow />
-
-                                <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 text-center">
-                                    Horas
-                                </div>
+                    return (
+                        <div key={day.id} className="bg-gray-50 rounded-lg shadow-sm border overflow-hidden p-4">
+                            <div className="bg-gray-50 px-4 py-3 border-b">
+                                <h2 className="text-lg font-semibold text-gray-900">
+                                    {day.id} <span className="text-gray-600">{day.day?.toUpperCase()}</span>
+                                </h2>
                             </div>
 
-                            {day.employees?.map((employee, employeeIndex) => (
+                            <div className="overflow-x-auto">
                                 <div
-                                    key={employee.id}
-                                    className={`grid gap-px bg-gray-200 min-w-max hover:bg-gray-50 ${employee.isModified ? "bg-yellow-50" : ""
-                                        }`}
+                                    className="grid gap-px bg-gray-200 min-w-max items-center"
+                                    style={{
+                                        gridTemplateColumns: "120px 150px repeat(62, 20px) 80px",
+                                    }}
+                                >
+                                    <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 border-r">
+                                        Equipo
+                                    </div>
+                                    <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 border-r">
+                                        Empleado
+                                    </div>
+
+                                    <HeadRow />
+
+                                    <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 text-center">
+                                        Horas
+                                    </div>
+                                </div>
+
+                                {day.employees?.map((employee, employeeIndex) => (
+                                    <div
+                                        key={employee.id}
+                                        className={`grid gap-px bg-gray-200 min-w-max hover:bg-gray-50 ${employee.isModified ? "bg-yellow-50" : ""
+                                            }`}
+                                        style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
+                                    >
+                                        <EmployeeRow
+                                            employee={employee}
+                                            dayIndex={realDayIndex} // usamos el índice real (no visible)
+                                            employeeIndex={employeeIndex}
+                                            numRows={day.employees.length}
+                                            numDays={data.length}
+                                            inputRefsMatrix={inputRefsMatrix}
+                                            dispatch={dispatch}
+                                            previousEmployee={
+                                                // ✅ ahora sí encuentra el día previo aunque sea el oculto
+                                                data[realDayIndex - 1]?.employees?.find(
+                                                    (e) => e.id === employee.id
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                ))}
+
+                                <div
+                                    className="grid gap-px bg-gray-200 min-w-max border-t-2 border-gray-400"
                                     style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
                                 >
-                                    <EmployeeRow
-                                        employee={employee}
-                                        dayIndex={dayIndex}
-                                        employeeIndex={employeeIndex}
-                                        numRows={day.employees.length}
-                                        numDays={data.length}
-                                        inputRefsMatrix={inputRefsMatrix}
-                                        dispatch={dispatch}
-                                        previousEmployee={
-                                            data[dayIndex - 1]?.employees?.find(
-                                                (e) => e.id === employee.id
-                                            )
-                                        }
-                                    />
+                                    <DistributionRow day={day} />
                                 </div>
-                            ))}
-
-                            <div
-                                className="grid gap-px bg-gray-200 min-w-max border-t-2 border-gray-400"
-                                style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
-                            >
-                                <DistributionRow day={day} />
                             </div>
                         </div>
-                    </div>
-                ))}
-                <RosterRangeSummary data={data} />
+                    );
+                })}
+                <RosterRangeSummary data={data.slice(1)} />
             </main>
+
 
             <footer className="mt-8 flex justify-center">
                 <button
                     onClick={handleSaveData}
                     disabled={modifiedData.length === 0}
                     className={`px-6 py-3 rounded-lg font-medium transition-colors ${modifiedData.length === 0
-                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            : "bg-blue-600 hover:bg-blue-700 text-white shadow-md"
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700 text-white shadow-md"
                         }`}
                 >
                     Guardar Cambios {modifiedData.length > 0 && `(${modifiedData.length})`}
