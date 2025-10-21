@@ -73,16 +73,16 @@ export const RosterPage = () => {
                                         gridTemplateColumns: "120px 150px repeat(62, 20px) 80px",
                                     }}
                                 >
-                                    <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 border-r">
+                                    <div className="bg-gray-100 px-3 py-0 text-sm font-medium text-gray-700 border-r">
                                         Equipo
                                     </div>
-                                    <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 border-r">
+                                    <div className="bg-gray-100 px-3 py-0 text-sm font-medium text-gray-700 border-r">
                                         Empleado
                                     </div>
 
                                     <HeadRow />
 
-                                    <div className="bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 text-center">
+                                    <div className="bg-gray-100 px-3 py-0 text-sm font-medium text-gray-700 text-center">
                                         Horas
                                     </div>
                                 </div>

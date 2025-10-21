@@ -1,5 +1,6 @@
 import { memo, useMemo, useRef } from "react";
 import { useEmployeeInteractions } from "../hooks/useEmployeeInteractions";
+import { selectColor } from "../../utils/function";
 
 const getHighestNonZeroIndex = (array) => {
     if (!array) return -1;
@@ -60,12 +61,24 @@ export const EmployeeRow = memo(
             });
         };
 
+        const getCursorClass = (isDisabled, value) => {
+            if (isDisabled || value === "PTO") return 'cursor-not-allowed opacity-30';
+            return 'cursor-pointer';
+        };
+
+        const getBackgroundClass = (value, team) => {
+            if (value === "PTO") return 'bg-red-200';
+            if (value === "Null") return 'bg-neutral-100';
+            if (value === "CONFLICT") return 'bg-amber-500 animate-pulse';
+            return selectColor(team);
+        };
+
         return (
             <>
-                <div className="bg-white px-3 py-2 text-sm font-medium text-gray-800 border-r flex items-center">
+                <div className="bg-white px-3 py-0 text-sm font-medium text-gray-800 border-r flex items-center">
                     <span className="truncate">{employee.teamWork}</span>
                 </div>
-                <div className="bg-white px-3 py-2 text-sm text-gray-700 border-r flex items-center">
+                <div className="bg-white px-3 py-0 text-sm text-gray-700 border-r flex items-center">
                     <span className="truncate">
                         {employee.name} {employee.lastName}
                     </span>
@@ -78,7 +91,7 @@ export const EmployeeRow = memo(
                     return (
                         <div
                             key={hourIndex}
-                            className={`${cellBgClass} flex items-center justify-center p-0.5`}
+                            className={`${cellBgClass} flex items-center justify-center px-0 py-0 mx-0 my-0`}
                             onMouseEnter={() => handleMouseEnter(hourIndex)}
                             onMouseUp={handleMouseUp}
                         >
@@ -92,7 +105,7 @@ export const EmployeeRow = memo(
                                     inputRefsMatrix.current[dayIndex][employeeIndex][hourIndex] = el;
                                 }}
                                 type="checkbox"
-                                checked={value === "WORK"}
+                                checked={value !== "Null" && value !== "PTO"}
                                 onMouseDown={(e) => {
                                     clickLockRef.current = true;
                                     handleMouseDown(hourIndex);
@@ -114,14 +127,22 @@ export const EmployeeRow = memo(
                                     }
                                 }}
                                 disabled={disabled}
-                                className={`w-4 h-4 rounded border-gray-300 transition-all duration-75 ${value === "WORK" ? "bg-blue-500" : "bg-white"
-                                    } ${disabled ? "cursor-not-allowed opacity-70" : "cursor-pointer"}`}
+                                className={`
+                w-5 h-5 m-0 p-0 appearance-none border-none
+                ${getCursorClass(isIndexDisabled(hourIndex))}
+                ${getBackgroundClass(value, employee.teamWork)}
+                ${value === "WORK" ? 'border-t-2 border-b-2 border-neutral-200' : ''}
+                focus:ring-2 focus:ring-indigo-400
+                transition-all duration-150
+                mx-auto my-1
+                shadow-sm
+              `}
                             />
                         </div>
                     );
                 })}
 
-                <div className="bg-white px-3 py-2 text-sm font-medium text-gray-700 border-l text-center">
+                <div className="bg-white px-3 py-0 text-sm font-medium text-gray-700 border-l text-center">
                     {totalHours.toFixed(2)}
                 </div>
             </>

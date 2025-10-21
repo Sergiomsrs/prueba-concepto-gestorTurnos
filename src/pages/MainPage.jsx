@@ -77,7 +77,7 @@ export const MainPage = () => {
         <main className="flex flex-col w-full max-w-full overflow-x-auto">
 
           <Routes>
-            <Route path="/a" element={<Daily />} />
+            <Route path="/" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
             <Route path="/landing" element={<LoginPage />} />
             <Route path="/adduser" element={<Add />} />
@@ -93,7 +93,7 @@ export const MainPage = () => {
             <Route path="/setupweek" element={<SetupWeek />} />
             <Route path="/generate-individual" element={<ShiftForm />} />
             <Route path="/reports" element={<Reports />} />
-            <Route path="/" element={<RosterPage />} />
+            <Route path="/roster-board" element={<RosterPage />} />
           </Routes>
         </main>
 
