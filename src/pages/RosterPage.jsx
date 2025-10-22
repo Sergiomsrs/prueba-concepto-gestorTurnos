@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useMemo, useRef, useState } from "react";
+import { useEffect, useReducer, useMemo, useRef, useState, useCallback } from "react";
 import { useRoster } from "../roster/hooks/useRoster";
 import { rosterReducer } from "../roster/reducers/rosterReducer";
 import { DistributionRow } from "../roster/components/DistributionRow";
@@ -13,19 +13,18 @@ export const RosterPage = () => {
 
     // 🔹 Estados para filtros
     const [filters, setFilters] = useState({
-        startDate: "2025-09-02",
-        endDate: "2025-09-30",
+        startDate: "",
+        endDate: "",
         selectedTeams: [],
         employeeName: "",
     });
     const [showMobileFilters, setShowMobileFilters] = useState(false);
     const [showTeamDropdown, setShowTeamDropdown] = useState(false);
 
-    // ✅ Refs separados para desktop y móvil
     const dropdownDesktopRef = useRef(null);
     const dropdownMobileRef = useRef(null);
 
-    // 🔹 Obtener equipos únicos
+    // ✅ Memoizar equipos únicos
     const availableTeams = useMemo(() => {
         const teams = new Set();
         data.forEach(day => {
@@ -36,81 +35,112 @@ export const RosterPage = () => {
         return Array.from(teams).sort();
     }, [data]);
 
-    // 🔹 Datos filtrados
+    // ✅ Crear mapeo de índices una sola vez
+    const indexMapping = useMemo(() => {
+        const mapping = new Map();
+        data.forEach((day, dayIndex) => {
+            const dayMap = new Map();
+            day.employees?.forEach((emp, empIndex) => {
+                dayMap.set(emp.id, empIndex);
+            });
+            mapping.set(day.id, { dayIndex, employeeMap: dayMap });
+        });
+        return mapping;
+    }, [data]);
+
+    // ✅ Optimizar datos filtrados
     const filteredData = useMemo(() => {
         if (!data.length) return [];
+
+        const hasTeamFilter = filters.selectedTeams.length > 0;
+        const hasNameFilter = filters.employeeName.trim() !== "";
+
+        if (!hasTeamFilter && !hasNameFilter) {
+            return data; // Sin filtros, devolver datos originales
+        }
+
+        const normalizedName = hasNameFilter ? filters.employeeName.toLowerCase() : "";
 
         return data.map(day => ({
             ...day,
             employees: day.employees?.filter(emp => {
-                const teamMatch = filters.selectedTeams.length === 0 ||
-                    filters.selectedTeams.includes(emp.teamWork);
+                if (hasTeamFilter && !filters.selectedTeams.includes(emp.teamWork)) {
+                    return false;
+                }
 
-                const nameMatch = filters.employeeName === "" ||
-                    emp.name.toLowerCase().includes(filters.employeeName.toLowerCase()) ||
-                    emp.lastName?.toLowerCase().includes(filters.employeeName.toLowerCase());
+                if (hasNameFilter) {
+                    const fullName = `${emp.name} ${emp.lastName || ""}`.toLowerCase();
+                    if (!fullName.includes(normalizedName)) {
+                        return false;
+                    }
+                }
 
-                return teamMatch && nameMatch;
+                return true;
             }) || []
         }));
     }, [data, filters.selectedTeams, filters.employeeName]);
 
-    const modifiedData = useMemo(
-        () =>
-            filteredData.flatMap((day) =>
-                day.employees
-                    .filter((emp) => emp.isModified)
-                    .map((emp) => ({
+    // ✅ Optimizar modifiedData
+    const modifiedData = useMemo(() => {
+        const result = [];
+
+        // Solo iterar dias que tienen empleados modificados
+        for (let dayIndex = 1; dayIndex < filteredData.length; dayIndex++) {
+            const day = filteredData[dayIndex];
+            if (!day.employees?.length) continue;
+
+            for (const emp of day.employees) {
+                if (emp.isModified) {
+                    result.push({
                         employeeId: emp.id,
                         date: day.id,
                         hours: emp.workShift,
                         shiftDuration: emp.shiftDuration,
-                    }))
-            ),
-        [filteredData]
-    );
+                    });
+                }
+            }
+        }
 
-    // 🔹 Handlers
-    const handleFilterChange = (key, value) => {
+        return result;
+    }, [filteredData]);
+
+    // ✅ Callbacks memoizados
+    const handleFilterChange = useCallback((key, value) => {
         setFilters(prev => ({ ...prev, [key]: value }));
-    };
+    }, []);
 
-    const handleTeamToggle = (team) => {
+    const handleTeamToggle = useCallback((team) => {
         setFilters(prev => ({
             ...prev,
             selectedTeams: prev.selectedTeams.includes(team)
                 ? prev.selectedTeams.filter(t => t !== team)
                 : [...prev.selectedTeams, team]
         }));
-    };
+    }, []);
 
-    const handleSelectAllTeams = () => {
+    const handleSelectAllTeams = useCallback(() => {
         setFilters(prev => ({
             ...prev,
             selectedTeams: prev.selectedTeams.length === availableTeams.length
                 ? []
                 : [...availableTeams]
         }));
-    };
+    }, [availableTeams]);
 
-    const handleGetData = () => {
+    const handleGetData = useCallback(() => {
         getRosterBetweenDates(filters.startDate, filters.endDate);
         setShowMobileFilters(false);
         setShowTeamDropdown(false);
-    };
+    }, [getRosterBetweenDates, filters.startDate, filters.endDate]);
 
-    const clearFilters = () => {
+    const clearFilters = useCallback(() => {
         setFilters(prev => ({
             ...prev,
             selectedTeams: [],
             employeeName: ""
         }));
         setShowTeamDropdown(false);
-    };
-
-    useEffect(() => {
-        getRosterBetweenDates(filters.startDate, filters.endDate);
-    }, [getRosterBetweenDates]);
+    }, []);
 
     useEffect(() => {
         if (apiData.length > 0) {
@@ -118,36 +148,45 @@ export const RosterPage = () => {
         }
     }, [apiData]);
 
-    const handleSaveData = async () => {
+    const handleSaveData = useCallback(async () => {
         const result = await saveData(modifiedData);
         if (result.success) {
             console.log("✅ Datos guardados exitosamente");
         } else {
             console.error("❌ Error al guardar:", result.message);
         }
-    };
+    }, [saveData, modifiedData]);
 
-    // 🔹 Estadísticas filtradas
+    // ✅ Estadísticas optimizadas
     const stats = useMemo(() => {
         const uniqueEmployees = new Set();
         let totalHours = 0;
 
-        filteredData.slice(1).forEach(day => {
-            day.employees?.forEach(emp => {
+        // Usar for loop para mejor rendimiento
+        for (let i = 1; i < filteredData.length; i++) {
+            const day = filteredData[i];
+            if (!day.employees?.length) continue;
+
+            for (const emp of day.employees) {
                 uniqueEmployees.add(emp.id);
-                totalHours += emp.workShift.filter(w => w === "WORK").length * 0.25;
-            });
-        });
+                // Contar directamente sin filter
+                for (const shift of emp.workShift) {
+                    if (shift === "WORK") {
+                        totalHours += 0.25;
+                    }
+                }
+            }
+        }
 
         return {
             employees: uniqueEmployees.size,
             hours: totalHours,
-            days: filteredData.length - 1
+            days: Math.max(0, filteredData.length - 1)
         };
     }, [filteredData]);
 
-    // ✅ Componente MultiSelect corregido con ref específico
-    const TeamMultiSelect = ({ isMobile = false }) => (
+    // ✅ Componente MultiSelect memoizado
+    const TeamMultiSelect = useCallback(({ isMobile = false }) => (
         <div className="relative" ref={isMobile ? dropdownMobileRef : dropdownDesktopRef}>
             <label className="block text-xs font-medium text-slate-700 mb-1">
                 {isMobile ? "Filtrar por Equipos" : "Equipos"}
@@ -175,7 +214,6 @@ export const RosterPage = () => {
 
             {showTeamDropdown && (
                 <div className="absolute z-50 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                    {/* Seleccionar todos */}
                     <div
                         onClick={(e) => {
                             e.stopPropagation();
@@ -194,7 +232,6 @@ export const RosterPage = () => {
                         </span>
                     </div>
 
-                    {/* Lista de equipos */}
                     {availableTeams.map(team => (
                         <div
                             key={team}
@@ -222,16 +259,14 @@ export const RosterPage = () => {
                 </div>
             )}
         </div>
-    );
+    ), [filters.selectedTeams, availableTeams, showTeamDropdown, handleTeamToggle, handleSelectAllTeams]);
 
-    // ✅ Cerrar dropdown - CORREGIDO con ambos refs
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (showTeamDropdown) {
                 const isClickOutsideDesktop = dropdownDesktopRef.current && !dropdownDesktopRef.current.contains(event.target);
                 const isClickOutsideMobile = dropdownMobileRef.current && !dropdownMobileRef.current.contains(event.target);
 
-                // Cerrar si el click está fuera de ambos dropdowns
                 if (isClickOutsideDesktop && isClickOutsideMobile) {
                     setShowTeamDropdown(false);
                 }
@@ -449,7 +484,6 @@ export const RosterPage = () => {
                                     </div>
                                 </div>
 
-                                {/* Resto del componente sin cambios... */}
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
                                         onClick={handleGetData}
@@ -499,6 +533,10 @@ export const RosterPage = () => {
                     {filteredData.slice(1).map((day, visibleDayIndex) => {
                         const realDayIndex = visibleDayIndex + 1;
 
+                        // ✅ Obtener mapeo una sola vez por día
+                        const dayMapping = indexMapping.get(day.id);
+                        if (!dayMapping) return null;
+
                         return (
                             <div key={day.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                                 {/* Header del Día */}
@@ -511,7 +549,7 @@ export const RosterPage = () => {
                                             <div>
                                                 <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
                                                     {new Date(day.id).toLocaleDateString('es-ES', {
-                                                        weekday: 'long',
+
                                                         day: 'numeric',
                                                         month: 'long'
                                                     })}
@@ -558,12 +596,12 @@ export const RosterPage = () => {
                                         </div>
                                     </div>
 
-                                    {/* Filas de Empleados */}
-                                    {day.employees?.map((employee, employeeIndex) => {
-                                        const originalDayIndex = data.findIndex(originalDay => originalDay.id === day.id);
-                                        const originalEmployeeIndex = data[originalDayIndex]?.employees?.findIndex(
-                                            originalEmp => originalEmp.id === employee.id
-                                        ) ?? -1;
+                                    {/* ✅ Optimizar mapeo de empleados */}
+                                    {day.employees?.map((employee) => {
+                                        // Usar el mapeo precalculado
+                                        const originalEmployeeIndex = dayMapping.employeeMap.get(employee.id);
+
+                                        if (originalEmployeeIndex === undefined) return null;
 
                                         return (
                                             <div
@@ -576,8 +614,8 @@ export const RosterPage = () => {
                                             >
                                                 <EmployeeRow
                                                     employee={employee}
-                                                    dayIndex={originalDayIndex}
-                                                    employeeIndex={originalEmployeeIndex}
+                                                    dayIndex={dayMapping.dayIndex} // ✅ Índice precalculado
+                                                    employeeIndex={originalEmployeeIndex} // ✅ Índice precalculado
                                                     numRows={day.employees.length}
                                                     numDays={filteredData.length}
                                                     inputRefsMatrix={inputRefsMatrix}
