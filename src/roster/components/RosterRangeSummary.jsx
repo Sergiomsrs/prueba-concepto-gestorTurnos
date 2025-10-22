@@ -157,7 +157,7 @@ export const RosterRangeSummary = memo(({ data }) => {
     }, [dataToUse]);
 
     return (
-        <div className="overflow-x-auto py-8 my-8 bg-white rounded-lg shadow-md p-6 border-t-4 border-blue-500 max-w-[1800px]">
+        <div className="overflow-x-auto py-8 my-8 mx-2 bg-white rounded-lg shadow-md border-t-4 border-blue-500 max-w-[1920px]">
             <table className="table-auto text-center w-full mb-0">
                 <thead>
                     <tr className="bg-gray-100">

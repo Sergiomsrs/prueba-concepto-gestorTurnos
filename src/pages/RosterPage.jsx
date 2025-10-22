@@ -287,12 +287,20 @@ export const RosterPage = () => {
                     {/* Top Bar - Título y Botón Móvil */}
                     <div className="flex items-center justify-between px-4 sm:px-6 h-16">
                         <div className="flex items-center space-x-3">
-                            <div className="p-2 bg-blue-600 rounded-lg">
-                                <span className="text-white text-xl font-bold">📅</span>
+                            <div className="">
+                                <span className="text-white text-xl font-bold">
+                                    <img
+                                        src="./logo-navegador.webp"
+                                        alt="WorkSchedFlow Logo"
+                                        width="48"
+                                        height="48"
+                                        class=""
+                                    />
+                                </span>
                             </div>
                             <div>
-                                <h1 className="text-xl sm:text-2xl font-bold text-slate-900">WorkSchedule Pro</h1>
-                                <p className="text-xs sm:text-sm text-slate-500 hidden sm:block">Sistema de Gestión de Turnos</p>
+                                <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Roster Board</h1>
+                                <p className="text-xs sm:text-sm text-slate-500 hidden sm:block">Gestión de equipos de trabajo</p>
                             </div>
                         </div>
 
@@ -544,12 +552,11 @@ export const RosterPage = () => {
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center space-x-3">
                                             <div className="p-2 bg-slate-100 rounded-lg">
-                                                <span className="text-slate-600">📅</span>
+                                                <span className="">📅</span>
                                             </div>
                                             <div>
                                                 <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
                                                     {new Date(day.id).toLocaleDateString('es-ES', {
-
                                                         day: 'numeric',
                                                         month: 'long'
                                                     })}
@@ -575,7 +582,7 @@ export const RosterPage = () => {
                                     <div
                                         className="grid gap-px bg-slate-200 min-w-max"
                                         style={{
-                                            gridTemplateColumns: "120px 150px repeat(96, 16px) 80px",
+                                            gridTemplateColumns: "120px 150px repeat(62, 16px) 80px",
                                         }}
                                     >
                                         {/* Headers */}
@@ -610,7 +617,7 @@ export const RosterPage = () => {
                                                     ? "bg-amber-100 shadow-sm"
                                                     : "hover:bg-slate-50"
                                                     }`}
-                                                style={{ gridTemplateColumns: "120px 150px repeat(96, 16px) 80px" }}
+                                                style={{ gridTemplateColumns: "120px 150px repeat(62, 16px) 80px" }}
                                             >
                                                 <EmployeeRow
                                                     employee={employee}
@@ -633,7 +640,7 @@ export const RosterPage = () => {
                                     {/* Fila de Distribución */}
                                     <div
                                         className="grid gap-px bg-slate-300 min-w-max border-t-2 border-slate-400"
-                                        style={{ gridTemplateColumns: "120px 150px repeat(96, 16px) 80px" }}
+                                        style={{ gridTemplateColumns: "120px 150px repeat(62, 16px) 80px" }}
                                     >
                                         <DistributionRow day={day} />
                                     </div>
