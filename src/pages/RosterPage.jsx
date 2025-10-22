@@ -15,10 +15,15 @@ export const RosterPage = () => {
     const [filters, setFilters] = useState({
         startDate: "2025-09-02",
         endDate: "2025-09-30",
-        selectedTeam: "todos",
+        selectedTeams: [],
         employeeName: "",
     });
     const [showMobileFilters, setShowMobileFilters] = useState(false);
+    const [showTeamDropdown, setShowTeamDropdown] = useState(false);
+
+    // ✅ Refs separados para desktop y móvil
+    const dropdownDesktopRef = useRef(null);
+    const dropdownMobileRef = useRef(null);
 
     // 🔹 Obtener equipos únicos
     const availableTeams = useMemo(() => {
@@ -38,11 +43,9 @@ export const RosterPage = () => {
         return data.map(day => ({
             ...day,
             employees: day.employees?.filter(emp => {
-                // Filtro por equipo
-                const teamMatch = filters.selectedTeam === "todos" ||
-                    emp.teamWork === filters.selectedTeam;
+                const teamMatch = filters.selectedTeams.length === 0 ||
+                    filters.selectedTeams.includes(emp.teamWork);
 
-                // Filtro por nombre
                 const nameMatch = filters.employeeName === "" ||
                     emp.name.toLowerCase().includes(filters.employeeName.toLowerCase()) ||
                     emp.lastName?.toLowerCase().includes(filters.employeeName.toLowerCase());
@@ -50,7 +53,7 @@ export const RosterPage = () => {
                 return teamMatch && nameMatch;
             }) || []
         }));
-    }, [data, filters.selectedTeam, filters.employeeName]);
+    }, [data, filters.selectedTeams, filters.employeeName]);
 
     const modifiedData = useMemo(
         () =>
@@ -72,17 +75,37 @@ export const RosterPage = () => {
         setFilters(prev => ({ ...prev, [key]: value }));
     };
 
+    const handleTeamToggle = (team) => {
+        setFilters(prev => ({
+            ...prev,
+            selectedTeams: prev.selectedTeams.includes(team)
+                ? prev.selectedTeams.filter(t => t !== team)
+                : [...prev.selectedTeams, team]
+        }));
+    };
+
+    const handleSelectAllTeams = () => {
+        setFilters(prev => ({
+            ...prev,
+            selectedTeams: prev.selectedTeams.length === availableTeams.length
+                ? []
+                : [...availableTeams]
+        }));
+    };
+
     const handleGetData = () => {
         getRosterBetweenDates(filters.startDate, filters.endDate);
-        setShowMobileFilters(false); // Cerrar filtros móviles
+        setShowMobileFilters(false);
+        setShowTeamDropdown(false);
     };
 
     const clearFilters = () => {
         setFilters(prev => ({
             ...prev,
-            selectedTeam: "todos",
+            selectedTeams: [],
             employeeName: ""
         }));
+        setShowTeamDropdown(false);
     };
 
     useEffect(() => {
@@ -123,6 +146,104 @@ export const RosterPage = () => {
         };
     }, [filteredData]);
 
+    // ✅ Componente MultiSelect corregido con ref específico
+    const TeamMultiSelect = ({ isMobile = false }) => (
+        <div className="relative" ref={isMobile ? dropdownMobileRef : dropdownDesktopRef}>
+            <label className="block text-xs font-medium text-slate-700 mb-1">
+                {isMobile ? "Filtrar por Equipos" : "Equipos"}
+            </label>
+            <button
+                type="button"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setShowTeamDropdown(!showTeamDropdown);
+                }}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-left flex items-center justify-between"
+            >
+                <span className="truncate">
+                    {filters.selectedTeams.length === 0
+                        ? "Seleccionar equipos..."
+                        : filters.selectedTeams.length === availableTeams.length
+                            ? "Todos los equipos"
+                            : `${filters.selectedTeams.length} equipo${filters.selectedTeams.length > 1 ? 's' : ''} seleccionado${filters.selectedTeams.length > 1 ? 's' : ''}`
+                    }
+                </span>
+                <span className={`transition-transform ${showTeamDropdown ? 'rotate-180' : ''}`}>
+                    ▼
+                </span>
+            </button>
+
+            {showTeamDropdown && (
+                <div className="absolute z-50 w-full mt-1 bg-white border border-slate-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                    {/* Seleccionar todos */}
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelectAllTeams();
+                        }}
+                        className="px-3 py-2 hover:bg-slate-100 cursor-pointer border-b border-slate-200 flex items-center space-x-2"
+                    >
+                        <input
+                            type="checkbox"
+                            checked={filters.selectedTeams.length === availableTeams.length}
+                            onChange={() => { }}
+                            className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 pointer-events-none"
+                        />
+                        <span className="text-sm font-medium text-slate-700">
+                            {filters.selectedTeams.length === availableTeams.length ? 'Deseleccionar todos' : 'Seleccionar todos'}
+                        </span>
+                    </div>
+
+                    {/* Lista de equipos */}
+                    {availableTeams.map(team => (
+                        <div
+                            key={team}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleTeamToggle(team);
+                            }}
+                            className="px-3 py-2 hover:bg-slate-100 cursor-pointer flex items-center space-x-2"
+                        >
+                            <input
+                                type="checkbox"
+                                checked={filters.selectedTeams.includes(team)}
+                                onChange={() => { }}
+                                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 pointer-events-none"
+                            />
+                            <span className="text-sm text-slate-700">{team}</span>
+                        </div>
+                    ))}
+
+                    {availableTeams.length === 0 && (
+                        <div className="px-3 py-2 text-sm text-slate-500 text-center">
+                            No hay equipos disponibles
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+
+    // ✅ Cerrar dropdown - CORREGIDO con ambos refs
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (showTeamDropdown) {
+                const isClickOutsideDesktop = dropdownDesktopRef.current && !dropdownDesktopRef.current.contains(event.target);
+                const isClickOutsideMobile = dropdownMobileRef.current && !dropdownMobileRef.current.contains(event.target);
+
+                // Cerrar si el click está fuera de ambos dropdowns
+                if (isClickOutsideDesktop && isClickOutsideMobile) {
+                    setShowTeamDropdown(false);
+                }
+            }
+        };
+
+        if (showTeamDropdown) {
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => document.removeEventListener('mousedown', handleClickOutside);
+        }
+    }, [showTeamDropdown]);
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
             {/* Header Principal */}
@@ -150,6 +271,14 @@ export const RosterPage = () => {
                                 <span className="text-slate-600">⏰</span>
                                 <span className="text-sm font-medium text-slate-700">{stats.hours.toFixed(1)} Horas</span>
                             </div>
+                            {filters.selectedTeams.length > 0 && (
+                                <div className="flex items-center space-x-2 px-3 py-2 bg-blue-100 rounded-lg">
+                                    <span className="text-blue-600">🔍</span>
+                                    <span className="text-sm font-medium text-blue-700">
+                                        {filters.selectedTeams.length} equipo{filters.selectedTeams.length > 1 ? 's' : ''}
+                                    </span>
+                                </div>
+                            )}
                             {modifiedData.length > 0 && (
                                 <div className="flex items-center space-x-2 px-3 py-2 bg-amber-100 rounded-lg">
                                     <div className="h-2 w-2 bg-amber-500 rounded-full animate-pulse"></div>
@@ -168,8 +297,7 @@ export const RosterPage = () => {
                     </div>
 
                     {/* Controles de Filtros */}
-                    <div className={`border-t border-slate-200 bg-slate-50 transition-all duration-300 ${showMobileFilters ? 'block' : 'hidden lg:block'
-                        }`}>
+                    <div className={`border-t border-slate-200 bg-slate-50 transition-all duration-300 ${showMobileFilters ? 'block' : 'hidden lg:block'}`}>
                         <div className="px-4 sm:px-6 py-4">
                             {/* Filtros Desktop */}
                             <div className="hidden lg:grid lg:grid-cols-6 gap-4 items-end">
@@ -199,22 +327,8 @@ export const RosterPage = () => {
                                     </div>
                                 </div>
 
-                                {/* Filtro Equipo */}
-                                <div>
-                                    <label className="block text-xs font-medium text-slate-700 mb-1">
-                                        Equipo
-                                    </label>
-                                    <select
-                                        value={filters.selectedTeam}
-                                        onChange={(e) => handleFilterChange('selectedTeam', e.target.value)}
-                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                                    >
-                                        <option value="todos">Todos los equipos</option>
-                                        {availableTeams.map(team => (
-                                            <option key={team} value={team}>{team}</option>
-                                        ))}
-                                    </select>
-                                </div>
+                                {/* ✅ Filtro Equipos MultiSelect Desktop */}
+                                <TeamMultiSelect />
 
                                 {/* Filtro Empleado */}
                                 <div>
@@ -236,8 +350,8 @@ export const RosterPage = () => {
                                         onClick={handleGetData}
                                         disabled={loading}
                                         className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${loading
-                                                ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                                : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                                            ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                                            : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
                                             }`}
                                     >
                                         {loading ? "⏳" : "📊"} {loading ? "Cargando..." : "Obtener"}
@@ -257,8 +371,8 @@ export const RosterPage = () => {
                                         onClick={handleSaveData}
                                         disabled={modifiedData.length === 0 || loading}
                                         className={`w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all shadow-sm ${modifiedData.length === 0 || loading
-                                                ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                                : "bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg"
+                                            ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                                            : "bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg"
                                             }`}
                                     >
                                         <span>💾</span>
@@ -318,21 +432,8 @@ export const RosterPage = () => {
 
                                 {/* Equipo y Empleado */}
                                 <div className="space-y-3">
-                                    <div>
-                                        <label className="block text-xs font-medium text-slate-700 mb-1">
-                                            Filtrar por Equipo
-                                        </label>
-                                        <select
-                                            value={filters.selectedTeam}
-                                            onChange={(e) => handleFilterChange('selectedTeam', e.target.value)}
-                                            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                                        >
-                                            <option value="todos">Todos los equipos</option>
-                                            {availableTeams.map(team => (
-                                                <option key={team} value={team}>{team}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                    {/* ✅ MultiSelect para móvil */}
+                                    <TeamMultiSelect isMobile={true} />
 
                                     <div>
                                         <label className="block text-xs font-medium text-slate-700 mb-1">
@@ -348,14 +449,14 @@ export const RosterPage = () => {
                                     </div>
                                 </div>
 
-                                {/* Botones Móvil */}
+                                {/* Resto del componente sin cambios... */}
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
                                         onClick={handleGetData}
                                         disabled={loading}
                                         className={`flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-colors ${loading
-                                                ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                                : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                                            ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                                            : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
                                             }`}
                                     >
                                         <span>{loading ? "⏳" : "📊"}</span>
@@ -366,8 +467,8 @@ export const RosterPage = () => {
                                         onClick={handleSaveData}
                                         disabled={modifiedData.length === 0 || loading}
                                         className={`flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-colors ${modifiedData.length === 0 || loading
-                                                ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                                : "bg-green-600 hover:bg-green-700 text-white shadow-sm"
+                                            ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                                            : "bg-green-600 hover:bg-green-700 text-white shadow-sm"
                                             }`}
                                     >
                                         <span>💾</span>
@@ -380,7 +481,6 @@ export const RosterPage = () => {
                                     </button>
                                 </div>
 
-                                {/* Limpiar Filtros */}
                                 <button
                                     onClick={clearFilters}
                                     className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
@@ -459,31 +559,38 @@ export const RosterPage = () => {
                                     </div>
 
                                     {/* Filas de Empleados */}
-                                    {day.employees?.map((employee, employeeIndex) => (
-                                        <div
-                                            key={employee.id}
-                                            className={`grid gap-px bg-slate-200 min-w-max transition-all duration-200 ${employee.isModified
+                                    {day.employees?.map((employee, employeeIndex) => {
+                                        const originalDayIndex = data.findIndex(originalDay => originalDay.id === day.id);
+                                        const originalEmployeeIndex = data[originalDayIndex]?.employees?.findIndex(
+                                            originalEmp => originalEmp.id === employee.id
+                                        ) ?? -1;
+
+                                        return (
+                                            <div
+                                                key={employee.id}
+                                                className={`grid gap-px bg-slate-200 min-w-max transition-all duration-200 ${employee.isModified
                                                     ? "bg-amber-100 shadow-sm"
                                                     : "hover:bg-slate-50"
-                                                }`}
-                                            style={{ gridTemplateColumns: "120px 150px repeat(96, 16px) 80px" }}
-                                        >
-                                            <EmployeeRow
-                                                employee={employee}
-                                                dayIndex={realDayIndex}
-                                                employeeIndex={employeeIndex}
-                                                numRows={day.employees.length}
-                                                numDays={filteredData.length}
-                                                inputRefsMatrix={inputRefsMatrix}
-                                                dispatch={dispatch}
-                                                previousEmployee={
-                                                    filteredData[realDayIndex - 1]?.employees?.find(
-                                                        (e) => e.id === employee.id
-                                                    )
-                                                }
-                                            />
-                                        </div>
-                                    ))}
+                                                    }`}
+                                                style={{ gridTemplateColumns: "120px 150px repeat(96, 16px) 80px" }}
+                                            >
+                                                <EmployeeRow
+                                                    employee={employee}
+                                                    dayIndex={originalDayIndex}
+                                                    employeeIndex={originalEmployeeIndex}
+                                                    numRows={day.employees.length}
+                                                    numDays={filteredData.length}
+                                                    inputRefsMatrix={inputRefsMatrix}
+                                                    dispatch={dispatch}
+                                                    previousEmployee={
+                                                        filteredData[realDayIndex - 1]?.employees?.find(
+                                                            (e) => e.id === employee.id
+                                                        )
+                                                    }
+                                                />
+                                            </div>
+                                        );
+                                    })}
 
                                     {/* Fila de Distribución */}
                                     <div
