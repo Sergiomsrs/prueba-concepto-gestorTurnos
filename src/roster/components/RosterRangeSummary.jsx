@@ -161,7 +161,7 @@ export const RosterRangeSummary = memo(({ data }) => {
             <table className="table-auto text-center w-full mb-0">
                 <thead>
                     <tr className="bg-gray-100">
-                        <th className="text-left px-3 py-2 sticky left-0 bg-gray-100 z-10">
+                        <th className="text-left px-3 py-2 left-0 bg-gray-100 z-10">
                             Empleado
                         </th>
                         <th className="px-2 py-2">WWH</th>
