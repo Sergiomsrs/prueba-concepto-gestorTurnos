@@ -15,7 +15,7 @@ export const Navbar = () => {
 
   return (
     <nav className="bg-gray-900 border-b border-gray-800 shadow-sm relative z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center">
         {/* Bloque Izquierdo: Branding (clicable) */}
         <div className="w-1/3 flex items-center">
           <a href="https://sergiomsrs.github.io/wsf-landing/"
