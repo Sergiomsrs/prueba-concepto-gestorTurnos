@@ -153,7 +153,7 @@ export const EmployeeRow = memo(
 
                 {employee.workShift.map((value, hourIndex) => {
                     const disabled = isIndexDisabled(hourIndex) || value === "PTO";
-                    const cellBgClass = disabled ? "bg-red-400" : "bg-white";
+                    const cellBgClass = disabled ? "bg-red-200" : "bg-white";
 
                     return (
                         <div
