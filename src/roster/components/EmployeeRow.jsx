@@ -158,7 +158,7 @@ export const EmployeeRow = memo(
                     return (
                         <div
                             key={hourIndex}
-                            className={`${cellBgClass} flex items-center justify-center px-0 py-0 mx-0 my-0`}
+                            className={`${cellBgClass} flex items-center justify-center w-5 h-5 px-0 py-0 mx-0 my-1`}
                             onMouseEnter={() => {
                                 // ✅ Solo permitir mouse enter si no es PTO o CONFLICT
                                 if (value !== "PTO" && value !== "CONFLICT") {

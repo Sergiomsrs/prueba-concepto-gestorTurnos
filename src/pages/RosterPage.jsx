@@ -613,10 +613,7 @@ export const RosterPage = () => {
                                         return (
                                             <div
                                                 key={employee.id}
-                                                className={`grid gap-px bg-slate-200 min-w-max transition-all duration-200 ${employee.isModified
-                                                    ? "bg-amber-100 shadow-sm"
-                                                    : "hover:bg-slate-50"
-                                                    }`}
+                                                className={`grid gap-px bg-slate-200 min-w-max transition-all duration-200`}
                                                 style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
                                             >
                                                 <EmployeeRow
