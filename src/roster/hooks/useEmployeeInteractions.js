@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react"; // ✅ Agregar useEffect
 
 export const useEmployeeInteractions = ({
     employee,
@@ -15,7 +15,27 @@ export const useEmployeeInteractions = ({
     const [baseValue, setBaseValue] = useState(null);
     const [lastFocusedIndex, setLastFocusedIndex] = useState(null);
 
-    // 🖱️ MOUSE HANDLERS
+    // ✅ NUEVO: Cleanup global para el mouse
+    useEffect(() => {
+        if (isSelecting) {
+            const handleGlobalMouseUp = () => {
+                setIsSelecting(false);
+                setStartSelection(null);
+                setBaseValue(null);
+            };
+
+            // ✅ Agregar listeners globales
+            document.addEventListener('mouseup', handleGlobalMouseUp);
+            document.addEventListener('mouseleave', handleGlobalMouseUp);
+
+            return () => {
+                document.removeEventListener('mouseup', handleGlobalMouseUp);
+                document.removeEventListener('mouseleave', handleGlobalMouseUp);
+            };
+        }
+    }, [isSelecting]);
+
+    // 🖱️ MOUSE HANDLERS (sin cambios en la lógica)
     const handleMouseDown = useCallback(
         (index) => {
             const currentValue = employee.workShift[index];
@@ -58,7 +78,7 @@ export const useEmployeeInteractions = ({
         setStartSelection(null);
     }, []);
 
-    // 🎹 TECLADO HANDLER
+    // 🎹 TECLADO HANDLER (SIN CAMBIOS - mantener exactamente igual)
     const handleKeyDown = useCallback(
         (event, colIndex) => {
             const { key, shiftKey } = event;
