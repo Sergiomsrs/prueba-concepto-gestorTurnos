@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from "react"; // ✅ Agregar useEffect
+import { useState, useRef, useCallback, useEffect } from "react";
 
 export const useEmployeeInteractions = ({
     employee,
@@ -10,55 +10,67 @@ export const useEmployeeInteractions = ({
     inputRefsMatrix,
 }) => {
     const inputRefs = useRef([]);
+    // Estado para el arrastre del ratón
     const [isSelecting, setIsSelecting] = useState(false);
-    const [startSelection, setStartSelection] = useState(null);
-    const [baseValue, setBaseValue] = useState(null);
-    const [lastFocusedIndex, setLastFocusedIndex] = useState(null);
+    // Índice donde empezó el arrastre
+    const startSelectionIndexRef = useRef(null);
+    // Valor (true/false) que se está aplicando en el arrastre
+    const baseValueRef = useRef(null);
+    // Último índice enfocado para la selección con Shift
+    const lastFocusedIndexRef = useRef(null); // ✅ Usar ref para evitar dependencia excesiva
 
-    // ✅ NUEVO: Cleanup global para el mouse
+    // ✅ NUEVO: Limpieza global para el mouse, más simple y basado en isSelecting
     useEffect(() => {
-        if (isSelecting) {
-            const handleGlobalMouseUp = () => {
-                setIsSelecting(false);
-                setStartSelection(null);
-                setBaseValue(null);
-            };
+        if (!isSelecting) return;
 
-            // ✅ Agregar listeners globales
-            document.addEventListener('mouseup', handleGlobalMouseUp);
-            document.addEventListener('mouseleave', handleGlobalMouseUp);
+        // Función para finalizar cualquier arrastre
+        const handleGlobalMouseStop = () => {
+            setIsSelecting(false);
+            startSelectionIndexRef.current = null;
+            baseValueRef.current = null;
+        };
 
-            return () => {
-                document.removeEventListener('mouseup', handleGlobalMouseUp);
-                document.removeEventListener('mouseleave', handleGlobalMouseUp);
-            };
-        }
+        // Escucha en el documento para terminar el arrastre fuera de la celda
+        document.addEventListener('mouseup', handleGlobalMouseStop);
+        document.addEventListener('mouseleave', handleGlobalMouseStop);
+
+        return () => {
+            document.removeEventListener('mouseup', handleGlobalMouseStop);
+            document.removeEventListener('mouseleave', handleGlobalMouseStop);
+        };
     }, [isSelecting]);
 
-    // 🖱️ MOUSE HANDLERS (sin cambios en la lógica)
+    // 🖱️ MOUSE HANDLERS
     const handleMouseDown = useCallback(
         (index) => {
+            // El valor a aplicar en el arrastre (true para 'WORK', false para 'Null')
             const currentValue = employee.workShift[index];
             const newValue = currentValue !== "WORK";
 
+            // Iniciar el arrastre
             setIsSelecting(true);
-            setStartSelection(index);
-            setBaseValue(newValue);
+            startSelectionIndexRef.current = index;
+            baseValueRef.current = newValue;
 
+            // La celda inicial debe ser actualizada inmediatamente
             dispatch({
-                type: "UPDATE_SHIFT",
-                payload: { dayIndex, employeeIndex, hourIndex: index },
+                type: "UPDATE_SHIFT_FIXED",
+                payload: { dayIndex, employeeIndex, hourIndex: index, value: newValue },
             });
+
         },
         [dispatch, dayIndex, employeeIndex, employee.workShift]
     );
 
     const handleMouseEnter = useCallback(
         (index) => {
-            if (!isSelecting || startSelection === null) return;
-            const start = Math.min(startSelection, index);
-            const end = Math.max(startSelection, index);
+            // Solo si estamos en modo arrastre y tenemos un punto de partida
+            if (!isSelecting || startSelectionIndexRef.current === null) return;
 
+            const start = Math.min(startSelectionIndexRef.current, index);
+            const end = Math.max(startSelectionIndexRef.current, index);
+
+            // Aplicar el valor base al rango
             dispatch({
                 type: "UPDATE_SHIFT_RANGE",
                 payload: {
@@ -66,23 +78,28 @@ export const useEmployeeInteractions = ({
                     employeeIndex,
                     startIndex: start,
                     endIndex: end,
-                    value: baseValue,
+                    value: baseValueRef.current,
                 },
             });
         },
-        [isSelecting, startSelection, baseValue, dayIndex, employeeIndex, dispatch]
+        [isSelecting, dayIndex, employeeIndex, dispatch]
     );
 
     const handleMouseUp = useCallback(() => {
         setIsSelecting(false);
-        setStartSelection(null);
+        startSelectionIndexRef.current = null;
+        baseValueRef.current = null;
     }, []);
 
-    // 🎹 TECLADO HANDLER (SIN CAMBIOS - mantener exactamente igual)
+    // 🎹 TECLADO HANDLER
     const handleKeyDown = useCallback(
         (event, colIndex) => {
             const { key, shiftKey } = event;
-            setLastFocusedIndex(colIndex);
+
+            // Actualizar el índice enfocado para la selección Shift+Flecha
+            if (key !== "Shift") {
+                lastFocusedIndexRef.current = colIndex;
+            }
 
             const moveFocus = (newDay, newRow, newCol) => {
                 const el = inputRefsMatrix.current?.[newDay]?.[newRow]?.[newCol];
@@ -93,31 +110,34 @@ export const useEmployeeInteractions = ({
             if (shiftKey && (key === "ArrowRight" || key === "ArrowLeft")) {
                 const direction = key === "ArrowRight" ? 1 : -1;
                 const newIndex = colIndex + direction;
+                const startSelection = lastFocusedIndexRef.current; // Usar el índice donde se inició la selección
 
-                if (newIndex >= 0 && newIndex < employee.workShift.length) {
+                event.preventDefault(); // ✅ Prevenir el movimiento normal del foco
+
+                if (newIndex >= 0 && newIndex < employee.workShift.length && startSelection !== null) {
+
+                    // Mover el foco a la nueva celda
                     inputRefs.current[newIndex]?.focus();
-                    event.preventDefault();
 
-                    if (lastFocusedIndex !== null) {
-                        const start = Math.min(lastFocusedIndex, newIndex);
-                        const end = Math.max(lastFocusedIndex, newIndex);
-                        const baseValue = employee.workShift[colIndex] === "WORK";
+                    // Determinar el valor base a aplicar (el valor de la celda donde se *inició* la selección)
+                    const initialValue = employee.workShift[startSelection] === "WORK";
+                    const startRange = Math.min(startSelection, newIndex);
+                    const endRange = Math.max(startSelection, newIndex);
 
-                        dispatch({
-                            type: "UPDATE_SHIFT_RANGE",
-                            payload: {
-                                dayIndex,
-                                employeeIndex,
-                                startIndex: start,
-                                endIndex: end,
-                                value: baseValue,
-                            },
-                        });
-                    }
+                    dispatch({
+                        type: "UPDATE_SHIFT_RANGE",
+                        payload: {
+                            dayIndex,
+                            employeeIndex,
+                            startIndex: startRange,
+                            endIndex: endRange,
+                            value: initialValue,
+                        },
+                    });
                 }
             }
 
-            // --- Navegación normal
+            // --- Navegación normal (sin Shift)
             else {
                 if (key === "ArrowRight" && colIndex < employee.workShift.length - 1) {
                     inputRefs.current[colIndex + 1]?.focus();
@@ -139,12 +159,6 @@ export const useEmployeeInteractions = ({
                         moveFocus(dayIndex - 1, numRows - 1, colIndex);
                     }
                     event.preventDefault();
-                } else if (key === " " || key === "Enter") {
-                    dispatch({
-                        type: "UPDATE_SHIFT",
-                        payload: { dayIndex, employeeIndex, hourIndex: colIndex },
-                    });
-                    event.preventDefault();
                 }
             }
         },
@@ -156,7 +170,6 @@ export const useEmployeeInteractions = ({
             numRows,
             numDays,
             inputRefsMatrix,
-            lastFocusedIndex,
         ]
     );
 
