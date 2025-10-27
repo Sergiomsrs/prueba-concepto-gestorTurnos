@@ -156,8 +156,7 @@ export const EmployeeRow = memo(
                                     ${getCursorClass(isIndexDisabled(hourIndex), value)}
                                     ${getBackgroundClass(value, employee.teamWork)}
                                     ${value === "WORK" ? 'border-t-2 border-b-2 border-neutral-200' : ''}
-                                    focus:ring-2 focus:ring-indigo-400
-                                    transition-all duration-150
+                                    focus:ring-2 focus:ring-indigo-400                          
                                     mx-auto my-1
                                     shadow-sm
                                 `}
