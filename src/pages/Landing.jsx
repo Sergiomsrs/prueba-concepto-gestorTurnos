@@ -54,7 +54,8 @@ export const Landing = () => {
             <h3 className="text-2xl font-semibold mb-4">Conoce la App: Versión Demo</h3>
             <section className="flex justify-start gap-4 mb-4">
               <LinkButton to={"/"}>Ir a la Demo Actual</LinkButton>
-              <LinkButton to={"/roster-board"}>Ver Versiones Previas</LinkButton>
+              <LinkButton to={"/daily"}>Ver Version Previa</LinkButton>
+              <LinkButton to={"https://sergiomsrs.github.io/workschedflow-demo/#/#/workschedflow-demo/"}>Ver Primera version</LinkButton>
               <LinkButton to={"/techinfo"}>Detrás del Desarrollo</LinkButton>
             </section>
             <Projects

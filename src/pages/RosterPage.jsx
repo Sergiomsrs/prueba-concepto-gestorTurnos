@@ -157,6 +157,7 @@ export const RosterPage = () => {
         }
     }, [saveData, modifiedData]);
 
+
     // ✅ Estadísticas optimizadas
     const stats = useMemo(() => {
         const uniqueEmployees = new Set();
