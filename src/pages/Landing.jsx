@@ -78,43 +78,42 @@ export const Landing = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 text-slate-800">
-      {/* Contenido principal sin header duplicado */}
-      <main className="max-w-7xl mx-auto px-6 pt-8 pb-16 space-y-16">
-
-        {/* INTRODUCCIÓN - Nueva sección */}
-        <section className="mt-8">
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl border border-indigo-100 p-8">
-            <div className="flex items-start gap-6">
-              <div className="flex-shrink-0 p-3 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl shadow-lg">
-                <span className="text-2xl text-white">💡</span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 text-slate-800 overflow-x-hidden">
+      {/* Contenido principal */}
+      <main className="w-full max-w-7xl mx-auto px-4 sm:px-6 pt-4 sm:pt-8 pb-8 sm:pb-16 space-y-8 sm:space-y-16">
+        {/* INTRODUCCIÓN - Optimizada para móvil */}
+        <section className="mt-4 sm:mt-8">
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl sm:rounded-2xl border border-indigo-100 p-4 sm:p-8">
+            <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+              <div className="flex-shrink-0 p-2 sm:p-3 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-lg sm:rounded-xl shadow-lg">
+                <span className="text-xl sm:text-2xl text-white">💡</span>
               </div>
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 sm:mb-4 flex flex-col sm:flex-row sm:items-center gap-2">
                   ¿Qué es WorkSchedFlow?
-                  <span className="inline-flex items-center px-3 py-1 bg-indigo-100 text-indigo-700 text-sm font-medium rounded-full">
+                  <span className="inline-flex items-center px-2 sm:px-3 py-1 bg-indigo-100 text-indigo-700 text-xs sm:text-sm font-medium rounded-full w-fit">
                     Prueba de concepto
                   </span>
                 </h2>
-                <p className="text-lg text-slate-700 leading-relaxed">
+                <p className="text-base sm:text-lg text-slate-700 leading-relaxed">
                   <span className="font-semibold text-indigo-600">WorkSchedFlow</span> es una prueba de concepto diseñada para facilitar la
                   <span className="font-medium"> gestión de turnos de trabajo</span>. Su objetivo principal es cubrir las necesidades de los
                   <span className="font-medium text-purple-600"> gestores de equipos</span>, brindando una herramienta que simplifica el diseño de horarios
                   mientras se asegura de cumplir con las <span className="font-medium">normativas laborales</span> y las expectativas de los empleados.
                 </p>
-                <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-1 gap-4">
                   <div className="flex items-start gap-3">
-                    <span className="text-indigo-500 text-xl">⚖️</span>
+                    <span className="text-indigo-500 text-lg sm:text-xl flex-shrink-0">⚖️</span>
                     <div>
-                      <h4 className="font-medium text-slate-800">Cumplimiento legislativo</h4>
-                      <p className="text-slate-600 text-sm">Garantiza el respeto a las normativas laborales</p>
+                      <h4 className="font-medium text-slate-800 text-sm sm:text-base">Cumplimiento legislativo</h4>
+                      <p className="text-slate-600 text-xs sm:text-sm">Garantiza el respeto a las normativas laborales</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-purple-500 text-xl">🎯</span>
+                    <span className="text-purple-500 text-lg sm:text-xl flex-shrink-0">🎯</span>
                     <div>
-                      <h4 className="font-medium text-slate-800">Equilibrio empresa-empleado</h4>
-                      <p className="text-slate-600 text-sm">Balancea demandas corporativas y derechos laborales</p>
+                      <h4 className="font-medium text-slate-800 text-sm sm:text-base">Equilibrio empresa-empleado</h4>
+                      <p className="text-slate-600 text-xs sm:text-sm">Balancea demandas corporativas y derechos laborales</p>
                     </div>
                   </div>
                 </div>
@@ -123,122 +122,125 @@ export const Landing = () => {
           </div>
         </section>
 
-        {/* HERO mejorado - sin header redundante */}
+        {/* HERO mejorado para móvil */}
         <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-3xl"></div>
-          <div className="relative bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/50 p-12">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-xl sm:rounded-3xl"></div>
+          <div className="relative bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-3xl shadow-lg sm:shadow-2xl border border-white/50 p-6 sm:p-12">
             {/* Texto principal */}
-            <div className="text-center max-w-5xl mx-auto mb-12">
-              <h1 className="text-5xl sm:text-6xl font-bold leading-tight text-slate-900 mb-6">
+            <div className="text-center max-w-5xl mx-auto mb-8 sm:mb-12">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold leading-tight text-slate-900 mb-4 sm:mb-6">
                 🎯 Planifica turnos con{" "}
                 <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   precisión y rapidez
                 </span>
               </h1>
-              <p className="text-2xl text-slate-600 leading-relaxed max-w-4xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-600 leading-relaxed max-w-4xl mx-auto">
                 Interfaz optimizada para equipos grandes: vista por{" "}
                 <span className="font-semibold text-blue-600">franjas de 15 minutos</span>,
                 reglas automáticas de descanso y herramientas para ahorrar tiempo en la programación diaria.
               </p>
 
-              <div className="mt-10 flex flex-wrap justify-center gap-6">
-                <LinkButton to={"/"} className="text-lg px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+              <div className="mt-6 sm:mt-10 flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-6">
+                <LinkButton to={"/"} className="text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
                   🚀 Ir a la demo
                 </LinkButton>
-                <LinkButton to={"/techinfo"} className="text-lg px-8 py-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+                <LinkButton to={"/techinfo"} className="text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
                   🔧 Detrás del desarrollo
                 </LinkButton>
                 <a
-                  className="inline-flex items-center px-8 py-4 rounded-lg text-lg font-medium bg-white border border-slate-200 text-slate-700 shadow-md hover:bg-slate-50 hover:shadow-lg transition-all"
+                  className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-sm sm:text-base lg:text-lg font-medium bg-white border border-slate-200 text-slate-700 shadow-md hover:bg-slate-50 hover:shadow-lg transition-all"
                   href="https://sergiomsrs.github.io/wsf-landing/"
                 >
                   ✨ Ver características
                 </a>
               </div>
 
-              {/* Características destacadas */}
-              <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
-                <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
-                  <div className="flex items-start gap-4">
-                    <span className="text-3xl">🖱️</span>
+              {/* Características destacadas - Grid responsive */}
+              <div className="mt-8 sm:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-left">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <span className="text-2xl sm:text-3xl flex-shrink-0">🖱️</span>
                     <div>
-                      <h4 className="font-bold text-lg text-slate-800">Drag & Click</h4>
-                      <p className="text-slate-600">Interfaz optimizada</p>
+                      <h4 className="font-bold text-base sm:text-lg text-slate-800">Drag & Click</h4>
+                      <p className="text-slate-600 text-sm sm:text-base">Interfaz optimizada</p>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6">
-                  <div className="flex items-start gap-4">
-                    <span className="text-3xl">⏰</span>
+                <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <span className="text-2xl sm:text-3xl flex-shrink-0">⏰</span>
                     <div>
-                      <h4 className="font-bold text-lg text-slate-800">Control PTO</h4>
-                      <p className="text-slate-600">Descansos automáticos</p>
+                      <h4 className="font-bold text-base sm:text-lg text-slate-800">Control PTO</h4>
+                      <p className="text-slate-600 text-sm sm:text-base">Descansos automáticos</p>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6">
-                  <div className="flex items-start gap-4">
-                    <span className="text-3xl">📊</span>
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <span className="text-2xl sm:text-3xl flex-shrink-0">📊</span>
                     <div>
-                      <h4 className="font-bold text-lg text-slate-800">Resúmenes</h4>
-                      <p className="text-slate-600">Horas y exportación</p>
+                      <h4 className="font-bold text-base sm:text-lg text-slate-800">Resúmenes</h4>
+                      <p className="text-slate-600 text-sm sm:text-base">Horas y exportación</p>
                     </div>
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-6">
-                  <div className="flex items-start gap-4">
-                    <span className="text-3xl">🔗</span>
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg sm:rounded-xl p-4 sm:p-6">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <span className="text-2xl sm:text-3xl flex-shrink-0">🔗</span>
                     <div>
-                      <h4 className="font-bold text-lg text-slate-800">APIs</h4>
-                      <p className="text-slate-600">Integración completa</p>
+                      <h4 className="font-bold text-base sm:text-lg text-slate-800">APIs</h4>
+                      <p className="text-slate-600 text-sm sm:text-base">Integración completa</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Imagen hero con overlay */}
-            <div className="relative mb-12">
-              <div className="bg-gradient-to-r from-slate-100 to-slate-50 rounded-2xl p-6 border border-slate-200">
+            {/* Imagen hero con overlay - Responsive */}
+            <div className="relative mb-8 sm:mb-12">
+              <div className="bg-gradient-to-r from-slate-100 to-slate-50 rounded-xl sm:rounded-2xl p-3 sm:p-6 border border-slate-200">
                 <img
                   src="./general.webp"
                   alt="Vista del área de trabajo"
-                  className="w-full h-auto rounded-xl shadow-lg border border-slate-300"
+                  className="w-full h-auto rounded-lg sm:rounded-xl shadow-lg border border-slate-300"
                 />
-                <div className="mt-6 text-center">
-                  <span className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-lg shadow-sm border border-slate-200 text-slate-700 font-medium text-lg">
-                    <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                <div className="mt-4 sm:mt-6 text-center">
+                  <span className="inline-flex items-center gap-2 bg-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg shadow-sm border border-slate-200 text-slate-700 font-medium text-sm sm:text-lg">
+                    <span className="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full animate-pulse"></span>
                     Vista general de WorkSchedFlow en acción
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Timeline horizontal mejorado */}
+            {/* Timeline horizontal - Completamente responsive */}
             <div className="relative">
-              <div className="text-center mb-10">
-                <h2 className="text-3xl font-bold text-slate-800 mb-4">🚀 Evolución del Producto</h2>
-                <p className="text-xl text-slate-600">Del MVP inicial hasta la versión actual — progreso continuo</p>
+              <div className="text-center mb-6 sm:mb-10">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2 sm:mb-4">🚀 Evolución del Producto</h2>
+                <p className="text-base sm:text-xl text-slate-600">Del MVP inicial hasta la versión actual — progreso continuo</p>
               </div>
 
               <div className="relative">
-                {/* Línea base con gradiente */}
-                <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-slate-200 via-blue-300 to-purple-400 rounded-full"></div>
+                {/* Línea base - Oculta en móvil */}
+                <div className="hidden sm:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-slate-200 via-blue-300 to-purple-400 rounded-full"></div>
 
-                <div className="flex flex-wrap justify-between items-start gap-8 relative z-10">
+                {/* Layout móvil vs desktop */}
+                <div className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-between items-center sm:items-start gap-6 sm:gap-8 relative z-10">
                   {versions.map((v, idx) => (
                     <div
                       key={v.id}
-                      className={`relative w-80 flex-shrink-0 transform hover:-translate-y-2 transition-all duration-300 ${idx % 2 === 0 ? "mt-0" : "mt-20"
+                      className={`relative w-full max-w-sm sm:w-80 flex-shrink-0 transform hover:-translate-y-2 transition-all duration-300 ${
+                        // Solo aplicar margin top alternado en desktop
+                        idx % 2 === 0 ? "sm:mt-0" : "sm:mt-20"
                         }`}
                     >
-                      {/* Nodo central mejorado */}
-                      <div className={`absolute left-1/2 -translate-x-1/2 -top-8 w-8 h-8 bg-gradient-to-br ${v.gradient} rounded-full shadow-lg ring-4 ring-white z-20 border-2 border-white`}>
+                      {/* Nodo central - Ajustado para móvil */}
+                      <div className={`absolute left-1/2 -translate-x-1/2 -top-4 sm:-top-8 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br ${v.gradient} rounded-full shadow-lg ring-2 sm:ring-4 ring-white z-20 border border-white sm:border-2`}>
                       </div>
 
                       {/* Tarjeta mejorada */}
-                      <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 relative z-10">
-                        <div className="aspect-[16/10] rounded-xl overflow-hidden border border-slate-200 mb-4 bg-slate-50">
+                      <div className="bg-white border border-slate-100 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg sm:shadow-xl hover:shadow-2xl transition-all duration-300 relative z-10">
+                        <div className="aspect-[16/10] rounded-lg sm:rounded-xl overflow-hidden border border-slate-200 mb-3 sm:mb-4 bg-slate-50">
                           <img
                             src={v.img}
                             alt={v.title}
@@ -246,22 +248,22 @@ export const Landing = () => {
                           />
                         </div>
 
-                        <div className="space-y-4">
-                          <div className={`inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r ${v.gradient} text-white text-sm font-medium rounded-full`}>
+                        <div className="space-y-3 sm:space-y-4">
+                          <div className={`inline-flex items-center gap-2 px-3 sm:px-4 py-1 sm:py-2 bg-gradient-to-r ${v.gradient} text-white text-xs sm:text-sm font-medium rounded-full`}>
                             {v.id.toUpperCase()}
                           </div>
 
                           <div>
-                            <h3 className="font-bold text-xl text-slate-800">{v.title}</h3>
-                            <p className="text-sm text-slate-500 font-medium">{v.subtitle}</p>
-                            <p className="text-slate-600 mt-3 leading-relaxed">{v.text}</p>
+                            <h3 className="font-bold text-lg sm:text-xl text-slate-800">{v.title}</h3>
+                            <p className="text-xs sm:text-sm text-slate-500 font-medium">{v.subtitle}</p>
+                            <p className="text-slate-600 mt-2 sm:mt-3 leading-relaxed text-sm sm:text-base">{v.text}</p>
                           </div>
 
-                          <div className="flex justify-between items-center pt-4">
-                            <LinkButton to={v.link} className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-3 sm:pt-4 gap-3 sm:gap-0">
+                            <LinkButton to={v.link} className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm w-full sm:w-auto">
                               🚀 Abrir
                             </LinkButton>
-                            <a href={v.more} className="text-sm text-slate-500 hover:text-blue-600 font-medium transition-colors">
+                            <a href={v.more} className="text-xs sm:text-sm text-slate-500 hover:text-blue-600 font-medium transition-colors text-center sm:text-right">
                               📋 Más info →
                             </a>
                           </div>
@@ -272,39 +274,39 @@ export const Landing = () => {
                 </div>
               </div>
 
-              <div className="text-center mt-12 text-slate-500 font-medium text-lg">
+              <div className="text-center mt-8 sm:mt-12 text-slate-500 font-medium text-sm sm:text-lg">
                 ✨ Línea temporal — cada versión representa un salto significativo en funcionalidad
               </div>
             </div>
           </div>
         </section>
 
-        {/* BENEFICIOS mejorados */}
-        <section id="features" className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all">
-            <div className="text-5xl mb-6">📈</div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">Escalabilidad</h3>
-            <p className="text-lg text-slate-600 leading-relaxed">Diseñado para manejar cientos de empleados con rendimiento estable y respuesta rápida.</p>
+        {/* BENEFICIOS - Grid completamente responsive */}
+        <section id="features" className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all">
+            <div className="text-4xl sm:text-5xl mb-4 sm:mb-6">📈</div>
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 sm:mb-4">Escalabilidad</h3>
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">Diseñado para manejar cientos de empleados con rendimiento estable y respuesta rápida.</p>
           </div>
-          <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all">
-            <div className="text-5xl mb-6">🎯</div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">Precisión</h3>
-            <p className="text-lg text-slate-600 leading-relaxed">Intervalos de 15 minutos y reglas automáticas para evitar conflictos de programación.</p>
+          <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all">
+            <div className="text-4xl sm:text-5xl mb-4 sm:mb-6">🎯</div>
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 sm:mb-4">Precisión</h3>
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">Intervalos de 15 minutos y reglas automáticas para evitar conflictos de programación.</p>
           </div>
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all">
-            <div className="text-5xl mb-6">✨</div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">Usabilidad</h3>
-            <p className="text-lg text-slate-600 leading-relaxed">Interfaz intuitiva con accesos rápidos y atajos de teclado integrados.</p>
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all">
+            <div className="text-4xl sm:text-5xl mb-4 sm:mb-6">✨</div>
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-800 mb-3 sm:mb-4">Usabilidad</h3>
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">Interfaz intuitiva con accesos rápidos y atajos de teclado integrados.</p>
           </div>
         </section>
 
-        {/* GRID DE PROJECTS mejorado */}
+        {/* GRID DE PROJECTS - Responsive completo */}
         <section>
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-slate-800 mb-6">🔍 Explora la aplicación</h2>
-            <p className="text-2xl text-slate-600">Descubre cada funcionalidad en detalle</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800 mb-4 sm:mb-6">🔍 Explora la aplicación</h2>
+            <p className="text-lg sm:text-xl md:text-2xl text-slate-600">Descubre cada funcionalidad en detalle</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {projectList.map((p) => (
               <div key={p.title} className="transform hover:-translate-y-1 transition-transform duration-300">
                 <Projects title={p.title} description={p.description} image={p.image} />
@@ -313,19 +315,19 @@ export const Landing = () => {
           </div>
         </section>
 
-        {/* CTA final mejorado */}
+        {/* CTA final - Optimizado para móvil */}
         <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl"></div>
-          <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 rounded-3xl shadow-2xl p-16 text-white text-center">
-            <h2 className="text-4xl font-bold mb-6">🚀 ¿Listo para revolucionar tus turnos?</h2>
-            <p className="text-2xl text-blue-100 mb-10 max-w-3xl mx-auto">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl sm:rounded-3xl"></div>
+          <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl sm:rounded-3xl shadow-lg sm:shadow-2xl p-8 sm:p-16 text-white text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">🚀 ¿Listo para revolucionar tus turnos?</h2>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-blue-100 mb-6 sm:mb-10 max-w-3xl mx-auto">
               Accede a la demo interactiva y comienza a generar horarios profesionales en segundos
             </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              <LinkButton to={"/"} className="text-lg px-8 py-4 bg-white text-blue-600 hover:bg-blue-50 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+            <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 sm:gap-6">
+              <LinkButton to={"/"} className="text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-3 sm:py-4 bg-white text-blue-600 hover:bg-blue-50 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
                 🎮 Probar Demo
               </LinkButton>
-              <LinkButton to={"/techinfo"} className="text-lg px-8 py-4 bg-blue-600 text-white hover:bg-blue-700 border border-blue-400 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
+              <LinkButton to={"/techinfo"} className="text-sm sm:text-base lg:text-lg px-6 sm:px-8 py-3 sm:py-4 bg-blue-600 text-white hover:bg-blue-700 border border-blue-400 shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all">
                 📖 Documentación
               </LinkButton>
             </div>
