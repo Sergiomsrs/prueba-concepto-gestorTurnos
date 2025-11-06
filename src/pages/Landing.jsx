@@ -48,7 +48,7 @@ export const Landing = () => {
       subtitle: "Inicial",
       img: "./version-v1.webp",
       text: "Funcionalidad básica para crear y ver turnos. Primer paso del producto.",
-      link: "/workschedflow-demo/",
+      link: "https://sergiomsrs.github.io/workschedflow-demo/#/workschedflow-demo/",
       more: "/changelog#v1",
       color: "bg-slate-700",
     },
@@ -58,7 +58,7 @@ export const Landing = () => {
       subtitle: "Mejoras UI",
       img: "./version-v2.webp",
       text: "Filtrado, rendimiento y refinamientos visuales orientados a usabilidad.",
-      link: "/v2",
+      link: "/daily",
       more: "/changelog#v2",
       color: "bg-slate-500",
     },
@@ -68,7 +68,7 @@ export const Landing = () => {
       subtitle: "Actual",
       img: "./version-v3.webp",
       text: "Interfaz optimizada para grandes equipos y herramientas avanzadas de planificación.",
-      link: "/daily",
+      link: "/",
       more: "/changelog#v3",
       color: "bg-blue-600",
     },
@@ -82,7 +82,7 @@ export const Landing = () => {
             <img src="./logo-navegador.webp" alt="Logo" width="48" height="48" />
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold">WorkSchedFlow</h1>
-              <p className="text-sm text-slate-500">Gestión profesional de turnos · v0.03</p>
+              <p className="text-sm text-slate-500">Gestión profesional de turnos · v0.3</p>
             </div>
           </div>
         </div>
@@ -106,7 +106,7 @@ export const Landing = () => {
               <LinkButton to={"/techinfo"}>Detrás del desarrollo</LinkButton>
               <a
                 className="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium bg-white border border-slate-200 text-slate-700 shadow-sm hover:bg-slate-50"
-                href="#features"
+                href="https://sergiomsrs.github.io/wsf-landing/"
               >
                 Ver características
               </a>
