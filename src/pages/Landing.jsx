@@ -68,7 +68,7 @@ export const Landing = () => {
       id: "v3",
       title: "Versión 3 — Actual",
       subtitle: "Actual",
-      img: "./version-v3.webp",
+      img: "./general.webp",
       text: "Interfaz optimizada para grandes equipos y herramientas avanzadas de planificación.",
       link: "/",
       more: "/changelog#v3",

@@ -581,7 +581,7 @@ export const RosterPage = () => {
                                 {/* Tabla de Turnos */}
                                 <div className="overflow-x-auto">
                                     <div
-                                        className="grid gap-px bg-slate-200 min-w-max"
+                                        className="grid  bg-slate-200 min-w-max"
                                         style={{
                                             gridTemplateColumns: "120px 150px repeat(62, 20px) 80px",
                                         }}
@@ -614,7 +614,7 @@ export const RosterPage = () => {
                                         return (
                                             <div
                                                 key={employee.id}
-                                                className={`grid gap-px bg-slate-200 min-w-max transition-all duration-200`}
+                                                className={`grid  bg-slate-200 min-w-max transition-all duration-200`}
                                                 style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
                                             >
                                                 <EmployeeRow

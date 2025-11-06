@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef, useCallback } from "react"; // ✅ Agregar useCallback
+import { memo, useMemo, useRef, useCallback } from "react";
 import { useEmployeeInteractions } from "../hooks/useEmployeeInteractions";
 import { selectColor } from "../../utils/function";
 
@@ -51,11 +51,9 @@ export const EmployeeRow = memo(
             [employee.workShift]
         );
 
-        // Función para manejar el toggle con casos especiales 
         const toggleHour = useCallback((hourIndex) => {
             const currentValue = employee.workShift[hourIndex];
 
-            // No permitir toggle en PTO o disabled
             if (currentValue === "PTO" || isIndexDisabled(hourIndex)) {
                 return;
             }
@@ -66,28 +64,22 @@ export const EmployeeRow = memo(
             });
         }, [employee.workShift, isIndexDisabled, dispatch, dayIndex, employeeIndex]);
 
-
-        // Manejo de onMouseDown unificado y más limpio
         const handleCellMouseDownWithLogic = useCallback((hourIndex, event) => {
             const currentValue = employee.workShift[hourIndex];
 
-            // Si es PTO o Disabled: prevenir todo y salir.
             if (currentValue === "PTO" || isIndexDisabled(hourIndex)) {
                 event.preventDefault();
                 event.stopPropagation();
                 return;
             }
 
-            // Si es CONFLICT: hacer el toggle (convierte a PTO) y salir. NO iniciar arrastre.
             if (currentValue === "CONFLICT") {
                 event.preventDefault();
                 event.stopPropagation();
-                toggleHour(hourIndex); // Usa toggleHour para el dispatch de CONFLICT -> PTO
+                toggleHour(hourIndex);
                 return;
             }
 
-            // Para WORK y Null: iniciar arrastre.
-            // La función handleMouseDown del hook se encarga del primer dispatch.
             handleMouseDown(hourIndex);
         }, [employee.workShift, isIndexDisabled, toggleHour, handleMouseDown]);
 
@@ -106,7 +98,7 @@ export const EmployeeRow = memo(
 
         return (
             <>
-                {/* ... Elementos de Nombre y Equipo ... */}
+                {/* Elementos de Nombre y Equipo */}
                 <div className="bg-white px-3 py-0 text-sm font-medium text-gray-800 border-r flex items-center">
                     <span className="truncate">{employee.teamWork}</span>
                 </div>
@@ -119,13 +111,27 @@ export const EmployeeRow = memo(
                 {employee.workShift.map((value, hourIndex) => {
                     const disabled = isIndexDisabled(hourIndex) || value === "PTO";
                     const cellBgClass = disabled ? "bg-red-200" : "bg-white";
+                    const isHourStart = hourIndex % 4 === 0; // Marca de hora en punto
 
                     return (
                         <div
                             key={hourIndex}
-                            className={`${cellBgClass} flex items-center justify-center w-5 h-5 px-0 py-0 mx-0 my-1`}
+                            className={`${cellBgClass} flex items-center justify-center w-5 h-5 px-0 py-0 mx-0 my-1 relative
+                                ${isHourStart ? '' : 'border-l border-slate-100'}
+                            `}
                             onMouseUp={handleMouseUp}
                         >
+                            {/* Línea extendida hacia arriba para horas en punto */}
+                            {isHourStart && (
+                                <div
+                                    className="absolute -left-0.5 w-[2px] bg-gray-200 z-10 "
+                                    style={{
+                                        top: '-15px',    // Extiende 3px hacia arriba
+                                        height: '35px', // Altura total: 26px (celda + márgenes) + 6px extra
+                                    }}
+                                />
+                            )}
+
                             <input
                                 ref={(el) => {
                                     inputRefs.current[hourIndex] = el;
@@ -165,7 +171,7 @@ export const EmployeeRow = memo(
                     );
                 })}
 
-                {/* ... Elemento de Horas Totales ... */}
+                {/* Elemento de Horas Totales */}
                 <div className="bg-white px-3 py-0 text-sm font-medium text-gray-700 border-l text-center">
                     {totalHours.toFixed(2)}
                 </div>
