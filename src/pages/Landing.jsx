@@ -49,7 +49,7 @@ export const Landing = () => {
       img: "./version-v1.webp",
       text: "Funcionalidad básica para crear y ver turnos. Primer paso del producto.",
       link: "https://sergiomsrs.github.io/workschedflow-demo/#/workschedflow-demo/",
-      more: "/changelog#v1",
+      more: "#",
       color: "bg-slate-700",
       gradient: "from-slate-600 to-slate-800",
     },
@@ -216,7 +216,7 @@ export const Landing = () => {
             {/* Timeline horizontal - Completamente responsive */}
             <div className="relative">
               <div className="text-center mb-6 sm:mb-10">
-                <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2 sm:mb-4">🚀 Evolución del Producto</h2>
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2 sm:mb-4">🚀 Evolución del Proyecto</h2>
                 <p className="text-base sm:text-xl text-slate-600">Del MVP inicial hasta la versión actual — progreso continuo</p>
               </div>
 
@@ -263,7 +263,7 @@ export const Landing = () => {
                             <LinkButton to={v.link} className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm w-full sm:w-auto">
                               🚀 Abrir
                             </LinkButton>
-                            <a href={v.more} className="text-xs sm:text-sm text-slate-500 hover:text-blue-600 font-medium transition-colors text-center sm:text-right">
+                            <a className="text-xs sm:text-sm text-slate-500 hover:text-blue-600 font-medium transition-colors text-center sm:text-right">
                               📋 Más info →
                             </a>
                           </div>
