@@ -260,9 +260,20 @@ export const Landing = () => {
                           </div>
 
                           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-3 sm:pt-4 gap-3 sm:gap-0">
-                            <LinkButton to={v.link} className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm w-full sm:w-auto">
-                              🚀 Abrir
-                            </LinkButton>
+                            {v.id === "v1" ? (
+                              <a
+                                href={v.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-lg hover:bg-gray-400 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 w-full sm:w-auto"
+                              >
+                                🚀 Abrir
+                              </a>
+                            ) : (
+                              <LinkButton to={v.link} className="bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm w-full sm:w-auto">
+                                🚀 Abrir
+                              </LinkButton>
+                            )}
                             <a className="text-xs sm:text-sm text-slate-500 hover:text-blue-600 font-medium transition-colors text-center sm:text-right">
                               📋 Más info →
                             </a>
