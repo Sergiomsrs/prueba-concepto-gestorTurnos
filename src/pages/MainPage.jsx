@@ -18,17 +18,14 @@ import { SetupWeek } from "../genericShifts/pages/SetupWeek"
 import { ShiftForm } from "./ShiftForm"
 import { Reports } from "./Reports"
 import { RosterPage } from "./RosterPage"
-
-
-
+import { ChatUI } from "../utilComponents/ChatUI"
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
 
-
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden ">
-      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0 ">
+    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden">
+      <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0">
         <header>
           <Navbar />
         </header>
@@ -74,8 +71,14 @@ export const MainPage = () => {
           </button>
         )}
 
-        <main className="flex flex-col w-full max-w-full overflow-x-auto">
+        {/* ChatUI posicionado en esquina inferior derecha */}
+        <div className="fixed bottom-4 right-4 z-50 pointer-events-none">
+          <div className="pointer-events-auto">
+            <ChatUI />
+          </div>
+        </div>
 
+        <main className="flex flex-col w-full max-w-full overflow-x-auto">
           <Routes>
             <Route path="/" element={<RosterPage />} />
             <Route path="/daily" element={<Daily />} />
