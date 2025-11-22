@@ -49,7 +49,7 @@ export const Login = () => {
 
       const userData = await meResponse.json();
       login(token, role, userData);
-      navigate("/report");
+      navigate("/");
       setFormData({ dni: '', password: '' });
 
     } catch (error) {
@@ -66,60 +66,157 @@ export const Login = () => {
   };
 
   return (
-    <section className="w-full min-h-full flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-      <div 
-        className="flex flex-col items-center justify-center w-full min-h-[60vh] md:min-h-[70vh] px-6 py-8 bg-cover bg-center bg-no-repeat"
+    <div className="h-[calc(100vh-5rem-4.5rem)] flex overflow-hidden">
+      {/* h-[calc(100vh - navbar(5rem) - footer(~3.5rem))] */}
+
+      {/* Panel izquierdo - Branding y información */}
+      <div
+        className="hidden lg:flex lg:w-3/5 bg-cover bg-center bg-no-repeat relative"
         style={{
           backgroundImage: `url('${import.meta.env.BASE_URL}bg-image-loginForm.webp')`
         }}
       >
-        <div className="w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+        {/* Overlay gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/85 via-blue-800/75 to-transparent"></div>
+
+        {/* Contenido del panel izquierdo */}
+        <div className="relative z-10 flex flex-col justify-center px-8 xl:px-12 text-white">
+          <div className="mb-8">
+            <p className="text-lg xl:text-xl text-blue-100 leading-relaxed">
+              Gestión de equipos de trabajo
+            </p>
+          </div>
+
+          <div className="space-y-3 text-blue-100">
+            <div className="flex items-center gap-3">
+              <div className="w-5 h-5 bg-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-sm xl:text-base">Planificación de turnos inteligente</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-5 h-5 bg-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-sm xl:text-base">Control de asistencia en tiempo real</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-5 h-5 bg-blue-400 rounded-full flex items-center justify-center flex-shrink-0">
+                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <span className="text-sm xl:text-base">Reportes y análisis avanzados</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Panel derecho - Formulario limpio */}
+      <div className="w-full lg:w-2/5 flex items-center justify-center bg-white px-6 py-4">
+        <div className="w-full max-w-md">
+
+          {/* Header móvil simplificado */}
+          <div
+            className="lg:hidden relative mb-6 -mx-6 -mt-4 px-6 pt-6 pb-4 bg-cover bg-center"
+            style={{
+              backgroundImage: `url('${import.meta.env.BASE_URL}bg-image-loginForm.webp')`
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/85 via-blue-800/75 to-transparent"></div>
+            <div className="relative z-10 text-center text-white">
+              <h1 className="text-xl font-bold">
+                WORK<span className="text-blue-300">SCHEDFLOW</span>
+              </h1>
+            </div>
+          </div>
+
+          {/* Título del formulario */}
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">
               Acceso al sistema
-            </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="dni" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">DNI</label>
+            </h2>
+            <p className="text-gray-600 text-sm">
+              Introduce tus credenciales para continuar
+            </p>
+          </div>
+
+          {/* Formulario directo */}
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="relative">
+              <label htmlFor="dni" className="block text-sm font-medium text-gray-700 mb-2">
+                DNI
+              </label>
+              <div className="relative">
                 <input
                   type="text"
                   name="dni"
                   id="dni"
                   value={formData.dni}
                   onChange={handleInputChange}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all outline-none placeholder-gray-400"
                   placeholder="Introduce tu DNI"
                   required
                 />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
               </div>
-              <div>
-                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+            </div>
+
+            <div className="relative">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Contraseña
+              </label>
+              <div className="relative">
                 <input
                   type="password"
                   name="password"
                   id="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  placeholder="••••••••"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-indigo-600 focus:border-indigo-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                  placeholder="Introduce tu contraseña"
+                  className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all outline-none placeholder-gray-400"
                   required
                 />
-              </div>
-              <button
-                type="submit"
-                className="w-full text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
-              >
-                Iniciar sesión
-              </button>
-              {error && (
-                <div className="mt-2">
-                  <AlertMessage isOpen={error} message={errorMessage} />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-4">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H9m-7 0a9 9 0 1118 0 9 9 0 01-18 0z" />
+                  </svg>
                 </div>
-              )}
-            </form>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-xl hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] mt-6"
+            >
+              Iniciar sesión
+            </button>
+
+            {error && (
+              <div className="mt-4">
+                <AlertMessage isOpen={error} message={errorMessage} />
+              </div>
+            )}
+          </form>
+
+          {/* Enlaces adicionales */}
+          <div className="mt-4 text-center">
+            <a href="#" className="text-sm text-blue-600 hover:text-blue-800 transition-colors">
+              ¿Olvidaste tu contraseña?
+            </a>
           </div>
+
+
         </div>
       </div>
-    </section>
+    </div>
   );
 };
