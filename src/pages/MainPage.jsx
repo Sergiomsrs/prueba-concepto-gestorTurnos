@@ -18,7 +18,7 @@ import { SetupWeek } from "../genericShifts/pages/SetupWeek"
 import { ShiftForm } from "./ShiftForm"
 import { Reports } from "./Reports"
 import { RosterPage } from "./RosterPage"
-import { ChatUI } from "../utilComponents/ChatUI"
+import { ChatUI } from "../ia/components/ChatUI"
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)

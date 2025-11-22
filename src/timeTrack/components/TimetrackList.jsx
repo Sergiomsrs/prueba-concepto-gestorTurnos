@@ -28,6 +28,8 @@ export const TimetrackList = ({
     const { auth } = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
 
+    console.log(auth.role)
+
 
 
     // Cargar lista de empleados al montar el componente
@@ -182,7 +184,7 @@ export const TimetrackList = ({
                                     <td className="py-3 px-4 text-center text-sm text-gray-500">
                                         {record.data.recordsCount}
                                     </td>
-                                    {auth.role == "ADMIN" || auth.role == "DEMO" && <td className="py-3 px-4 text-center">
+                                    {(auth.role == "ADMIN" || auth.role == "DEMO") && <td className="py-3 px-4 text-center">
                                         <button
                                             onClick={() => handleOpenModal(record)}
                                             className="rounded-md cursor-pointer bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-600"
