@@ -22,6 +22,8 @@ import { ChatUI } from "../utilComponents/ChatUI"
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
+  const location = useLocation()
+  const isRosterPage = location.pathname === "/"
 
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden">
@@ -30,11 +32,11 @@ export const MainPage = () => {
           <Navbar />
         </header>
 
-        {/* Banner DEMO debajo de la navbar */}
+        {/* Banner DEMO con posicionamiento dinámico */}
         {showDemoBanner && (
           <div
-            className="absolute right-6 z-30 flex items-center gap-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-5 py-3 rounded-lg shadow-lg mt-2"
-            style={{ top: "4.5rem" }}
+            className="absolute right-6 z-50 flex items-center gap-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-5 py-3 rounded-lg shadow-lg mt-2"
+            style={{ top: isRosterPage ? "8.5rem" : "4.5rem" }}
           >
             <div>
               <span className="font-semibold block">
@@ -63,8 +65,8 @@ export const MainPage = () => {
         {!showDemoBanner && (
           <button
             onClick={() => setShowDemoBanner(true)}
-            className="absolute right-6 z-30 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-1 rounded-full shadow hover:bg-yellow-200 transition"
-            style={{ top: "4.5rem" }}
+            className="absolute right-6 z-50 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-1 rounded-full shadow hover:bg-yellow-200 transition"
+            style={{ top: isRosterPage ? "8.5rem" : "4.5rem" }}
             aria-label="Mostrar aviso demo"
           >
             Mostrar aviso DEMO
