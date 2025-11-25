@@ -32,30 +32,79 @@ export const DateRangePicker = ({ value = { start: "", end: "" }, onChange }) =>
     };
 
     return (
-        <div className="flex flex-col items-start gap-2" id="date-range-picker">
-            <div className="flex items-center w-full">
+        <div className="w-full">
+            {/* Vista móvil: Stack vertical */}
+            <div className="sm:hidden space-y-3">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Fecha inicio (Lunes)
+                    </label>
+                    <input
+                        name="start"
+                        type="date"
+                        value={value.start}
+                        onChange={handleInputChange}
+                        className={`w-full border text-sm rounded-md px-3 py-2 h-[42px] ${error
+                                ? "bg-red-50 border-red-500"
+                                : "bg-gray-50 border-gray-300"
+                            }`}
+                    />
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Fecha fin (Domingo)
+                    </label>
+                    <input
+                        name="end"
+                        type="date"
+                        value={value.end}
+                        readOnly
+                        className="w-full bg-gray-50 border border-gray-300 text-sm rounded-md px-3 py-2 h-[42px]"
+                    />
+                </div>
+
+                {error && (
+                    <div className="p-2 bg-red-50 border border-red-200 rounded-md">
+                        <p className="text-sm text-red-600">⚠️ {error}</p>
+                    </div>
+                )}
+            </div>
+
+            {/* Vista desktop: Inputs horizontales */}
+            <div className="hidden sm:flex items-center gap-3">
                 <input
-                    id="datepicker-range-start"
                     name="start"
                     type="date"
                     value={value.start}
                     onChange={handleInputChange}
-                    className={`bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${error ? "bg-red-200 border-red-500" : "border-gray-300"
+                    className={`flex-1 border text-sm rounded-md px-3 py-2 h-[42px] ${error
+                            ? "bg-red-50 border-red-500"
+                            : "bg-gray-50 border-gray-300"
                         }`}
-                    placeholder="Select date start"
                 />
-                <span className="mx-4 text-gray-500">a</span>
+
+                <span className="text-gray-400 text-sm">→</span>
+
                 <input
-                    id="datepicker-range-end"
                     name="end"
                     type="date"
                     value={value.end}
                     readOnly
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    placeholder="Select date end"
+                    className="flex-1 bg-gray-50 border border-gray-300 text-sm rounded-md px-3 py-2 h-[42px]"
                 />
             </div>
-            {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+
+            {/* Mensaje de error y ayuda */}
+            {error && (
+                <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-xs text-red-600">⚠️ {error}</p>
+                </div>
+            )}
+
+            <p className="text-xs text-gray-500 mt-1">
+                💡 Selecciona un lunes para la semana completa
+            </p>
         </div>
     );
 };
