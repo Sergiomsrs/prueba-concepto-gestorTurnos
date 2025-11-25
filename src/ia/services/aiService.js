@@ -1,4 +1,4 @@
-const AI_API_URL = import.meta.env.VITE_AI_API_URL || 'http://localhost:8090/ai';
+const AI_API_URL = import.meta.env.VITE_AI_API_URL || 'http://localhost:8090/ai/search-by-name';
 
 export const aiService = {
     async sendMessage(message) {
