@@ -43,8 +43,6 @@ export const CyclesGenerator = () => {
     setData(newData);
   };
 
-  console.log(ciclo)
-
 
   return (
     <section className="flex flex-col mx-2 sm:mx-0 mt-6 sm:px-16">
