@@ -5,6 +5,8 @@ import { DistributionRow } from "../roster/components/DistributionRow";
 import { HeadRow } from "../roster/components/HeadRow";
 import { EmployeeRow } from "../roster/components/EmployeeRow";
 import { RosterRangeSummary } from "../roster/components/RosterRangeSummary";
+import { useReactToPrint } from "react-to-print";
+import { PrintableRoster } from "../roster/components/PrintableRoster";
 
 export const RosterPage = () => {
     const { getRosterBetweenDates, apiData, saveData, loading } = useRoster();
@@ -23,6 +25,9 @@ export const RosterPage = () => {
 
     const dropdownDesktopRef = useRef(null);
     const dropdownMobileRef = useRef(null);
+
+    // Ref para el componente imprimible
+    const printableRef = useRef(null);
 
     // ✅ Memoizar equipos únicos
     const availableTeams = useMemo(() => {
@@ -157,6 +162,26 @@ export const RosterPage = () => {
         }
     }, [saveData, modifiedData]);
 
+    // Función para imprimir
+    const handlePrint = useReactToPrint({
+        contentRef: printableRef, // ✅ Cambiar de 'content' a 'contentRef'
+        documentTitle: `Roster_${filters.startDate || 'inicio'}_${filters.endDate || 'fin'}`,
+        pageStyle: `
+            @page {
+                size: A4 landscape;
+                margin: 0.5in;
+            }
+        `,
+        onBeforeGetContent: () => {
+            console.log('🖨️ Preparando impresión...');
+        },
+        onAfterPrint: () => {
+            console.log('✅ Impresión completada');
+        },
+        onPrintError: (errorLocation, error) => {
+            console.error('❌ Error de impresión:', errorLocation, error);
+        }
+    });
 
     // ✅ Estadísticas optimizadas
     const stats = useMemo(() => {
@@ -282,6 +307,15 @@ export const RosterPage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+            {/* Componente oculto para impresión */}
+            <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+                <PrintableRoster
+                    ref={printableRef}
+                    data={filteredData.slice(1)}
+                    filters={filters}
+                />
+            </div>
+
             {/* Header Principal */}
             <header className="bg-white shadow-lg border-b border-slate-200 sticky top-0 z-40">
                 <div className="max-w-[1920px] mx-auto">
@@ -295,7 +329,6 @@ export const RosterPage = () => {
                                         alt="WorkSchedFlow Logo"
                                         width="48"
                                         height="48"
-                                        class=""
                                     />
                                 </span>
                             </div>
@@ -329,15 +362,39 @@ export const RosterPage = () => {
                                     <span className="text-sm font-medium text-amber-700">{modifiedData.length} Cambios</span>
                                 </div>
                             )}
+                            {/* Botón de impresión */}
+                            <button
+                                onClick={handlePrint}
+                                disabled={filteredData.length <= 1}
+                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg font-medium transition-colors ${filteredData.length <= 1
+                                    ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                                    : "bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
+                                    }`}
+                            >
+                                <span>🖨️</span>
+                                <span className="text-sm">Imprimir</span>
+                            </button>
                         </div>
 
                         {/* Botón Filtros Móvil */}
-                        <button
-                            onClick={() => setShowMobileFilters(!showMobileFilters)}
-                            className="lg:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
-                        >
-                            <span className="text-lg">🔍</span>
-                        </button>
+                        <div className="lg:hidden flex items-center space-x-2">
+                            <button
+                                onClick={handlePrint}
+                                disabled={filteredData.length <= 1}
+                                className={`p-2 rounded-lg ${filteredData.length <= 1
+                                    ? "text-slate-400 cursor-not-allowed"
+                                    : "text-purple-600 hover:text-purple-900 hover:bg-purple-50"
+                                    }`}
+                            >
+                                <span className="text-lg">🖨️</span>
+                            </button>
+                            <button
+                                onClick={() => setShowMobileFilters(!showMobileFilters)}
+                                className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
+                            >
+                                <span className="text-lg">🔍</span>
+                            </button>
+                        </div>
                     </div>
 
                     {/* Controles de Filtros */}

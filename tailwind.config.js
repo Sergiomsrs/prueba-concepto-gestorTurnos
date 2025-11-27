@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+
   theme: {
     extend: {
       borderWidth: {
@@ -13,17 +14,19 @@ export default {
         'half': '50%',
       },
       keyframes: {
-        fadeIn: { // 👈 Keyframes personalizados
+        fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
       },
       animation: {
-        "fade-in": "fadeIn 0.3s ease-in-out", // 👈 Animación personalizada
+        "fade-in": "fadeIn 0.3s ease-in-out",
       },
     },
   },
+
   plugins: [
+    // Tu plugin actual
     function ({ addUtilities }) {
       addUtilities({
         '.border-45-height::after': {
@@ -36,6 +39,18 @@ export default {
           backgroundColor: 'rgb(209 213 219)',
         },
       });
+    },
+
+    // ⭐ Nuevo plugin para impresión
+    function ({ addUtilities }) {
+      const printUtilities = {
+        ".print-break-after": { "page-break-after": "always" },
+        ".print-break-before": { "page-break-before": "always" },
+        ".print-break-inside-avoid": { "page-break-inside": "avoid" },
+        ".print-break-inside-auto": { "page-break-inside": "auto" },
+      };
+
+      addUtilities(printUtilities, ["responsive", "print"]);
     },
   ],
 };
