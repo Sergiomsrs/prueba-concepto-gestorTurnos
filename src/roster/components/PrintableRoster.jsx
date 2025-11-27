@@ -1,14 +1,14 @@
 import React from "react";
 import { selectColor } from "../../utils/function";
 
-// --- COMPONENTES INTERNOS CON ESTILO TAILWIND SIMPLIFICADO ---
+// --- COMPONENTES INTERNOS MEMOIZADOS ---
 
 /**
  * Encabezado de la cuadrícula con las horas (cada 15 minutos).
  */
-const PrintableHeadRow = () => {
+const PrintableHeadRow = React.memo(() => {
+    const startHour = 7;
     const hours = Array.from({ length: 62 }, (_, i) => {
-        const startHour = 7;
         const totalMinutes = startHour * 60 + (i * 15);
         const hour = Math.floor(totalMinutes / 60);
         return hour.toString().padStart(2, '0');
@@ -19,10 +19,13 @@ const PrintableHeadRow = () => {
             {hours.map((hour, i) => {
                 const isHourStart = i % 4 === 0;
 
-                // SOLO MANTENEMOS EL BORDE DE LA HORA EXACTA
-                const borderClass = isHourStart
+                // ➡️ CAMBIO: Borde fino por defecto para las celdas de 15 minutos
+                const defaultBorder = 'border-l border-slate-300';
+
+                // Sobrescribe con borde grueso si es inicio de hora
+                const specificBorder = isHourStart
                     ? 'border-l border-slate-500'
-                    : 'border-l-0';
+                    : defaultBorder;
 
                 return (
                     <div
@@ -31,7 +34,7 @@ const PrintableHeadRow = () => {
                             bg-slate-100 h-6 flex items-center justify-center 
                             text-[5pt] relative
                             ${isHourStart ? 'font-bold text-slate-700' : 'font-normal text-slate-400'}
-                            ${borderClass}
+                            ${specificBorder}
                         `}
                     >
                         {isHourStart ? hour : ""}
@@ -40,24 +43,26 @@ const PrintableHeadRow = () => {
             })}
         </>
     );
-};
+});
 
 // ---------------------------------------------------------------- //
 
 /**
  * Fila individual de un empleado.
  */
-const PrintableEmployeeRow = ({ employee }) => {
+const PrintableEmployeeRow = React.memo(({ employee }) => {
     const totalHours = (employee.workShift.filter((w) => w === "WORK").length * 15) / 60;
 
     const getCellClasses = (value, isHourStart) => {
-        // ✅ AJUSTADO: Altura de celda de turno reducida a h-3.5 (14px)
         const baseClasses = `h-3.5 flex items-center justify-center`;
 
-        // SOLO MANTENEMOS EL BORDE DE LA HORA EXACTA
+        // ➡️ CAMBIO: Borde fino por defecto para las celdas de 15 minutos
+        const defaultBorder = 'border-l border-slate-300';
+
+        // Sobrescribe con borde grueso si es inicio de hora
         const borderLeftClass = isHourStart
             ? 'border-l border-slate-500'
-            : 'border-l-0';
+            : defaultBorder;
 
         let backgroundClass = 'bg-slate-50';
 
@@ -73,15 +78,12 @@ const PrintableEmployeeRow = ({ employee }) => {
     };
 
     return (
-        // AÑADIMOS UN ÚNICO BORDE INFERIOR A LA FILA COMPLETA
         <div className="contents border-b border-slate-200">
             {/* Columna Equipo */}
-            {/* ✅ AJUSTADO: Padding vertical (py) minimizado a [1px] */}
             <div className="bg-white py-[1px] px-1.5 text-[6pt] font-semibold text-slate-800 border-r flex items-center overflow-hidden text-ellipsis whitespace-nowrap">
                 {employee.teamWork}
             </div>
             {/* Columna Empleado */}
-            {/* ✅ AJUSTADO: Padding vertical (py) minimizado a [1px] */}
             <div className="bg-white py-[1px] px-1.5 text-[5.5pt] text-slate-600 border-r flex items-center overflow-hidden text-ellipsis whitespace-nowrap">
                 {employee.name} {employee.lastName}
             </div>
@@ -94,20 +96,19 @@ const PrintableEmployeeRow = ({ employee }) => {
             ))}
 
             {/* Columna Total */}
-            {/* ✅ AJUSTADO: Padding vertical (py) minimizado a [1px] */}
             <div className="bg-white py-[1px] px-1 text-[6pt] font-semibold text-slate-800 border-l flex items-center justify-center">
                 {totalHours.toFixed(1)}
             </div>
         </div>
     );
-};
+});
 
 // ---------------------------------------------------------------- //
 
 /**
  * Fila de distribución de empleados por franja horaria.
  */
-const PrintableDistributionRow = ({ day }) => {
+const PrintableDistributionRow = React.memo(({ day }) => {
     const distributionData = Array.from({ length: 62 }, (_, i) => day.employees?.reduce((acc, emp) => acc + (emp.workShift[i] === "WORK" ? 1 : 0), 0) || 0);
 
     return (
@@ -118,10 +119,13 @@ const PrintableDistributionRow = ({ day }) => {
             </div>
 
             {distributionData.map((count, i) => {
-                // SOLO MANTENEMOS EL BORDE DE LA HORA EXACTA
+                // ➡️ CAMBIO: Borde fino por defecto para las celdas de 15 minutos
+                const defaultBorder = 'border-l border-slate-300';
+
+                // Sobrescribe con borde grueso si es inicio de hora
                 const borderLeftClass = i % 4 === 0
                     ? 'border-l border-slate-500'
-                    : 'border-l-0';
+                    : defaultBorder;
 
                 return (
                     <div
@@ -141,7 +145,7 @@ const PrintableDistributionRow = ({ day }) => {
             <div className="bg-slate-100 border-t-2 border-slate-500 border-b-2 border-b-slate-500 border-l border-slate-200"></div>
         </>
     );
-};
+});
 
 // ---------------------------------------------------------------- //
 
@@ -158,11 +162,13 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
     return (
         <div
             ref={ref}
-            className="font-sans bg-white p-4"
+            // ➡️ CAMBIO: Eliminado el padding (p-4 -> p-0/sin clase) para más espacio
+            className="font-sans bg-white"
         >
             <style>{`
                 @media print {
-                    @page { size: A4 portrait; margin: 0.5in; }
+                    /* ➡️ CAMBIO: Márgenes de impresión reducidos de 0.5in a 0.2in */
+                    @page { size: A4 portrait; margin: 0.2in; } 
                     * {
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
@@ -186,7 +192,8 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
             {data.map((day) => (
                 <section
                     key={day.id}
-                    className="break-inside-avoid mb-6 border border-slate-200 rounded-xl overflow-hidden shadow-lg"
+                    // ➡️ CAMBIO: Eliminado shadow-lg
+                    className="break-inside-avoid mb-6 border border-slate-200 rounded-xl overflow-hidden"
                 >
                     {/* Header del Día */}
                     <header className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
@@ -218,7 +225,6 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
                             }}
                         >
                             {/* Headers del Grid */}
-                            {/* Nota: Hemos dejado el py-2 (8px) aquí para que la cabecera del grid se distinga mejor. */}
                             <div className="bg-slate-100 px-1 py-2 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">👥 Equipo</div>
                             <div className="bg-slate-100 px-1 py-2 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">👤 Empleado</div>
 

@@ -169,7 +169,7 @@ export const RosterPage = () => {
         pageStyle: `
             @page {
                 size: A4 landscape;
-                margin: 0.5in;
+                margin: 0.2in;
             }
         `,
         onBeforeGetContent: () => {
