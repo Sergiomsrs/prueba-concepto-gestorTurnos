@@ -31,7 +31,7 @@ const PrintableHeadRow = React.memo(() => {
                     <div
                         key={i}
                         className={`
-                            bg-slate-100 h-6 flex items-center justify-center 
+                            bg-slate-100 h-3 flex items-center justify-center 
                             text-[5pt] relative
                             ${isHourStart ? 'font-bold text-slate-700' : 'font-normal text-slate-400'}
                             ${specificBorder}
@@ -219,18 +219,18 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
                     {/* Grid de Turnos */}
                     <div>
                         <div
-                            className="grid bg-slate-400 border-t border-slate-200"
+                            className="grid bg-slate-200 border-t border-slate-200"
                             style={{
                                 gridTemplateColumns: '1.5fr 2fr repeat(62, 0.5fr) 1fr',
                             }}
                         >
                             {/* Headers del Grid */}
-                            <div className="bg-slate-100 px-1 py-2 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">👥 Equipo</div>
-                            <div className="bg-slate-100 px-1 py-2 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">👤 Empleado</div>
+                            <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Equipo</div>
+                            <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Empleado</div>
 
                             <PrintableHeadRow />
 
-                            <div className="bg-slate-100 p-2 text-[7pt] font-semibold text-slate-600 flex items-center justify-center gap-1">⏰</div>
+                            <div className="bg-slate-200 p-0 text-[7pt] font-semibold text-slate-600 flex items-center justify-center gap-1">⏰</div>
 
                             {/* Filas de Empleados */}
                             {day.employees?.map((employee) => <PrintableEmployeeRow key={employee.id} employee={employee} />)}
