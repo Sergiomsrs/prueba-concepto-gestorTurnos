@@ -184,7 +184,7 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
 
             {/* Header de la Página */}
             <header className="text-center mb-6">
-                <h1 className="text-2xl font-bold text-slate-800 mb-2">Roster Board</h1>
+                <h1 className="text-2xl font-bold text-slate-800 mb-2">WorkSchedFlow</h1>
                 <p className="text-sm text-slate-500">Gestión de equipos de trabajo</p>
             </header>
 
@@ -196,7 +196,7 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
                     className="break-inside-avoid mb-6 border border-slate-200 rounded-xl overflow-hidden"
                 >
                     {/* Header del Día */}
-                    <header className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
+                    <header className="p-1 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-slate-100 rounded-lg text-lg">📅</div>
                             <div>
