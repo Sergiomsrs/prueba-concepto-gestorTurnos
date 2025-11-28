@@ -18,9 +18,9 @@ const PrintableHeadRow = React.memo(() => {
         <>
             {hours.map((hour, i) => {
                 const isHourStart = i % 4 === 0;
-                const defaultBorder = 'border-l-[0.5px] border-slate-300';
+                const defaultBorder = 'border-l-[0.2px] border-slate-100';
                 const specificBorder = isHourStart
-                    ? 'border-l-[0.5px] border-slate-500'
+                    ? 'border-l-[0.2px] border-slate-300'
                     : defaultBorder;
 
                 return (
@@ -49,9 +49,9 @@ const PrintableEmployeeRow = React.memo(({ employee }) => {
 
     const getCellClasses = (value, isHourStart) => {
         const baseClasses = `h-3.5 flex items-center justify-center`;
-        const defaultBorder = 'border-l-[0.2px] border-slate-300';
+        const defaultBorder = 'border-l-[0.1px] border-slate-100';
         const borderLeftClass = isHourStart
-            ? 'border-l-[0.2px] border-slate-500'
+            ? 'border-l-[0.1px] border-slate-300'
             : defaultBorder;
 
         let backgroundClass = 'bg-slate-50';
@@ -98,9 +98,9 @@ const PrintableDistributionRow = React.memo(({ day }) => {
             </div>
 
             {distributionData.map((count, i) => {
-                const defaultBorder = 'border-l-[0.2px] border-slate-300';
+                const defaultBorder = 'border-l-[0.1px] border-slate-100';
                 const borderLeftClass = i % 4 === 0
-                    ? 'border-l-[0.2px] border-slate-500'
+                    ? 'border-l-[0.2px] border-slate-300'
                     : defaultBorder;
 
                 return (
@@ -292,7 +292,7 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
                     className="break-inside-avoid mb-6 border-[0.5px] border-slate-200 rounded-xl overflow-hidden"
                 >
                     {/* Header del Día */}
-                    <header className="p-1 bg-slate-50 border-b-[0.5px] border-slate-200 flex justify-between items-center">
+                    <header className="p-1 bg-slate-50 border-b-[0.5px]  flex justify-between items-center">
                         <div className="flex items-center gap-3">
                             <div className="p-2 bg-slate-100 rounded-lg text-lg">📅</div>
                             <div>
@@ -315,7 +315,7 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
                     {/* Grid de Turnos */}
                     <div>
                         <div
-                            className="grid bg-slate-200 border-t-[0.2px] border-slate-200"
+                            className="grid bg-slate-200 border-t-[0.2px]"
                             style={{
                                 gridTemplateColumns: '1.5fr 2fr repeat(62, 0.5fr) 1fr',
                             }}
