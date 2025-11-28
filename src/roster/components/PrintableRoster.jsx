@@ -265,81 +265,127 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
         >
             <style>{`
                 @media print {
-                    @page { size: A4 portrait; margin: 0.2in; } 
+                    @page { 
+                        size: A4 portrait; 
+                        margin: 0.2in; 
+                    } 
+                    
+                    /* Forzar ancho fijo independiente del viewport móvil */
+                    .print-container {
+                        width: 8in !important; /* Ancho fijo A4 portrait menos márgenes */
+                        min-width: 8in !important;
+                        max-width: 8in !important;
+                        overflow: visible !important;
+                        transform-origin: 0 0;
+                    }
+                    
+                    /* Grid con anchos optimizados para A4 vertical */
+                    .print-grid {
+                        grid-template-columns: 0.6fr 1fr repeat(62, 0.08fr) 0.4fr !important;
+                        width: 100% !important;
+                        min-width: 100% !important;
+                    }
+                    
+                    /* Reducir ligeramente el tamaño de fuente en móvil */
+                    @media (max-width: 768px) {
+                        .print-container {
+                            font-size: 90% !important;
+                        }
+                        
+                        .print-grid {
+                            grid-template-columns: 0.5fr 0.9fr repeat(62, 0.075fr) 0.35fr !important;
+                        }
+                    }
+                    
                     * {
                         -webkit-print-color-adjust: exact !important;
                         print-color-adjust: exact !important;
                     }
+                    
                     body {
                         -webkit-font-smoothing: antialiased;
                         -moz-osx-font-smoothing: grayscale;
                         image-rendering: -webkit-optimize-contrast;
                         image-rendering: crisp-edges;
+                        overflow-x: visible !important;
+                    }
+                    
+                    /* Evitar que el contenido se corte */
+                    .day-section {
+                        break-inside: avoid;
+                        page-break-inside: avoid;
+                    }
+                    
+                    /* Asegurar que las tablas no se corten */
+                    table {
+                        width: 100% !important;
                     }
                 }
             `}</style>
 
-            {/* Header de la Página */}
-            <header className="text-center mb-6">
-                <h1 className="text-2xl font-bold text-slate-800 mb-2">WorkSchedFlow</h1>
-                <p className="text-sm text-slate-500">Gestión de equipos de trabajo</p>
-            </header>
+            <div className="print-container">
+                {/* Header de la Página */}
+                <header className="text-center mb-6">
+                    <h1 className="text-2xl font-bold text-slate-800 mb-2">WorkSchedFlow</h1>
+                    <p className="text-sm text-slate-500">Gestión de equipos de trabajo</p>
+                </header>
 
-            {/* Contenido por Día */}
-            {data.map((day) => (
-                <section
-                    key={day.id}
-                    className="break-inside-avoid mb-6 border-[0.5px] border-slate-200 rounded-xl overflow-hidden"
-                >
-                    {/* Header del Día */}
-                    <header className="p-1 bg-slate-50 border-b-[0.5px]  flex justify-between items-center">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2 bg-slate-100 rounded-lg text-lg">📅</div>
-                            <div>
-                                <h2 className="text-base font-semibold text-slate-800 m-0">
-                                    {new Date(day.id).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}
-                                </h2>
-                                <p className="text-xs text-slate-500 capitalize mt-0.5">
-                                    {day.day} • {day.employees?.length || 0} empleados
-                                </p>
+                {/* Contenido por Día */}
+                {data.map((day) => (
+                    <section
+                        key={day.id}
+                        className="day-section break-inside-avoid mb-6 border-[0.5px] border-slate-200 rounded-xl overflow-hidden"
+                    >
+                        {/* Header del Día */}
+                        <header className="p-1 bg-slate-50 border-b-[0.5px] flex justify-between items-center">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-slate-100 rounded-lg text-lg">📅</div>
+                                <div>
+                                    <h2 className="text-base font-semibold text-slate-800 m-0">
+                                        {new Date(day.id).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}
+                                    </h2>
+                                    <p className="text-xs text-slate-500 capitalize mt-0.5">
+                                        {day.day} • {day.employees?.length || 0} empleados
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-sm font-semibold text-slate-800">
+                                    {((day.employees?.reduce((total, emp) => total + emp.workShift.filter(w => w === "WORK").length, 0) || 0) * 0.25).toFixed(1)} horas
+                                </div>
+                                <div className="text-xs text-slate-500">Total del día</div>
+                            </div>
+                        </header>
+
+                        {/* Grid de Turnos */}
+                        <div>
+                            <div
+                                className="print-grid grid bg-slate-200 border-t-[0.2px]"
+                                style={{
+                                    gridTemplateColumns: '1.5fr 2fr repeat(62, 0.5fr) 1fr',
+                                }}
+                            >
+                                {/* Headers del Grid */}
+                                <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Equipo</div>
+                                <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Empleado</div>
+
+                                <PrintableHeadRow />
+
+                                <div className="bg-slate-200 p-0 text-[7pt] font-semibold text-slate-600 flex items-center justify-center gap-1">⏰</div>
+
+                                {/* Filas de Empleados */}
+                                {day.employees?.map((employee) => <PrintableEmployeeRow key={employee.id} employee={employee} />)}
+
+                                {/* Fila de Distribución */}
+                                <PrintableDistributionRow day={day} />
                             </div>
                         </div>
-                        <div className="text-right">
-                            <div className="text-sm font-semibold text-slate-800">
-                                {((day.employees?.reduce((total, emp) => total + emp.workShift.filter(w => w === "WORK").length, 0) || 0) * 0.25).toFixed(1)} horas
-                            </div>
-                            <div className="text-xs text-slate-500">Total del día</div>
-                        </div>
-                    </header>
+                    </section>
+                ))}
 
-                    {/* Grid de Turnos */}
-                    <div>
-                        <div
-                            className="grid bg-slate-200 border-t-[0.2px]"
-                            style={{
-                                gridTemplateColumns: '1.5fr 2fr repeat(62, 0.5fr) 1fr',
-                            }}
-                        >
-                            {/* Headers del Grid */}
-                            <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Equipo</div>
-                            <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Empleado</div>
-
-                            <PrintableHeadRow />
-
-                            <div className="bg-slate-200 p-0 text-[7pt] font-semibold text-slate-600 flex items-center justify-center gap-1">⏰</div>
-
-                            {/* Filas de Empleados */}
-                            {day.employees?.map((employee) => <PrintableEmployeeRow key={employee.id} employee={employee} />)}
-
-                            {/* Fila de Distribución */}
-                            <PrintableDistributionRow day={day} />
-                        </div>
-                    </div>
-                </section>
-            ))}
-
-            {/* ✅ NUEVA SECCIÓN: Tabla de Resumen */}
-            <PrintableSummaryTable data={data} />
+                {/* Tabla de Resumen */}
+                <PrintableSummaryTable data={data} />
+            </div>
         </div>
     );
 });
