@@ -157,6 +157,7 @@ export const RosterPage = () => {
         const result = await saveData(modifiedData);
         if (result.success) {
             console.log("✅ Datos guardados exitosamente");
+            await getRosterBetweenDates(filters.startDate, filters.endDate);
         } else {
             console.error("❌ Error al guardar:", result.message);
         }
