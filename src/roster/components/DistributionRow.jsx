@@ -1,9 +1,6 @@
-import { memo, useMemo, useState } from 'react';
+import { memo, useMemo } from 'react';
 
-export const DistributionRow = memo(({ day, originalDay }) => {
-    // Estado local para el toggle
-    const [showFullDistribution, setShowFullDistribution] = useState(false);
-
+export const DistributionRow = memo(({ day, originalDay, showFullDistribution, onToggle }) => {
     // Decidir qué datos usar según el toggle
     const dataToUse = showFullDistribution && originalDay ? originalDay : day;
 
@@ -25,10 +22,14 @@ export const DistributionRow = memo(({ day, originalDay }) => {
                 Total
             </div>
             <button
-                onClick={() => setShowFullDistribution(!showFullDistribution)}
-                className="bg-gray-300 px-3 py-1 text-sm font-medium text-gray-700 border-r flex items-center"
+                onClick={onToggle}
+                className="bg-gray-300 px-3 py-1 text-sm font-medium text-gray-700 border-r flex items-center justify-between"
+                title={showFullDistribution ? "Mostrando distribución completa" : "Mostrando distribución filtrada"}
             >
-                Personas
+                <span>Personas</span>
+                {showFullDistribution && (
+                    <span className="ml-2 text-purple-600 text-xs font-bold">📊</span>
+                )}
             </button>
             {sumaPorIndice.map((valor, index) => (
                 <div key={index} className="bg-gray-300 flex items-center justify-center p-0.5">
@@ -42,6 +43,7 @@ export const DistributionRow = memo(({ day, originalDay }) => {
 }, (prevProps, nextProps) => {
     return (
         prevProps.day === nextProps.day &&
-        prevProps.originalDay === nextProps.originalDay
+        prevProps.originalDay === nextProps.originalDay &&
+        prevProps.showFullDistribution === nextProps.showFullDistribution
     );
 });

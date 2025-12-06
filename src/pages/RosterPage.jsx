@@ -23,7 +23,7 @@ export const RosterPage = () => {
     });
     const [showMobileFilters, setShowMobileFilters] = useState(false);
     const [showTeamDropdown, setShowTeamDropdown] = useState(false);
-
+    const [showFullDistribution, setShowFullDistribution] = useState(false); // Agregar este estado
 
     const dropdownDesktopRef = useRef(null);
     const dropdownMobileRef = useRef(null);
@@ -738,8 +738,9 @@ export const RosterPage = () => {
                                     >
                                         <DistributionRow
                                             day={day}
-                                            originalDay={data[dayMapping.dayIndex]} // ✅ Pasar datos originales
-
+                                            originalDay={data[dayMapping.dayIndex]}
+                                            showFullDistribution={showFullDistribution}
+                                            onToggle={() => setShowFullDistribution(!showFullDistribution)}
                                         />
                                     </div>
                                 </div>
