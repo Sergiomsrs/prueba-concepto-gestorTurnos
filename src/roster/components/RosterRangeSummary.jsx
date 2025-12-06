@@ -2,14 +2,14 @@ import { useMemo, memo, useContext } from "react";
 import { daysOfWeek } from "../../utils/data";
 import { AppContext } from "../../context/AppContext";
 
-// 🔹 Utilidad para calcular horas - MOVIDA FUERA para evitar recreación
+// 🔹 Utilidad para calcular horas
 const calculateShiftDurationFromWorkShift = (workShift) => {
     if (!workShift) return 0;
     const workCount = workShift.filter((block) => block === "WORK").length;
     return (workCount * 15) / 60;
 };
 
-// 🔹 Utilidad totales - MOVIDA FUERA
+// 🔹 Utilidad totales
 const getTotalShiftDuration = (employeeName, data) => {
     let totalMinutes = 0;
     for (const day of data) {
@@ -22,54 +22,16 @@ const getTotalShiftDuration = (employeeName, data) => {
     return +(totalMinutes / 60).toFixed(1);
 };
 
-// 🔹 Estilo BINARIO - MOVIDA FUERA
+// 🔹 Estilo plano y minimalista
 const getCellStyle = (hours, isHoliday) => {
-    if (hours > 0) return "bg-emerald-600 text-white font-medium hover:bg-emerald-500";
-    if (isHoliday) return "bg-slate-100 text-slate-300 border border-purple-200";
-    return "bg-slate-50 text-slate-200 hover:bg-slate-100";
+    if (hours > 0) return "bg-emerald-500 text-white font-semibold";
+    if (isHoliday) return "bg-purple-50 text-purple-400 border border-purple-200";
+    return "bg-slate-100 text-slate-400";
 };
 
-// 🔹 Componente de celda de día - MEMOIZADO
-const DayCell = memo(({ day, employeeName, dataToUse, holidayDates }) => {
-    const emp = dataToUse.find((e) => e.name === employeeName);
-    const hours = useMemo(
-        () => emp?.workShift ? calculateShiftDurationFromWorkShift(emp.workShift) : 0,
-        [emp?.workShift]
-    );
-    const isHoliday = useMemo(
-        () => holidayDates.includes(day.id),
-        [holidayDates, day.id]
-    );
-
-    const cellStyle = useMemo(
-        () => getCellStyle(hours, isHoliday),
-        [hours, isHoliday]
-    );
-
-    return (
-        <td className="p-0 border-l border-white border-b w-7 h-8 min-w-[28px]">
-            <div
-                className={`w-full h-full flex items-center justify-center text-[10px] transition-colors cursor-pointer ${cellStyle}`}
-                title={`${day.day}: ${hours}h`}
-            >
-                {hours > 0 ? hours : isHoliday ? '🎉' : ''}
-            </div>
-        </td>
-    );
-}, (prevProps, nextProps) => {
-    return (
-        prevProps.day.id === nextProps.day.id &&
-        prevProps.employeeName === nextProps.employeeName &&
-        prevProps.dataToUse === nextProps.dataToUse &&
-        prevProps.holidayDates === nextProps.holidayDates
-    );
-});
-
-DayCell.displayName = 'DayCell';
-
-// 🔹 Fila de empleado - OPTIMIZADA
+// 🔹 Fila de empleado - Diseño plano
 const EmployeeRow = memo(
-    ({ employeeName, teamWork, dataToUse, holidayDates, selectedOption }) => {
+    ({ employeeName, employeeLastName, teamWork, dataToUse, holidayDates, selectedOption }) => {
         const isVisible = useMemo(
             () => selectedOption === "todos" || selectedOption === teamWork,
             [selectedOption, teamWork]
@@ -95,49 +57,46 @@ const EmployeeRow = memo(
             [wwh, totalShiftDuration]
         );
 
-        const variationClasses = useMemo(
-            () => variation >= 0 ? "text-emerald-600 bg-emerald-50" : "text-red-600 bg-red-50",
-            [variation]
+        const fullName = useMemo(
+            () => `${employeeName} ${employeeLastName}`,
+            [employeeName, employeeLastName]
         );
 
         if (!isVisible) return null;
 
         return (
-            <tr className="group border-b border-slate-200 h-8 transition-colors hover:bg-blue-50">
-                {/* NOMBRE - Tamaño legible */}
-                <td className="text-left px-3 py-1 bg-white group-hover:bg-blue-50 sticky left-0 z-10 border-r border-slate-300 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                    <div className="flex flex-col justify-center w-40">
-                        <span className="text-sm font-semibold text-slate-800 truncate" title={employeeName}>
-                            {employeeName}
+            <tr className="border-b border-slate-200 hover:bg-slate-50">
+                {/* COLUMNA EMPLEADO */}
+                <td className="px-4 py-2.5 bg-white sticky left-0 z-10 border-r border-slate-200">
+                    <div className="flex flex-col w-48">
+                        <span className="text-sm font-semibold text-slate-800" title={fullName}>
+                            {fullName}
                         </span>
-                        <span className="text-[10px] text-slate-500">{teamWork}</span>
                     </div>
                 </td>
 
-                {/* DATOS NUMÉRICOS - Tamaño medio */}
-                <td className="px-2 py-1 text-xs font-medium text-slate-600 text-center bg-slate-50 border-r border-slate-200">
+                {/* ESTADÍSTICAS */}
+                <td className="px-3 py-2.5 text-sm text-slate-700 text-center border-r border-slate-200">
                     {wwh}
                 </td>
-                <td className="px-2 py-1 text-xs font-bold text-slate-800 text-center bg-slate-50 border-r border-slate-200">
+                <td className="px-3 py-2.5 text-sm font-bold text-slate-900 text-center border-r border-slate-200">
                     {totalShiftDuration}
                 </td>
-                <td className={`px-2 py-1 text-xs font-bold text-center border-r-2 border-slate-300 ${variationClasses}`}>
-                    {variation > 0 ? '+' : ''}{Math.round(variation)}
+                <td className={`px-3 py-2.5 text-sm font-bold text-center border-r-2 border-slate-300 ${variation >= 0 ? "text-emerald-600" : "text-red-600"
+                    }`}>
+                    {variation > 0 ? '+' : ''}{variation.toFixed(1)}
                 </td>
 
-                {/* CALENDARIO - Celdas con números */}
+                {/* CALENDARIO */}
                 {dataToUse.map((day) => {
                     const emp = day.employees.find((e) => e.name === employeeName);
                     const hours = emp?.workShift ? calculateShiftDurationFromWorkShift(emp.workShift) : 0;
                     const isHoliday = holidayDates.includes(day.id);
 
                     return (
-                        <td
-                            key={day.id}
-                            className="p-0 border-l border-white border-b border-white w-7 h-8 min-w-[28px]"
-                        >
+                        <td key={day.id} className="p-0.5 w-8 h-10">
                             <div
-                                className={`w-full h-full flex items-center justify-center text-[10px] transition-colors cursor-pointer ${getCellStyle(hours, isHoliday)}`}
+                                className={`w-full h-full flex items-center justify-center text-xs rounded ${getCellStyle(hours, isHoliday)}`}
                                 title={`${day.day}: ${hours}h`}
                             >
                                 {hours > 0 ? hours : isHoliday ? '🎉' : ''}
@@ -151,6 +110,7 @@ const EmployeeRow = memo(
     (prevProps, nextProps) => {
         return (
             prevProps.employeeName === nextProps.employeeName &&
+            prevProps.employeeLastName === nextProps.employeeLastName &&
             prevProps.teamWork === nextProps.teamWork &&
             prevProps.dataToUse === nextProps.dataToUse &&
             prevProps.holidayDates === nextProps.holidayDates &&
@@ -161,8 +121,8 @@ const EmployeeRow = memo(
 
 EmployeeRow.displayName = 'EmployeeRow';
 
-// 🔹 Fila resumen footer - OPTIMIZADA
-const DailySummaryRow = memo(({ dataToUse }) => {
+// 🔹 Fila footer
+const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selectedOption }) => {
     const dailyTotals = useMemo(() => {
         return dataToUse.map((day) => {
             let totalMinutes = 0;
@@ -176,27 +136,92 @@ const DailySummaryRow = memo(({ dataToUse }) => {
         });
     }, [dataToUse]);
 
-    return (
-        <tr className="bg-slate-100 h-8 border-t-2 border-slate-300 font-bold text-xs">
-            <td className="text-left px-3 py-1 sticky left-0 z-10 bg-slate-100 border-r border-slate-300 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                TOTAL
-            </td>
-            <td colSpan="3" className="bg-slate-100 border-r-2 border-slate-300"></td>
+    // Calcular totales de columnas WWH, Total y Variación
+    const columnTotals = useMemo(() => {
+        let totalWWH = 0;
+        let totalHours = 0;
 
+        // Verificar que employeesData sea iterable
+        if (!employeesData || !Array.isArray(employeesData)) {
+            return { wwh: 0, total: '0.0', variation: '0.0' };
+        }
+
+        for (const [name] of employeesData) {
+            // Filtrar por selectedOption
+            const employeeInfo = dataToUse[0]?.employees.find(e => e.name === name);
+            if (!employeeInfo) continue;
+
+            const isVisible = selectedOption === "todos" || selectedOption === employeeInfo.teamWork;
+            if (!isVisible) continue;
+
+            // Calcular WWH
+            let wwh = 0;
+            for (const day of dataToUse) {
+                if (holidayDates.includes(day.id)) continue;
+                const emp = day.employees.find((e) => e.name === name);
+                if (emp?.wwh) wwh += emp.wwh / 7;
+            }
+            totalWWH += Math.round((wwh * 2) / 2);
+
+            // Calcular Total horas trabajadas
+            totalHours += getTotalShiftDuration(name, dataToUse);
+        }
+
+        const totalVariation = totalWWH - totalHours;
+
+        return {
+            wwh: totalWWH,
+            total: totalHours.toFixed(1),
+            variation: totalVariation.toFixed(1)
+        };
+    }, [dataToUse, employeesData, holidayDates, selectedOption]);
+
+    return (
+        <tr className="bg-slate-50 border-t-2 border-slate-300">
+            <td className="px-4 py-3 sticky left-0 z-10 bg-slate-50 border-r border-slate-200">
+                <div className="font-bold text-sm text-slate-900">TOTAL GENERAL</div>
+            </td>
+
+            {/* TOTALES DE COLUMNAS */}
+            <td className="px-3 py-3 text-sm font-bold text-slate-900 text-center bg-slate-100 border-r border-slate-200">
+                {columnTotals.wwh}
+            </td>
+            <td className="px-3 py-3 text-sm font-bold text-slate-900 text-center bg-slate-100 border-r border-slate-200">
+                {columnTotals.total}
+            </td>
+            <td className={`px-3 py-3 text-sm font-bold text-center bg-slate-100 border-r-2 border-slate-300 ${parseFloat(columnTotals.variation) >= 0 ? "text-emerald-600" : "text-red-600"
+                }`}>
+                {parseFloat(columnTotals.variation) > 0 ? '+' : ''}{columnTotals.variation}
+            </td>
+
+            {/* TOTALES POR DÍA */}
             {dailyTotals.map((hours, i) => (
-                <td key={i} className="p-0 border-l border-white w-7 min-w-[28px] text-center bg-slate-200 text-slate-700">
-                    {hours}
+                <td key={i} className="p-0.5 w-8">
+                    <div className="w-full h-full flex items-center justify-center text-xs font-bold bg-slate-200 text-slate-900 rounded">
+                        {hours}
+                    </div>
                 </td>
             ))}
         </tr>
     );
 }, (prevProps, nextProps) => {
-    return prevProps.dataToUse === nextProps.dataToUse;
+    // Comparación mejorada
+    const employeesEqual =
+        Array.isArray(prevProps.employeesData) &&
+        Array.isArray(nextProps.employeesData) &&
+        prevProps.employeesData.length === nextProps.employeesData.length;
+
+    return (
+        prevProps.dataToUse === nextProps.dataToUse &&
+        employeesEqual &&
+        prevProps.holidayDates === nextProps.holidayDates &&
+        prevProps.selectedOption === nextProps.selectedOption
+    );
 });
 
 DailySummaryRow.displayName = 'DailySummaryRow';
 
-// 🔹 Componente principal - OPTIMIZADO
+// 🔹 Componente principal
 export const RosterRangeSummary = memo(({ data }) => {
     const { selectedOption, holidayDates } = useContext(AppContext);
 
@@ -205,7 +230,10 @@ export const RosterRangeSummary = memo(({ data }) => {
         for (const day of data) {
             for (const emp of day.employees) {
                 if (!employeeMap.has(emp.name)) {
-                    employeeMap.set(emp.name, emp.teamWork);
+                    employeeMap.set(emp.name, {
+                        lastName: emp.lastName,
+                        teamWork: emp.teamWork
+                    });
                 }
             }
         }
@@ -216,45 +244,66 @@ export const RosterRangeSummary = memo(({ data }) => {
         return data.map((item) => {
             const dayName = item.day?.charAt(0).toUpperCase() || daysOfWeek[item.id]?.charAt(0);
             const dayNumber = typeof item.id === "string" ? item.id.slice(8, 10) : "";
-            return { id: item.id, initial: dayName, dayNumber };
+            const isWeekend = item.day === 'sábado' || item.day === 'domingo';
+            return { id: item.id, initial: dayName, dayNumber, isWeekend };
         });
     }, [data]);
 
     return (
-        <div className="overflow-x-auto">
-            <table className="w-auto border-collapse bg-white rounded-lg shadow-sm border border-slate-200">
+        <div className="overflow-x-auto rounded-lg border border-slate-200">
+            <table className="w-auto border-collapse bg-white">
                 <thead>
-                    <tr className="bg-slate-100 h-10 border-b border-slate-300">
-                        <th className="text-left px-3 sticky left-0 bg-slate-100 z-20 border-r border-slate-300 min-w-[160px] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                            <span className="text-xs font-bold text-slate-700 uppercase">Empleado</span>
+                    <tr className="bg-slate-50 border-b-2 border-slate-300">
+                        {/* HEADER EMPLEADO */}
+                        <th className="text-left px-4 py-3 sticky left-0 bg-slate-50 z-20 border-r border-slate-200 min-w-[200px]">
+                            <div className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                                Empleado
+                            </div>
                         </th>
-                        <th className="px-2 w-10 text-[10px] font-bold text-slate-600 bg-slate-50 border-r border-slate-200" title="Horas Esperadas">WWH</th>
-                        <th className="px-2 w-10 text-[10px] font-bold text-slate-600 bg-slate-50 border-r border-slate-200" title="Horas Reales">TOT</th>
-                        <th className="px-2 w-10 text-[10px] font-bold text-slate-600 bg-slate-50 border-r-2 border-slate-300" title="Variación">VAR</th>
+
+                        {/* HEADERS ESTADÍSTICAS */}
+                        <th className="px-3 py-3 text-xs font-bold text-slate-700 uppercase border-r border-slate-200" title="Weekly Working Hours">
+                            WWH
+                        </th>
+                        <th className="px-3 py-3 text-xs font-bold text-slate-700 uppercase border-r border-slate-200" title="Total Horas">
+                            Total
+                        </th>
+                        <th className="px-3 py-3 text-xs font-bold text-slate-700 uppercase border-r-2 border-slate-300" title="Variación">
+                            Var
+                        </th>
 
                         {/* HEADERS DÍAS */}
                         {dayHeaders.map((d) => (
-                            <th key={d.id} className="p-0 w-7 min-w-[28px] bg-slate-100 border-l border-white">
-                                <div className="flex flex-col items-center justify-center h-full w-full leading-none">
-                                    <span className="text-[9px] text-slate-500 font-normal mb-0.5">{d.initial}</span>
-                                    <span className="text-[10px] font-bold text-slate-800">{d.dayNumber}</span>
+                            <th
+                                key={d.id}
+                                className={`p-2 w-8 text-center ${d.isWeekend ? 'bg-slate-100' : 'bg-slate-50'
+                                    }`}
+                            >
+                                <div className="flex flex-col items-center">
+                                    <span className="text-xs font-semibold text-slate-700">
+                                        {d.initial}
+                                    </span>
+                                    <span className="text-xs font-bold text-slate-900 mt-0.5">
+                                        {d.dayNumber}
+                                    </span>
                                 </div>
                             </th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {employeesData.map(([name, teamWork]) => (
+                    {employeesData.map(([name, { lastName, teamWork }]) => (
                         <EmployeeRow
                             key={name}
                             employeeName={name}
+                            employeeLastName={lastName}
                             teamWork={teamWork}
                             dataToUse={data}
                             holidayDates={holidayDates}
                             selectedOption={selectedOption}
                         />
                     ))}
-                    <DailySummaryRow dataToUse={data} />
+                    <DailySummaryRow dataToUse={data} employeesData={employeesData} holidayDates={holidayDates} selectedOption={selectedOption} />
                 </tbody>
             </table>
         </div>
