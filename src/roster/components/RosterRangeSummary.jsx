@@ -47,7 +47,7 @@ const DayCell = memo(({ day, employeeName, dataToUse, holidayDates }) => {
     );
 
     return (
-        <td className="p-0 border-l border-white border-b border-white w-7 h-8 min-w-[28px]">
+        <td className="p-0 border-l border-white border-b w-7 h-8 min-w-[28px]">
             <div
                 className={`w-full h-full flex items-center justify-center text-[10px] transition-colors cursor-pointer ${cellStyle}`}
                 title={`${day.day}: ${hours}h`}
