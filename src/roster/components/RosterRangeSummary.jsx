@@ -67,8 +67,8 @@ const EmployeeRow = memo(
         return (
             <tr className="border-b border-slate-200 hover:bg-slate-50">
                 {/* COLUMNA EMPLEADO */}
-                <td className="px-4 py-2.5 bg-white sticky left-0 z-10 border-r border-slate-200">
-                    <div className="flex flex-col w-48">
+                <td className="pl-4 py-2.5 bg-white sticky left-0 z-10 border-r border-slate-200">
+                    <div className="flex flex-col w-28">
                         <span className="text-sm font-semibold text-slate-800" title={fullName}>
                             {fullName}
                         </span>
@@ -178,7 +178,7 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
 
     return (
         <tr className="bg-slate-50 border-t-2 border-slate-300">
-            <td className="px-4 py-3 sticky left-0 z-10 bg-slate-50 border-r border-slate-200">
+            <td className="pl-4 py-3 sticky left-0 z-10 bg-slate-50 border-r border-slate-200">
                 <div className="font-bold text-sm text-slate-900">TOTAL GENERAL</div>
             </td>
 
@@ -255,7 +255,7 @@ export const RosterRangeSummary = memo(({ data }) => {
                 <thead>
                     <tr className="bg-slate-50 border-b-2 border-slate-300">
                         {/* HEADER EMPLEADO */}
-                        <th className="text-left px-4 py-3 sticky left-0 bg-slate-50 z-20 border-r border-slate-200 min-w-[200px]">
+                        <th className="text-left pl-4 py-3 sticky left-0 bg-slate-50 z-20 border-r border-slate-200 min-w-[160px]">
                             <div className="text-sm font-bold text-slate-900 uppercase tracking-wide">
                                 Empleado
                             </div>
