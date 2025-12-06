@@ -13,12 +13,13 @@ export const RosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
     const inputRefsMatrix = useRef([]);
 
-    // 🔹 Estados para filtros
+    // 🔹 Estados para filtros (ACTUALIZADO)
     const [filters, setFilters] = useState({
         startDate: "",
         endDate: "",
         selectedTeams: [],
         employeeName: "",
+        hideZeroHours: false, // ✅ NUEVO FILTRO
     });
     const [showMobileFilters, setShowMobileFilters] = useState(false);
     const [showTeamDropdown, setShowTeamDropdown] = useState(false);
@@ -53,14 +54,15 @@ export const RosterPage = () => {
         return mapping;
     }, [data]);
 
-    // ✅ Optimizar datos filtrados
+    // ✅ Optimizar datos filtrados (ACTUALIZADO CON FILTRO DE HORAS)
     const filteredData = useMemo(() => {
         if (!data.length) return [];
 
         const hasTeamFilter = filters.selectedTeams.length > 0;
         const hasNameFilter = filters.employeeName.trim() !== "";
+        const hasHoursFilter = filters.hideZeroHours;
 
-        if (!hasTeamFilter && !hasNameFilter) {
+        if (!hasTeamFilter && !hasNameFilter && !hasHoursFilter) {
             return data; // Sin filtros, devolver datos originales
         }
 
@@ -69,10 +71,12 @@ export const RosterPage = () => {
         return data.map(day => ({
             ...day,
             employees: day.employees?.filter(emp => {
+                // Filtro por equipo
                 if (hasTeamFilter && !filters.selectedTeams.includes(emp.teamWork)) {
                     return false;
                 }
 
+                // Filtro por nombre
                 if (hasNameFilter) {
                     const fullName = `${emp.name} ${emp.lastName || ""}`.toLowerCase();
                     if (!fullName.includes(normalizedName)) {
@@ -80,10 +84,18 @@ export const RosterPage = () => {
                     }
                 }
 
+                // ✅ NUEVO: Filtro por horas cero
+                if (hasHoursFilter) {
+                    const totalHours = (emp.workShift.filter(w => w === "WORK").length * 15) / 60;
+                    if (totalHours === 0) {
+                        return false;
+                    }
+                }
+
                 return true;
             }) || []
         }));
-    }, [data, filters.selectedTeams, filters.employeeName]);
+    }, [data, filters.selectedTeams, filters.employeeName, filters.hideZeroHours]);
 
     // ✅ Optimizar modifiedData
     const modifiedData = useMemo(() => {
@@ -138,11 +150,13 @@ export const RosterPage = () => {
         setShowTeamDropdown(false);
     }, [getRosterBetweenDates, filters.startDate, filters.endDate]);
 
+    // ✅ ACTUALIZADO: incluir hideZeroHours en clearFilters
     const clearFilters = useCallback(() => {
         setFilters(prev => ({
             ...prev,
             selectedTeams: [],
-            employeeName: ""
+            employeeName: "",
+            hideZeroHours: false, // ✅ Reset del filtro
         }));
         setShowTeamDropdown(false);
     }, []);
@@ -161,11 +175,11 @@ export const RosterPage = () => {
         } else {
             console.error("❌ Error al guardar:", result.message);
         }
-    }, [saveData, modifiedData]);
+    }, [saveData, modifiedData, getRosterBetweenDates, filters.startDate, filters.endDate]);
 
     // Función para imprimir
     const handlePrint = useReactToPrint({
-        contentRef: printableRef, // ✅ Cambiar de 'content' a 'contentRef'
+        contentRef: printableRef,
         documentTitle: `Roster_${filters.startDate || 'inicio'}_${filters.endDate || 'fin'}`,
         pageStyle: `
             @page {
@@ -189,14 +203,12 @@ export const RosterPage = () => {
         const uniqueEmployees = new Set();
         let totalHours = 0;
 
-        // Usar for loop para mejor rendimiento
         for (let i = 1; i < filteredData.length; i++) {
             const day = filteredData[i];
             if (!day.employees?.length) continue;
 
             for (const emp of day.employees) {
                 uniqueEmployees.add(emp.id);
-                // Contar directamente sin filter
                 for (const shift of emp.workShift) {
                     if (shift === "WORK") {
                         totalHours += 0.25;
@@ -506,6 +518,20 @@ export const RosterPage = () => {
                                     </div>
                                 </div>
 
+                                {/* ✅ NUEVO BOTÓN TOGGLE MÓVIL */}
+                                <button
+                                    onClick={() => handleFilterChange('hideZeroHours', !filters.hideZeroHours)}
+                                    className={`w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all ${filters.hideZeroHours
+                                        ? 'bg-blue-600 text-white shadow-sm'
+                                        : 'bg-slate-100 text-slate-700'
+                                        }`}
+                                >
+                                    <span>⏰</span>
+                                    <span>
+                                        {filters.hideZeroHours ? 'Mostrando solo empleados activos' : 'Mostrar solo empleados activos'}
+                                    </span>
+                                </button>
+
                                 {/* Fechas */}
                                 <div className="grid grid-cols-2 gap-3">
                                     <div>
@@ -657,14 +683,15 @@ export const RosterPage = () => {
                                         <HeadRow />
 
                                         <div className="bg-slate-100 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 text-center border-l flex items-center justify-center">
-                                            <span className="mr-1">⏰</span>
+                                            <span className="mr-1"><button
+                                                onClick={() => handleFilterChange('hideZeroHours', !filters.hideZeroHours)}
+                                            >⏰</button></span>
                                             <span className="hidden sm:inline">Total</span>
                                         </div>
                                     </div>
 
                                     {/* ✅ Optimizar mapeo de empleados */}
                                     {day.employees?.map((employee) => {
-                                        // Usar el mapeo precalculado
                                         const originalEmployeeIndex = dayMapping.employeeMap.get(employee.id);
 
                                         if (originalEmployeeIndex === undefined) return null;
@@ -677,8 +704,8 @@ export const RosterPage = () => {
                                             >
                                                 <EmployeeRow
                                                     employee={employee}
-                                                    dayIndex={dayMapping.dayIndex} // ✅ Índice precalculado
-                                                    employeeIndex={originalEmployeeIndex} // ✅ Índice precalculado
+                                                    dayIndex={dayMapping.dayIndex}
+                                                    employeeIndex={originalEmployeeIndex}
                                                     numRows={day.employees.length}
                                                     numDays={filteredData.length}
                                                     inputRefsMatrix={inputRefsMatrix}
