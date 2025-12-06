@@ -24,6 +24,7 @@ export const RosterPage = () => {
     const [showMobileFilters, setShowMobileFilters] = useState(false);
     const [showTeamDropdown, setShowTeamDropdown] = useState(false);
 
+
     const dropdownDesktopRef = useRef(null);
     const dropdownMobileRef = useRef(null);
 
@@ -648,16 +649,26 @@ export const RosterPage = () => {
                                                 </h2>
                                                 <p className="text-sm text-slate-500 capitalize">
                                                     {day.day} • {day.employees?.length || 0} empleados
+                                                    {/* ✅ Mostrar indicador si hay filtros activos */}
+                                                    {filters.hideZeroHours || filters.selectedTeams.length > 0 || filters.employeeName && (
+                                                        <span className="text-blue-600 ml-1">
+                                                            (filtrados de {data[dayMapping.dayIndex]?.employees?.length || 0})
+                                                        </span>
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="text-right">
-                                            <div className="text-sm font-medium text-slate-900">
-                                                {((day.employees?.reduce((total, emp) =>
-                                                    total + emp.workShift.filter(w => w === "WORK").length, 0
-                                                ) || 0) * 0.25).toFixed(1)} horas
+
+                                        <div className="flex items-center gap-3">
+                                            {/* Estadísticas del día */}
+                                            <div className="text-right">
+                                                <div className="text-sm font-medium text-slate-900">
+                                                    {((day.employees?.reduce((total, emp) =>
+                                                        total + emp.workShift.filter(w => w === "WORK").length, 0
+                                                    ) || 0) * 0.25).toFixed(1)} horas
+                                                </div>
+                                                <div className="text-xs text-slate-500">Total del día</div>
                                             </div>
-                                            <div className="text-xs text-slate-500">Total del día</div>
                                         </div>
                                     </div>
                                 </div>
@@ -722,10 +733,14 @@ export const RosterPage = () => {
 
                                     {/* Fila de Distribución */}
                                     <div
-                                        className="grid gap-px bg-slate-300 min-w-max border-t-2 border-slate-400"
+                                        className="grid bg-slate-300 min-w-max border-t-2 border-slate-400"
                                         style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
                                     >
-                                        <DistributionRow day={day} />
+                                        <DistributionRow
+                                            day={day}
+                                            originalDay={data[dayMapping.dayIndex]} // ✅ Pasar datos originales
+
+                                        />
                                     </div>
                                 </div>
                             </div>
