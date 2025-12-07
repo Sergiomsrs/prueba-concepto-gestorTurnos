@@ -102,12 +102,11 @@ export const RosterPage = () => {
     const modifiedData = useMemo(() => {
         const result = [];
 
-        // Solo iterar dias que tienen empleados modificados
-        for (let dayIndex = 1; dayIndex < filteredData.length; dayIndex++) {
-            const day = filteredData[dayIndex];
-            if (!day.employees?.length) continue;
+        // ✅ Cambiar esto:
+        for (let dayIndex = 1; dayIndex < data.length; dayIndex++) {  // <- Usar 'data'
+            const day = data[dayIndex];
 
-            for (const emp of day.employees) {
+            for (const emp of day.employees || []) {
                 if (emp.isModified) {
                     result.push({
                         employeeId: emp.id,
@@ -120,7 +119,7 @@ export const RosterPage = () => {
         }
 
         return result;
-    }, [filteredData]);
+    }, [data]);  // <- Depender solo de 'data'
 
     // ✅ Callbacks memoizados
     const handleFilterChange = useCallback((key, value) => {
