@@ -150,7 +150,7 @@ export const ChatUI = () => {
                                 <div className="text-xs leading-relaxed">
                                     Puedo ayudarte a crear turnos.
                                     <br />
-                                    <strong>Ejemplo:</strong> "Crea un turno para el empleado 7 el 22/11/2025 de 08:00 a 14:00"
+                                    <strong>Ejemplo:</strong> "Crea un turno para Ross Geller el 22/11/2025 de 08:00 a 14:00"
                                 </div>
                             </div>
                         ) : (
