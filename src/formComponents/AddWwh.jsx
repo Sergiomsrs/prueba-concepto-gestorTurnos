@@ -7,7 +7,6 @@ export const AddWwh = () => {
     const initialState = { name: '', lastName: '', email: '', hireDate: '', terminationDate: '' };
     const [createForm, setCreateForm] = useState(initialState);
 
-
     const { workHours,
         message,
         setMessage,
@@ -16,11 +15,8 @@ export const AddWwh = () => {
         handleSaveWwh,
         setNewWorkHours,
         handleGetWwhByEmployeeId } = useEmployeeConditions();
-    console.log(workHours)
 
     const { allEmployees } = useEmployees();
-
-    console.log(message)
 
     const handleEmployeeSelect = (e) => {
 
