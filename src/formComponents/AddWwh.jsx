@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useEmployeeConditions } from "../Hooks/useEmployeeConditions";
 import { useEmployees } from "../Hooks/useEmployees";
 
@@ -7,16 +7,26 @@ export const AddWwh = () => {
     const initialState = { name: '', lastName: '', email: '', hireDate: '', terminationDate: '' };
     const [createForm, setCreateForm] = useState(initialState);
 
-    const { workHours,
-        message,
-        setMessage,
-        newWorkHours,
-        setWorkHours,
-        handleSaveWwh,
-        setNewWorkHours,
-        handleGetWwhByEmployeeId } = useEmployeeConditions();
-
     const { allEmployees } = useEmployees();
+
+
+    const {
+        //Data
+        message,
+        workHours,
+        newWorkHours,
+
+        //Setters
+        setMessage,
+        setWorkHours,
+        setNewWorkHours,
+
+        //Handlers
+        handleSaveWwh,
+        handleGetWwhByEmployeeId
+
+    } = useEmployeeConditions();
+
 
     const handleEmployeeSelect = (e) => {
 

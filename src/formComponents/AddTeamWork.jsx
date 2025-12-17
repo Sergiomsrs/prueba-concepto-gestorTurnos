@@ -1,28 +1,41 @@
-import { useEffect, useState } from "react"
+import { useMemo, useState } from "react"
 import { useEmployees } from "../Hooks/useEmployees";
 import { useEmployeeConditions } from "../Hooks/useEmployeeConditions";
 
 
 export const AddTeamWork = () => {
-    const initialState = { name: '', lastName: '', email: '', hireDate: '', terminationDate: '' };
+    const initialState = { id: "" };
     const [createForm, setCreateForm] = useState(initialState);
 
     const { allEmployees } = useEmployees();
 
-    const { teamWork,
+    const {
+        // Data
         message,
-        setMessage,
+        teamWork,
         newTeamWork,
+        // Setters
+
+        setMessage,
         setTeamWork,
-        handleSaveTw,
         setNewTeamWork,
-        handleGetTwByEmployeeId } = useEmployeeConditions();
+
+        // Handlers
+
+        handleSaveTw,
+        handleGetTwByEmployeeId
+
+    } = useEmployeeConditions();
 
 
+    const employeesById = useMemo(
+        () => Object.fromEntries(allEmployees.map(e => [e.id, e])),
+        [allEmployees]
+    );
 
     const handleEmployeeSelect = (e) => {
         const selectedId = e.target.value;
-        const selectedEmployee = allEmployees.find(emp => emp.id.toString() === selectedId);
+        const selectedEmployee = employeesById[selectedId];
 
         if (selectedEmployee) {
             setCreateForm(selectedEmployee);
