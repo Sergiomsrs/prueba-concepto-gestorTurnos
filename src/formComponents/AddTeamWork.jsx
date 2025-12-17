@@ -1,57 +1,37 @@
 import { useEffect, useState } from "react"
+import { useEmployees } from "../Hooks/useEmployees";
+import { useEmployeeConditions } from "../Hooks/useEmployeeConditions";
 
 
 export const AddTeamWork = () => {
     const initialState = { name: '', lastName: '', email: '', hireDate: '', terminationDate: '' };
     const [createForm, setCreateForm] = useState(initialState);
-    const [message, setMessage] = useState("");
-    const [employees, setEmployees] = useState([]); // Estado para la lista de empleados
-    const [teamWork, setteamWork] = useState([]);
-    const [newTeamWork, setNewTeamWork] = useState({ teamWork: "", twStartDate: "" }); // Estado para la nueva jornada
-    const [isExistingEmployee, setIsExistingEmployee] = useState(false);
 
-    // Cargar todos los empleados cuando el componente se monta
-    useEffect(() => {
-        fetch('http://localhost:8081/api/emp/findall') // URL para obtener todos los empleados
-            .then(response => response.json())
-            .then(data => setEmployees(data))
-            .catch(error => console.error("Error al cargar empleados:", error));
-    }, []);
+    const { allEmployees } = useEmployees();
+
+    const { teamWork,
+        message,
+        setMessage,
+        newTeamWork,
+        setTeamWork,
+        handleSaveTw,
+        setNewTeamWork,
+        handleGetTwByEmployeeId } = useEmployeeConditions();
+
+
 
     const handleEmployeeSelect = (e) => {
         const selectedId = e.target.value;
-        const selectedEmployee = employees.find(emp => emp.id.toString() === selectedId);
+        const selectedEmployee = allEmployees.find(emp => emp.id.toString() === selectedId);
 
         if (selectedEmployee) {
             setCreateForm(selectedEmployee);
             setMessage("");
+            handleGetTwByEmployeeId(selectedId)
 
-            fetch(`http://localhost:8081/api/teamwork/${selectedId}`)
-                .then(response => {
-                    if (response.status === 204) {
-                        setMessage("No hay jornadas registradas.");
-                        setteamWork([]);
-                        return null;
-                    }
-                    if (!response.ok) {
-                        throw new Error(`Error en la respuesta del servidor: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data) {
-                        setMessage("");
-                        setteamWork(data);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error al cargar jornadas:", error);
-                    setMessage("Hubo un problema al cargar las jornadas.");
-                });
         } else {
             setCreateForm(initialState);
-            setIsExistingEmployee(false);
-            setteamWork([]);
+            setTeamWork([]);
         }
     };
 
@@ -71,24 +51,7 @@ export const AddTeamWork = () => {
             return;
         }
 
-        fetch(`http://localhost:8081/api/teamwork/create?employeeId=${createForm.id}&teamWork=${newTeamWork.teamWork}&twStartDate=${newTeamWork.twStartDate}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Error al crear la jornada.");
-                }
-                setMessage("Jornada añadida exitosamente.");
-                setNewTeamWork({ teamWork: "", twStartDate: "" });
-                handleEmployeeSelect({ target: { value: createForm.id } });
-            })
-            .catch(error => {
-                console.error("Error al añadir la jornada:", error);
-                setMessage("Hubo un problema al añadir la jornada.");
-            });
+        handleSaveTw(createForm.id, newTeamWork.teamWork, newTeamWork.twStartDate)
     };
 
     return (
@@ -102,7 +65,7 @@ export const AddTeamWork = () => {
                     className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5"
                 >
                     <option value="">-- Seleccione un empleado --</option>
-                    {employees.map(employee => (
+                    {allEmployees.map(employee => (
                         <option key={employee.id} value={employee.id}>
                             {employee.name} {employee.lastName}
                         </option>
@@ -110,8 +73,13 @@ export const AddTeamWork = () => {
                 </select>
             </div>
 
-            {/* Mensaje */}
-            {message && <p className="text-red-500 text-sm">{message}</p>}
+            {message && (
+                <div className="mt-4 rounded-lg border border-violet-200 bg-violet-50 px-4 py-3 shadow-sm animate-fade-in">
+                    <p className="text-sm font-medium text-violet-700">
+                        {message}
+                    </p>
+                </div>
+            )}
 
             {/* Tabla de jornadas */}
             {teamWork.length > 0 && (

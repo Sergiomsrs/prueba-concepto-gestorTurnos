@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { fetchConditions } from "../services/wwhService";
+import { fetchTwConditions } from "../services/teamWorkService";
 
 
 
 export const useEmployeeConditions = () => {
 
     const [workHours, setWorkHours] = useState([]);
-    const [message, setMessage] = useState("");
     const [newWorkHours, setNewWorkHours] = useState({ weeklyWorkHoursData: "", wwhStartDate: "" }); // Estado para la nueva jornada
 
+    const [teamWork, setTeamWork] = useState([]);
+    const [newTeamWork, setNewTeamWork] = useState({ teamWork: "", twStartDate: "" });
 
+    const [message, setMessage] = useState("");
 
     const handleGetWwhByEmployeeId = async (employeeId) => {
         try {
@@ -44,8 +47,41 @@ export const useEmployeeConditions = () => {
             setWorkHours([])
             throw error;
         }
+    }
 
+    const handleGetTwByEmployeeId = async (employeeId) => {
+        try {
+            const result = await fetchTwConditions.getTeamWorkByEmployee(employeeId);
+            if (result.length === 0) {
+                setMessage("No hay registros para este empleado")
+            }
+            setTeamWork(result);
 
+        } catch (error) {
+            setMessage("No se encuentran Jornadas asignadas al empleado.");
+            console.error(error);
+            throw error;
+        }
+    }
+
+    const handleSaveTw = async (employeeId, startDate, endDate) => {
+
+        setTeamWork([]);
+        setMessage("");
+
+        try {
+            await fetchTwConditions.saveTw(employeeId, startDate, endDate);
+            setMessage("Nuevo equipo de trabajo guardado correctamente.");
+            setTimeout(() => {
+                setMessage("")
+            }, 2000)
+            setNewTeamWork({ teamWork: "", twStartDate: "" });
+            handleGetTwByEmployeeId(employeeId)
+        } catch (error) {
+            setMessage("Error al guardar el equipo de trabajo.");
+            setTeamWork([])
+            throw error;
+        }
     }
 
 
@@ -57,7 +93,7 @@ export const useEmployeeConditions = () => {
         message,
         setMessage,
         handleGetWwhByEmployeeId,
-        handleSaveWwh
+        handleSaveWwh, teamWork, setteamWork: setTeamWork, newTeamWork, setNewTeamWork, handleGetTwByEmployeeId, handleSaveTw
 
     }
 }
