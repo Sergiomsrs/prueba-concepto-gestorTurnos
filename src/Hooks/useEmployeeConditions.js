@@ -16,6 +16,8 @@ export const useEmployeeConditions = () => {
 
     const [message, setMessage] = useState("");
 
+    /* ----- Weekly Work Hours Methods ----- */
+
     const handleGetWwhByEmployeeId = async (employeeId) => {
         try {
             const result = await fetchConditions.getWwhByEmployee(employeeId);
@@ -68,6 +70,9 @@ export const useEmployeeConditions = () => {
             throw error;
         }
     }
+
+
+    /* ----- Team Work Methods ----- */
 
     const handleGetTwByEmployeeId = async (employeeId) => {
         try {
