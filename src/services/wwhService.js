@@ -37,6 +37,19 @@ export const fetchConditions = {
         const data = await res.json();
         return { status: res.status, data };
     },
+    deleteWwh: async (wwhId) => {
+        const res = await fetch(`${API_URL}/wwh/${wwhId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        const data = await res.json();
+        return { status: res.status, data };
+    },
 };
 
 

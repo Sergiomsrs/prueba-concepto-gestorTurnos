@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useEmployeeConditions } from "../Hooks/useEmployeeConditions";
 import { useEmployees } from "../Hooks/useEmployees";
+import { TrashIcon } from "../components/icons/TrashIcon";
 
 
 export const AddWwh = () => {
@@ -15,6 +16,7 @@ export const AddWwh = () => {
         message,
         workHours,
         newWorkHours,
+        currentEmployeeId,
 
         //Setters
         setMessage,
@@ -23,7 +25,8 @@ export const AddWwh = () => {
 
         //Handlers
         handleSaveWwh,
-        handleGetWwhByEmployeeId
+        handleGetWwhByEmployeeId,
+        handleDeleteWwh
 
     } = useEmployeeConditions();
 
@@ -57,12 +60,19 @@ export const AddWwh = () => {
             setMessage("Por favor, completa todos los campos.");
             return;
         }
-        handleSaveWwh(createForm.id, newWorkHours.weeklyWorkHoursData, newWorkHours.wwhStartDate)
+        handleSaveWwh(currentEmployeeId, newWorkHours.weeklyWorkHoursData, newWorkHours.wwhStartDate)
     };
+
+    const handleDeleteById = (wwhId) => {
+
+
+
+
+    }
 
 
     return (
-        <form className="space-y-6">
+        <form className="space-y-6" onSubmit={handleSubmitNewWorkHours}>
             {/* Dropdown para seleccionar empleado */}
             <div className="flex flex-col gap-4 mb-4">
                 <label htmlFor="employee-select" className="text-sm font-medium text-gray-700">Seleccionar Empleado</label>
@@ -97,6 +107,7 @@ export const AddWwh = () => {
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Inicio</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Término</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Horas Semanales</th>
+                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700"></th>
                             </tr>
                         </thead>
                         <tbody className="text-sm">
@@ -105,6 +116,12 @@ export const AddWwh = () => {
                                     <td className="px-4 py-2">{workHour.wwhStartDate}</td>
                                     <td className="px-4 py-2">{workHour.wwhTerminationDate || "N/A"}</td>
                                     <td className="px-4 py-2">{workHour.weeklyWorkHoursData}</td>
+                                    <td className="px-4 py-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteWwh(workHour.id)}
+                                        ><TrashIcon /></button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -142,7 +159,7 @@ export const AddWwh = () => {
                 <div className="mt-6 flex items-center justify-end gap-x-6">
                     <button type="button" className="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
 
-                    <button onClick={handleSubmitNewWorkHours} className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white">Save</button>
+                    <button type="submit" className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white">Save</button>
 
                 </div>
 

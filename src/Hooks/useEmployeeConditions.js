@@ -7,10 +7,12 @@ import { fetchTwConditions } from "../services/teamWorkService";
 export const useEmployeeConditions = () => {
 
     const [workHours, setWorkHours] = useState([]);
-    const [newWorkHours, setNewWorkHours] = useState({ weeklyWorkHoursData: "", wwhStartDate: "" }); // Estado para la nueva jornada
+    const [newWorkHours, setNewWorkHours] = useState({ weeklyWorkHoursData: "", wwhStartDate: "" });
 
     const [teamWork, setTeamWork] = useState([]);
     const [newTeamWork, setNewTeamWork] = useState({ teamWork: "", twStartDate: "" });
+    const [currentEmployeeId, setCurrentEmployeeId] = useState(null);
+
 
     const [message, setMessage] = useState("");
 
@@ -20,6 +22,7 @@ export const useEmployeeConditions = () => {
             if (result.length === 0) {
                 setMessage("No hay registros para este empleado")
             }
+            setCurrentEmployeeId(employeeId)
             setWorkHours(result);
 
         } catch (error) {
@@ -44,6 +47,23 @@ export const useEmployeeConditions = () => {
             handleGetWwhByEmployeeId(employeeId)
         } catch (error) {
             setMessage("Error al guardar la jornada.");
+            setWorkHours([])
+            throw error;
+        }
+    }
+
+    const handleDeleteWwh = async (wwhId) => {
+
+        try {
+            await fetchConditions.deleteWwh(wwhId);
+            setMessage("Jornada eliminada correctamente.");
+            setTimeout(() => {
+                setMessage("")
+            }, 2000)
+            setNewWorkHours({ weeklyWorkHoursData: "", wwhStartDate: "" });
+            handleGetWwhByEmployeeId(currentEmployeeId)
+        } catch (error) {
+            setMessage("Error al eliminar la jornada.");
             setWorkHours([])
             throw error;
         }
@@ -76,7 +96,7 @@ export const useEmployeeConditions = () => {
                 setMessage("")
             }, 2000)
             setNewTeamWork({ teamWork: "", twStartDate: "" });
-            handleGetTwByEmployeeId(employeeId)
+            handleGetTwByEmployeeId(currentEmployeeId)
         } catch (error) {
             setMessage("Error al guardar el equipo de trabajo.");
             setTeamWork([])
@@ -93,7 +113,7 @@ export const useEmployeeConditions = () => {
         message,
         setMessage,
         handleGetWwhByEmployeeId,
-        handleSaveWwh, teamWork, setteamWork: setTeamWork, newTeamWork, setNewTeamWork, handleGetTwByEmployeeId, handleSaveTw
+        handleSaveWwh, teamWork, setteamWork: setTeamWork, newTeamWork, setNewTeamWork, handleGetTwByEmployeeId, handleSaveTw, handleDeleteWwh, currentEmployeeId
 
     }
 }
