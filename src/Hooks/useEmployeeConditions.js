@@ -80,10 +80,11 @@ export const useEmployeeConditions = () => {
             if (result.length === 0) {
                 setMessage("No hay registros para este empleado")
             }
+            setCurrentEmployeeId(employeeId)
             setTeamWork(result);
 
         } catch (error) {
-            setMessage("No se encuentran Jornadas asignadas al empleado.");
+            setMessage("No se encuentran equipos de trabajo asignados al empleado.");
             console.error(error);
             throw error;
         }
@@ -101,7 +102,7 @@ export const useEmployeeConditions = () => {
                 setMessage("")
             }, 2000)
             setNewTeamWork({ teamWork: "", twStartDate: "" });
-            handleGetTwByEmployeeId(currentEmployeeId)
+            handleGetTwByEmployeeId(employeeId)
         } catch (error) {
             setMessage("Error al guardar el equipo de trabajo.");
             setTeamWork([])
@@ -109,16 +110,45 @@ export const useEmployeeConditions = () => {
         }
     }
 
+    const handleDeleteTw = async (twId) => {
+
+        try {
+            await fetchTwConditions.deleteTw(twId);
+            setMessage("Equipo eliminado correctamente.");
+            setTimeout(() => {
+                setMessage("")
+            }, 2000)
+            setNewTeamWork({ teamWork: "", twStartDate: "" });
+            handleGetTwByEmployeeId(currentEmployeeId)
+        } catch (error) {
+            setMessage("Error al eliminar el equipo de trabajo.");
+            setNewTeamWork([])
+            throw error;
+        }
+    }
+
 
     return {
-        workHours,
-        setWorkHours,
-        newWorkHours,
-        setNewWorkHours,
         message,
+        currentEmployeeId,
+
+        workHours,
+        newWorkHours,
+        teamWork,
+        newTeamWork,
+
         setMessage,
+        setWorkHours,
+        setNewWorkHours,
+        setTeamWork,
+        setNewTeamWork,
+
+        handleSaveWwh,
+        handleDeleteWwh,
         handleGetWwhByEmployeeId,
-        handleSaveWwh, teamWork, setteamWork: setTeamWork, newTeamWork, setNewTeamWork, handleGetTwByEmployeeId, handleSaveTw, handleDeleteWwh, currentEmployeeId
+        handleDeleteTw,
+        handleSaveTw,
+        handleGetTwByEmployeeId
 
     }
 }

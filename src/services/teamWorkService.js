@@ -37,4 +37,17 @@ export const fetchTwConditions = {
         const data = await res.json();
         return { status: res.status, data };
     },
+    deleteTw: async (twId) => {
+        const res = await fetch(`${API_URL}/teamwork/${twId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!res.ok) {
+            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        }
+        const data = await res.json();
+        return { status: res.status, data };
+    },
 };

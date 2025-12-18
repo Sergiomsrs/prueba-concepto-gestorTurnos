@@ -63,13 +63,6 @@ export const AddWwh = () => {
         handleSaveWwh(currentEmployeeId, newWorkHours.weeklyWorkHoursData, newWorkHours.wwhStartDate)
     };
 
-    const handleDeleteById = (wwhId) => {
-
-
-
-
-    }
-
 
     return (
         <form className="space-y-6" onSubmit={handleSubmitNewWorkHours}>

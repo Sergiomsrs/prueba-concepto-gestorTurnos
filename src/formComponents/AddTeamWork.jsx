@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react"
 import { useEmployees } from "../Hooks/useEmployees";
 import { useEmployeeConditions } from "../Hooks/useEmployeeConditions";
+import { TrashIcon } from "../components/icons/TrashIcon";
 
 
 export const AddTeamWork = () => {
@@ -23,6 +24,7 @@ export const AddTeamWork = () => {
         // Handlers
 
         handleSaveTw,
+        handleDeleteTw,
         handleGetTwByEmployeeId
 
     } = useEmployeeConditions();
@@ -103,6 +105,7 @@ export const AddTeamWork = () => {
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Inicio</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Fecha Fin</th>
                                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Equipo de trabajo</th>
+                                <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Equipo de trabajo</th>
                             </tr>
                         </thead>
                         <tbody className="text-sm">
@@ -111,6 +114,12 @@ export const AddTeamWork = () => {
                                     <td className="px-4 py-2">{teamWork.twStartDate}</td>
                                     <td className="px-4 py-2">{teamWork.twTerminationDate || "N/A"}</td>
                                     <td className="px-4 py-2">{teamWork.teamWork}</td>
+                                    <td className="px-4 py-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleDeleteTw(teamWork.id)}
+                                        ><TrashIcon /></button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
