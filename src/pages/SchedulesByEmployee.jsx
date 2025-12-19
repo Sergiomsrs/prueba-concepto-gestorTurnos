@@ -50,6 +50,7 @@ export const SchedulesByEmployee = () => {
                 setEmployees={setEmployees}
                 selectedEmployeeId={selectedEmployeeId}
                 setSelectedEmployeeId={setSelectedEmployeeId}
+                activeTab={activeTab}
               />
             }
             <NewDatePicker activeTab={activeTab} setActiveTab={setActiveTab} />

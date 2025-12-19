@@ -76,6 +76,23 @@ export const getAllEmployees = async () => {
     }
 };
 
+export const getEmployeesByRange = async (month, year) => {
+    try {
+        const response = await fetch(`${API_URL}/emp/active-by-month?month=${month}&year=${year}`, {
+            method: "GET",
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const fetchDisponibilities = {
     getDisponibilities: async (selectedId) => {
         const res = await fetch(`${API_URL}/disp/${selectedId}`);

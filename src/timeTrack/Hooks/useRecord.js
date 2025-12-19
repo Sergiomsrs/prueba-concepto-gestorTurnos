@@ -11,13 +11,17 @@ export const useRecord = () => {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(1);
   const [selectedDayRecords, setSelectedDayRecords] = useState(null);
   const [lastThree, setLastThree] = useState([]);
+  const [activeTab, setActiveTab] = useState({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth(), // 0-11
+  });
 
   const { auth } = useContext(AuthContext);
 
   const fetchEmployees = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8081/api/emp/active', {
+      const response = await fetch(`http://localhost:8081/api/emp/active-by-month?month=${activeTab.month + 1}&year=${activeTab.year}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -69,14 +73,14 @@ export const useRecord = () => {
   };
 
   const fetchLastThree = async () => {
-  try {
-    const res = await fetch("http://localhost:8081/api/timestamp/last3"); 
-    const data = await res.json();
-    setLastThree(data);
-  } catch (err) {
-    console.error("Error al cargar los últimos registros:", err);
-  }
-};
+    try {
+      const res = await fetch("http://localhost:8081/api/timestamp/last3");
+      const data = await res.json();
+      setLastThree(data);
+    } catch (err) {
+      console.error("Error al cargar los últimos registros:", err);
+    }
+  };
 
 
   return {
@@ -92,6 +96,7 @@ export const useRecord = () => {
     selectedEmployeeId,
     selectedDayRecords,
     lastThree,
+    activeTab,
 
     setRecords,
     setError,
@@ -99,7 +104,8 @@ export const useRecord = () => {
     setIsLoading,
     setSelectedEmployeeId,
     setSelectedDayRecords,
-    setLastThree
+    setLastThree,
+    setActiveTab
   };
 
 

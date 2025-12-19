@@ -1,18 +1,18 @@
 import { useEffect } from 'react'
-import { searchActiveEmployees } from '../services/employees';
+import { getEmployeesByRange, searchActiveEmployees } from '../services/employees';
 
-export const EmployeeSelector = ({employees, setEmployees, selectedEmployeeId, setSelectedEmployeeId}) => {
+export const EmployeeSelector = ({ employees, setEmployees, selectedEmployeeId, setSelectedEmployeeId, activeTab }) => {
 
-        useEffect(() => {
-            searchActiveEmployees()
-                .then(data => setEmployees(data))
-                .catch(error => console.error(error));
-        }, []);
-    
+    useEffect(() => {
+        getEmployeesByRange(activeTab.month + 1, activeTab.year)
+            .then(data => setEmployees(data))
+            .catch(error => console.error(error));
+    }, [activeTab]);
 
-  return (
-    <>
-    <label className="block text-base font-medium leading-6 text-gray-900">Selecciona el empleado</label>
+
+    return (
+        <>
+            <label className="block text-base font-medium leading-6 text-gray-900">Selecciona el empleado</label>
             <div className="relative mt-2 mb-4 rounded-md shadow-sm">
                 <select
                     id="employee"
@@ -29,6 +29,6 @@ export const EmployeeSelector = ({employees, setEmployees, selectedEmployeeId, s
                     ))}
                 </select>
             </div>
-    </>
-  )
+        </>
+    )
 }
