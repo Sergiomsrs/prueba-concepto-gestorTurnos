@@ -20,6 +20,12 @@ export const ShiftForm = () => {
     const [message, setMessage] = useState({ type: "", text: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [activeTab, setActiveTab] = useState({
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(), // 0-11
+    });
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({
@@ -137,6 +143,7 @@ export const ShiftForm = () => {
                                 setEmployees={setEmployees}
                                 selectedEmployeeId={form.employeeId}
                                 setSelectedEmployeeId={handleEmployeeChange}
+                                activeTab={activeTab}
                             />
                         </div>
 
@@ -230,8 +237,8 @@ export const ShiftForm = () => {
                         {/* Mensaje de feedback */}
                         {message.text && (
                             <div className={`rounded-lg p-4 ${message.type === "success"
-                                    ? "bg-green-50 border border-green-200"
-                                    : "bg-red-50 border border-red-200"
+                                ? "bg-green-50 border border-green-200"
+                                : "bg-red-50 border border-red-200"
                                 }`}>
                                 <div className="flex items-center gap-3">
                                     <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${message.type === "success" ? "bg-green-100" : "bg-red-100"
@@ -259,8 +266,8 @@ export const ShiftForm = () => {
                             type="submit"
                             disabled={isSubmitting}
                             className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg text-base font-semibold text-white transition-all shadow-lg ${isSubmitting
-                                    ? "bg-gray-400 cursor-not-allowed"
-                                    : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl transform hover:-translate-y-0.5"
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl transform hover:-translate-y-0.5"
                                 }`}
                         >
                             {isSubmitting ? (
