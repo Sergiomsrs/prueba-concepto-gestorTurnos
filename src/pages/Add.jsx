@@ -5,6 +5,7 @@ import { AddTeamWork } from '../formComponents/AddTeamWork';
 import { AddPto } from '../formComponents/AddPto';
 import { AddDisp } from '../formComponents/AddDisp';
 import { AppContext } from '../context/AppContext';
+import { AddPublicHolidays } from '../formComponents/AddPublicHolidays';
 
 
 
@@ -36,8 +37,11 @@ export const Add = () => {
     case 4:
       content = <AddDisp />;
       break;
+    case 5:
+      content = <AddPublicHolidays />;
+      break;
     default:
-      content = null; // o cualquier contenido predeterminado
+      content = null;
   }
 
   return (
@@ -57,6 +61,7 @@ export const Add = () => {
               { label: "Team Work" },
               { label: "Pto" },
               { label: "Disp" },
+              { label: "PublicH" },
             ].map((tab, idx) => (
               <li key={tab.label} className="flex-none">
                 <button
