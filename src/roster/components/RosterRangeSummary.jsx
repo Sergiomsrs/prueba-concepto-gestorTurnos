@@ -40,7 +40,7 @@ const EmployeeRow = memo(
         const wwh = useMemo(() => {
             let total = 0;
             for (const day of dataToUse) {
-                if (holidayDates.includes(day.id)) continue;
+                if (day.holiday) continue;
                 const emp = day.employees.find((e) => e.name === employeeName);
                 if (emp?.wwh) total += emp.wwh / 7;
             }
@@ -146,20 +146,17 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
             return { wwh: 0, total: '0.0', variation: '0.0' };
         }
 
-        for (const [name] of employeesData) {
+        for (const [name, employeeInfo] of employeesData) {
             // Filtrar por selectedOption
-            const employeeInfo = dataToUse[0]?.employees.find(e => e.name === name);
-            if (!employeeInfo) continue;
-
             const isVisible = selectedOption === "todos" || selectedOption === employeeInfo.teamWork;
             if (!isVisible) continue;
 
             // Calcular WWH
             let wwh = 0;
             for (const day of dataToUse) {
-                if (holidayDates.includes(day.id)) continue;
+                if (day.holiday) continue;
                 const emp = day.employees.find((e) => e.name === name);
-                if (emp?.wwh) wwh += emp.wwh / 7;
+                if (emp?.wwh) wwh += emp.wwh / 2;
             }
             totalWWH += Math.round((wwh * 2) / 2);
 
@@ -232,7 +229,8 @@ export const RosterRangeSummary = memo(({ data }) => {
                 if (!employeeMap.has(emp.name)) {
                     employeeMap.set(emp.name, {
                         lastName: emp.lastName,
-                        teamWork: emp.teamWork
+                        teamWork: emp.teamWork,
+                        isHoliday: day.holiday
                     });
                 }
             }

@@ -2,6 +2,7 @@ export const apiMockData = [
     {
         "id": "2025-08-10",
         "day": "domingo",
+        "holiday": false,
         "employees": [
             {
                 "id": 1,
@@ -512,6 +513,7 @@ export const apiMockData = [
     {
         "id": "2025-08-11",
         "day": "lunes",
+        "holiday": false,
         "employees": [
             {
                 "id": 1,
@@ -1022,6 +1024,7 @@ export const apiMockData = [
     {
         "id": "2025-08-12",
         "day": "martes",
+        "holiday": true,
         "employees": [
             {
                 "id": 1,
@@ -1532,6 +1535,7 @@ export const apiMockData = [
     {
         "id": "2025-08-13",
         "day": "miércoles",
+        "holiday": false,
         "employees": [
             {
                 "id": 1,
@@ -2042,6 +2046,7 @@ export const apiMockData = [
     {
         "id": "2025-08-14",
         "day": "jueves",
+        "holiday": false,
         "employees": [
             {
                 "id": 1,
@@ -2552,6 +2557,7 @@ export const apiMockData = [
     {
         "id": "2025-08-15",
         "day": "viernes",
+        "holiday": false,
         "employees": [
             {
                 "id": 1,
@@ -3062,6 +3068,7 @@ export const apiMockData = [
     {
         "id": "2025-08-16",
         "day": "sábado",
+        "holiday": false,
         "employees": [
             {
                 "id": 1,
@@ -3572,6 +3579,7 @@ export const apiMockData = [
     {
         "id": "2025-08-17",
         "day": "domingo",
+        "holiday": false,
         "employees": [
             {
                 "id": 1,
