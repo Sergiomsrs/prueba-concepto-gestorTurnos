@@ -91,7 +91,7 @@ const EmployeeRow = memo(
                 {dataToUse.map((day) => {
                     const emp = day.employees.find((e) => e.name === employeeName);
                     const hours = emp?.workShift ? calculateShiftDurationFromWorkShift(emp.workShift) : 0;
-                    const isHoliday = holidayDates.includes(day.id);
+                    const isHoliday = day.holiday;
 
                     return (
                         <td key={day.id} className="p-0.5 w-8 h-10">

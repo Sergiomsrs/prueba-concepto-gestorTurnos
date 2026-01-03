@@ -12,6 +12,7 @@ export const RosterPage = () => {
     const { getRosterBetweenDates, apiData, saveData, loading } = useRoster();
     const [data, dispatch] = useReducer(rosterReducer, []);
     const inputRefsMatrix = useRef([]);
+    console.log(apiData)
 
     // 🔹 Estados para filtros (ACTUALIZADO)
     const [filters, setFilters] = useState({
@@ -644,7 +645,7 @@ export const RosterPage = () => {
                                                     {new Date(day.id).toLocaleDateString('es-ES', {
                                                         day: 'numeric',
                                                         month: 'long'
-                                                    })}
+                                                    })}{day.holiday ? "🎉" : ""}
                                                 </h2>
                                                 <p className="text-sm text-slate-500 capitalize">
                                                     {day.day} • {day.employees?.length || 0} empleados
