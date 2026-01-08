@@ -1,27 +1,32 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { selectColor } from "../../utils/function";
 
-// --- COMPONENTES INTERNOS MEMOIZADOS ---
+// --- CONSTANTS ---
+// Defining these outside ensures they are calculated only once, not on every render.
+const START_HOUR = 7;
+const TOTAL_SLOTS = 62;
+const TIME_SLOTS = Array.from({ length: TOTAL_SLOTS }, (_, i) => {
+    const totalMinutes = START_HOUR * 60 + (i * 15);
+    const hour = Math.floor(totalMinutes / 60);
+    return {
+        label: hour.toString().padStart(2, '0'),
+        isHourStart: i % 4 === 0
+    };
+});
+
+// --- MEMOIZED INTERNAL COMPONENTS ---
 
 /**
- * Encabezado de la cuadrícula con las horas (cada 15 minutos).
+ * Encabezado de la cuadrícula con las horas.
+ * Optimizado: Usa la constante TIME_SLOTS pre-calculada.
  */
 const PrintableHeadRow = React.memo(() => {
-    const startHour = 7;
-    const hours = Array.from({ length: 62 }, (_, i) => {
-        const totalMinutes = startHour * 60 + (i * 15);
-        const hour = Math.floor(totalMinutes / 60);
-        return hour.toString().padStart(2, '0');
-    });
-
     return (
         <>
-            {hours.map((hour, i) => {
-                const isHourStart = i % 4 === 0;
-                const defaultBorder = 'border-l-[0.2px] border-slate-100';
-                const specificBorder = isHourStart
+            {TIME_SLOTS.map((slot, i) => {
+                const borderClass = slot.isHourStart
                     ? 'border-l-[0.2px] border-slate-300'
-                    : defaultBorder;
+                    : 'border-l-[0.2px] border-slate-100';
 
                 return (
                     <div
@@ -29,11 +34,11 @@ const PrintableHeadRow = React.memo(() => {
                         className={`
                             bg-slate-100 h-3 flex items-center justify-center 
                             text-[5pt] relative
-                            ${isHourStart ? 'font-bold text-slate-700' : 'font-normal text-slate-400'}
-                            ${specificBorder}
+                            ${slot.isHourStart ? 'font-bold text-slate-700' : 'font-normal text-slate-400'}
+                            ${borderClass}
                         `}
                     >
-                        {isHourStart ? hour : ""}
+                        {slot.isHourStart ? slot.label : ""}
                     </div>
                 );
             })}
@@ -45,39 +50,45 @@ const PrintableHeadRow = React.memo(() => {
  * Fila individual de un empleado.
  */
 const PrintableEmployeeRow = React.memo(({ employee }) => {
-    const totalHours = (employee.workShift.filter((w) => w === "WORK").length * 15) / 60;
+    // Safety check for workShift
+    const workShift = employee.workShift || [];
+    const totalHours = (workShift.filter((w) => w === "WORK").length * 15) / 60;
 
     const getCellClasses = (value, isHourStart) => {
         const baseClasses = `h-3.5 flex items-center justify-center`;
-        const defaultBorder = 'border-l-[0.1px] border-slate-100';
-        const borderLeftClass = isHourStart
+        const borderClass = isHourStart
             ? 'border-l-[0.1px] border-slate-300'
-            : defaultBorder;
+            : 'border-l-[0.1px] border-slate-100';
 
         let backgroundClass = 'bg-slate-50';
+
         if (value === "CONFLICT") {
             backgroundClass = 'bg-amber-400';
         } else if (value === "WORK") {
-            backgroundClass = selectColor(employee.teamWork).replace('bg-', 'bg-');
+            // Ensure selectColor returns a valid tailwind class
+            backgroundClass = selectColor(employee.teamWork);
         }
 
-        return `${baseClasses} ${backgroundClass} ${borderLeftClass}`;
+        return `${baseClasses} ${backgroundClass} ${borderClass}`;
     };
 
     return (
         <div className="contents border-b-[0.5px] border-slate-200">
+            {/* Team Column */}
             <div className="bg-white py-[1px] px-1.5 text-[6pt] font-semibold text-slate-800 border-r-[0.2px] border-slate-200 flex items-center overflow-hidden text-ellipsis whitespace-nowrap">
                 {employee.teamWork}
             </div>
+            {/* Name Column */}
             <div className="bg-white py-[1px] px-1.5 text-[5.5pt] text-slate-600 border-r-[0.2px] border-slate-200 flex items-center overflow-hidden text-ellipsis whitespace-nowrap">
                 {employee.name} {employee.lastName}
             </div>
 
-            {employee.workShift.map((value, hourIndex) => (
-                <div key={hourIndex} className={getCellClasses(value, hourIndex % 4 === 0)}>
-                </div>
+            {/* Time Grid */}
+            {workShift.map((value, hourIndex) => (
+                <div key={hourIndex} className={getCellClasses(value, hourIndex % 4 === 0)} />
             ))}
 
+            {/* Total Hours Column */}
             <div className="bg-white py-[1px] px-1 text-[6pt] font-semibold text-slate-800 border-l-[0.2px] border-slate-200 flex items-center justify-center">
                 {totalHours.toFixed(1)}
             </div>
@@ -89,7 +100,12 @@ const PrintableEmployeeRow = React.memo(({ employee }) => {
  * Fila de distribución de empleados por franja horaria.
  */
 const PrintableDistributionRow = React.memo(({ day }) => {
-    const distributionData = Array.from({ length: 62 }, (_, i) => day.employees?.reduce((acc, emp) => acc + (emp.workShift[i] === "WORK" ? 1 : 0), 0) || 0);
+    // Memoize the distribution calculation within the component to prevent recalc on non-data renders
+    const distributionData = useMemo(() => {
+        return Array.from({ length: TOTAL_SLOTS }, (_, i) =>
+            day.employees?.reduce((acc, emp) => acc + (emp.workShift?.[i] === "WORK" ? 1 : 0), 0) || 0
+        );
+    }, [day.employees]);
 
     return (
         <>
@@ -98,10 +114,9 @@ const PrintableDistributionRow = React.memo(({ day }) => {
             </div>
 
             {distributionData.map((count, i) => {
-                const defaultBorder = 'border-l-[0.1px] border-slate-100';
-                const borderLeftClass = i % 4 === 0
+                const borderClass = i % 4 === 0
                     ? 'border-l-[0.2px] border-slate-300'
-                    : defaultBorder;
+                    : 'border-l-[0.1px] border-slate-100';
 
                 return (
                     <div
@@ -109,7 +124,7 @@ const PrintableDistributionRow = React.memo(({ day }) => {
                         className={`
                             bg-slate-100 
                             flex items-center justify-center text-[5.5pt] font-bold 
-                            ${borderLeftClass}
+                            ${borderClass}
                             ${count > 0 ? 'text-slate-800' : 'text-transparent'}
                         `}
                     >
@@ -123,56 +138,55 @@ const PrintableDistributionRow = React.memo(({ day }) => {
 });
 
 /**
- * Tabla de Resumen con datos de empleados, WWH, horas trabajadas y diferencia
+ * Tabla de Resumen con datos de empleados
  */
 const PrintableSummaryTable = React.memo(({ data }) => {
-    // Calcular datos del resumen
-    const employeesSummary = React.useMemo(() => {
+    const { employeesSummary, totalHours, totalWWH, totalVariation } = useMemo(() => {
         const employeeMap = new Map();
 
-        // Recopilar información de todos los días
         data.forEach(day => {
             day.employees?.forEach(emp => {
-                const key = `${emp.name} ${emp.lastName}`;
+                const key = `${emp.name} ${emp.lastName}`; // Consider using emp.id if available for uniqueness
 
                 if (!employeeMap.has(key)) {
                     employeeMap.set(key, {
-                        name: key,
+                        name: `${emp.name} ${emp.lastName}`,
                         teamWork: emp.teamWork,
                         totalHours: 0,
                         totalWWH: 0,
-                        dayCount: 0
                     });
                 }
 
                 const employee = employeeMap.get(key);
-                // Calcular horas trabajadas desde workShift
-                const workHours = (emp.workShift.filter(w => w === "WORK").length * 15) / 60;
+                const workHours = (emp.workShift?.filter(w => w === "WORK").length * 15) / 60 || 0;
+
                 employee.totalHours += workHours;
 
-                // Sumar WWH si existe
+                // Logic: Accumulate WWH / 7 for each day present in the data
                 if (emp.wwh) {
-                    employee.totalWWH += emp.wwh / 7; // WWH dividido entre 7 días
+                    employee.totalWWH += emp.wwh / 7;
                 }
-                employee.dayCount++;
             });
         });
 
-        // Convertir a array y calcular diferencias
-        return Array.from(employeeMap.values()).map(emp => ({
+        const summaryList = Array.from(employeeMap.values()).map(emp => ({
             ...emp,
-            averageWWH: emp.totalWWH,
             variation: emp.totalWWH - emp.totalHours
         }));
-    }, [data]);
 
-    const totalHours = employeesSummary.reduce((sum, emp) => sum + emp.totalHours, 0);
-    const totalWWH = employeesSummary.reduce((sum, emp) => sum + emp.averageWWH, 0);
-    const totalVariation = totalWWH - totalHours;
+        const tHours = summaryList.reduce((sum, emp) => sum + emp.totalHours, 0);
+        const tWWH = summaryList.reduce((sum, emp) => sum + emp.totalWWH, 0);
+
+        return {
+            employeesSummary: summaryList,
+            totalHours: tHours,
+            totalWWH: tWWH,
+            totalVariation: tWWH - tHours
+        };
+    }, [data]);
 
     return (
         <section className="mt-8 break-inside-avoid border-[0.5px] border-slate-200 rounded-xl overflow-hidden">
-            {/* Header del resumen */}
             <header className="p-2 bg-slate-50 border-b-[0.5px] border-slate-200">
                 <h3 className="text-sm font-semibold text-slate-800 mb-1">📊 Resumen de Jornadas</h3>
                 <p className="text-[8pt] text-slate-500">
@@ -180,64 +194,35 @@ const PrintableSummaryTable = React.memo(({ data }) => {
                 </p>
             </header>
 
-            {/* Tabla */}
             <div className="overflow-hidden">
                 <table className="w-full text-[7pt]">
                     <thead>
                         <tr className="bg-slate-100">
-                            <th className="text-left px-2 py-1 font-semibold text-slate-700 border-r-[0.5px] border-slate-200">
-                                Empleado
-                            </th>
-                            <th className="px-2 py-1 font-semibold text-slate-700 border-r-[0.5px] border-slate-200 text-center">
-                                Equipo
-                            </th>
-                            <th className="px-2 py-1 font-semibold text-slate-700 border-r-[0.5px] border-slate-200 text-center">
-                                WWH
-                            </th>
-                            <th className="px-2 py-1 font-semibold text-slate-700 border-r-[0.5px] border-slate-200 text-center">
-                                Trabajadas
-                            </th>
-                            <th className="px-2 py-1 font-semibold text-slate-700 text-center">
-                                Diferencia
-                            </th>
+                            <th className="text-left px-2 py-1 font-semibold text-slate-700 border-r-[0.5px] border-slate-200">Empleado</th>
+                            <th className="px-2 py-1 font-semibold text-slate-700 border-r-[0.5px] border-slate-200 text-center">Equipo</th>
+                            <th className="px-2 py-1 font-semibold text-slate-700 border-r-[0.5px] border-slate-200 text-center">WWH</th>
+                            <th className="px-2 py-1 font-semibold text-slate-700 border-r-[0.5px] border-slate-200 text-center">Trabajadas</th>
+                            <th className="px-2 py-1 font-semibold text-slate-700 text-center">Diferencia</th>
                         </tr>
                     </thead>
                     <tbody>
                         {employeesSummary.map((emp, index) => (
                             <tr key={index} className="border-b-[0.5px] border-slate-100 hover:bg-slate-50">
-                                <td className="text-left px-2 py-1 font-medium text-slate-800 border-r-[0.5px] border-slate-200">
-                                    {emp.name}
-                                </td>
-                                <td className="px-2 py-1 text-slate-600 border-r-[0.5px] border-slate-200 text-center">
-                                    {emp.teamWork}
-                                </td>
-                                <td className="px-2 py-1 text-slate-700 border-r-[0.5px] border-slate-200 text-center">
-                                    {emp.averageWWH.toFixed(1)}
-                                </td>
-                                <td className="px-2 py-1 text-slate-700 border-r-[0.5px] border-slate-200 text-center">
-                                    {emp.totalHours.toFixed(1)}
-                                </td>
-                                <td className={`px-2 py-1 text-center font-medium ${emp.variation >= 0 ? "text-green-700" : "text-red-700"
-                                    }`}>
+                                <td className="text-left px-2 py-1 font-medium text-slate-800 border-r-[0.5px] border-slate-200">{emp.name}</td>
+                                <td className="px-2 py-1 text-slate-600 border-r-[0.5px] border-slate-200 text-center">{emp.teamWork}</td>
+                                <td className="px-2 py-1 text-slate-700 border-r-[0.5px] border-slate-200 text-center">{emp.averageWWH ? emp.averageWWH.toFixed(1) : emp.totalWWH.toFixed(1)}</td>
+                                <td className="px-2 py-1 text-slate-700 border-r-[0.5px] border-slate-200 text-center">{emp.totalHours.toFixed(1)}</td>
+                                <td className={`px-2 py-1 text-center font-medium ${emp.variation >= 0 ? "text-green-700" : "text-red-700"}`}>
                                     {emp.variation >= 0 ? "+" : ""}{emp.variation.toFixed(1)}
                                 </td>
                             </tr>
                         ))}
-
-                        {/* Fila de totales */}
                         <tr className="bg-slate-100 border-t-[1px] border-slate-300 font-semibold">
-                            <td className="text-left px-2 py-1.5 text-slate-800 border-r-[0.5px] border-slate-200">
-                                TOTALES
-                            </td>
+                            <td className="text-left px-2 py-1.5 text-slate-800 border-r-[0.5px] border-slate-200">TOTALES</td>
                             <td className="px-2 py-1.5 border-r-[0.5px] border-slate-200"></td>
-                            <td className="px-2 py-1.5 text-slate-800 border-r-[0.5px] border-slate-200 text-center">
-                                {totalWWH.toFixed(1)}
-                            </td>
-                            <td className="px-2 py-1.5 text-slate-800 border-r-[0.5px] border-slate-200 text-center">
-                                {totalHours.toFixed(1)}
-                            </td>
-                            <td className={`px-2 py-1.5 text-center font-bold ${totalVariation >= 0 ? "text-green-700" : "text-red-700"
-                                }`}>
+                            <td className="px-2 py-1.5 text-slate-800 border-r-[0.5px] border-slate-200 text-center">{totalWWH.toFixed(1)}</td>
+                            <td className="px-2 py-1.5 text-slate-800 border-r-[0.5px] border-slate-200 text-center">{totalHours.toFixed(1)}</td>
+                            <td className={`px-2 py-1.5 text-center font-bold ${totalVariation >= 0 ? "text-green-700" : "text-red-700"}`}>
                                 {totalVariation >= 0 ? "+" : ""}{totalVariation.toFixed(1)}
                             </td>
                         </tr>
@@ -252,138 +237,93 @@ const PrintableSummaryTable = React.memo(({ data }) => {
  * Componente principal.
  */
 export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
-    const stats = {
-        employees: new Set(data.flatMap(day => day.employees?.map(emp => emp.id) || [])).size,
-        hours: data.reduce((total, day) => total + (day.employees?.reduce((dayTotal, emp) => dayTotal + emp.workShift.filter(w => w === "WORK").length * 0.25, 0) || 0), 0),
-        days: data.length
+    // Grid inline style extraction for cleaner JSX
+    const gridStyle = {
+        gridTemplateColumns: '1.5fr 2fr repeat(62, 0.5fr) 1fr',
     };
 
     return (
-        <div
-            ref={ref}
-            className="font-sans bg-white"
-        >
+        <div ref={ref} className="font-sans bg-white">
             <style>{`
                 @media print {
                     @page { 
                         size: A4 portrait; 
                         margin: 0.2in; 
                     } 
-                    
-                    /* Forzar ancho fijo independiente del viewport móvil */
                     .print-container {
-                        width: 8in !important; /* Ancho fijo A4 portrait menos márgenes */
+                        width: 8in !important;
                         min-width: 8in !important;
                         max-width: 8in !important;
                         overflow: visible !important;
-                        transform-origin: 0 0;
                     }
-                    
-                    /* Grid con anchos optimizados para A4 vertical */
                     .print-grid {
                         grid-template-columns: 0.6fr 1fr repeat(62, 0.08fr) 0.4fr !important;
                         width: 100% !important;
-                        min-width: 100% !important;
                     }
-                    
-                    /* Reducir ligeramente el tamaño de fuente en móvil */
                     @media (max-width: 768px) {
-                        .print-container {
-                            font-size: 90% !important;
-                        }
-                        
-                        .print-grid {
-                            grid-template-columns: 0.5fr 0.9fr repeat(62, 0.075fr) 0.35fr !important;
-                        }
+                        .print-container { font-size: 90% !important; }
+                        .print-grid { grid-template-columns: 0.5fr 0.9fr repeat(62, 0.075fr) 0.35fr !important; }
                     }
-                    
-                    * {
-                        -webkit-print-color-adjust: exact !important;
-                        print-color-adjust: exact !important;
-                    }
-                    
-                    body {
-                        -webkit-font-smoothing: antialiased;
-                        -moz-osx-font-smoothing: grayscale;
-                        image-rendering: -webkit-optimize-contrast;
-                        image-rendering: crisp-edges;
-                        overflow-x: visible !important;
-                    }
-                    
-                    /* Evitar que el contenido se corte */
-                    .day-section {
-                        break-inside: avoid;
-                        page-break-inside: avoid;
-                    }
-                    
-                    /* Asegurar que las tablas no se corten */
-                    table {
-                        width: 100% !important;
-                    }
+                    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+                    .day-section { break-inside: avoid; page-break-inside: avoid; }
+                    table { width: 100% !important; }
                 }
             `}</style>
 
             <div className="print-container">
-                {/* Header de la Página */}
                 <header className="text-center mb-6">
                     <h1 className="text-2xl font-bold text-slate-800 mb-2">WorkSchedFlow</h1>
                     <p className="text-sm text-slate-500">Gestión de equipos de trabajo</p>
                 </header>
 
-                {/* Contenido por Día */}
-                {data.map((day) => (
-                    <section
-                        key={day.id}
-                        className="day-section break-inside-avoid mb-6 border-[0.5px] border-slate-200 rounded-xl overflow-hidden"
-                    >
-                        {/* Header del Día */}
-                        <header className="p-1 bg-slate-50 border-b-[0.5px] flex justify-between items-center">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2 bg-slate-100 rounded-lg text-lg">📅</div>
-                                <div>
-                                    <h2 className="text-base font-semibold text-slate-800 m-0">
-                                        {new Date(day.id).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}
-                                    </h2>
-                                    <p className="text-xs text-slate-500 capitalize mt-0.5">
-                                        {day.day} • {day.employees?.length || 0} empleados
-                                    </p>
+                {data.map((day) => {
+                    const dailyTotalHours = (day.employees?.reduce((total, emp) =>
+                        total + (emp.workShift?.filter(w => w === "WORK").length || 0), 0) || 0) * 0.25;
+
+                    return (
+                        <section key={day.id} className="day-section break-inside-avoid mb-6 border-[0.5px] border-slate-200 rounded-xl overflow-hidden">
+                            {/* Header del Día */}
+                            <header className="p-1 bg-slate-50 border-b-[0.5px] flex justify-between items-center">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2 bg-slate-100 rounded-lg text-lg">📅</div>
+                                    <div>
+                                        <h2 className="text-base font-semibold text-slate-800 m-0">
+                                            {new Date(day.id).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}
+                                        </h2>
+                                        <p className="text-xs text-slate-500 capitalize mt-0.5">
+                                            {day.day} • {day.employees?.length || 0} empleados
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-sm font-semibold text-slate-800">
+                                        {dailyTotalHours.toFixed(1)} horas
+                                    </div>
+                                    <div className="text-xs text-slate-500">Total del día</div>
+                                </div>
+                            </header>
+
+                            {/* Grid de Turnos */}
+                            <div>
+                                <div className="print-grid grid bg-slate-200 border-t-[0.2px]" style={gridStyle}>
+                                    <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Equipo</div>
+                                    <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Empleado</div>
+
+                                    <PrintableHeadRow />
+
+                                    <div className="bg-slate-200 p-0 text-[7pt] font-semibold text-slate-600 flex items-center justify-center gap-1">⏰</div>
+
+                                    {day.employees?.map((employee) => (
+                                        <PrintableEmployeeRow key={employee.id} employee={employee} />
+                                    ))}
+
+                                    <PrintableDistributionRow day={day} />
                                 </div>
                             </div>
-                            <div className="text-right">
-                                <div className="text-sm font-semibold text-slate-800">
-                                    {((day.employees?.reduce((total, emp) => total + emp.workShift.filter(w => w === "WORK").length, 0) || 0) * 0.25).toFixed(1)} horas
-                                </div>
-                                <div className="text-xs text-slate-500">Total del día</div>
-                            </div>
-                        </header>
+                        </section>
+                    );
+                })}
 
-                        {/* Grid de Turnos */}
-                        <div>
-                            <div
-                                className="print-grid grid bg-slate-200 border-t-[0.2px]"
-                                style={{
-                                    gridTemplateColumns: '1.5fr 2fr repeat(62, 0.5fr) 1fr',
-                                }}
-                            >
-                                {/* Headers del Grid */}
-                                <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Equipo</div>
-                                <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Empleado</div>
-
-                                <PrintableHeadRow />
-
-                                <div className="bg-slate-200 p-0 text-[7pt] font-semibold text-slate-600 flex items-center justify-center gap-1">⏰</div>
-
-                                {/* Filas de Empleados */}
-                                {day.employees?.map((employee) => <PrintableEmployeeRow key={employee.id} employee={employee} />)}
-
-                                {/* Fila de Distribución */}
-                                <PrintableDistributionRow day={day} />
-                            </div>
-                        </div>
-                    </section>
-                ))}
-
-                {/* Tabla de Resumen */}
                 <PrintableSummaryTable data={data} />
             </div>
         </div>
