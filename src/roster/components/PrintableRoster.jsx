@@ -243,30 +243,78 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
     };
 
     return (
-        <div ref={ref} className="font-sans bg-white">
+        <div ref={ref} className="font-sans bg-white" style={{ width: '210mm', margin: '0 auto' }}>
             <style>{`
+                :root {
+                    --page-width: 210mm;
+                    --print-font-size: 10px;
+                }
+                
                 @media print {
-                    @page { 
-                        size: A4 portrait; 
-                        margin: 0.2in; 
-                    } 
-                    .print-container {
-                        width: 8in !important;
-                        min-width: 8in !important;
-                        max-width: 8in !important;
+                    * {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                        color-adjust: exact !important;
+                    }
+                    
+                    html, body {
+                        width: 210mm !important;
+                        height: auto !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
                         overflow: visible !important;
                     }
+                    
+                    .print-container {
+                        width: 210mm !important;
+                        max-width: 210mm !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        overflow: visible !important;
+                        font-size: 10px !important;
+                        background: white !important;
+                    }
+                    
                     .print-grid {
                         grid-template-columns: 0.6fr 1fr repeat(62, 0.08fr) 0.4fr !important;
                         width: 100% !important;
+                        font-size: inherit !important;
                     }
-                    @media (max-width: 768px) {
-                        .print-container { font-size: 90% !important; }
-                        .print-grid { grid-template-columns: 0.5fr 0.9fr repeat(62, 0.075fr) 0.35fr !important; }
+                    
+                    .day-section {
+                        break-inside: avoid !important;
+                        page-break-inside: avoid !important;
+                        orphans: 3;
+                        widows: 3;
                     }
-                    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                    .day-section { break-inside: avoid; page-break-inside: avoid; }
-                    table { width: 100% !important; }
+                    
+                    table {
+                        width: 100% !important;
+                        border-collapse: collapse !important;
+                    }
+                    
+                    thead, tbody, tr, td, th {
+                        break-inside: avoid !important;
+                    }
+                    
+                    section {
+                        break-inside: avoid !important;
+                    }
+                    
+                    img {
+                        max-width: 100% !important;
+                    }
+                }
+                
+                @media screen {
+                    .print-container {
+                        width: 210mm;
+                        margin: 20px auto;
+                        padding: 20px;
+                        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+                    }
                 }
             `}</style>
 

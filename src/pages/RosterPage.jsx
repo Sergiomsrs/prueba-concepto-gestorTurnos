@@ -184,8 +184,14 @@ export const RosterPage = () => {
         documentTitle: `Roster_${filters.startDate || 'inicio'}_${filters.endDate || 'fin'}`,
         pageStyle: `
             @page {
-                size: A4 landscape;
-                margin: 0.2in;
+                size: A4 portrait;
+                margin: 0.3cm 0.2cm;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
             }
         `,
         onBeforeGetContent: () => {
@@ -321,8 +327,17 @@ export const RosterPage = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-            {/* Componente oculto para impresión */}
-            <div style={{ position: 'absolute', left: '-9999px', top: '-9999px' }}>
+            {/* Componente oculto para impresión - Optimizado para móvil y PC */}
+            <div style={{
+                display: 'none',
+                visibility: 'hidden',
+                position: 'absolute',
+                left: '-10000px',
+                top: '-10000px',
+                width: '210mm',
+                height: '297mm',
+                overflow: 'hidden'
+            }}>
                 <PrintableRoster
                     ref={printableRef}
                     data={filteredData.slice(1)}
