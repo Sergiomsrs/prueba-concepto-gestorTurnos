@@ -8,7 +8,7 @@ WorkSchedFlow es una prueba de concepto diseñada para facilitar la gestión de 
 
 [Workschedflow](https://sergiomsrs.github.io/prueba-concepto-gestorTurnos/) - Accede a la demo.
 
-![imagenApp](/roster-page-wsf.webp)
+![imagenApp](/public/general.webp)
 
 
 ## Estado del Proyecto
