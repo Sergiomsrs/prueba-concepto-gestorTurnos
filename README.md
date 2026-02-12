@@ -1,55 +1,79 @@
-# Gestión de Turnos de Trabajo - Prueba de Concepto
+# WorkSchedFlow - POC
 
 ## Descripción
 
-Este proyecto es una prueba de concepto de una aplicación para gestionar turnos de trabajo. El objetivo es evaluar las mejores formas de abordar el proyecto, recopilar la información necesaria y definir las características esenciales que debería tener una aplicación de este estilo.
+**WorkSchedFlow** es una prueba de concepto diseñada para facilitar la gestión de turnos de trabajo. Su objetivo principal es cubrir las necesidades de los gestores de equipos, proporcionando una herramienta que simplifica el diseño de horarios, garantiza el cumplimiento de la normativa laboral y tiene en cuenta las expectativas y disponibilidad de los empleados.
 
+👉 **Demo online:**  
+[WorkSchedFlow – GitHub Pages](https://sergiomsrs.github.io/prueba-concepto-gestorTurnos/)
+
+🎥 **Vídeo demostración:**  
+[Ver demo en YouTube](https://youtu.be/RifYxP6gKqA)
+
+![imagenApp](/public/general.webp)
+
+---
 
 ## Estado del Proyecto
 
-Actualmente, el proyecto está en una etapa inicial y no se encuentra en un estado funcional. Se están explorando diversas tecnologías y enfoques para determinar la mejor manera de implementar las características planificadas.
+El proyecto se encuentra actualmente en **fase de despliegue** y cuenta con una **versión demo funcional** publicada en GitHub Pages.  
+Además, dispone de una **API REST** que todavía no ha sido desplegada.
 
-# Instalar dependencias Testing
+En paralelo, se está trabajando en el desarrollo de un **microservicio de inteligencia artificial**, basado en **LangChain y Ollama**, orientado a la automatización y optimización de la planificación de turnos.
 
-1. [Vitest](https://vitest.dev/guide/)
+---
 
-```bash
-npm install --save-dev vitest jsdom
-```
+## Características Principales
 
-2. React [Testing Library](https://testing-library.com/docs/react-testing-library/intro)
+### Gestión y planificación
+- Plataforma integral que unifica **gestión de empleados**, **cuadrantes horarios** y **control de fichajes**.
+- Sistema totalmente automatizado: seleccionando un rango de fechas se generan los empleados activos, sus jornadas y los equipos de trabajo.
+- Control preciso de jornadas y equipos, definiendo fechas de inicio y fin para cada asignación.
 
-```bash
-npm install --save-dev @testing-library/react @testing-library/dom
-```
+### Vista del empleado
+- Vista personal por empleado con:
+  - Horarios asignados
+  - Ausencias y vacaciones
+  - Registros de jornada
+  - Notificaciones ante cualquier modificación
 
-- Todo en un sólo comando
+### Ausencias y disponibilidad
+- Gestión completa de **ausencias, vacaciones y horas no disponibles**.
+- Las ausencias se muestran señalizadas y quedan automáticamente excluidas de la planificación.
 
-```bash
-npm install --save-dev @testing-library/react @testing-library/dom vitest jsdom
-```
+### Herramientas avanzadas de cuadrantes
+- Creación de cuadrantes con:
+  - Marcaje automático de descansos
+  - Filtros por equipo o empleado
+  - Vista diaria solo de empleados activos
+  - Vistas globales o segmentadas por grupos
+- Creación flexible de cuadrantes:
+  - Desde cero
+  - Copiando semanas anteriores
+  - Aplicando turnos por defecto
 
-3. Crear estos scripts en el `package.json`
+### Plantillas y planificación modelo
+- Configuración de **semanas genéricas** con empleados ficticios para planificaciones tipo.
+- Asignación posterior de estas semanas a empleados reales.
+- Hasta **6 semanas genéricas** disponibles.
 
-```json
-"scripts": {
-  "test": "vitest",
-  "test:ui": "vitest --ui",
-  "coverage": "vitest run --coverage"
-}
-```
+### Control de jornada e inspección
+- Control de registros de jornada con:
+  - Alertas por ausencia en turno
+  - Alertas por fichajes incorrectos
+- Vista dedicada para inspección con:
+  - Acceso completo a todos los registros
+  - Descarga de informes en PDF
+- Posibilidad de añadir o corregir fichajes, generando:
+  - Notificaciones automáticas
+  - Envío de correos tanto al gestor como al empleado
 
-4. Configurar `vite.config.ts`
-```ts
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react-swc';
+### Reportes y exportación
+- Resumen automático por trabajador y totales del periodo seleccionado.
+- Reporte mensual completo con:
+  - Horas totales por empleado
+  - Horas extra, nocturnas y festivas
+  - Cálculo de costes según la lógica de negocio
+- Impresión directa de cuadrantes en PDF, con una vista clara y lista para entregar.
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: 'jsdom',
-    globals: true,
-  },
-});
-```
+
