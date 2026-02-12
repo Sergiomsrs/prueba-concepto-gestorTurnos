@@ -28638,3 +28638,356 @@ export const reportMockData = {
         }
     ]
 }
+
+export const rolesMock = [
+    {
+        "id": 1,
+        "name": "Turno 1",
+        "wwh": 40,
+        "teamwork": "Black",
+        "active": true
+    },
+    {
+        "id": 2,
+        "name": "Turno 2",
+        "wwh": 40,
+        "teamwork": "Black",
+        "active": true
+    },
+    {
+        "id": 3,
+        "name": "Turno 3",
+        "wwh": 35,
+        "teamwork": "Black",
+        "active": true
+    },
+    {
+        "id": 4,
+        "name": "Turno 4",
+        "wwh": 35,
+        "teamwork": "Black",
+        "active": true
+    },
+    {
+        "id": 5,
+        "name": "Turno 5",
+        "wwh": 25,
+        "teamwork": "Black",
+        "active": true
+    },
+    {
+        "id": 6,
+        "name": "Turno 6",
+        "wwh": 25,
+        "teamwork": "Black",
+        "active": true
+    },
+    {
+        "id": 7,
+        "name": "Turno 7",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 8,
+        "name": "Turno 8",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 9,
+        "name": "Turno 9",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 10,
+        "name": "Turno 10",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 11,
+        "name": "Turno 11",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 12,
+        "name": "Turno 12",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 13,
+        "name": "Turno 13",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 14,
+        "name": "Turno 14",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 15,
+        "name": "Turno 15",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 16,
+        "name": "Turno 16",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 17,
+        "name": "Turno 17",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 18,
+        "name": "Turno 18",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 19,
+        "name": "Turno 19",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 20,
+        "name": "Turno 20",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 21,
+        "name": "Turno 21",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 22,
+        "name": "Turno 22",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 23,
+        "name": "Turno 23",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 24,
+        "name": "Turno 24",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 25,
+        "name": "Turno 25",
+        "wwh": 20,
+        "teamwork": "Yellow",
+        "active": false
+    },
+    {
+        "id": 26,
+        "name": "Turno 26",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 27,
+        "name": "Turno 27",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 28,
+        "name": "Turno 28",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 29,
+        "name": "Turno 29",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 30,
+        "name": "Turno 30",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 31,
+        "name": "Turno 31",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 32,
+        "name": "Turno 32",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 33,
+        "name": "Turno 33",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 34,
+        "name": "Turno 34",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 35,
+        "name": "Turno 35",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 36,
+        "name": "Turno 36",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 37,
+        "name": "Turno 37",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 38,
+        "name": "Turno 38",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 39,
+        "name": "Turno 39",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 40,
+        "name": "Turno 40",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 41,
+        "name": "Turno 41",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 42,
+        "name": "Turno 42",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 43,
+        "name": "Turno 43",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 44,
+        "name": "Turno 44",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 45,
+        "name": "Turno 45",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 46,
+        "name": "Turno 46",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 47,
+        "name": "Turno 47",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 48,
+        "name": "Turno 48",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 49,
+        "name": "Turno 49",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    },
+    {
+        "id": 50,
+        "name": "Turno 50",
+        "wwh": 20,
+        "teamwork": "Pink",
+        "active": false
+    }
+]

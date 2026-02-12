@@ -4,6 +4,7 @@ import { useEmployees } from "../../Hooks/useEmployees";
 import { DateRangePicker } from "../components/DateRangePicker";
 import { OptionsPicker } from "../components/OptionsPicker";
 import { saveDefaultRole } from "../../services/genericShiftService";
+import ConfirmButton from "@/roster/utils/ConfirmButton";
 
 export const SetupWeek = () => {
     const {
@@ -30,6 +31,8 @@ export const SetupWeek = () => {
     useEffect(() => {
         handleGetAllRolesWihtDefaults();
     }, []);
+
+    console.log(roles)
 
     const handleSelectEmployee = (genericShiftId, employeeId) => {
         setSelectedEmployees(prev => {
@@ -135,12 +138,13 @@ export const SetupWeek = () => {
 
                         <OptionsPicker value={ciclo} onChange={setCiclo} />
 
-                        <button
-                            onClick={handleGetConfig}
-                            className="px-4 py-2 bg-emerald-600 text-white rounded-md shadow hover:bg-emerald-700 transition font-medium text-sm w-full h-[42px]"
-                        >
-                            Enviar Configuración
-                        </button>
+                        <ConfirmButton
+                            triggerText="Enviar Configuración"
+                            title="¿Confirmar envío de datos?"
+                            description="Se aplicarán los cambios en el horario del trabajador seleccionado."
+                            onConfirm={handleGetConfig}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white w-full h-[42px]"
+                        />
                     </div>
 
                     {/* Vista desktop: Layout con botones a la derecha */}
@@ -188,12 +192,13 @@ export const SetupWeek = () => {
                                 Recargar
                             </button>
 
-                            <button
-                                onClick={handleGetConfig}
-                                className="px-4 py-2 bg-emerald-600 text-white rounded-md shadow hover:bg-emerald-700 transition font-medium text-sm h-[42px]"
-                            >
-                                Enviar Config.
-                            </button>
+                            <ConfirmButton
+                                triggerText="Enviar Configuración"
+                                title="¿Confirmar envío de datos?"
+                                description="Se aplicarán los cambios en el horario del trabajador seleccionado."
+                                onConfirm={handleGetConfig}
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white w-full h-[42px]"
+                            />
                         </div>
                     </div>
                 </div>
