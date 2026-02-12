@@ -32,8 +32,6 @@ export const SetupWeek = () => {
         handleGetAllRolesWihtDefaults();
     }, []);
 
-    console.log(roles)
-
     const handleSelectEmployee = (genericShiftId, employeeId) => {
         setSelectedEmployees(prev => {
             const prevObj = prev.find(sel => sel.genericShiftId === genericShiftId);
