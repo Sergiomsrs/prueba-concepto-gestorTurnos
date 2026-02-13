@@ -85,12 +85,9 @@ export const useCyclesGenerator = () => {
     }
 
     const handleCreateByGeneric = async (config) => {
-        try {
-            const response = await createByGenericShift(config);
-        } catch (error) {
-            console.error("Error obteniendo ciclo:", error);
-        }
 
+        const response = await createByGenericShift(config);
+        return response;
     }
 
     const handleToggle = async (id) => {

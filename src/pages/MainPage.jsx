@@ -19,6 +19,7 @@ import { ShiftForm } from "./ShiftForm"
 import { Reports } from "./Reports"
 import { RosterPage } from "./RosterPage"
 import { ChatUI } from "../ia/components/ChatUI"
+import { Toaster } from "@/components/ui/sonner"
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
@@ -81,6 +82,7 @@ export const MainPage = () => {
         </div>
 
         <main className="flex flex-col w-full max-w-full overflow-x-auto">
+          <Toaster position="bottom-right" richColors />
           <Routes>
             <Route path="/" element={<RosterPage />} />
             <Route path="/daily" element={<Daily />} />

@@ -5,6 +5,7 @@ import { DateRangePicker } from "../components/DateRangePicker";
 import { OptionsPicker } from "../components/OptionsPicker";
 import { saveDefaultRole } from "../../services/genericShiftService";
 import ConfirmButton from "@/roster/utils/ConfirmButton";
+import { toast } from "sonner"
 
 export const SetupWeek = () => {
     const {
@@ -60,9 +61,13 @@ export const SetupWeek = () => {
             endDate: range.end,
             selectedEmployees
         };
-        setConfig(config);
-        handleCreateByGeneric(config)
-    }
+
+        toast.promise(handleCreateByGeneric(config), {
+            loading: 'Enviando...',
+            success: 'Listo',
+            error: 'Error',
+        });
+    };
 
     useEffect(() => {
         if (defaultRoles && defaultRoles.length > 0 && selectedEmployees.length === 0) {
