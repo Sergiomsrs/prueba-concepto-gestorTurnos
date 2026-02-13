@@ -87,13 +87,22 @@ export const SetupWeek = () => {
             shiftRoleId: role.shiftRoleId === "" ? null : role.shiftRoleId
         };
 
-        if (!payload.shiftRoleId) return;
-        try {
-            await saveDefaultRole(payload);
-            console.log("Enviado correctamente:", payload);
-        } catch (error) {
-            console.error("Error enviando datos:", error);
+        if (!payload.shiftRoleId) {
+            toast.error("El ID del rol es obligatorio");
+            return;
         }
+
+        toast.promise(saveDefaultRole(payload), {
+            loading: 'Actualizando asignación...',
+            success: () => {
+                console.log("Enviado correctamente:", payload);
+                return "Asignación actualizada correctamente";
+            },
+            error: (err) => {
+                console.error("Error enviando datos:", err);
+                return "Error al actualizar la asignación";
+            },
+        });
     };
 
     return (
