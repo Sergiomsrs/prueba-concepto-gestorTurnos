@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selectedEmployeeId, employees }) => {
 
@@ -33,7 +34,7 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
 
     try {
       const response = await fetch(
-        `http://localhost:8081/api/report/employee/${employeeId}/report/pdf/monthly?year=${year}&month=${month + 1}`,
+        `${API_URL}/report/employee/${employeeId}/report/pdf/monthly?year=${year}&month=${month + 1}`,
         {
           method: 'GET',
           headers: {
