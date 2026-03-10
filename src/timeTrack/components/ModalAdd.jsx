@@ -3,6 +3,8 @@ import { useContext, useState } from 'react';
 import { ConfirmModal } from './ConfirmationModal';
 import { AuthContext } from '../context/AuthContext';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, setRecords, activeTab }) => {
   const [date, setDate] = useState(null);
   const [time, setTime] = useState(null);
@@ -38,7 +40,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
     }
 
     try {
-      const response = await fetch('http://localhost:8081/api/timestamp/timestamp', {
+      const response = await fetch(`${API_URL}/timestamp/timestamp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -56,7 +58,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
       }
 
       const updatedRecordsResponse = await fetch(
-        `http://localhost:8081/api/timestamp/employee/${selectedEmployeeId}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
+        `${API_URL}/timestamp/employee/${selectedEmployeeId}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -110,31 +112,31 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
           <div className="p-2 md:p-6 space-y-4 text-gray-800">
             <div className="flex items-center justify-start gap-8">
 
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">Empleado</h2>
-              <p className="text-sm text-gray-600">{employee?.name} {employee?.lastName}</p>
-            </div>
+              <div className="space-y-1">
+                <h2 className="text-lg font-semibold">Empleado</h2>
+                <p className="text-sm text-gray-600">{employee?.name} {employee?.lastName}</p>
+              </div>
 
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">Día seleccionado</h2>
-              <p className="text-sm text-gray-600">{date || 'No seleccionado'}</p>
-            </div>
+              <div className="space-y-1">
+                <h2 className="text-lg font-semibold">Día seleccionado</h2>
+                <p className="text-sm text-gray-600">{date || 'No seleccionado'}</p>
+              </div>
 
-            <div className="space-y-1">
-              <h2 className="text-lg font-semibold">Hora</h2>
-              <p className="text-sm text-gray-600">{time || 'No seleccionada'}</p>
-            </div>
+              <div className="space-y-1">
+                <h2 className="text-lg font-semibold">Hora</h2>
+                <p className="text-sm text-gray-600">{time || 'No seleccionada'}</p>
+              </div>
             </div>
             <div className="flex items-center justify-start gap-6">
 
-           
+
               <div className="flex flex-col space-y-2">
                 <label className="text-sm font-medium text-gray-700">Fecha</label>
                 <input
                   type="date"
                   onChange={handleDateChange}
                   className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
+                />
               </div>
 
               <div className="flex flex-col space-y-2">
@@ -143,9 +145,9 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
                   type="time"
                   onChange={handleTimeChange}
                   className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
+                />
               </div>
-               
+
             </div>
           </div>
 
