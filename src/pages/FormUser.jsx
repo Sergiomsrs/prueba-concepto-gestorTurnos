@@ -1,4 +1,5 @@
 import { useState } from "react"
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const FormUser = () => {
 
@@ -27,7 +28,7 @@ export const FormUser = () => {
     }
 
     const handleSaved = () => {
-        fetch('http://localhost:8081/api/emp/creates', {
+        fetch(`${API_URL}/emp/creates`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
