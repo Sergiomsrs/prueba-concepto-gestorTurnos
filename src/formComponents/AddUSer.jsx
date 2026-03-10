@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-
+const API_URL = import.meta.env.VITE_API_URL;
 
 const initialState = {
     id: "",
@@ -24,7 +24,7 @@ export const AddUSer = () => {
 
     // Cargar todos los empleados cuando el componente se monta
     useEffect(() => {
-        fetch('http://localhost:8081/api/emp/findall') // URL para obtener todos los empleados
+        fetch(`${API_URL}/emp/findall`) // URL para obtener todos los empleados
             .then(response => response.json())
             .then(data => setEmployees(data))
             .catch(error => console.error("Error al cargar empleados:", error));
@@ -42,7 +42,7 @@ export const AddUSer = () => {
     };
 
     const handleSave = () => {
-        fetch('http://localhost:8081/api/emp/create', {
+        fetch(`${API_URL}/emp/create`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ export const AddUSer = () => {
     };
 
     const handleUpdate = () => {
-        fetch(`http://localhost:8081/api/emp/update/${createForm.id}`, {
+        fetch(`${API_URL}/emp/update/${createForm.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export const AddUSer = () => {
     };
 
     const handleDelete = () => {
-        fetch(`http://localhost:8081/api/emp/delete/${createForm.id}`, {
+        fetch(`${API_URL}/emp/delete/${createForm.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export const AddUSer = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await fetch(`http://localhost:8081/api/emp/search?email=${email}`);
+            const response = await fetch(`${API_URL}/emp/search?email=${email}`);
             if (response.ok) {
                 const foundEmployee = await response.json();
                 setCreateForm(foundEmployee);
