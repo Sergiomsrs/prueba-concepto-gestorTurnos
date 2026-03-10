@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { AlertMessage } from '../components/AlertMessage';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const Login = () => {
   const { login } = useContext(AuthContext);
@@ -25,7 +26,7 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const loginResponse = await fetch('http://localhost:8081/api/auth/login', {
+      const loginResponse = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -37,7 +38,7 @@ export const Login = () => {
       const token = loginData.token;
       const role = loginData.role;
 
-      const meResponse = await fetch('http://localhost:8081/api/emp/me', {
+      const meResponse = await fetch(`${API_URL}/emp/me`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

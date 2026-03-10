@@ -1,6 +1,8 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 
 export const useRecord = () => {
   const [records, setRecords] = useState([]);
@@ -21,7 +23,7 @@ export const useRecord = () => {
   const fetchEmployees = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`http://localhost:8081/api/emp/active-by-month?month=${activeTab.month + 1}&year=${activeTab.year}`, {
+      const response = await fetch(`${API_URL}/emp/active-by-month?month=${activeTab.month + 1}&year=${activeTab.year}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +56,7 @@ export const useRecord = () => {
     try {
 
       const response = await fetch(
-        `http://localhost:8081/api/timestamp/employee/${(auth.role == "ADMIN" || auth.role == "GUEST") ? selectedEmployeeId : auth.user.id}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
+        `${API_URL}/timestamp/employee/${(auth.role == "ADMIN" || auth.role == "GUEST") ? selectedEmployeeId : auth.user.id}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -74,7 +76,7 @@ export const useRecord = () => {
 
   const fetchLastThree = async () => {
     try {
-      const res = await fetch("http://localhost:8081/api/timestamp/last3");
+      const res = await fetch(`${API_URL}/timestamp/last3`);
       const data = await res.json();
       setLastThree(data);
     } catch (err) {

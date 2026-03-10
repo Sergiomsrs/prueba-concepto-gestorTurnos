@@ -11,6 +11,8 @@ export const useSchedules = (employeeId, startDate, endDate) => {
   const [disponibility, setDisponibility] = useState(dispMockData);
   const { auth } = useContext(AuthContext);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
 
   const employeeToFecth = (auth.role == "ADMIN" || auth.isAuthenticated == false) ? employeeId : auth.user?.id
 
@@ -22,7 +24,7 @@ export const useSchedules = (employeeId, startDate, endDate) => {
 
 
         const response = await fetch(
-          `http://localhost:8081/api/schedule/employeeday/${employeeToFecth}/schedules?startDate=${startDate}&endDate=${endDate}`
+          `${API_URL}/schedule/employeeday/${employeeToFecth}/schedules?startDate=${startDate}&endDate=${endDate}`
         );
 
         if (!response.ok) {

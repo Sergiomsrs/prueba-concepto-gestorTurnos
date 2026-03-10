@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { lastRecordData } from '../../utils/apiMock';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const LogList = () => {
     const { auth } = useContext(AuthContext);
@@ -19,13 +20,13 @@ export const LogList = () => {
                 }
 
                 // Si hay usuario autenticado, hacer la llamada a la API
-                const response = await fetch("http://localhost:8081/api/ws/last100", {
+                const response = await fetch(`${API_URL}/ws/last100`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
                     },
                 });
-                
+
                 if (!response.ok) throw new Error("Error al obtener los datos");
 
                 const data = await response.json();
