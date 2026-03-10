@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCyclesGenerator } from "../../Hooks/useCyclesGenerator";
 import { useEmployees } from "../../Hooks/useEmployees";
 import { DateRangePicker } from "../components/DateRangePicker";
 import { OptionsPicker } from "../components/OptionsPicker";
 import { saveDefaultRole } from "../../services/genericShiftService";
 import ConfirmButton from "@/roster/utils/ConfirmButton";
+import { AuthContext } from "@/timeTrack/context/AuthContext";
 
 export const SetupWeek = () => {
     const {
@@ -23,6 +24,8 @@ export const SetupWeek = () => {
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [range, setRange] = useState({ start: "", end: "" });
     const [config, setConfig] = useState({ range: "", cicle: "", selectedEmployees: "" });
+
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {
         handleGetAllEmployees();

@@ -59,10 +59,13 @@ export const fetchAbsences = (selectedId) => {
 
 /* Nueva implementacion servicios + hooks */
 
-export const getAllEmployees = async () => {
+export const getAllEmployees = async (token) => {
     try {
         const response = await fetch(`${API_URL}/emp/findall`, {
             method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         if (!response.ok) {

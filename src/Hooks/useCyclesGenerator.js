@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { employess, generateData, generateShiftData } from "../utils/shiftGeneratorData";
 import { getGenericShiftWeek } from "../services/shiftService";
 import { createByGenericShift, getCycle, getDefaultRoles, getRoles, toggleShiftRole } from "../services/genericShiftService";
 import { rolesMock } from "@/utils/apiMock";
+import { AuthContext } from "@/timeTrack/context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -13,6 +14,8 @@ export const useCyclesGenerator = () => {
     const [roles, setRoles] = useState(rolesMock)
     const [defaultRoles, setDefaultRoles] = useState([])
 
+    const { auth } = useContext(AuthContext);
+
     useEffect(() => {
 
         setData(generateData(1, employess))
@@ -21,7 +24,7 @@ export const useCyclesGenerator = () => {
 
     const handleGetCycle = async (cicle) => {
         try {
-            const response = await getCycle(cicle); // llamada al fetch
+            const response = await getCycle(cicle, auth.token); // llamada al fetch
             setData(response); // guarda en estado
         } catch (error) {
             console.error("Error obteniendo ciclo:", error);
@@ -36,7 +39,10 @@ export const useCyclesGenerator = () => {
 
         fetch(`${API_URL}/gs/saveAll`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                Authorization: `Bearer ${auth.token}`,
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(dataToSave),
         })
             .then(response => response.json())
@@ -54,7 +60,7 @@ export const useCyclesGenerator = () => {
 
     const handleGetAllRoles = async () => {
         try {
-            const response = await getRoles();
+            const response = await getRoles(auth.token);
             setRoles(response);
         } catch (error) {
             console.error("Error obteniendo ciclo:", error);
@@ -63,10 +69,10 @@ export const useCyclesGenerator = () => {
     }
     const handleGetAllRolesWihtDefaults = async () => {
         try {
-            const response = await getRoles();
+            const response = await getRoles(auth.token);
             setRoles(response);
 
-            const response2 = await getDefaultRoles();
+            const response2 = await getDefaultRoles(auth.token);
             setDefaultRoles(response2)
         } catch (error) {
             console.error("Error obteniendo ciclo:", error);
@@ -76,7 +82,7 @@ export const useCyclesGenerator = () => {
 
     const handleGetRolesByDefault = async () => {
         try {
-            const response = await getDefaultRoles();
+            const response = await getDefaultRoles(auth.token);
             setDefaultRoles(response);
         } catch (error) {
             console.error("Error obteniendo ciclo:", error);
@@ -86,7 +92,7 @@ export const useCyclesGenerator = () => {
 
     const handleCreateByGeneric = async (config) => {
         try {
-            const response = await createByGenericShift(config);
+            const response = await createByGenericShift(config, auth.token);
         } catch (error) {
             console.error("Error obteniendo ciclo:", error);
         }
@@ -95,7 +101,7 @@ export const useCyclesGenerator = () => {
 
     const handleToggle = async (id) => {
         try {
-            await toggleShiftRole(id); // Ejecuta el toggle
+            await toggleShiftRole(id, auth.token); // Ejecuta el toggle
             console.log("Rol actualizado:", id);
 
             // Vuelve a cargar los roles

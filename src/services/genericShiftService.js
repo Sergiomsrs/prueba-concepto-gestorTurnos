@@ -1,9 +1,12 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const getCycle = async (cycle) => {
+export const getCycle = async (cycle, token) => {
     try {
         const response = await fetch(`${API_URL}/gs/getcycle?cycle=${cycle}`, {
             method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         if (!response.ok) {
@@ -18,10 +21,13 @@ export const getCycle = async (cycle) => {
 };
 
 
-export const getRoles = async () => {
+export const getRoles = async (token) => {
     try {
         const response = await fetch(`${API_URL}/role`, {
             method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         if (!response.ok) {
@@ -35,10 +41,13 @@ export const getRoles = async () => {
     }
 };
 
-export const getDefaultRoles = async () => {
+export const getDefaultRoles = async (token) => {
     try {
         const response = await fetch(`${API_URL}/default/get-all`, {
             method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         if (!response.ok) {
@@ -52,11 +61,12 @@ export const getDefaultRoles = async () => {
     }
 };
 
-export const createByGenericShift = async (config) => {
+export const createByGenericShift = async (config, token) => {
     try {
         const response = await fetch(`${API_URL}/gs/create-week`, {
             method: "POST",
             headers: {
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(config),
@@ -72,11 +82,12 @@ export const createByGenericShift = async (config) => {
         throw error;
     }
 };
-export const toggleShiftRole = async (roleId) => {
+export const toggleShiftRole = async (roleId, token) => {
     try {
         const response = await fetch(`${API_URL}/role/${roleId}/toggle-active`, {
             method: "PUT",
             headers: {
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             }
         });
@@ -92,11 +103,12 @@ export const toggleShiftRole = async (roleId) => {
     }
 };
 
-export const saveDefaultRole = async (role) => {
+export const saveDefaultRole = async (role, token) => {
     try {
         const response = await fetch(`${API_URL}/default/save`, {
             method: "POST",
             headers: {
+                Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(role),

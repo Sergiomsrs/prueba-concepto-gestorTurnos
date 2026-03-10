@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { getAllEmployees, fetchDisponibilities, fetchPto } from "../services/employees"
+import { AuthContext } from "@/timeTrack/context/AuthContext";
 
 
 const createFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
@@ -16,15 +17,18 @@ export const useEmployees = () => {
     const [ptoCreateForm, setPtoCreateForm] = useState(PtoFormInitialState);
     const [ptoList, setPtoList] = useState([]);
 
+    const { auth } = useContext(AuthContext);
 
     useEffect(() => {
         handleGetAllEmployees()
     }, []);
 
 
+
+
     const handleGetAllEmployees = async () => {
         try {
-            const response = await getAllEmployees();
+            const response = await getAllEmployees(auth.token);
             setAllEmployees(response);
         } catch (error) {
             console.error("Error obteniendo ciclo:", error);
