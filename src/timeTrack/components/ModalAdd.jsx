@@ -10,7 +10,7 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
   const [time, setTime] = useState(null);
 
   const { auth } = useContext(AuthContext);
-  const employee = employees.find(emp => emp.id === selectedEmployeeId);
+
 
   const [isConOpen, setIsConOpenModal] = useState(false);
   const [message, setMessage] = useState(null);
@@ -88,6 +88,8 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
     handleSubmit();
     setIsConOpenModal(false);
   };
+
+  const employee = employees.find(emp => emp.id === Number(selectedEmployeeId));
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
