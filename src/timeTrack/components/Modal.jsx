@@ -3,6 +3,8 @@ import { filterAndMapRecords } from '../utilities/timeManagement';
 import { AuthContext } from '../context/AuthContext';
 import { ConfirmModal } from './ConfirmationModal';
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const Modal = ({ isOpen, setIsOpen, employeeId, selectedDayRecords, records, setRecords }) => {
 
   const { auth } = useContext(AuthContext);
@@ -11,8 +13,8 @@ export const Modal = ({ isOpen, setIsOpen, employeeId, selectedDayRecords, recor
   const [recordToOperate, setRecordToOperate] = useState(null);
   const [action, setAction] = useState(null);
   const [message, setMessage] = useState(null);
-  
-  
+
+
 
   const [editableRecords, setEditableRecords] = useState([]);
   const [dayRecords, setDayRecords] = useState({
@@ -25,7 +27,7 @@ export const Modal = ({ isOpen, setIsOpen, employeeId, selectedDayRecords, recor
       warning: null
     }
   });
-  
+
 
   // Si selectedDayRecords es null o undefined, no se hace nada
   // Carga la informacion de selectedDayRecords en day records
@@ -89,9 +91,9 @@ export const Modal = ({ isOpen, setIsOpen, employeeId, selectedDayRecords, recor
   };
 
   // Funcion para guardar o actualizar un registro
-const handleSaveRecord = async (recordId) => {
+  const handleSaveRecord = async (recordId) => {
 
-    
+
     // Buscamos en editable records el recor que coincida en id con la que le estamos pasando al metodo
     const recordToSave = editableRecords.find(r => r.id === recordId);
     if (!recordToSave) return alert("No se encontró el registro.");
@@ -100,15 +102,16 @@ const handleSaveRecord = async (recordId) => {
     try {
       const isNew = String(recordId).startsWith('temp');
       const url = isNew
-        ? 'http://localhost:8081/api/timestamp/timestamp'
-        : `http://localhost:8081/api/timestamp/${recordId}`;
+        ? `${API_URL}/timestamp/timestamp`
+        : `${API_URL}/timestamp/${recordId}`;
       const method = isNew ? 'POST' : 'PATCH';
 
       const response = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${auth.token}`,
-         },
+        },
         body: JSON.stringify({
           employeeId: isNew ? recordToSave.employeeId : "",
           timestamp: recordToSave.timestamp,
@@ -116,7 +119,7 @@ const handleSaveRecord = async (recordId) => {
         }),
       });
 
-      
+
 
 
       // Lanzamos mensaje de error en caso de fallo en la consulta
@@ -129,7 +132,7 @@ const handleSaveRecord = async (recordId) => {
       const updatedRecord = {
         employeeId: recordToSave.employeeId,
         timestamp: recordToSave.timestamp,
-        id: recordId, 
+        id: recordId,
         isMod: "true",
       };
 
@@ -151,30 +154,30 @@ const handleSaveRecord = async (recordId) => {
     }
 
     setIsOpen(false);
-};
+  };
 
   const onOpenModal = (id, action) => {
-    
+
     setRecordToOperate(id);
     setIsConOpenModal(true);
     setAction(action);
-    setMessage(action == "delete"? "¿Estás seguro de que deseas eliminar este registro?" : "¿Estás seguro de que deseas guardar este registro?");
-   }
+    setMessage(action == "delete" ? "¿Estás seguro de que deseas eliminar este registro?" : "¿Estás seguro de que deseas guardar este registro?");
+  }
 
-   const onConfirmDelete = () => {
-    handleDeleteRecord(recordToOperate); 
+  const onConfirmDelete = () => {
+    handleDeleteRecord(recordToOperate);
     setRecordToOperate(null);
-    setIsConOpenModal(false); 
+    setIsConOpenModal(false);
   }
   const onCancel = () => {
     setRecordToOperate(null);
     setIsConOpenModal(false);
   }
 
-    const onConfirmSave = () => {
-    handleSaveRecord(recordToOperate); 
+  const onConfirmSave = () => {
+    handleSaveRecord(recordToOperate);
     setRecordToOperate(null);
-    setIsConOpenModal(false); 
+    setIsConOpenModal(false);
   }
 
 
@@ -195,11 +198,12 @@ const handleSaveRecord = async (recordId) => {
     }
     // Se lanza la consulta
     try {
-      const res = await fetch(`http://localhost:8081/api/timestamp/${recordId}`, {
+      const res = await fetch(`${API_URL}/timestamp/${recordId}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${auth.token}`,
-         },
+        },
       });
 
       if (!res.ok) {
@@ -287,7 +291,7 @@ const handleSaveRecord = async (recordId) => {
                   <div className="w-full">
                     <div className="text-sm text-gray-500  flex justify-between">
                       <span>Fecha: {record.dateStr}</span>
-                      
+
                       <button
                         onClick={() => onOpenModal(record.id, "delete")}
                         className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300shadow-lg shadow-red-500/50 font-medium rounded-lg text-sm px-2 py-1 text-center me-0 mb-0 cursor-pointer"
@@ -303,7 +307,7 @@ const handleSaveRecord = async (recordId) => {
                         className="w-fit px-3 py-2 border border-gray-300 rounded-lg shadow-sm bg-white  text-gray-900 "
                       />
                       <button
-                        onClick={() =>onOpenModal(record.id, "save")}
+                        onClick={() => onOpenModal(record.id, "save")}
                         className="w-full  px-4 py-2 rounded-md font-semibold text-sm transition bg-indigo-600 hover: bg-indigo-500 text-white cursor-pointer "
                       >Guardar</button>
 
