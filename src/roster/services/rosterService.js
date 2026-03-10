@@ -1,9 +1,17 @@
+
+
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const fetchRosterBetweenDates = async (startDate, endDate) => {
+
+
+export const fetchRosterBetweenDates = async (startDate, endDate, token) => {
+
     try {
         const response = await fetch(`${API_URL}/day/${startDate}/${endDate}`, {
             method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
         });
 
         if (!response.ok) {
@@ -28,7 +36,7 @@ export const fetchRosterBetweenDates = async (startDate, endDate) => {
 };
 
 // ✅ Método saveData mejorado
-export const saveRosterData = async (modifiedData) => {
+export const saveRosterData = async (modifiedData, token) => {
     // Validación de entrada
     if (!modifiedData || !Array.isArray(modifiedData)) {
         return {
@@ -52,6 +60,7 @@ export const saveRosterData = async (modifiedData) => {
         const response = await fetch(`${API_URL}/ws/saveAll`, {
             method: 'POST',
             headers: {
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },

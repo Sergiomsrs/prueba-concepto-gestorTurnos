@@ -1,6 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { apiMockData } from "../../utils/apiMock";
 import { fetchRosterBetweenDates, saveRosterData } from "../services/rosterService";
+import { AuthContext } from "@/timeTrack/context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,12 +11,14 @@ export const useRoster = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    const { auth } = useContext(AuthContext);
+
     const getRosterBetweenDates = useCallback(async (startDate, endDate) => {
         setLoading(true);
         setError(null);
 
         try {
-            const result = await fetchRosterBetweenDates(startDate, endDate);
+            const result = await fetchRosterBetweenDates(startDate, endDate, auth.token);
 
             if (result.success) {
                 setApiData(result.data);
@@ -56,7 +59,7 @@ export const useRoster = () => {
         setError(null);
 
         try {
-            const result = await saveRosterData(modifiedData);
+            const result = await saveRosterData(modifiedData, auth.token);
 
             if (result.success) {
                 setAlert({

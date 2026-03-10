@@ -5,10 +5,6 @@ import { fetchPublicHolidays } from "../services/publicHolidaysService";
 
 export const usePublicHolidays = () => {
 
-
-
-
-
     const [message, setMessage] = useState("");
     const [publicHolidays, setPublicHolidays] = useState([{
         "id": 1,
