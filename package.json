@@ -12,7 +12,8 @@
     "deploy": "gh-pages -d dist",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "api": "java -jar ../Jobhour-api-0.0.1-SNAPSHOT.jar"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "^1.1.15",
