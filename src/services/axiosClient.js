@@ -32,7 +32,7 @@ axiosClient.interceptors.response.use(
         if (error.response?.status === 403) {
             console.warn("Token expirado");
             sessionStorage.clear();
-            window.location.href = "/prueba-concepto-gestorTurnos/login#/login";
+            // window.location.href = "/prueba-concepto-gestorTurnos/login#/login";
         }
 
         return Promise.reject(error);
