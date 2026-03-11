@@ -12,7 +12,6 @@ export const RosterPage = () => {
     const { getRosterBetweenDates, apiData, saveData, loading } = useRoster();
     const [data, dispatch] = useReducer(rosterReducer, []);
     const inputRefsMatrix = useRef([]);
-    console.log(apiData)
 
     // 🔹 Estados para filtros (ACTUALIZADO)
     const [filters, setFilters] = useState({

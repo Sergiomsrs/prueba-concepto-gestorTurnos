@@ -1,7 +1,7 @@
 
 import { useState } from 'react'
 import { AlertModal } from '../components/AlertModal'
-const API_URL = import.meta.env.VITE_API_URL;
+import { axiosClient } from '@/services/axiosClient'
 
 export const AddTimeTrack = () => {
 
@@ -10,52 +10,48 @@ export const AddTimeTrack = () => {
     const [isOpen, setIsOpen] = useState(false)
 
 
+
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
-            const response = await fetch(`${API_URL}/timestamp/fichar`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    dni: formData.dni,
-                    password: formData.password,
-                }),
-            })
+            // Axios ya sabe que es un POST y convierte el objeto a JSON automáticamente
+            // El token ya va incluido gracias al interceptor de request
+            const response = await axiosClient.post('/timestamp/fichar', {
+                dni: formData.dni,
+                password: formData.password,
+            });
 
-            if (!response.ok) {
-                throw new Error('Error en el fichaje')
-            }
+            // Con Axios, si llegamos aquí, la respuesta es 2xx (éxito)
+            console.log('Fichaje exitoso:', response.data);
 
-            const data = await response.json()
-            console.log('Fichaje exitoso:', data)
-
-
-            setFormData({ dni: '', password: '' })
+            setFormData({ dni: '', password: '' });
             setMessage({
                 type: 'success',
                 text: 'Fichaje exitoso',
-            })
-            setIsOpen(true)
-            setTimeout(() => {
-                setIsOpen(false)
-            }, 1000)
+            });
+
+            setIsOpen(true);
+            setTimeout(() => setIsOpen(false), 1000);
 
         } catch (error) {
-            console.error('Error:', error)
-            setFormData({ dni: '', password: '' })
+            // Axios lanza el error automáticamente si el status es 4xx o 5xx
+            console.error('Error:', error);
+
+            setFormData({ dni: '', password: '' });
+
+            // Intentamos obtener el mensaje de error del backend, si no, uno por defecto
+            const errorText = error.response?.data?.message || 'Se ha producido un error al fichar';
+
             setMessage({
                 type: 'error',
-                text: 'Se ha producido un error al fichar',
-            })
-            setIsOpen(true)
-            setTimeout(() => {
-                setIsOpen(false)
-            }, 2000)
+                text: errorText,
+            });
+
+            setIsOpen(true);
+            setTimeout(() => setIsOpen(false), 2000);
         }
-    }
+    };
 
 
 
