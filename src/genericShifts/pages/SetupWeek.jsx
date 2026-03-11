@@ -87,7 +87,7 @@ export const SetupWeek = () => {
 
         if (!payload.shiftRoleId) return;
         try {
-            await saveDefaultRole(payload);
+            await saveDefaultRole(payload, auth.token);
             console.log("Enviado correctamente:", payload);
         } catch (error) {
             console.error("Error enviando datos:", error);
