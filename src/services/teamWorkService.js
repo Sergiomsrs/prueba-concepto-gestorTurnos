@@ -1,53 +1,42 @@
-const API_URL = import.meta.env.VITE_API_URL;
-
+import { axiosClient } from "./axiosClient";
 
 export const fetchTwConditions = {
 
     getTeamWorkByEmployee: async (employeeId) => {
-
-
         try {
-            const response = await fetch(`${API_URL}/teamwork/${employeeId}`, {
-                method: "GET",
-            });
+            const response = await axiosClient.get(`/teamwork/${employeeId}`);
 
-            if (response.status === 204) {
-                return [];
-            }
-            if (!response.ok) {
-                console.log(response)
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data;
+
+            return response.data || [];
         } catch (error) {
+            if (error.response?.status === 204) return [];
             throw error;
         }
     },
+
     saveTw: async (employeeId, startDate, endDate) => {
-        const res = await fetch(`${API_URL}/teamwork/create?employeeId=${employeeId}&teamWork=${startDate}&twStartDate=${endDate}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        try {
+            const response = await axiosClient.post('/teamwork/create', null, {
+                params: {
+                    employeeId: employeeId,
+                    teamWork: startDate,
+                    twStartDate: endDate
+                }
+            });
+
+            return { status: response.status, data: response.data };
+        } catch (error) {
+            throw new Error(`Error en la respuesta del servidor: ${error.response?.status || error.message}`);
         }
-        const data = await res.json();
-        return { status: res.status, data };
     },
+
     deleteTw: async (twId) => {
-        const res = await fetch(`${API_URL}/teamwork/${twId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        try {
+            const response = await axiosClient.delete(`/teamwork/${twId}`);
+
+            return { status: response.status, data: response.data };
+        } catch (error) {
+            throw new Error(`Error en la respuesta del servidor: ${error.response?.status || error.message}`);
         }
-        const data = await res.json();
-        return { status: res.status, data };
     },
 };

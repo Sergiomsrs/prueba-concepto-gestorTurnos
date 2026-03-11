@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEmployees } from "@/Hooks/useEmployees";
+import { AuthContext } from "@/timeTrack/context/AuthContext";
+import { useContext, useState } from "react"
 const API_URL = import.meta.env.VITE_API_URL;
 
 const initialState = {
@@ -16,19 +18,15 @@ const initialState = {
 
 export const AddUSer = () => {
 
+    const { allEmployees: employees } = useEmployees();
+
     const [createForm, setCreateForm] = useState(initialState);
     const [email, setEmail] = useState("");
     const [isExistingEmployee, setIsExistingEmployee] = useState(false);
     const [message, setMessage] = useState("");
-    const [employees, setEmployees] = useState([]); // Estado para la lista de empleados
 
-    // Cargar todos los empleados cuando el componente se monta
-    useEffect(() => {
-        fetch(`${API_URL}/emp/findall`) // URL para obtener todos los empleados
-            .then(response => response.json())
-            .then(data => setEmployees(data))
-            .catch(error => console.error("Error al cargar empleados:", error));
-    }, []);
+    const { auth } = useContext(AuthContext);
+
 
     const handleInputCreateChange = (e) => {
         setCreateForm({
@@ -46,6 +44,7 @@ export const AddUSer = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
             },
             body: JSON.stringify(createForm),
         })
@@ -59,6 +58,7 @@ export const AddUSer = () => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
             },
             body: JSON.stringify(createForm),
         })
@@ -72,6 +72,7 @@ export const AddUSer = () => {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${auth.token}`,
             },
         })
             .then(response => {

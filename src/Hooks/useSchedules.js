@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { dispMockData, ptoMockData, timestampSchedulesMock } from '../utils/apiMock';
 import { fetchAbsences, searchPtoByEmployee } from '../services/employees'; // Importa tu método
 import { AuthContext } from '../timeTrack/context/AuthContext';
+import { axiosClient } from '@/services/axiosClient';
 
 export const useSchedules = (employeeId, startDate, endDate) => {
   const [data, setData] = useState(timestampSchedulesMock);
@@ -22,20 +23,20 @@ export const useSchedules = (employeeId, startDate, endDate) => {
         setLoading(true);
         setError(null);
 
-
-        const response = await fetch(
-          `${API_URL}/schedule/employeeday/${employeeToFecth}/schedules?startDate=${startDate}&endDate=${endDate}`
+        const res = await axiosClient.get(
+          `/schedule/employeeday/${employeeToFecth}/schedules`,
+          {
+            params: {
+              startDate,
+              endDate,
+            },
+          }
         );
 
-        if (!response.ok) {
-          throw new Error(`Error en la respuesta del servidor: ${response.status}`);
-        }
-
-        const schedules = await response.json();
-        setData(schedules);
+        setData(res.data);
       } catch (err) {
-        setError(err.message || 'Error desconocido');
-        console.error('Error al buscar horarios:', err);
+        console.error("Error al buscar horarios:", err);
+        setError(err.message || "Error desconocido");
         setData(timestampSchedulesMock);
       } finally {
         setLoading(false);

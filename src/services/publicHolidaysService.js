@@ -1,67 +1,50 @@
-const API_URL = import.meta.env.VITE_API_URL;
-
-
+import { axiosClient } from "./axiosClient";
 export const fetchPublicHolidays = {
 
     getAll: async () => {
-
-
         try {
-            const response = await fetch(`${API_URL}/ph`, {
-                method: "GET",
-            });
+            const response = await axiosClient.get('/ph');
 
-            if (response.status === 204) {
-                return [];
-            }
-            if (!response.ok) {
-                console.log(response)
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data;
+            if (response.status === 204) return [];
+
+            return response.data;
         } catch (error) {
+            if (error.response?.status === 204) return [];
             throw error;
         }
     },
+
     savePh: async (id, date, type, description, paid) => {
-        const res = await fetch(`${API_URL}/ph`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
+        try {
+            const payload = {
                 id: id,
                 date: date,
                 type: type,
                 description: description,
-                paid: paid == "SI" ? true : false
-            })
-        });
-        console.log({
-            id: id,
-            date: date,
-            type: type,
-            description: description,
-            paid: paid == "SI" ? true : false
-        })
-        if (!res.ok) {
-            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+                paid: paid === "SI"
+            };
+
+            const response = await axiosClient.post('/ph', payload);
+
+            return {
+                status: response.status,
+                data: response.data
+            };
+        } catch (error) {
+            throw new Error(`Error en la respuesta del servidor: ${error.response?.status || error.message}`);
         }
-        const data = await res.json();
-        return { status: res.status, data };
     },
+
     deleteById: async (id) => {
-        const res = await fetch(`${API_URL}/ph/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        try {
+            const response = await axiosClient.delete(`/ph/${id}`);
+
+            return {
+                status: response.status,
+                data: response.data
+            };
+        } catch (error) {
+            throw new Error(`Error en la respuesta del servidor: ${error.response?.status || error.message}`);
         }
-        const data = await res.json();
-        return { status: res.status, data };
     },
 };

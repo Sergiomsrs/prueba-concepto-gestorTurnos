@@ -1,55 +1,40 @@
-const API_URL = import.meta.env.VITE_API_URL;
+import { axiosClient } from "./axiosClient";
 
 
 export const fetchConditions = {
 
     getWwhByEmployee: async (employeeId) => {
-
-
         try {
-            const response = await fetch(`${API_URL}/wwh/${employeeId}`, {
-                method: "GET",
-            });
-
-            if (response.status === 204) {
-                return [];
-            }
-            if (!response.ok) {
-                console.log(response)
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data;
+            const response = await axiosClient.get(`/wwh/${employeeId}`);
+            return response.data || [];
         } catch (error) {
+            if (error.response?.status === 204) return [];
             throw error;
         }
     },
+
     saveWwh: async (employeeId, startDate, endDate) => {
-        const res = await fetch(`${API_URL}/wwh/create?employeeId=${employeeId}&weeklyWorkHoursData=${startDate}&wwhStartDate=${endDate}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        try {
+            const response = await axiosClient.post('/wwh/create', null, {
+                params: {
+                    employeeId: employeeId,
+                    weeklyWorkHoursData: startDate,
+                    wwhStartDate: endDate
+                }
+            });
+
+            return { status: response.status, data: response.data };
+        } catch (error) {
+            throw new Error(`Error en la respuesta del servidor: ${error.response?.status}`);
         }
-        const data = await res.json();
-        return { status: res.status, data };
     },
+
     deleteWwh: async (wwhId) => {
-        const res = await fetch(`${API_URL}/wwh/${wwhId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        if (!res.ok) {
-            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        try {
+            const response = await axiosClient.delete(`/wwh/${wwhId}`);
+            return { status: response.status, data: response.data };
+        } catch (error) {
+            throw new Error(`Error en la respuesta del servidor: ${error.response?.status}`);
         }
-        const data = await res.json();
-        return { status: res.status, data };
     },
 };
-
-
