@@ -35,7 +35,6 @@ export const useCyclesGenerator = () => {
 
     const handleSaveCycle = () => {
         const dataToSave = generateShiftData(data, ciclo)
-        console.log(dataToSave)
 
         fetch(`${API_URL}/gs/saveAll`, {
             method: 'POST',
@@ -47,7 +46,7 @@ export const useCyclesGenerator = () => {
         })
             .then(response => response.json())
             .then(data => {
-                console.log("Respuesta completa del backend:", data);
+
                 if (data.status === "success") {
                     console.log("Vamos Bien")
                 }

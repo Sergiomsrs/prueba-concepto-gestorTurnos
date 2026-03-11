@@ -8,8 +8,6 @@ export const Resumen = ({ data }) => {
 
   const dataToUse = data.slice(1)
 
-  console.log(dataToUse)
-
   const uniqueEmployeeNames = uniqueEmployeeName(data);
 
 

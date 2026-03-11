@@ -1,62 +1,55 @@
-const API_URL = import.meta.env.VITE_API_URL;
+import { axiosClient } from "./axiosClient";
 
+// 📅 Obtener turnos de la semana (Ruta con variables en la URL)
 export const getShiftWeek = async (startDate, endDate) => {
     try {
-        const response = await fetch(`${API_URL}/day/${startDate}/${endDate}`, {
-            method: "GET",
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
+        const response = await axiosClient.get(`/day/${startDate}/${endDate}`);
+        return response.data;
     } catch (error) {
         throw error;
     }
 };
 
+// 👥 Obtener roles/turnos genéricos
 export const getGenericShiftWeek = async () => {
-
     try {
-        const response = await fetch(`${API_URL}/gs/getRoles`, {
-            method: "GET",
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
+        const response = await axiosClient.get('/gs/getRoles');
+        return response.data;
     } catch (error) {
         throw error;
     }
+};
 
-}
-
+// 🛠️ Objeto de acciones para turnos
 export const fetchShift = {
+    // Guardar un turno individual
     saveIndividualShift: async (config) => {
-        const res = await fetch(`${API_URL}/schedule/create-turn`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(config),
-        });
-        if (!res.ok) {
-            throw new Error(`Error en la respuesta del servidor: ${res.status}`);
+        try {
+            const response = await axiosClient.post('/schedule/create-turn', config);
+            return {
+                status: response.status,
+                data: response.data
+            };
+        } catch (error) {
+            throw new Error(`Error en la respuesta del servidor: ${error.response?.status || error.message}`);
         }
-        const data = await res.json();
-        return { status: res.status, data };
     },
+
+    // Copiar una semana completa a otra
     copyWeek: async ({ sourceStartDate, targetStartDate }) => {
-        const res = await fetch(`${API_URL}/schedule/copy-week`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ sourceStartDate, targetStartDate }),
-        });
-        if (!res.ok) {
-            throw new Error("Error al copiar semana");
+        try {
+            const response = await axiosClient.post('/schedule/copy-week', {
+                sourceStartDate,
+                targetStartDate
+            });
+
+            // Axios maneja tanto texto plano como JSON en .data
+            return {
+                status: response.status,
+                data: response.data
+            };
+        } catch (error) {
+            throw new Error(error.response?.data?.message || "Error al copiar semana");
         }
-        const text = await res.text();
-        return { status: res.status, data: text };
     },
 };

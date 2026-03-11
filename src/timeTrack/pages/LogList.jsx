@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { lastRecordData } from '../../utils/apiMock';
-const API_URL = import.meta.env.VITE_API_URL;
+import { axiosClient } from '@/services/axiosClient';
 
 export const LogList = () => {
     const { auth } = useContext(AuthContext);
@@ -9,30 +9,30 @@ export const LogList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
+
     useEffect(() => {
         const fetchLast10Records = async () => {
             try {
-                // Si no hay usuario autenticado, usar datos mockeados
+                setIsLoading(true); // Aseguramos el estado de carga al empezar
+
+                // 1. Lógica de Modo Demo / No Autenticado
                 if (!auth?.isAuthenticated || auth?.role === "DEMO") {
                     setLastRecords(lastRecordData);
-                    setIsLoading(false);
-                    return;
+                    return; // El finally se encargará de setIsLoading(false)
                 }
 
-                // Si hay usuario autenticado, hacer la llamada a la API
-                const response = await fetch(`${API_URL}/ws/last100`, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
+                // 2. Llamada real con Axios
+                // El token y los headers ya van incluidos por el interceptor
+                const response = await axiosClient.get("/ws/last100");
 
-                if (!response.ok) throw new Error("Error al obtener los datos");
+                // Axios ya ha convertido el JSON, lo guardamos directamente
+                setLastRecords(response.data);
 
-                const data = await response.json();
-                setLastRecords(data);
             } catch (err) {
-                setError(err.message);
+                // Manejamos el error extrayendo el mensaje del backend si existe
+                const errorMsg = err.response?.data?.message || "Error al obtener los datos";
+                setError(errorMsg);
+                console.error("Error en fetchLast10Records:", err);
             } finally {
                 setIsLoading(false);
             }

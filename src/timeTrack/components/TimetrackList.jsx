@@ -28,10 +28,6 @@ export const TimetrackList = ({
     const { auth } = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
 
-    console.log(auth.role)
-
-
-
     // Cargar lista de empleados al montar el componente
     useEffect(() => {
         if (auth.role == "ADMIN" || auth.role == "GUEST") fetchEmployees();
