@@ -13,12 +13,11 @@ export const SetupWeek = () => {
         defaultRoles,
         roles,
         handleCreateByGeneric,
-        handleGetAllRoles,
-        handleGetRolesByDefault,
         setCiclo,
         handleGetAllRolesWihtDefaults,
         handleToggle,
     } = useCyclesGenerator();
+
     const { allEmployees, handleGetAllEmployees } = useEmployees();
 
     const [selectedEmployees, setSelectedEmployees] = useState([]);
@@ -27,9 +26,9 @@ export const SetupWeek = () => {
 
     const { auth } = useContext(AuthContext);
 
-    useEffect(() => {
-        handleGetAllEmployees();
-    }, []);
+    /*     useEffect(() => {
+            handleGetAllEmployees();
+        }, []); */
 
     useEffect(() => {
         handleGetAllRolesWihtDefaults();
