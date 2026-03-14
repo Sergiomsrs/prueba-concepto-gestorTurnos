@@ -1,14 +1,11 @@
 import { useState } from "react"
 import { useEmployeeConditions } from "../Hooks/useEmployeeConditions";
-import { useEmployees } from "../Hooks/useEmployees";
 import { TrashIcon } from "../components/icons/TrashIcon";
 
 
-export const AddWwh = () => {
+export const AddWwh = ({ allEmployees }) => {
     const initialState = { name: '', lastName: '', email: '', hireDate: '', terminationDate: '' };
     const [createForm, setCreateForm] = useState(initialState);
-
-    const { allEmployees } = useEmployees();
 
 
     const {

@@ -3,10 +3,9 @@ import { useState } from "react";
 import { useEmployees } from "../Hooks/useEmployees";
 import { TrashIcon } from "../components/icons/TrashIcon";
 
-export const AddPto = () => {
+export const AddPto = ({ allEmployees }) => {
 
     const {
-        allEmployees,
         message,
         ptoCreateForm,
         ptoList,

@@ -1,4 +1,3 @@
-import { useEmployees } from "@/Hooks/useEmployees";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
 import { useContext, useState } from "react"
 const API_URL = import.meta.env.VITE_API_URL;
@@ -16,9 +15,8 @@ const initialState = {
     role: "",
 }
 
-export const AddUSer = () => {
+export const AddUSer = ({ allEmployees: employees }) => {
 
-    const { allEmployees: employees } = useEmployees();
 
     const [createForm, setCreateForm] = useState(initialState);
     const [email, setEmail] = useState("");

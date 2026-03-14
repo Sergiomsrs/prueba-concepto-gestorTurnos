@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react"
 import { getAllEmployees, fetchDisponibilities, fetchPto } from "../services/employees"
 import { AuthContext } from "@/timeTrack/context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
 
 
 const createFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
@@ -9,7 +10,7 @@ const PtoFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '
 
 export const useEmployees = () => {
 
-    const [allEmployees, setAllEmployees] = useState([])
+
     const [activeEmployees, setactiveEmployees] = useState([])
     const [createForm, setCreateForm] = useState(createFormInitialState);
     const [message, setMessage] = useState("");
@@ -19,22 +20,14 @@ export const useEmployees = () => {
 
     const { auth } = useContext(AuthContext);
 
-    useEffect(() => {
-        handleGetAllEmployees()
-    }, []);
-
-
-
-
-    const handleGetAllEmployees = async () => {
-        try {
-            const response = await getAllEmployees(auth.token);
-            setAllEmployees(response);
-        } catch (error) {
-            console.error("Error obteniendo ciclo:", error);
-        }
-
-    }
+    const {
+        data: allEmployees = [],
+        refetch: handleGetAllEmployees
+    } = useQuery({
+        queryKey: ["employees"],
+        queryFn: () => getAllEmployees(auth.token),
+        enabled: !!auth?.token
+    });
 
     const handleEmployeeSelect = async (selectedId, allEmployees) => {
         const selectedEmployee = allEmployees.find(emp => emp.id.toString() === selectedId);

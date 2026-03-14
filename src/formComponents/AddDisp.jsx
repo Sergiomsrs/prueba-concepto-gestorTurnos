@@ -4,10 +4,9 @@ import { useEmployees } from "../Hooks/useEmployees";
 
 const newDisponibilityInititalState = { employeeId: "", absenceReason: "", date: "", startHour: "", terminationHour: "" };
 
-export const AddDisp = () => {
+export const AddDisp = ({ allEmployees }) => {
 
     const {
-        allEmployees,
         createForm,
         message,
         workHours,

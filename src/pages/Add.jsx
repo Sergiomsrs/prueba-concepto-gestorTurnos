@@ -6,6 +6,7 @@ import { AddPto } from '../formComponents/AddPto';
 import { AddDisp } from '../formComponents/AddDisp';
 import { AppContext } from '../context/AppContext';
 import { AddPublicHolidays } from '../formComponents/AddPublicHolidays';
+import { useEmployees } from '@/Hooks/useEmployees';
 
 
 
@@ -13,6 +14,8 @@ export const Add = () => {
 
 
   const { activeTab, setActiveTab } = useContext(AppContext);
+
+  const { allEmployees } = useEmployees();
 
   const handleTabClick = (index) => {
     setActiveTab(index);
@@ -23,19 +26,19 @@ export const Add = () => {
 
   switch (activeTab) {
     case 0:
-      content = <AddUSer />;
+      content = <AddUSer allEmployees={allEmployees} />;
       break;
     case 1:
-      content = <AddWwh />;
+      content = <AddWwh allEmployees={allEmployees} />;
       break;
     case 2:
-      content = <AddTeamWork />;
+      content = <AddTeamWork allEmployees={allEmployees} />;
       break;
     case 3:
-      content = <AddPto />;
+      content = <AddPto allEmployees={allEmployees} />;
       break;
     case 4:
-      content = <AddDisp />;
+      content = <AddDisp allEmployees={allEmployees} />;
       break;
     case 5:
       content = <AddPublicHolidays />;

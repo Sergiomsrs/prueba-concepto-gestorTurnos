@@ -1,14 +1,12 @@
 import { useMemo, useState } from "react"
-import { useEmployees } from "../Hooks/useEmployees";
 import { useEmployeeConditions } from "../Hooks/useEmployeeConditions";
 import { TrashIcon } from "../components/icons/TrashIcon";
 
 
-export const AddTeamWork = () => {
+export const AddTeamWork = ({ allEmployees }) => {
     const initialState = { id: "" };
     const [createForm, setCreateForm] = useState(initialState);
 
-    const { allEmployees } = useEmployees();
 
     const {
         // Data
