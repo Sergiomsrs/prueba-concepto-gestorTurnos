@@ -7,7 +7,7 @@ export const useChatAI = () => {
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const sendMessage = useCallback(async (userMessage) => {
+    /* const sendMessage = useCallback(async (userMessage) => {
         if (!userMessage.trim() || isLoading) return;
 
         // Agregar mensaje del usuario
@@ -42,6 +42,47 @@ export const useChatAI = () => {
             setMessages(prev => prev.filter(m => m.id !== loadingId).concat({
                 from: "bot",
                 text: "❌ Error al procesar tu solicitud. Verifica que el servidor esté funcionando.",
+                id: Date.now() + 3,
+                isError: true
+            }));
+        } finally {
+            setIsLoading(false);
+        }
+    }, [isLoading]); */
+
+    const sendMessage = useCallback(async (userMessage) => {
+        if (!userMessage.trim() || isLoading) return;
+
+        setMessages(prev => [...prev, {
+            from: "user",
+            text: userMessage,
+            id: Date.now()
+        }]);
+
+        setIsLoading(true);
+        const loadingId = Date.now() + 1;
+        setMessages(prev => [...prev, {
+            from: "bot",
+            text: "Consultando disponibilidad...",
+            isLoading: true,
+            id: loadingId
+        }]);
+
+        try {
+
+            const offlineMessage = "El servicio de IA está temporalmente fuera de servicio. Para cualquier duda puedes ver la guía de uso de la aplicación aquí: https://sergiomsrs.github.io/wsf-landing/guia/";
+
+            // 3. Reemplazar el mensaje de carga con la respuesta estática
+            setMessages(prev => prev.filter(m => m.id !== loadingId).concat({
+                from: "bot",
+                text: offlineMessage,
+                id: Date.now() + 2
+            }));
+
+        } catch (error) {
+            setMessages(prev => prev.filter(m => m.id !== loadingId).concat({
+                from: "bot",
+                text: "❌ Servicio no disponible.",
                 id: Date.now() + 3,
                 isError: true
             }));
