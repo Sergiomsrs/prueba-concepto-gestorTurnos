@@ -4,8 +4,8 @@ const API_URL = 'http://localhost:8081/api';
 const ADMIN_CREDENTIALS = { dni: "1234", password: "1234" };
 
 const DEMO_CONFIG = [
-    { cantidad: 3, horas: 40, equipo: "blue" },
-    { cantidad: 3, horas: 20, equipo: "black" }
+    { cantidad: 7, horas: 39, equipo: "black", numero: 1 },
+    { cantidad: 0, horas: 20, equipo: "black", numero: 1 }
 ];
 
 async function seedData() {
@@ -32,8 +32,8 @@ async function seedData() {
                     method: 'POST',
                     headers,
                     body: JSON.stringify({
-                        name: `Nuevo`,
-                        lastName: `${grupo.equipo} ${i}`, // Pilla "ROJO" o "VERDE"
+                        name: `Empleado ${(grupo.numero + i) - 1}`,
+                        lastName: 'Demo',
                         secondLastName: `Nº${randomId}`,
                         email: `user${randomId}@demo.com`,
                         dni: `DNI${randomId}`,

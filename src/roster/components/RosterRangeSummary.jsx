@@ -68,8 +68,12 @@ const EmployeeRow = memo(
             <tr className="border-b border-slate-200 hover:bg-slate-50">
                 {/* COLUMNA EMPLEADO */}
                 <td className="pl-4 py-2.5 bg-white sticky left-0 z-10 border-r border-slate-200">
-                    <div className="flex flex-col w-28">
-                        <span className="text-sm font-semibold text-slate-800" title={fullName}>
+                    {/* Quitamos w-28 y usamos min-w para asegurar espacio y max-w para el tope */}
+                    <div className="flex flex-col min-w-[150px] max-w-[250px]">
+                        <span
+                            className="whitespace-nowrap overflow-hidden text-ellipsis"
+                            title={fullName}
+                        >
                             {fullName}
                         </span>
                     </div>
@@ -253,7 +257,7 @@ export const RosterRangeSummary = memo(({ data }) => {
                 <thead>
                     <tr className="bg-slate-50 border-b-2 border-slate-300">
                         {/* HEADER EMPLEADO */}
-                        <th className="text-left pl-4 py-3 sticky left-0 bg-slate-50 z-20 border-r border-slate-200 min-w-[160px]">
+                        <th className="text-left pl-4 py-3 sticky left-0 bg-slate-50 z-20 border-r border-slate-200 min-w-[150px] max-w-[250px] whitespace-nowrap">
                             <div className="text-sm font-bold text-slate-900 uppercase tracking-wide">
                                 Empleado
                             </div>
