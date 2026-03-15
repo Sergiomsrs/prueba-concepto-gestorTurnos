@@ -1,5 +1,4 @@
 import { Route, Routes, Link, useLocation } from "react-router-dom"
-import { LoginPage } from "./LoginPage"
 import { Navbar } from "../utilComponents/Navbar"
 import { EmployeeWeek } from "./EmployeeWeek"
 import { Daily } from "../gridComponents/Daily"
@@ -85,7 +84,7 @@ export const MainPage = () => {
             <Route path="/" element={<RosterPage />} />
             <Route path="/daily" element={<Daily />} />
             <Route path="/employeeweek" element={<EmployeeWeek />} />
-            <Route path="/landing" element={<LoginPage />} />
+            {/* <Route path="/landing" element={<LoginPage />} /> */}
             <Route path="/adduser" element={<Add />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/fichar" element={<AddTimeTrack />} />
