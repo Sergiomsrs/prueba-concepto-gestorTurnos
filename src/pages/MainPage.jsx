@@ -19,13 +19,18 @@ import { Reports } from "./Reports"
 import { RosterPage } from "./RosterPage"
 import { ChatUI } from "../ia/components/ChatUI"
 import { AuthContext } from "@/timeTrack/context/AuthContext"
+import { ProtectedRoute } from "@/timeTrack/context/ProtectedRoute"
+
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
   const location = useLocation()
   const isRosterPage = location.pathname === "/"
-
   const { auth } = useContext(AuthContext);
+
+  // Definimos los grupos de roles para no repetir strings
+  const ALL_AUTHENTICATED = ["USER", "ADMIN", "DEMO"];
+  const ONLY_ADMIN = ["ADMIN", "DEMO"];
 
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden">
@@ -34,8 +39,8 @@ export const MainPage = () => {
           <Navbar />
         </header>
 
-        {/* Banner DEMO con posicionamiento dinámico */}
-        {showDemoBanner && (
+        {/* Banner DEMO: Solo se muestra si el usuario logueado tiene rol DEMO */}
+        {auth.role === "DEMO" && showDemoBanner && (
           <div
             className="absolute right-6 z-50 flex items-center gap-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-5 py-3 rounded-lg shadow-lg mt-2"
             style={{ top: isRosterPage ? "8.5rem" : "4.5rem" }}
@@ -46,66 +51,71 @@ export const MainPage = () => {
               </span>
               <span className="text-sm">
                 Puedes explorar la app libremente. Si quieres más información,&nbsp;
-                <Link
-                  to="/info"
-                  className="underline text-indigo-700 hover:text-indigo-900 font-semibold"
-                >
+                <Link to="/info" className="underline text-indigo-700 hover:text-indigo-900 font-semibold">
                   haz clic aquí
-                </Link>
-                .
+                </Link>.
               </span>
             </div>
-            <button
-              onClick={() => setShowDemoBanner(false)}
-              className="ml-2 text-yellow-700 hover:text-yellow-900 font-bold text-lg leading-none"
-              aria-label="Cerrar aviso demo"
-            >
-              ×
-            </button>
+            <button onClick={() => setShowDemoBanner(false)} className="ml-2 text-yellow-700 hover:text-yellow-900 font-bold text-lg">×</button>
           </div>
-        )}
-        {!showDemoBanner && (
-          <button
-            onClick={() => setShowDemoBanner(true)}
-            className="absolute right-6 z-50 bg-yellow-100 border border-yellow-400 text-yellow-800 px-3 py-1 rounded-full shadow hover:bg-yellow-200 transition"
-            style={{ top: isRosterPage ? "8.5rem" : "4.5rem" }}
-            aria-label="Mostrar aviso demo"
-          >
-            Mostrar aviso DEMO
-          </button>
         )}
 
-        {/* ChatUI posicionado en esquina inferior derecha */}
         <div className="fixed bottom-4 right-4 z-50 pointer-events-none">
-          <div className="pointer-events-auto">
-            <ChatUI />
-          </div>
+          <div className="pointer-events-auto"><ChatUI /></div>
         </div>
 
         <main className="flex flex-col w-full max-w-full overflow-x-auto">
           <Routes>
-            <Route path="/" element={<RosterPage />} />
-            <Route path="/daily" element={<Daily />} />
-            <Route path="/employeeweek" element={<EmployeeWeek />} />
-            {/* <Route path="/landing" element={<LoginPage />} /> */}
-            <Route path="/adduser" element={<Add />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/fichar" element={<AddTimeTrack />} />
-            <Route path="/revisar" element={<TimeTrackView />} />
+            {/* --- 1. RUTAS TOTALMENTE PÚBLICAS --- */}
             <Route path="/login" element={<Login />} />
-            <Route path="/loglist" element={<LogList />} />
+            <Route path="/fichar" element={<AddTimeTrack />} />
             <Route path="/info" element={<Landing />} />
             <Route path="/techinfo" element={<TechInfo />} />
-            <Route path="/schedules" element={<SchedulesByEmployee />} />
-            <Route path="/generate" element={<CyclesGenerator />} />
-            <Route path="/setupweek" element={<SetupWeek />} />
-            <Route path="/generate-individual" element={<ShiftForm />} />
-            <Route path="/reports" element={<Reports />} />
+
+            {/* --- 2. RUTAS PARA USER, ADMIN Y DEMO --- */}
+            <Route path="/revisar" element={
+              <ProtectedRoute allowedRoles={ALL_AUTHENTICATED}><TimeTrackView /></ProtectedRoute>
+            } />
+            <Route path="/schedules" element={
+              <ProtectedRoute allowedRoles={ALL_AUTHENTICATED}><SchedulesByEmployee /></ProtectedRoute>
+            } />
+
+            {/* --- 3. RUTAS SOLO PARA ADMIN (O DEMO) --- */}
+            <Route path="/" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><RosterPage /></ProtectedRoute>
+            } />
+            <Route path="/daily" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><Daily /></ProtectedRoute>
+            } />
+            <Route path="/employeeweek" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><EmployeeWeek /></ProtectedRoute>
+            } />
+            <Route path="/adduser" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><Add /></ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><AdminPage /></ProtectedRoute>
+            } />
+            <Route path="/loglist" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><LogList /></ProtectedRoute>
+            } />
+            <Route path="/generate" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><CyclesGenerator /></ProtectedRoute>
+            } />
+            <Route path="/setupweek" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><SetupWeek /></ProtectedRoute>
+            } />
+            <Route path="/generate-individual" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><ShiftForm /></ProtectedRoute>
+            } />
+            <Route path="/reports" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><Reports /></ProtectedRoute>
+            } />
           </Routes>
         </main>
 
         <footer className="mt-8 mb-2">
-          <p className="text-center">© 2025 My Website. All rights reserved.</p>
+          <p className="text-center">© 2025 WorkSchedFlow. All rights reserved.</p>
         </footer>
       </div>
     </div>
