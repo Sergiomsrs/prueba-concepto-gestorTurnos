@@ -1,43 +1,34 @@
+import { axiosClient } from "@/services/axiosClient";
 
 
-const API_URL = import.meta.env.VITE_API_URL;
-
-
-
-export const fetchRosterBetweenDates = async (startDate, endDate, token) => {
-
+// ✅ fetchRosterBetweenDates migrado a Axios
+export const fetchRosterBetweenDates = async (startDate, endDate) => {
     try {
-        const response = await fetch(`${API_URL}/day/${startDate}/${endDate}`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await axiosClient.get(`/day/${startDate}/${endDate}`);
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
         return {
             success: true,
-            data,
+            data: response.data,
             message: "Datos cargados correctamente"
         };
     } catch (error) {
         console.error('Error en fetchRosterBetweenDates:', error);
+
+        // Axios guarda el error de respuesta en error.response
+        const errorMessage = error.response?.data?.message || error.message || "Error al cargar los datos";
+
         return {
             success: false,
             data: null,
-            message: error.message || "Error al cargar los datos",
+            message: errorMessage,
             error: error
         };
     }
 };
 
-// ✅ Método saveData mejorado
-export const saveRosterData = async (modifiedData, token) => {
-    // Validación de entrada
+// ✅ saveRosterData migrado a Axios
+export const saveRosterData = async (modifiedData) => {
+    // Validación de entrada (se mantiene igual)
     if (!modifiedData || !Array.isArray(modifiedData)) {
         return {
             success: false,
@@ -57,57 +48,24 @@ export const saveRosterData = async (modifiedData, token) => {
     }
 
     try {
-        const response = await fetch(`${API_URL}/ws/saveAll`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(modifiedData),
-        });
-
-        // Verificar si la respuesta es exitosa
-        if (!response.ok) {
-            let errorMessage = `Error del servidor: ${response.status}`;
-
-            // Intentar obtener mensaje de error del servidor
-            try {
-                const errorData = await response.json();
-                errorMessage = errorData.message || errorMessage;
-            } catch {
-                // Si no se puede parsear JSON, usar mensaje genérico
-                errorMessage = `Error ${response.status}: ${response.statusText}`;
-            }
-
-            throw new Error(errorMessage);
-        }
-
-        // Intentar parsear la respuesta
-        let responseData;
-        try {
-            responseData = await response.json();
-        } catch {
-            // Si no hay JSON en la respuesta, asumir éxito
-            responseData = { message: "Datos guardados correctamente" };
-        }
+        const response = await axiosClient.post('/ws/saveAll', modifiedData);
 
         return {
             success: true,
-            data: responseData,
-            message: responseData.message || "Datos guardados correctamente"
+            data: response.data,
+            message: response.data?.message || "Datos guardados correctamente"
         };
 
     } catch (error) {
         console.error('Error en saveRosterData:', error);
 
-        // Manejar diferentes tipos de errores
         let userMessage = "Error al guardar los datos";
 
-        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        // Manejo de errores específico de Axios
+        if (error.code === 'ERR_NETWORK') {
             userMessage = "Error de conexión. Verifica tu conexión a internet.";
-        } else if (error.message.includes('JSON')) {
-            userMessage = "Error al procesar la respuesta del servidor.";
+        } else if (error.response?.data?.message) {
+            userMessage = error.response.data.message;
         } else if (error.message) {
             userMessage = error.message;
         }
@@ -121,7 +79,7 @@ export const saveRosterData = async (modifiedData, token) => {
     }
 };
 
-// ✅ Método adicional para actualizar un shift específico
+// ✅ updateSingleShift migrado a Axios
 export const updateSingleShift = async (employeeId, date, shiftData) => {
     if (!employeeId || !date || !shiftData) {
         return {
@@ -133,28 +91,15 @@ export const updateSingleShift = async (employeeId, date, shiftData) => {
     }
 
     try {
-        const response = await fetch(`${API_URL}/ws/updateShift`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                employeeId,
-                date,
-                ...shiftData
-            }),
+        const response = await axiosClient.put('/ws/updateShift', {
+            employeeId,
+            date,
+            ...shiftData
         });
-
-        if (!response.ok) {
-            throw new Error(`Error del servidor: ${response.status}`);
-        }
-
-        const responseData = await response.json();
 
         return {
             success: true,
-            data: responseData,
+            data: response.data,
             message: "Turno actualizado correctamente"
         };
 
@@ -164,7 +109,7 @@ export const updateSingleShift = async (employeeId, date, shiftData) => {
         return {
             success: false,
             data: null,
-            message: "Error al actualizar el turno",
+            message: error.response?.data?.message || "Error al actualizar el turno",
             error: error.message || "Unknown error"
         };
     }
