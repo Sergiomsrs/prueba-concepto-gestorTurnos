@@ -66,6 +66,26 @@ export const Login = () => {
     }
   };
 
+
+  const handleDemoLogin = () => {
+    const demoToken = "demo-token-12345";
+    const demoRole = "ADMIN";
+    const demoUserData = {
+      id: 0,
+      name: "Usuario",
+      lastName: "de Demo",
+      dni: "00000000X",
+      email: "demo@workschdedflow.com",
+      role: "ADMIN"
+    };
+
+    // Usamos la misma función login del contexto
+    login(demoToken, demoRole, demoUserData);
+
+    // Redirigimos al inicio
+    navigate("/");
+  };
+
   return (
     <div className="h-[calc(100vh-5rem-4.5rem)] flex overflow-hidden">
       {/* h-[calc(100vh - navbar(5rem) - footer(~3.5rem))] */}
@@ -199,6 +219,27 @@ export const Login = () => {
               className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-xl hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-300 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] mt-6"
             >
               Iniciar sesión
+            </button>
+
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-white text-gray-500">O prueba el sistema</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleDemoLogin}
+              className="w-full bg-white border-2 border-blue-600 text-blue-600 font-semibold py-3 px-4 rounded-xl hover:bg-blue-50 focus:ring-4 focus:ring-blue-100 transition-all duration-200 flex items-center justify-center gap-2 group"
+            >
+              <svg className="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Acceder en Modo Demo
             </button>
 
             {error && (

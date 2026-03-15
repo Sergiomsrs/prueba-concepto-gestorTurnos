@@ -9,7 +9,7 @@ import { Login } from "../timeTrack/pages/Login"
 import { LogList } from "../timeTrack/pages/LogList"
 import { Landing } from "./Landing"
 import { TechInfo } from "./TechInfo"
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { SchedulesByEmployee } from "./SchedulesByEmployee"
 import { AdminPage } from "./AdminPage"
 import { CyclesGenerator } from "../genericShifts/pages/CyclesGenerator"
@@ -18,11 +18,14 @@ import { ShiftForm } from "./ShiftForm"
 import { Reports } from "./Reports"
 import { RosterPage } from "./RosterPage"
 import { ChatUI } from "../ia/components/ChatUI"
+import { AuthContext } from "@/timeTrack/context/AuthContext"
 
 export const MainPage = () => {
   const [showDemoBanner, setShowDemoBanner] = useState(true)
   const location = useLocation()
   const isRosterPage = location.pathname === "/"
+
+  const { auth } = useContext(AuthContext);
 
   return (
     <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden">
