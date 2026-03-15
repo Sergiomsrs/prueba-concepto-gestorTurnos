@@ -16,7 +16,7 @@ export const LogList = () => {
                 setIsLoading(true); // Aseguramos el estado de carga al empezar
 
                 // 1. Lógica de Modo Demo / No Autenticado
-                if (!auth?.isAuthenticated || auth?.role === "DEMO") {
+                if (auth.token === "demo-token-12345" || !auth.token) {
                     setLastRecords(lastRecordData);
                     return; // El finally se encargará de setIsLoading(false)
                 }
