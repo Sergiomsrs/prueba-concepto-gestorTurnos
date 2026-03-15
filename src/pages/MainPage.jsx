@@ -40,23 +40,49 @@ export const MainPage = () => {
         </header>
 
         {/* Banner DEMO: Solo se muestra si el usuario logueado tiene rol DEMO */}
-        {auth.role === "DEMO" && showDemoBanner && (
+        {auth.token === "demo-token-12345" && (
           <div
-            className="absolute right-6 z-50 flex items-center gap-4 bg-yellow-100 border border-yellow-400 text-yellow-800 px-5 py-3 rounded-lg shadow-lg mt-2"
+            className={`fixed right-0 z-50 flex items-center transition-all duration-500 ease-in-out ${showDemoBanner ? "translate-x-0" : "translate-x-[calc(100%-40px)]"
+              }`}
             style={{ top: isRosterPage ? "8.5rem" : "4.5rem" }}
           >
-            <div>
-              <span className="font-semibold block">
-                ¡Estás usando una versión DEMO sin conexión a la API!
-              </span>
-              <span className="text-sm">
-                Puedes explorar la app libremente. Si quieres más información,&nbsp;
-                <Link to="/info" className="underline text-indigo-700 hover:text-indigo-900 font-semibold">
-                  haz clic aquí
-                </Link>.
-              </span>
+            {/* Pestaña lateral (solo visible cuando está cerrado) */}
+            {!showDemoBanner && (
+              <button
+                onClick={() => setShowDemoBanner(true)}
+                className="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 p-2 rounded-l-lg shadow-lg flex items-center justify-center group"
+                title="Mostrar info demo"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </button>
+            )}
+
+            {/* Cuerpo del Banner */}
+            <div className="bg-yellow-100 border-y border-l border-yellow-400 text-yellow-800 px-5 py-3 rounded-l-lg shadow-2xl flex items-center gap-4 max-w-sm lg:max-w-md">
+              <div>
+                <span className="font-semibold block text-sm lg:text-base">
+                  ¡Modo DEMO activo!
+                </span>
+                <span className="text-xs lg:text-sm">
+                  Sin conexión a API.
+                  <Link to="/info" className="ml-1 underline text-indigo-700 hover:text-indigo-900 font-semibold">
+                    Ver más info
+                  </Link>
+                </span>
+              </div>
+
+              <button
+                onClick={() => setShowDemoBanner(false)}
+                className="bg-yellow-200 hover:bg-yellow-300 text-yellow-700 p-1 rounded-full transition-colors"
+                aria-label="Ocultar banner"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                </svg>
+              </button>
             </div>
-            <button onClick={() => setShowDemoBanner(false)} className="ml-2 text-yellow-700 hover:text-yellow-900 font-bold text-lg">×</button>
           </div>
         )}
 
