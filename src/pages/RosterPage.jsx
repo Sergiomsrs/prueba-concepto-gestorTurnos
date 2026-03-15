@@ -1,11 +1,13 @@
 import { useEffect, useReducer, useMemo, useRef, useState, useCallback } from "react";
 import { useRoster } from "../roster/hooks/useRoster";
 import { rosterReducer } from "../roster/reducers/rosterReducer";
+import { useReactToPrint } from "react-to-print";
+
+
 import { DistributionRow } from "../roster/components/DistributionRow";
 import { HeadRow } from "../roster/components/HeadRow";
 import { EmployeeRow } from "../roster/components/EmployeeRow";
 import { RosterRangeSummary } from "../roster/components/RosterRangeSummary";
-import { useReactToPrint } from "react-to-print";
 import { PrintableRoster } from "../roster/components/PrintableRoster";
 
 export const RosterPage = () => {

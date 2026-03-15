@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+/* import { memo, useCallback } from 'react';
 
 export const ShiftInputs = memo(({ workShift, onShiftToggle, isModified }) => {
     return (
@@ -13,4 +13,4 @@ export const ShiftInputs = memo(({ workShift, onShiftToggle, isModified }) => {
             ))}
         </div>
     );
-});
+}); */
