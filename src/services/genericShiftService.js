@@ -1,129 +1,56 @@
-const API_URL = import.meta.env.VITE_API_URL;
+import { axiosClient } from "./axiosClient";
 
-export const getCycle = async (cycle, token) => {
+export const getCycle = async (cycle) => {
     try {
-        const response = await fetch(`${API_URL}/gs/getcycle?cycle=${cycle}`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        const response = await axiosClient.get(`/gs/getcycle`, {
+            params: { cycle }
         });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data; // Devuelve los datos al componente
-    } catch (error) {
-        throw error; // El componente decide cómo manejar el error
-    }
-};
-
-
-export const getRoles = async (token) => {
-    try {
-        const response = await fetch(`${API_URL}/role`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data; // Devuelve los datos al componente
-    } catch (error) {
-        throw error; // El componente decide cómo manejar el error
-    }
-};
-
-export const getDefaultRoles = async (token) => {
-    try {
-        const response = await fetch(`${API_URL}/default/get-all`, {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data;
+        return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-export const createByGenericShift = async (config, token) => {
+export const getRoles = async () => {
     try {
-        const response = await fetch(`${API_URL}/gs/create-week`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(config),
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        throw error;
-    }
-};
-export const toggleShiftRole = async (roleId, token) => {
-    try {
-        const response = await fetch(`${API_URL}/role/${roleId}/toggle-active`, {
-            method: "PUT",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const updatedRole = await response.json();
-        return updatedRole;
+        const response = await axiosClient.get(`/role`);
+        return response.data;
     } catch (error) {
         throw error;
     }
 };
 
-export const saveDefaultRole = async (role, token) => {
+export const getDefaultRoles = async () => {
     try {
-        const response = await fetch(`${API_URL}/default/save`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(role),
-        });
+        const response = await axiosClient.get(`/default/get-all`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+export const createByGenericShift = async (config) => {
+    try {
+        const response = await axiosClient.post(`/gs/create-week`, config);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
-        if (response.status === 204) {
-            return null;
-        }
+export const toggleShiftRole = async (roleId) => {
+    try {
+        const response = await axiosClient.put(`/role/${roleId}/toggle-active`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
 
-        const result = await response.json();
-        return result;
+export const saveDefaultRole = async (role) => {
+    try {
+        const response = await axiosClient.post(`/default/save`, role);
+        return response.data;
     } catch (error) {
         throw error;
     }
