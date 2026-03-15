@@ -30,7 +30,7 @@ export const TimetrackList = ({
 
     // Cargar lista de empleados al montar el componente
     useEffect(() => {
-        if (auth.role == "ADMIN" || auth.role == "GUEST") fetchEmployees();
+        if (auth.role == "ADMIN") fetchEmployees();
     }, [activeTab]);
 
 
@@ -42,7 +42,7 @@ export const TimetrackList = ({
 
 
     // Procesar los registros para el renderizado
-    const processedRecords = auth?.user
+    const processedRecords = auth.token != "demo-token-12345"
         ? processTimeStamps(records, selectedEmployeeId)
         : timestampMockData;
 
@@ -101,7 +101,7 @@ export const TimetrackList = ({
             </div>}
 
             {/* Estado de carga */}
-            {isLoading && <div className="text-center py-4 text-blue-500">Cargando registros...</div>}
+            {(isLoading && auth.token !== "demo-token-12345") && <div className="text-center py-4 text-blue-500">Cargando registros...</div>}
 
 
             {/* Tabla de resultados */}

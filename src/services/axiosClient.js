@@ -14,20 +14,17 @@ axiosClient.interceptors.request.use(
     (config) => {
         const token = sessionStorage.getItem("token");
 
-        // 1. BLOQUEO TOTAL MODO DEMO
-        // Si el token es el de demo, rechazamos CUALQUIER petición (GET, POST, etc.)
+        // Bloqueo total para el modo Demo
         if (token === "demo-token-12345") {
-            console.warn(`🚫 Petición ${config.method.toUpperCase()} bloqueada: Modo Demo activo (Sin conexión a API).`);
+            console.warn(`🚫 Petición ${config.method.toUpperCase()} bloqueada: Modo Demo activo.`);
 
-            // Creamos un error personalizado
             const demoError = new Error("BLOCK_ALL_DEMO_REQUESTS");
             demoError.isDemoCancel = true;
 
-            // Al retornar Promise.reject, la petición NUNCA sale del navegador
             return Promise.reject(demoError);
         }
 
-        // 2. COMPORTAMIENTO NORMAL (Usuarios reales)
+        // Inyección automática del token Bearer
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -41,22 +38,23 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
     (response) => response,
     (error) => {
-        // A. Si nosotros mismos bloqueamos la petición en el Request
+        // Silenciar errores provocados por el bloqueo del Modo Demo
         if (error.isDemoCancel || error.message === "BLOCK_ALL_DEMO_REQUESTS") {
-
-            // Retornamos una promesa que nunca se resuelve (Pending)
-            // Esto evita que salten los bloques .catch() o errores rojos en tus componentes
             return new Promise(() => { });
         }
 
-        // B. Manejo de errores reales del servidor (solo para usuarios no-demo)
-        if (error.response?.status === 403 || error.response?.status === 401) {
-            console.warn("Sesión inválida o expirada");
+        // 401: Token expirado o inválido -> Cierre de sesión y redirección
+        if (error.response?.status === 401) {
+            console.warn("Sesión expirada (401)");
             sessionStorage.clear();
-            // Evitamos redirecciones si ya estamos en login
             if (!window.location.hash.includes("/login")) {
                 window.location.href = "/#/login";
             }
+        }
+
+        // 403: Prohibido (Falta de permisos) -> Solo informar, no cerrar sesión
+        if (error.response?.status === 403) {
+            console.error("Error 403: No tienes permisos suficientes para este recurso.");
         }
 
         return Promise.reject(error);

@@ -1,12 +1,11 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-
-const API_URL = import.meta.env.VITE_API_URL;
+import { axiosClient } from "@/services/axiosClient";
+import { timestampMockData } from "@/utils/apiMock";
 
 
 export const useRecord = () => {
   const [records, setRecords] = useState([]);
-
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [employees, setEmployees] = useState([]);
@@ -22,29 +21,32 @@ export const useRecord = () => {
 
   const fetchEmployees = async () => {
     setIsLoading(true);
+    setError(null);
     try {
-      const response = await fetch(`${API_URL}/emp/active-by-month?month=${activeTab.month + 1}&year=${activeTab.year}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${auth.token}`,
-        },
+      // Usamos axiosClient con params para una URL más limpia
+      const response = await axiosClient.get('/emp/active-by-month', {
+        params: {
+          month: activeTab.month + 1,
+          year: activeTab.year
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Error al obtener empleados');
-      }
-
-      const data = await response.json();
-      setEmployees(data);
+      // Axios ya devuelve el JSON parseado en .data
+      setEmployees(response.data);
     } catch (error) {
-      setError(error.message);
+      // Si la petición fue bloqueada por el interceptor de modo demo, 
+      // no entrará aquí o se quedará en la promesa pendiente.
+      setError(error.response?.data?.message || 'Error al obtener empleados');
+      // Limpiar registros si hay error
     } finally {
       setIsLoading(false);
     }
   };
 
-  const fetchRecords = async (activeTab) => {
+  const fetchRecords = async (currentTab) => {
+    // Usamos el parámetro currentTab que recibe la función
+    const tabToUse = currentTab || activeTab;
+
     if (!selectedEmployeeId) {
       setRecords([]);
       return;
@@ -54,19 +56,18 @@ export const useRecord = () => {
     setError(null);
 
     try {
+      const targetId = (auth.role === "ADMIN" || auth.role === "GUEST")
+        ? selectedEmployeeId
+        : auth.user.id;
 
-      const response = await fetch(
-        `${API_URL}/timestamp/employee/${(auth.role == "ADMIN" || auth.role == "GUEST") ? selectedEmployeeId : auth.user.id}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.token}`,
-          },
+      const response = await axiosClient.get(`/timestamp/employee/${targetId}/month`, {
+        params: {
+          year: tabToUse.year,
+          month: tabToUse.month + 1
         }
-      );
+      });
 
-      const data = await response.json();
-      setRecords(data);
+      setRecords(response.data);
     } catch (error) {
       setError("Error al cargar registros");
     } finally {
@@ -76,21 +77,17 @@ export const useRecord = () => {
 
   const fetchLastThree = async () => {
     try {
-      const res = await fetch(`${API_URL}/timestamp/last3`);
-      const data = await res.json();
-      setLastThree(data);
+      const response = await axiosClient.get('/timestamp/last3');
+      setLastThree(response.data);
     } catch (err) {
       console.error("Error al cargar los últimos registros:", err);
     }
   };
 
-
   return {
-
     fetchEmployees,
     fetchRecords,
     fetchLastThree,
-
     records,
     error,
     employees,
@@ -99,7 +96,6 @@ export const useRecord = () => {
     selectedDayRecords,
     lastThree,
     activeTab,
-
     setRecords,
     setError,
     setEmployees,
@@ -109,7 +105,4 @@ export const useRecord = () => {
     setLastThree,
     setActiveTab
   };
-
-
-
-}
+};
