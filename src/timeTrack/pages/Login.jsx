@@ -48,9 +48,15 @@ export const Login = () => {
 
       if (!meResponse.ok) throw new Error('Error al obtener datos del usuario');
 
+
+
       const userData = await meResponse.json();
       login(token, role, userData);
-      navigate("/");
+      if (role === "USER") {
+        navigate("/schedules");
+      } else {
+        navigate("/");
+      }
       setFormData({ dni: '', password: '' });
 
     } catch (error) {
