@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { axiosClient } from '@/services/axiosClient';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selectedEmployeeId, employees }) => {
@@ -33,22 +34,22 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
     const emp = employees.find(emp => emp.id == selectedEmployeeId);
 
     try {
-      const response = await fetch(
-        `${API_URL}/report/employee/${employeeId}/report/pdf/monthly?year=${year}&month=${month + 1}`,
+      const response = await axiosClient.get(
+        `/report/employee/${employeeId}/report/pdf/monthly`,
         {
-          method: 'GET',
+          params: {
+            year: year,
+            month: month + 1
+          },
+          responseType: 'blob', // Crítico para manejar archivos PDF
           headers: {
             Accept: 'application/pdf',
-            Authorization: `Bearer ${auth.token}`
           },
         }
       );
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-
-      const blob = await response.blob();
+      // Axios entrega el blob directamente en response.data cuando usas responseType: 'blob'
+      const blob = new Blob([response.data], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

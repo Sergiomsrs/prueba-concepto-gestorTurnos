@@ -3,6 +3,7 @@ import { AppContext } from "./AppContext"
 import { apiMockData, SchedulesMock } from "../utils/apiMock";
 import { getShiftWeek } from "../services/shiftService";
 import { generateShiftData } from "../utils/function";
+import { axiosClient } from "@/services/axiosClient";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -43,36 +44,37 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const saveData = () => {
+    const saveData = async () => {
         const shiftData = generateShiftData(data);
 
-        fetch(`${API_URL}/ws/saveAll`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(shiftData),
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    setAlert({
-                        isOpen: true,
-                        message: { type: "success", text: data.message }
-                    });
-                } else {
-                    setAlert({
-                        isOpen: true,
-                        message: { type: "error", text: "⚠️ " + data.message + "\nDetalles: " + (data.data || "") }
-                    });
-                }
-                setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
-            })
-            .catch(error => {
+        try {
+            // Axios procesa automáticamente el body y las cabeceras JSON
+            const response = await axiosClient.post('/ws/saveAll', shiftData);
+
+            // Axios pone el cuerpo de la respuesta en .data
+            const result = response.data;
+
+            if (result.status === "success") {
                 setAlert({
                     isOpen: true,
-                    message: { type: "error", text: "Error de red al conectar con el servidor" }
+                    message: { type: "success", text: result.message }
                 });
-                setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
+            } else {
+                setAlert({
+                    isOpen: true,
+                    message: { type: "error", text: "⚠️ " + result.message + "\nDetalles: " + (result.data || "") }
+                });
+            }
+        } catch (error) {
+            // Manejo de errores de red o errores del servidor (4xx, 5xx)
+            setAlert({
+                isOpen: true,
+                message: { type: "error", text: "Error de red al conectar con el servidor" }
             });
+        } finally {
+            // Se ejecuta siempre después del éxito o del error
+            setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
+        }
     };
 
     const resetData = () => {
