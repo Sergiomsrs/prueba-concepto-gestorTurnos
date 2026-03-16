@@ -179,23 +179,26 @@ export const Login = () => {
             <button
               onClick={handleDemoLogin}
               className="
-            w-full
-            py-4
-            rounded-xl
-            border-2
-            border-blue-600
-            text-blue-600
-            font-semibold
-            flex
-            items-center
-            justify-center
-            gap-3
-            transition
-            hover:bg-blue-600
-            hover:text-white
-            hover:shadow-lg
-            group
-            "
+  relative
+  w-full
+  py-4
+  rounded-xl
+  bg-gradient-to-r
+  from-blue-600
+  to-indigo-600
+  text-white
+  font-semibold
+  flex
+  items-center
+  justify-center
+  gap-3
+  transition
+  duration-300
+  hover:shadow-[0_8px_25px_rgba(37,99,235,0.35)]
+  hover:scale-[1.02]
+  active:scale-[0.98]
+  group
+"
             >
 
               <svg
