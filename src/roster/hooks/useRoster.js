@@ -3,15 +3,16 @@ import { apiMockData } from "../../utils/apiMock";
 import { fetchRosterBetweenDates, saveRosterData } from "../services/rosterService";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
 
-const API_URL = import.meta.env.VITE_API_URL;
-
 export const useRoster = () => {
-    const [apiData, setApiData] = useState(apiMockData);
     const [alert, setAlert] = useState({ isOpen: false, message: null });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const { auth } = useContext(AuthContext);
+
+    const [apiData, setApiData] = useState(() => {
+        return auth.token === "demo-token-12345" ? apiMockData : [];
+    });
 
     const getRosterBetweenDates = useCallback(async (startDate, endDate) => {
         setLoading(true);
