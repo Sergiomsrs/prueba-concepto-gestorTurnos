@@ -1,21 +1,18 @@
-const AI_API_URL = import.meta.env.VITE_AI_API_URL || 'http://localhost:8090/ai/search-by-name';
+
+import { axiosClient } from "@/services/axiosClient";
 
 export const aiService = {
     async sendMessage(message) {
         try {
-            const response = await fetch(AI_API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message })
+            // Usamos axiosClient para heredar la baseURL y los interceptores
+            const response = await axiosClient.post('/ai/chat', { message }, {
+                // Si la IA responde texto plano en lugar de JSON, 
+                // esto evita que Axios intente parsearlo como objeto
+                responseType: 'text'
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP Error: ${response.status}`);
-            }
-
-            return await response.text();
+            // Axios devuelve el cuerpo de la respuesta directamente en .data
+            return response.data;
         } catch (error) {
             console.error('Error en aiService.sendMessage:', error);
             throw error;

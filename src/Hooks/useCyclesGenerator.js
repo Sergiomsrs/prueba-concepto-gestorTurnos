@@ -1,11 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { employess, generateData, generateShiftData } from "../utils/shiftGeneratorData";
-import { getGenericShiftWeek } from "../services/shiftService";
 import { createByGenericShift, getCycle, getDefaultRoles, getRoles, toggleShiftRole } from "../services/genericShiftService";
 import { rolesMock } from "@/utils/apiMock";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
+import { axiosClient } from "@/services/axiosClient";
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 export const useCyclesGenerator = () => {
 
@@ -33,28 +32,22 @@ export const useCyclesGenerator = () => {
 
 
 
-    const handleSaveCycle = () => {
-        const dataToSave = generateShiftData(data, ciclo)
+    const handleSaveCycle = async () => {
+        const dataToSave = generateShiftData(data, ciclo);
 
-        fetch(`${API_URL}/gs/saveAll`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${auth.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dataToSave),
-        })
-            .then(response => response.json())
-            .then(data => {
+        try {
+            // Axios se encarga del JSON.stringify y del Content-Type automáticamente
+            const response = await axiosClient.post('/gs/saveAll', dataToSave);
 
-                if (data.status === "success") {
-                    console.log("Vamos Bien")
-                }
-
-            })
-            .catch(error => {
-                console.log("Vamos Mal")
-            });
+            // La respuesta del servidor está en response.data
+            if (response.data.status === "success") {
+                console.log("Vamos Bien");
+            }
+        } catch (error) {
+            // Cualquier error (4xx, 5xx o red) caerá aquí
+            console.log("Vamos Mal");
+            console.error("Detalles del error:", error);
+        }
     };
 
     const handleGetAllRoles = async () => {
