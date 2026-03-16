@@ -14,74 +14,6 @@ export const generateData = () => {
   }));
 };
 
-export const getDatesInRange = (startDate, endDate) => {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  const dates = [];
-
-  // Validar las fechas
-  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-    console.error("Fechas inválidas:", startDate, endDate);
-    return [];
-  }
-
-  // Iterar desde la fecha de inicio hasta la de fin
-  for (let currentDate = new Date(start); currentDate <= end; currentDate.setDate(currentDate.getDate() + 1)) {
-    dates.push(new Date(currentDate).toISOString().split('T')[0]); // Formato YYYY-MM-DD
-  }
-
-  return dates;
-};
-
-export const generatePtoWithDate = (id, dates) => {
-  return dates.map(date => ({
-    employeeId: id,
-    hours: Array(62).fill("PTO"),
-    date: date,
-    shiftDuration: '00:00'
-  }));
-};
-
-export const generatePtoNullWithDate = (id, dates) => {
-  return dates.map(date => ({
-    employeeId: id,
-    hours: Array(62).fill("Null"),
-    date: date,
-    shiftDuration: '00:00'
-  }));
-};
-
-
-export const generateDatawithDate = (dates) => {
-
-  return dates.map(day => (
-    {
-      id: day,
-      day: new Intl.DateTimeFormat('es-ES', { weekday: 'long' }).format(new Date(day)),
-      employees: employess.map(emp => ({
-        name: emp.name,
-        teamWork: emp.teamWork,
-        workShift: Array(62).fill("Null"),
-        shiftDuration: '00:00'
-      }))
-    }));
-};
-
-
-export const generateDays = (date) => {
-
-  const date2 = new Date(date);
-  const date2MinusOneDay = new Date(date2);
-  date2MinusOneDay.setDate(date2.getDate() - 1);
-  const days = [date2MinusOneDay];
-
-  for (let i = 0; i < 7; i++) {
-    const newDate = new Date(date2);
-    newDate.setDate(date2.getDate() + i);
-    days.push(newDate.toISOString().split('T')[0]);
-  }
-  return days;
-}
 
 export const obtenerPreviousDay = (dayIndex, data) => {
   return data[dayIndex - 1];
@@ -115,23 +47,14 @@ export const getHighestNonZeroIndex = (array) => {
   return -1; // Devuelve -1 si todos los elementos son Null
 };
 
-// Formatea de HH:mm:ss a HH:mm
 export function formatTime(timeString) {
+  // Formatea de HH:mm:ss a HH:mm
   // Verifica si timeString es una cadena de texto y tiene una longitud válida
   if (typeof timeString === 'string' && timeString.length === 8) {
     return timeString.substring(0, 5); // Formatea el tiempo si es válido
   }
   return timeString || "N/A"; // Devuelve timeString o un valor predeterminado si es undefined o null
 }
-
-
-export const generatePtoShift = (id, startDate, endDate) => {
-  const shifts = [];
-
-};
-
-
-
 
 export const generateShiftData = (dt) => {
   const shiftData = [];
@@ -148,7 +71,6 @@ export const generateShiftData = (dt) => {
   });
   return shiftData;
 };
-
 
 export const formatDate = (day, hol, daysOfWeek = []) => {
   const date = new Date(day.id);
@@ -169,14 +91,12 @@ export const formatDate = (day, hol, daysOfWeek = []) => {
   return `${dayName} ${formattedDate} ${isHoliday ? '🎉' : ''}`;
 };
 
-
 export const formatToDate = (day) => {
   const date = new Date(day.id);
   const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
   const formattedDate = date.toLocaleDateString('es-ES', options).replace(/\//g, '-');
   return formattedDate;
 };
-
 
 export const uniqueEmployeeName = (data) => {
   // Creamos un Set para almacenar nombres únicos de empleados
@@ -239,10 +159,8 @@ export const selectColor = (teamWork) => {
   return selectColor;
 };
 
-
-
-// Función para calcular la duración total en formato decimal
 export const getTotalShiftDuration = (employeeName, data) => {
+  // Función para calcular la duración total en formato decimal
   let totalMinutes = 0;
 
   // Iteramos sobre los días para obtener la duración de cada turno del empleado
@@ -257,7 +175,6 @@ export const getTotalShiftDuration = (employeeName, data) => {
   const totalHoursDecimal = totalMinutes / 60;
   return totalHoursDecimal.toFixed(2);
 };
-
 
 export const getDayName = (num) => {
   const days = [

@@ -6,14 +6,6 @@ export const searchActiveEmployees = async () => {
     return res.data;
 };
 
-// Horarios de un empleado por rango de fechas
-export const searchSchedulesByEmployesAndDate = async () => {
-    const res = await axiosClient.get(
-        "/schedule/employee/1/schedules?startDate=2025-08-01&endDate=2025-08-31"
-    );
-    return res.data;
-};
-
 // PTO de un empleado
 export const searchPtoByEmployee = async (employeeId) => {
     const res = await axiosClient.get(`/pto/${employeeId}`);

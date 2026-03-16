@@ -78,39 +78,3 @@ export const saveRosterData = async (modifiedData) => {
         };
     }
 };
-
-// ✅ updateSingleShift migrado a Axios
-export const updateSingleShift = async (employeeId, date, shiftData) => {
-    if (!employeeId || !date || !shiftData) {
-        return {
-            success: false,
-            data: null,
-            message: "Faltan parámetros requeridos",
-            error: "Missing required parameters"
-        };
-    }
-
-    try {
-        const response = await axiosClient.put('/ws/updateShift', {
-            employeeId,
-            date,
-            ...shiftData
-        });
-
-        return {
-            success: true,
-            data: response.data,
-            message: "Turno actualizado correctamente"
-        };
-
-    } catch (error) {
-        console.error('Error en updateSingleShift:', error);
-
-        return {
-            success: false,
-            data: null,
-            message: error.response?.data?.message || "Error al actualizar el turno",
-            error: error.message || "Unknown error"
-        };
-    }
-};

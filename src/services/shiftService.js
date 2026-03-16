@@ -10,16 +10,6 @@ export const getShiftWeek = async (startDate, endDate) => {
     }
 };
 
-// 👥 Obtener roles/turnos genéricos
-export const getGenericShiftWeek = async () => {
-    try {
-        const response = await axiosClient.get('/gs/getRoles');
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-};
-
 // 🛠️ Objeto de acciones para turnos
 export const fetchShift = {
     // Guardar un turno individual

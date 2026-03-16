@@ -140,13 +140,8 @@ export const useEmployees = () => {
 
     const handleDeletePto = async (ptoId, startDate, terminationDate) => {
         try {
-            // Si necesitas usar dates o pto, hazlo aquí (actualmente no se usan en la petición)
-            // const dates = getDatesInRange(startDate, terminationDate);
-            // const pto = generatePtoNullWithDate(ptoCreateForm.id, dates);
-
             await fetchPto.deletePtoById(ptoId);
 
-            // Recarga la lista de PTO del empleado seleccionado
             if (ptoCreateForm.id) {
                 const { status, data } = await fetchPto.getPtoList(ptoCreateForm.id);
                 if (status === 204) {
