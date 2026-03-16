@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 
 import { ConfirmModal } from './ConfirmationModal';
 import { AuthContext } from '../context/AuthContext';
+import { axiosClient } from '@/services/axiosClient';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -34,44 +35,42 @@ export const ModalAdd = ({ setIsModalAddOpen, selectedEmployeeId, employees, set
 
   const handleSubmit = async () => {
     const timestamp = generateTimestamp(date, time);
+
     if (!timestamp || !selectedEmployeeId) {
       console.error("Faltan datos para enviar el fichaje");
       return;
     }
 
     try {
-      const response = await fetch(`${API_URL}/timestamp/timestamp`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${auth.token}`,
-        },
-        body: JSON.stringify({
-          employeeId: selectedEmployeeId,
-          timestamp,
-          isMod: true,
-        }),
+      // 1. Guardar el nuevo fichaje
+      await axiosClient.post('/timestamp/timestamp', {
+        employeeId: selectedEmployeeId,
+        timestamp,
+        isMod: true,
       });
 
-      if (!response.ok) {
-        throw new Error(`Error al guardar el fichaje: ${response.status}`);
-      }
-
-      const updatedRecordsResponse = await fetch(
-        `${API_URL}/timestamp/employee/${selectedEmployeeId}/month?year=${activeTab.year}&month=${activeTab.month + 1}`,
+      // 2. Obtener los registros actualizados (Refresco de la lista)
+      const updatedRecordsResponse = await axiosClient.get(
+        `/timestamp/employee/${selectedEmployeeId}/month`,
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.token}`,
+          params: {
+            year: activeTab.year,
+            month: activeTab.month + 1,
           },
         }
       );
 
-      const updatedRecords = await updatedRecordsResponse.json();
-      setRecords(updatedRecords);
+      // Axios entrega el JSON directamente en .data
+      setRecords(updatedRecordsResponse.data);
+
+      // Cerrar el modal tras el éxito
       setIsModalAddOpen(false);
+
     } catch (error) {
-      console.error("Error en la petición:", error);
+      // Axios captura tanto errores del POST como del GET aquí
+      const errorMessage = error.response?.data?.message || error.message;
+      console.error("Error en la petición:", errorMessage);
+      // Opcional: alert("Hubo un problema al guardar: " + errorMessage);
     }
   };
 

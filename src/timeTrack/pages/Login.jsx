@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { AlertMessage } from '../components/AlertMessage';
+import { authService } from '@/auth/services/authService';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const Login = () => {
@@ -26,49 +27,33 @@ export const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const loginResponse = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      // 1. Intentar el login para obtener el TOKEN
+      const loginData = await authService.login(formData);
+      const { token, role } = loginData;
 
-      if (!loginResponse.ok) throw new Error('Error al iniciar sesión');
+      // 2. IMPORTANTE: Guardar el token en sessionStorage manualmente AHORA
+      // Esto asegura que el interceptor de Axios lo vea para la siguiente llamada
+      sessionStorage.setItem('token', token);
 
-      const loginData = await loginResponse.json();
-      const token = loginData.token;
-      const role = loginData.role;
+      // 3. Ahora que el token está en el storage, pedimos los datos del usuario
+      const userData = await authService.getMe();
 
-      const meResponse = await fetch(`${API_URL}/emp/me`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!meResponse.ok) throw new Error('Error al obtener datos del usuario');
-
-
-
-      const userData = await meResponse.json();
+      // 4. Una vez tenemos TODO, llamamos al login del Contexto
+      // Esto actualizará el estado global y el resto de sessionStorage
       login(token, role, userData);
-      if (role === "USER") {
-        navigate("/schedules");
-      } else {
-        navigate("/");
-      }
-      setFormData({ dni: '', password: '' });
+
+      // 5. Navegar según el rol
+      navigate(role === "USER" ? "/schedules" : "/");
 
     } catch (error) {
+      console.error("Error en el proceso de login:", error);
       setError(true);
-      let err = error.message === 'Failed to fetch' ? 'Error de conexión' : error.message;
       setErrorMessage({
-        text: err,
+        text: error.response?.status === 403
+          ? "Sesión inválida o sin permisos"
+          : "Credenciales incorrectas",
         type: 'error'
       });
-      setTimeout(() => {
-        setError(false);
-      }, 3000);
     }
   };
 

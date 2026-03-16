@@ -60,16 +60,5 @@ export function getMonthRange(year, month) {
   };
 }
 
-export const getSchedules = (baseUrl, start, end) => {
-  return fetch(`${baseUrl}/day/${start}/${end}`, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      return response.json();
-    });
-};
 
 

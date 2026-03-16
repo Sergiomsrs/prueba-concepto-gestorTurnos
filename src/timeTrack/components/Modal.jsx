@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { filterAndMapRecords } from '../utilities/timeManagement';
 import { AuthContext } from '../context/AuthContext';
 import { ConfirmModal } from './ConfirmationModal';
+import { axiosClient } from '@/services/axiosClient';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -69,91 +70,59 @@ export const Modal = ({ isOpen, setIsOpen, employeeId, selectedDayRecords, recor
     setEditableRecords(updatedRecords);
   };
 
-  // Maneja la adición de nuevos registros
-  // Crea un nuevo registro temporal y lo añade a editableRecords
-  const handleAddRecord = () => {
-    const [day, month, year] = dayRecords.day.split('/').map(Number);
-    const now = new Date();
-    const date = new Date(year, month - 1, day, now.getHours(), now.getMinutes(), 0);
-    const dateStr = date.toISOString().slice(0, 10);
-    const time = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-    const timestamp = `${dateStr}T${time}:00.000`;
-    // Generamos un id temporal
-    const newRecord = {
-      id: `temp-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
-      employeeId,
-      timestamp,
-      dateStr,
-      time // Cambiar a false si no es un nuevo registro
-    };
-    // Se añade el nuevo registro a editableRecords
-    setEditableRecords(prev => [...prev, newRecord]);
-  };
 
   // Funcion para guardar o actualizar un registro
   const handleSaveRecord = async (recordId) => {
-
-
-    // Buscamos en editable records el recor que coincida en id con la que le estamos pasando al metodo
+    // 1. Localizar el registro
     const recordToSave = editableRecords.find(r => r.id === recordId);
     if (!recordToSave) return alert("No se encontró el registro.");
 
-    // Hacemos save o update en funcion del id, si es temporal o definitivo
+    const isNew = String(recordId).startsWith('temp');
+
     try {
-      const isNew = String(recordId).startsWith('temp');
-      const url = isNew
-        ? `${API_URL}/timestamp/timestamp`
-        : `${API_URL}/timestamp/${recordId}`;
-      const method = isNew ? 'POST' : 'PATCH';
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${auth.token}`,
-        },
-        body: JSON.stringify({
-          employeeId: isNew ? recordToSave.employeeId : "",
-          timestamp: recordToSave.timestamp,
-          isMod: "true", // Cambiar a false si no es un nuevo registro
-        }),
-      });
-
-
-
-
-      // Lanzamos mensaje de error en caso de fallo en la consulta
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Error HTTP: ${response.status}`);
-      }
-
-      // Actualizar la interfaz 
-      const updatedRecord = {
-        employeeId: recordToSave.employeeId,
+      // 2. Ejecutar la petición con Axios
+      const payload = {
+        employeeId: isNew ? recordToSave.employeeId : "",
         timestamp: recordToSave.timestamp,
-        id: recordId,
         isMod: "true",
       };
 
-      // Eliminar el registro temporal (si es un nuevo registro)
+      // Usamos el método correspondiente según si es nuevo o existente
+      const response = isNew
+        ? await axiosClient.post('/timestamp/timestamp', payload)
+        : await axiosClient.patch(`/timestamp/${recordId}`, payload);
+
+      // 3. Preparar el objeto para la interfaz
+      // Nota: Si el backend devuelve el ID real al crear, podrías usar response.data.id
+      const updatedRecord = {
+        employeeId: recordToSave.employeeId,
+        timestamp: recordToSave.timestamp,
+        id: isNew && response.data.id ? response.data.id : recordId,
+        isMod: "true",
+      };
+
+      // 4. Actualizar estados (Lógica original intacta)
+
+      // Eliminar de la lista de edición
       setEditableRecords(prev => prev.filter(r => r.id !== recordId));
 
-      // Si el registro es nuevo, lo añadimos
       if (isNew) {
+        // Si el registro es nuevo, lo añadimos a la lista principal
         setRecords(prev => [...prev, updatedRecord]);
       } else {
-        // Si es un registro modificado, actualizamos el existente
+        // Si es modificado, actualizamos el existente en la lista principal
         setRecords(prev => prev.map(r => (r.id === recordId ? updatedRecord : r)));
       }
 
     } catch (err) {
-      console.log("TOKEN ENVIADO:", auth.token);
+      // Axios guarda el error de respuesta en err.response
+      const errorMessage = err.response?.data?.message || err.message || "Error al guardar";
       console.error("Error al guardar:", err);
-      alert(err.message);
+      alert(errorMessage);
+    } finally {
+      // Esto se ejecuta siempre, equivaliendo al final de tu función
+      setIsOpen(false);
     }
-
-    setIsOpen(false);
   };
 
   const onOpenModal = (id, action) => {
@@ -181,44 +150,30 @@ export const Modal = ({ isOpen, setIsOpen, employeeId, selectedDayRecords, recor
   }
 
 
-  // Funcion para eliminar un registro de la base de datos
   const handleDeleteRecord = async (recordId) => {
-
-
+    // 1. Manejo de registros temporales (Local)
     if (String(recordId).startsWith('temp')) {
-      setEditableRecords(prev => {
-        const updatedEditableRecords = prev.filter(r => r.id !== recordId);
-        const updatedRecords = records.filter(record => record.id !== recordId);
-        setRecords(updatedRecords);
-        return updatedEditableRecords;
-      });
-      // Cerrar modal si es un registro temporal
+      setEditableRecords(prev => prev.filter(r => r.id !== recordId));
+      setRecords(prev => prev.filter(r => r.id !== recordId));
       setIsOpen(false);
       return;
     }
-    // Se lanza la consulta
+
+    // 2. Manejo de registros persistidos (API)
     try {
-      const res = await fetch(`${API_URL}/timestamp/${recordId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${auth.token}`,
-        },
-      });
+      // Axios lanza automáticamente el error si la respuesta no es 2xx
+      await axiosClient.delete(`/timestamp/${recordId}`);
 
-      if (!res.ok) {
-        const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.message || `Error HTTP: ${res.status}`);
-      }
-
-      // Eliminar el registro de los estados
+      // Si la petición tiene éxito, actualizamos los estados
       setEditableRecords(prev => prev.filter(r => r.id !== recordId));
       setRecords(prev => prev.filter(r => r.id !== recordId));
 
       setIsOpen(false);
     } catch (err) {
+      // Accedemos al mensaje de error del servidor de forma segura
+      const errorMessage = err.response?.data?.message || err.message || "Error al eliminar el registro";
       console.error("Error al eliminar:", err);
-      alert(err.message);
+      alert(errorMessage);
     }
   };
 
