@@ -23,7 +23,6 @@ export const useRoster = () => {
 
             if (result.success) {
                 setApiData(result.data);
-                console.log("Datos de roster actualizados:", result.data);
                 setAlert({
                     isOpen: true,
                     message: { type: "success", text: result.message },
