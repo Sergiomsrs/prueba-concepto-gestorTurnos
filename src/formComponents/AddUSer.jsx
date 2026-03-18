@@ -5,13 +5,14 @@ const initialState = {
     id: "",
     name: "",
     lastName: "",
-    secondLastName: "", // Recuperado
+    secondLastName: "",
     email: "",
-    dni: "", // Recuperado
-    password: "", // Recuperado
+    dni: "",
+    password: "",
     role: "",
-    hireDate: "", // Recuperado
-    terminationDate: "", // Recuperado
+    hireDate: "",
+    terminationDate: "",
+    sortOrder: "",
 };
 
 export const AddUSer = ({ allEmployees: employees }) => {
@@ -26,6 +27,8 @@ export const AddUSer = ({ allEmployees: employees }) => {
             [e.target.name]: e.target.value
         });
     };
+
+    console.log(employees);
 
     const handleInputEmailChange = (e) => {
         setEmail(e.target.value);
@@ -46,6 +49,7 @@ export const AddUSer = ({ allEmployees: employees }) => {
         if (e) e.preventDefault();
         try {
             await axiosClient.put(`/emp/update/${createForm.id}`, createForm);
+            console.log("Usuario actualizado:", createForm);
             setMessage("Usuario actualizado con éxito");
         } catch (error) {
             setMessage("Error al actualizar usuario");
@@ -181,6 +185,18 @@ export const AddUSer = ({ allEmployees: employees }) => {
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-900">Rol / Puesto</label>
                         <input onChange={handleInputCreateChange} type="text" name="role" value={createForm.role || ""} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                    </div>
+
+                    <div className="sm:col-span-2">
+                        <label className="block text-sm font-medium text-gray-900 font-bold text-indigo-600">Orden en Tabla</label>
+                        <input
+                            onChange={handleInputCreateChange}
+                            type="number"
+                            name="sortOrder"
+                            value={createForm.sortOrder || ""}
+                            placeholder="Ej: 1"
+                            className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-indigo-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm bg-indigo-50"
+                        />
                     </div>
 
                     <div className="sm:col-span-2">
