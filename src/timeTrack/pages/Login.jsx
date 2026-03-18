@@ -9,8 +9,6 @@ export const Login = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({ text: '', type: '' });
-
-  // Estados para gestionar el estado de la petición y el arranque en frío
   const [isLoading, setIsLoading] = useState(false);
   const [isServerWakingUp, setIsServerWakingUp] = useState(false);
 
