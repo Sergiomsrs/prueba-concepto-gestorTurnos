@@ -114,9 +114,9 @@ export const Login = () => {
   };
 
   return (
-    <div className="h-[calc(100vh-5rem-4.5rem)] flex overflow-hidden">
+    <div className="min-h-screen lg:h-[calc(100vh-9.5rem)] flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden bg-white">
 
-      {/* PANEL IZQUIERDO */}
+      {/* PANEL IZQUIERDO (Solo visible en Desktop) */}
       <div
         className="hidden lg:flex lg:w-3/5 bg-cover bg-center bg-no-repeat relative"
         style={{
@@ -148,24 +148,9 @@ export const Login = () => {
         </div>
       </div>
 
-      {/* PANEL DERECHO */}
-      <div className="w-full lg:w-2/5 flex items-center justify-center bg-white px-8">
+      {/* PANEL DERECHO (Formulario) */}
+      <div className="w-full lg:w-2/5 flex items-center justify-center bg-white px-8 py-10 lg:py-0">
         <div className="w-full max-w-md">
-
-          {/* HEADER MOBILE */}
-          <div
-            className="lg:hidden relative mb-8 -mx-8 -mt-6 px-8 pt-6 pb-6 bg-cover bg-center"
-            style={{
-              backgroundImage: `url('${import.meta.env.BASE_URL}bg-image-loginForm.webp')`
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/85 via-blue-800/75 to-transparent"></div>
-            <div className="relative z-10 text-center text-white">
-              <h1 className="text-xl font-bold">
-                WORK<span className="text-blue-300">SCHEDFLOW</span>
-              </h1>
-            </div>
-          </div>
 
           {/* HERO DEMO CTA */}
           <div className="mb-10">
@@ -241,7 +226,7 @@ export const Login = () => {
               {isServerWakingUp && (
                 <div className="bg-blue-50 border-l-4 border-blue-400 p-3 mt-2">
                   <p className="text-xs text-blue-700 leading-tight">
-                    <strong>Nota:</strong> El servidor gratuito de Render se "duerme" tras 15 min. de inactividad. El primer arranque puede tardar hasta 40 segundos.
+                    <strong>Nota:</strong> El servidor gratuito se "duerme" por inactividad. El primer arranque puede tardar.
                   </p>
                 </div>
               )}
@@ -253,7 +238,7 @@ export const Login = () => {
               )}
             </form>
 
-            <div className="mt-5 text-center">
+            <div className="mt-5 text-center pb-4">
               <button className="text-sm text-blue-600 hover:text-blue-800 bg-transparent border-none cursor-pointer">
                 ¿Olvidaste tu contraseña?
               </button>
