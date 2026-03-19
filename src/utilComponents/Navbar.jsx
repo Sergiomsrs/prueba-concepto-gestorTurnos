@@ -2,13 +2,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import { AuthContext } from "../timeTrack/context/AuthContext";
 import { saludo } from '../timeTrack/utilities/timeManagement';
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Navbar = () => {
+  const queryClient = useQueryClient();
   const { auth, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
+    queryClient.clear();
     logout();
     navigate('/login');
   };

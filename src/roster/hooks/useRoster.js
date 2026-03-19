@@ -8,6 +8,8 @@ export const useRoster = (startDate, endDate) => {
     const { auth } = useContext(AuthContext);
     const queryClient = useQueryClient();
 
+    const isDemo = auth.token === "demo-token-12345";
+
     // 1️⃣ QUERY: Obtención de datos
     const rosterQuery = useQuery({
         queryKey: ["roster", startDate, endDate],
@@ -19,7 +21,8 @@ export const useRoster = (startDate, endDate) => {
             if (!result.success) throw new Error(result.message);
             return result.data;
         },
-        enabled: !!startDate && !!endDate, // Solo se ejecuta si hay fechas
+        initialData: isDemo ? apiMockData : undefined,
+        enabled: isDemo || (!!startDate && !!endDate),
         staleTime: 1000 * 60 * 5, // Considera los datos "frescos" por 5 min
     });
 
