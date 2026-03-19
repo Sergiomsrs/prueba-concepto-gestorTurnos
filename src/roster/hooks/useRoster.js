@@ -10,7 +10,6 @@ export const useRoster = (startDate, endDate) => {
 
     const isDemo = auth.token === "demo-token-12345";
 
-    // 1️⃣ QUERY: Obtención de datos
     const rosterQuery = useQuery({
         queryKey: ["roster", startDate, endDate],
         queryFn: async () => {
@@ -22,8 +21,26 @@ export const useRoster = (startDate, endDate) => {
             return result.data;
         },
         initialData: isDemo ? apiMockData : undefined,
-        enabled: isDemo || (!!startDate && !!endDate),
-        staleTime: 1000 * 60 * 5, // Considera los datos "frescos" por 5 min
+
+        // 🛡️ LÓGICA DE VALIDACIÓN AQUÍ
+        enabled: (() => {
+            if (isDemo) return true; // En modo demo siempre habilitado
+            if (!startDate || !endDate) return false;
+
+            const inicio = new Date(startDate);
+            const fin = new Date(endDate);
+
+            // 1. Validar que inicio no sea superior a fin
+            if (inicio > fin) return false;
+
+            // 2. Validar que la diferencia no supere los 35 días
+            const diffInMs = fin.getTime() - inicio.getTime();
+            const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+            return diffInDays <= 35;
+        })(),
+
+        staleTime: 1000 * 60 * 5,
     });
 
     // 2️⃣ MUTATION: Guardado de datos
