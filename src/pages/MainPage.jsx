@@ -20,6 +20,7 @@ import { RosterPage } from "./RosterPage"
 import { ChatUI } from "../ia/components/ChatUI"
 import { AuthContext } from "@/timeTrack/context/AuthContext"
 import { ProtectedRoute } from "@/timeTrack/context/ProtectedRoute"
+import { Footer } from "@/utilComponents/Footer"
 
 
 export const MainPage = () => {
@@ -140,9 +141,10 @@ export const MainPage = () => {
           </Routes>
         </main>
 
-        <footer className="mt-8 mb-2">
-          <p className="text-center">© 2025 WorkSchedFlow. All rights reserved.</p>
-        </footer>
+        <Footer />
+        {/* <footer className="mt-8 mb-2">
+          <p className="text-center">© 2026 WorkSchedFlow. All rights reserved.</p>
+        </footer> */}
       </div>
     </div>
   )
