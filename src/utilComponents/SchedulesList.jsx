@@ -4,77 +4,67 @@ export const SchedulesList = ({ processedRecords }) => {
     const getDayOfWeek = (dateString) => {
         const [day, month, year] = dateString.split("/");
         const date = new Date(`${year}-${month}-${day}`);
-        const weekday = date.toLocaleDateString("es-ES", { weekday: "long" });
+        const weekday = date.toLocaleDateString("es-ES", { weekday: "short" }); // "lun.", "mar."
         return weekday.charAt(0).toUpperCase() + weekday.slice(1);
     };
 
     return (
-        <div className="border rounded-lg overflow-hidden shadow-sm bg-gray-50">
-            {/* --- VISTA MÓVIL (Cards) --- */}
+        <div className="border rounded-lg overflow-hidden shadow-sm bg-white mx-2">
+            {/* --- VISTA MÓVIL COMPACTA --- */}
             <div className="block md:hidden">
                 {processedRecords.map((record, index) => {
                     const weekday = getDayOfWeek(record.data.day);
-                    const isWeekend = weekday === "Sábado" || weekday === "Domingo";
+                    const isWeekend = weekday.includes("Sáb") || weekday.includes("Dom");
 
                     return (
-                        <div key={index} className={`p-4 border-b last:border-b-0 bg-white mb-2 ${isWeekend ? 'border-l-4 border-indigo-300' : ''}`}>
-                            {/* Cabecera de la Card */}
-                            <div className="flex justify-between items-start mb-3">
-                                <div>
-                                    <span className="text-xs font-bold uppercase text-gray-400 tracking-wider">{weekday}</span>
-                                    <h4 className="text-lg font-bold text-gray-800">{record.data.day}</h4>
-                                </div>
-                                <div className="text-right">
-                                    <span className="block text-xs text-gray-400 uppercase">Total</span>
-                                    <span className="text-lg font-mono font-bold text-blue-600">
-                                        {record.data.isDayOff ? "-" : record.data.totalWorked}
-                                    </span>
-                                </div>
+                        <div key={index} className={`px-3 py-2 border-b last:border-b-0 flex items-center gap-3 ${isWeekend ? 'bg-indigo-100/40' : 'bg-white'}`}>
+
+                            {/* Fecha y Día (Columna fija a la izquierda) */}
+                            <div className="flex flex-col items-center justify-center min-w-[50px] border-r pr-3">
+                                <span className={`text-[10px] font-bold uppercase ${isWeekend ? 'text-indigo-500' : 'text-gray-400'}`}>
+                                    {weekday.replace('.', '')}
+                                </span>
+                                <span className="text-sm font-bold text-gray-800">
+                                    {record.data.day.split('/')[0]}
+                                </span>
                             </div>
 
-                            {/* Contenido: Horarios */}
-                            <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
+                            {/* Info Principal (Centro) */}
+                            <div className="flex-1 min-w-0">
                                 {record.data.isDayOff ? (
-                                    <span className="text-green-600 font-medium flex items-center gap-2">
-                                        🌴 Día libre
-                                    </span>
+                                    <span className="text-xs text-green-600 font-medium italic">Día libre</span>
                                 ) : (
-                                    <div className="space-y-3">
+                                    <div className="flex flex-wrap gap-x-3 gap-y-1">
                                         {record.data.periods.map((period, i) => (
-                                            <div key={i} className="flex items-center justify-between text-sm">
-                                                <div className="flex items-center gap-2">
-                                                    <span className={`px-2 py-1 rounded font-semibold ${period.entryIsMod === "true" ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-white border'}`}>
-                                                        {period.entry}
+                                            <div key={i} className="flex items-center text-[13px]">
+                                                <span className={`${period.entryIsMod === "true" ? 'text-red-600 font-bold' : 'text-gray-700'}`}>
+                                                    {period.entry}
+                                                </span>
+                                                <span className="mx-1 text-gray-400 text-[10px]">→</span>
+                                                {period.exit ? (
+                                                    <span className={`${period.exitIsMod === "true" ? 'text-red-600 font-bold' : 'text-gray-700'}`}>
+                                                        {period.exit}
                                                     </span>
-                                                    <span className="text-gray-400">→</span>
-                                                    {period.exit ? (
-                                                        <span className={`px-2 py-1 rounded font-semibold ${period.exitIsMod === "true" ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-white border'}`}>
-                                                            {period.exit}
-                                                        </span>
-                                                    ) : (
-                                                        <span className="text-amber-600 text-xs font-bold animate-pulse">FALTA SALIDA</span>
-                                                    )}
-                                                </div>
-                                                {period.exit && (
-                                                    <span className="text-gray-500 font-mono text-xs italic">
-                                                        {formatMillisecondsToTime(period.durationMs)}
-                                                    </span>
+                                                ) : (
+                                                    <span className="text-amber-600 text-[10px] font-bold">...</span>
                                                 )}
                                             </div>
                                         ))}
                                     </div>
                                 )}
-                            </div>
-
-                            {/* Footer de la Card */}
-                            <div className="mt-3 flex justify-between items-center">
+                                {/* Warning muy pequeño abajo si existe */}
                                 {record.data.warning && (
-                                    <span className="text-[10px] bg-yellow-100 text-yellow-700 px-2 py-1 rounded flex items-center gap-1">
+                                    <span className="block text-[9px] text-amber-700 truncate">
                                         ⚠️ {record.data.warning}
                                     </span>
                                 )}
-                                <span className="text-[10px] text-gray-400 ml-auto">
-                                    Registros: {record.data.isDayOff ? "0" : record.data.recordsCount / 2}
+                            </div>
+
+                            {/* Total Trabajado (Derecha) */}
+                            <div className="text-right pl-2">
+                                <span className="block text-[10px] text-gray-400 leading-none">HRS</span>
+                                <span className="text-sm font-mono font-bold text-blue-600">
+                                    {record.data.isDayOff ? "-" : record.data.totalWorked}
                                 </span>
                             </div>
                         </div>
@@ -82,78 +72,44 @@ export const SchedulesList = ({ processedRecords }) => {
                 })}
             </div>
 
-            {/* --- VISTA DESKTOP (Tabla original mejorada) --- */}
+            {/* --- VISTA DESKTOP --- */}
             <div className="hidden md:block overflow-x-auto">
                 <table className="w-full border-separate border-spacing-0">
                     <thead>
                         <tr>
-                            <th className="py-3 px-4 text-left text-gray-600 font-bold bg-gray-100 border-b uppercase text-xs tracking-wider">Fecha</th>
-                            <th className="py-3 px-4 text-left text-gray-600 font-bold bg-gray-100 border-b uppercase text-xs tracking-wider">Día</th>
-                            <th className="py-3 px-4 text-left text-gray-600 font-bold bg-gray-100 border-b uppercase text-xs tracking-wider">Horario</th>
-                            <th className="py-3 px-4 text-center text-gray-600 font-bold bg-gray-100 border-b uppercase text-xs tracking-wider">Total</th>
-                            <th className="py-3 px-4 text-center text-gray-600 font-bold bg-gray-100 border-b uppercase text-xs tracking-wider">Registros</th>
+                            <th className="py-2 px-4 text-left text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Fecha</th>
+                            <th className="py-2 px-4 text-left text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Día</th>
+                            <th className="py-2 px-4 text-left text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Horarios</th>
+                            <th className="py-2 px-4 text-center text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Total</th>
+                            <th className="py-2 px-4 text-center text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Reg.</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="divide-y divide-gray-100">
                         {processedRecords.map((record, index) => {
                             const weekday = getDayOfWeek(record.data.day);
-                            const isSaturday = weekday === "Sábado";
-                            const isSunday = weekday === "Domingo";
-                            const isWeekend = isSaturday || isSunday;
-
-                            const weekendBg = isSaturday
-                                ? "bg-emerald-50/30 border-l-4 border-emerald-300"
-                                : isSunday
-                                    ? "bg-violet-50/30 border-l-4 border-violet-300"
-                                    : "bg-white";
+                            const isWeekend = weekday.includes("Sáb") || weekday.includes("Dom");
 
                             return (
-                                <tr key={index} className={`transition-colors border-b hover:bg-gray-50 ${weekendBg}`}>
-                                    <td className="py-4 px-4 whitespace-nowrap border-b border-gray-100">
-                                        <span className="font-medium text-gray-900">{record.data.day}</span>
-                                        {record.data.warning && (
-                                            <span className="block text-[10px] leading-tight text-yellow-600 mt-1 max-w-[120px]">
-                                                {record.data.warning}
-                                            </span>
-                                        )}
-                                    </td>
-                                    <td className="py-4 px-4 whitespace-nowrap border-b border-gray-100 font-semibold text-gray-700">
-                                        {weekday}
-                                    </td>
-                                    <td className="py-4 px-4 border-b border-gray-100">
+                                <tr key={index} className={`hover:bg-gray-50/80 transition-colors ${isWeekend ? 'bg-indigo-100/40' : ''}`}>
+                                    <td className="py-2 px-4 text-sm font-medium text-gray-600">{record.data.day}</td>
+                                    <td className="py-2 px-4 text-sm text-gray-500">{weekday}</td>
+                                    <td className="py-2 px-4">
                                         {record.data.isDayOff ? (
-                                            <span className="text-green-600 font-medium">Día libre 🌴</span>
+                                            <span className="text-xs text-green-600">Día libre</span>
                                         ) : (
-                                            <div className="flex flex-col gap-1">
+                                            <div className="flex gap-4">
                                                 {record.data.periods.map((period, i) => (
-                                                    <div key={i} className="flex items-center gap-2 text-sm">
-                                                        <span className={`px-1.5 py-0.5 rounded ${period.entryIsMod === "true" ? 'bg-red-50 text-red-700 border border-red-200' : 'text-gray-700 border'}`}>
-                                                            {period.entry}
-                                                        </span>
-                                                        <span className="text-gray-400">→</span>
-                                                        {period.exit ? (
-                                                            <>
-                                                                <span className={`px-1.5 py-0.5 rounded ${period.exitIsMod === "true" ? 'bg-red-50 text-red-700 border border-red-200' : 'text-gray-700 border'}`}>
-                                                                    {period.exit}
-                                                                </span>
-                                                                <span className="text-gray-400 text-xs italic">
-                                                                    ({formatMillisecondsToTime(period.durationMs)})
-                                                                </span>
-                                                            </>
-                                                        ) : (
-                                                            <span className="text-amber-600 font-bold text-xs uppercase">Falta salida</span>
-                                                        )}
-                                                    </div>
+                                                    <span key={i} className="text-sm flex items-center gap-1">
+                                                        <b className={period.entryIsMod === "true" ? "text-red-500" : ""}>{period.entry}</b>
+                                                        <span className="text-gray-300">|</span>
+                                                        <b className={period.exitIsMod === "true" ? "text-red-500" : ""}>{period.exit || '??'}</b>
+                                                    </span>
                                                 ))}
                                             </div>
                                         )}
                                     </td>
-                                    <td className="py-4 px-4 text-center font-bold text-blue-700 border-b border-gray-100">
-                                        {record.data.isDayOff ? "-" : record.data.totalWorked}
-                                    </td>
-                                    <td className="py-4 px-4 text-center text-xs text-gray-500 border-b border-gray-100">
-                                        {record.data.isDayOff ? "0" : record.data.recordsCount / 2}
-                                    </td>
+                                    <td className="py-2 px-4 text-center font-mono font-bold text-blue-600">{record.data.isDayOff ? "-" : record.data.totalWorked}</td>
+                                    <td className="py-2 px-4 text-center text-xs text-gray-400">{record.data.isDayOff ? "0" : record.data.recordsCount / 2}</td>
                                 </tr>
                             );
                         })}

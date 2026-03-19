@@ -34,17 +34,20 @@ export const SchedulesByEmployee = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 mt-20 flex justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 w-full sm:w-3/4">
-        {/* Columna izquierda: Filtros + Ausencias */}
-        <div className="md:col-span-4 flex flex-col gap-4">
-          {/* Filtros */}
-          <div className="w-full bg-gray-50 border border-gray-200 rounded-lg p-4 mb-2">
+    <div className="min-h-screen bg-gray-100 mt-6 flex justify-center">
+      {/* Cambiamos a flex-col en móvil y flex-row en desktop para controlar mejor el flujo */}
+      <div className="flex flex-col md:flex-row gap-4 w-full sm:w-3/4">
+
+        {/* --- COLUMNA IZQUIERDA (Filtros y Ausencias) --- */}
+        {/* En móvil, usamos 'contents' para que los hijos sigan participando en el orden del padre */}
+        <div className="flex flex-col gap-4 md:w-1/3 contents md:flex">
+
+          {/* 1. FILTROS: Siempre arriba (Order 1) */}
+          <div className="order-1 w-full bg-gray-50 border border-gray-200 rounded-lg p-4">
             <h2 className="text-lg font-bold mb-4 border-b-4 border-blue-400 pb-1 text-blue-800">
               Filtros
             </h2>
-            {
-              (auth.role == "ADMIN" || auth.isAuthenticated == false) &&
+            {(auth.role === "ADMIN" || auth.isAuthenticated === false) && (
               <EmployeeSelector
                 employees={employees}
                 setEmployees={setEmployees}
@@ -52,48 +55,51 @@ export const SchedulesByEmployee = () => {
                 setSelectedEmployeeId={setSelectedEmployeeId}
                 activeTab={activeTab}
               />
-            }
+            )}
             <NewDatePicker activeTab={activeTab} setActiveTab={setActiveTab} />
           </div>
-          {/* Ausencias solicitadas */}
-          <div className="w-full bg-gray-50 border border-gray-200 rounded-lg p-6 flex flex-col gap-4">
+
+          {/* 3. AUSENCIAS: Abajo en móvil (Order 3), justo bajo filtros en PC */}
+          <div className="order-3 w-full bg-gray-50 border border-gray-200 rounded-lg p-6 flex flex-col gap-4">
             <h2 className="text-lg font-bold mb-4 border-b-4 border-emerald-400 pb-1 text-emerald-700">
               Ausencias solicitadas
             </h2>
-            {/* Subtítulo y tabla de no disponibilidad */}
-            <h3 className="text-base font-semibold text-emerald-700 mb-2">Peticiones de No Disponibilidad</h3>
+            <h3 className="text-base font-semibold text-emerald-700 mb-2 font-mono">Peticiones de No Disponibilidad</h3>
             <div className="overflow-y-auto max-h-[32vh] mb-4">
               {disponibility.length === 0 ? (
-                <p className="text-gray-500">No hay ausencias registradas.</p>
+                <p className="text-gray-500 text-sm italic">No hay ausencias registradas.</p>
               ) : (
                 <DispTable workHours={disponibility} />
               )}
             </div>
-            {/* Subtítulo y tabla de vacaciones */}
-            <h3 className="text-base font-semibold text-emerald-700 mb-2">Solicitudes de vacaciones</h3>
+            <h3 className="text-base font-semibold text-emerald-700 mb-2 font-mono">Solicitudes de vacaciones</h3>
             <div className="overflow-y-auto max-h-[32vh]">
               {employeePto.length === 0 ? (
-                <p className="text-gray-500">No hay vacaciones registradas.</p>
+                <p className="text-gray-500 text-sm italic">No hay vacaciones registradas.</p>
               ) : (
                 <PtoTable employeePto={employeePto} />
               )}
             </div>
           </div>
         </div>
-        {/* Columna derecha: ScheduleList */}
-        <div className="md:col-span-8 flex flex-col items-center">
-          <div className="w-full bg-gray-50 border border-gray-200 rounded-lg p-6">
-            <h2 className="text-lg font-bold mb-4 border-b-4 border-indigo-400 pb-1 text-indigo-800">
+
+        {/* --- COLUMNA DERECHA (Planificación Mensual) --- */}
+        {/* 2. PLANIFICACIÓN: En medio en móvil (Order 2), a la derecha en PC */}
+        <div className="order-2 md:flex-1 flex flex-col items-center">
+          <div className="w-full bg-gray-100  p-0 md:p-6 overflow-hidden">
+            <h2 className="text-lg font-bold mb-4 border-b-4 border-indigo-400 pb-1 text-indigo-800 mt-4 mx-4 md:mx-0">
               Planificación Mensual
             </h2>
             {data.length <= 0 ? (
-              <h1 className="text-red-500">No hay registros</h1>
+              <h1 className="text-red-500 font-medium text-center py-4">No hay registros</h1>
             ) : (
               <SchedulesList processedRecords={processedRecords} />
             )}
           </div>
         </div>
+
       </div>
     </div>
   );
-};
+
+}

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 export const AdminPage = () => {
   return (
     <div className="bg-gray-50">
-      <div className="mx-auto max-w-2xl px-2 lg:max-w-7xl lg:px-8 mt-16">
+      <div className="mx-auto max-w-2xl px-2 lg:max-w-7xl lg:px-8 mt-6">
         <h2 className="text-center text-2xl font-semibold text-indigo-600">WorkSchedFlow</h2>
         <p className="mx-auto mt-2 max-w-lg text-balance text-center text-4xl font-semibold tracking-tight text-gray-950 sm:text-5xl">
           Panel de Administración
