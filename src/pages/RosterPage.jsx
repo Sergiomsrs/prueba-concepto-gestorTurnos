@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useMemo, useRef, useState, useCallback } from "react";
+import { useEffect, useReducer, useMemo, useRef, useState, useCallback, useContext } from "react";
 import { useRoster } from "../roster/hooks/useRoster";
 import { rosterReducer } from "../roster/reducers/rosterReducer";
 import { useReactToPrint } from "react-to-print";
@@ -9,20 +9,15 @@ import { HeadRow } from "../roster/components/HeadRow";
 import { EmployeeRow } from "../roster/components/EmployeeRow";
 import { RosterRangeSummary } from "../roster/components/RosterRangeSummary";
 import { PrintableRoster } from "../roster/components/PrintableRoster";
+import { AppContext } from "@/context/AppContext";
 
 export const RosterPage = () => {
-    const { getRosterBetweenDates, apiData, saveData, loading } = useRoster();
     const [data, dispatch] = useReducer(rosterReducer, []);
     const inputRefsMatrix = useRef([]);
 
-    // 🔹 Estados para filtros (ACTUALIZADO)
-    const [filters, setFilters] = useState({
-        startDate: "",
-        endDate: "",
-        selectedTeams: [],
-        employeeName: "",
-        hideZeroHours: false, // ✅ NUEVO FILTRO
-    });
+
+    const { filters, setFilters } = useContext(AppContext)
+    const { apiData, loading, error, saveData } = useRoster(filters.startDate, filters.endDate);
     const [showMobileFilters, setShowMobileFilters] = useState(false);
     const [showTeamDropdown, setShowTeamDropdown] = useState(false);
     const [showFullDistribution, setShowFullDistribution] = useState(false); // Agregar este estado
@@ -146,11 +141,12 @@ export const RosterPage = () => {
         }));
     }, [availableTeams]);
 
-    const handleGetData = useCallback(() => {
-        getRosterBetweenDates(filters.startDate, filters.endDate);
+    const handleGetData = () => {
+        // Ya no necesitas llamar a getRosterBetweenDates()
+        // TanStack Query ya está observando filters.startDate/endDate
         setShowMobileFilters(false);
         setShowTeamDropdown(false);
-    }, [getRosterBetweenDates, filters.startDate, filters.endDate]);
+    };
 
     // ✅ ACTUALIZADO: incluir hideZeroHours en clearFilters
     const clearFilters = useCallback(() => {
@@ -169,15 +165,22 @@ export const RosterPage = () => {
         }
     }, [apiData]);
 
-    const handleSaveData = useCallback(async () => {
-        const result = await saveData(modifiedData);
-        if (result.success) {
-            console.log("✅ Datos guardados exitosamente");
-            await getRosterBetweenDates(filters.startDate, filters.endDate);
-        } else {
-            console.error("❌ Error al guardar:", result.message);
+    const handleSaveData = async () => {
+        try {
+            // Usamos mutateAsync del hook que creamos antes
+            await saveData(modifiedData);
+
+            // Si llega aquí, es que fue EXITOSO (el hook lanzó el invalidateQueries)
+            console.log("✅ Datos guardados y tabla actualizada automáticamente");
+
+            // Aquí puedes limpiar estados locales si tenías algo como:
+            // setModifiedData([]); 
+
+        } catch (error) {
+            // El error viene directamente del throw que pusimos en el hook
+            console.error("❌ Error al guardar:", error.message);
         }
-    }, [saveData, modifiedData, getRosterBetweenDates, filters.startDate, filters.endDate]);
+    };
 
     // Función para imprimir
     const handlePrint = useReactToPrint({
@@ -485,7 +488,7 @@ export const RosterPage = () => {
                                             : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
                                             }`}
                                     >
-                                        {loading ? "⏳" : "📊"} {loading ? "Cargando..." : "Obtener"}
+                                        {loading ? "⏳" : "📊"} {loading ? "Cargando..." : "Preparado"}
                                     </button>
                                     <button
                                         onClick={clearFilters}

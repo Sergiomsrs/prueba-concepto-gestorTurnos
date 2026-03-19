@@ -21,6 +21,16 @@ export const AppProvider = ({ children }) => {
         const saved = localStorage.getItem("activeTab");
         return saved !== null ? Number(saved) : 0;
     });
+
+    const [filters, setFilters] = useState({
+        startDate: "",
+        endDate: "",
+        selectedTeams: [],
+        employeeName: "",
+        hideZeroHours: false, // ✅ NUEVO FILTRO
+    });
+
+
     const fetchShiftWeek = async (startDate, endDate) => {
         setLoading(true);
         setError(null);
@@ -101,6 +111,7 @@ export const AppProvider = ({ children }) => {
             loading,
             schedules,
             selectedOption,
+            filters,
 
             fetchShiftWeek,
             resetData,
@@ -112,6 +123,7 @@ export const AppProvider = ({ children }) => {
             setHolidayDates,
             setSchedules,
             setSelectedOption,
+            setFilters
         }}>
             {children}
         </AppContext.Provider>

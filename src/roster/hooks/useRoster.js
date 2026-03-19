@@ -1,114 +1,58 @@
-import { useState, useCallback, useContext } from "react";
-import { apiMockData } from "../../utils/apiMock";
+import { useContext } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchRosterBetweenDates, saveRosterData } from "../services/rosterService";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
+import { apiMockData } from "../../utils/apiMock";
 
-export const useRoster = () => {
-    const [alert, setAlert] = useState({ isOpen: false, message: null });
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-
+export const useRoster = (startDate, endDate) => {
     const { auth } = useContext(AuthContext);
+    const queryClient = useQueryClient();
 
-    const [apiData, setApiData] = useState(() => {
-        return auth.token === "demo-token-12345" ? apiMockData : [];
+    // 1️⃣ QUERY: Obtención de datos
+    const rosterQuery = useQuery({
+        queryKey: ["roster", startDate, endDate],
+        queryFn: async () => {
+            // Manejo del mock para modo demo
+            if (auth.token === "demo-token-12345") return apiMockData;
+
+            const result = await fetchRosterBetweenDates(startDate, endDate, auth.token);
+            if (!result.success) throw new Error(result.message);
+            return result.data;
+        },
+        enabled: !!startDate && !!endDate, // Solo se ejecuta si hay fechas
+        staleTime: 1000 * 60 * 5, // Considera los datos "frescos" por 5 min
     });
 
-    const getRosterBetweenDates = useCallback(async (startDate, endDate) => {
-        setLoading(true);
-        setError(null);
+    // 2️⃣ MUTATION: Guardado de datos
+    const saveMutation = useMutation({
+        mutationFn: async (modifiedData) => {
+            if (!modifiedData?.length) throw new Error("No hay datos para guardar");
 
-        try {
-            const result = await fetchRosterBetweenDates(startDate, endDate, auth.token);
-
-            if (result.success) {
-                setApiData(result.data);
-                setAlert({
-                    isOpen: true,
-                    message: { type: "success", text: result.message },
-                });
-            } else {
-                setError(result.error);
-                setAlert({
-                    isOpen: true,
-                    message: { type: "error", text: result.message },
-                });
-            }
-        } catch (err) {
-            setError(err.message);
-            setAlert({
-                isOpen: true,
-                message: { type: "error", text: "Error inesperado al cargar los datos" },
-            });
-        } finally {
-            setLoading(false);
-            setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
-        }
-    }, []);
-
-    const saveData = useCallback(async (modifiedData) => {
-        // Validación de entrada
-        if (!modifiedData || !Array.isArray(modifiedData) || modifiedData.length === 0) {
-            setAlert({
-                isOpen: true,
-                message: { type: "warning", text: "No hay datos para guardar" },
-            });
-            return { success: false, message: "No hay datos para guardar" };
-        }
-
-        setLoading(true);
-        setError(null);
-
-        try {
             const result = await saveRosterData(modifiedData, auth.token);
-
-            if (result.success) {
-                setAlert({
-                    isOpen: true,
-                    message: { type: "success", text: result.message },
-                });
-
-                return { success: true, data: result.data };
-            } else {
-                setError(result.error);
-                setAlert({
-                    isOpen: true,
-                    message: { type: "error", text: result.message },
-                });
-
-                return { success: false, message: result.message };
-            }
-        } catch (err) {
-            const errorMessage = "Error inesperado al guardar los datos";
-            setError(err.message);
-            setAlert({
-                isOpen: true,
-                message: { type: "error", text: errorMessage },
-            });
-
-            return { success: false, message: errorMessage };
-        } finally {
-            setLoading(false);
-            setTimeout(() => setAlert({ isOpen: false, message: null }), 2500);
-        }
-    }, []);
-
-    const clearAlert = useCallback(() => {
-        setAlert({ isOpen: false, message: null });
-    }, []);
-
-    const clearError = useCallback(() => {
-        setError(null);
-    }, []);
+            if (!result.success) throw new Error(result.message);
+            return result;
+        },
+        onSuccess: () => {
+            // Invalida la caché para que se refresque la tabla automáticamente
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
+        },
+    });
 
     return {
-        apiData,
-        alert,
-        loading,
-        error,
-        getRosterBetweenDates,
-        saveData,
-        clearAlert,
-        clearError
+        // Datos y Estados (TanStack ya nos da isLoading, error, etc)
+        apiData: rosterQuery.data || [],
+        loading: rosterQuery.isLoading || saveMutation.isPending,
+        error: rosterQuery.error?.message || saveMutation.error?.message,
+
+        // Acciones
+        getRosterBetweenDates: rosterQuery.refetch, // Por si quieres forzar recarga
+        saveData: saveMutation.mutateAsync,
+
+        // Helpers de estado de la mutación
+        saveStatus: {
+            isSuccess: saveMutation.isSuccess,
+            isError: saveMutation.isError,
+            reset: saveMutation.reset
+        }
     };
 };
