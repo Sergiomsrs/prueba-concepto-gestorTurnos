@@ -1,186 +1,119 @@
-import { useContext, useEffect, useState } from "react"
-import { getAllEmployees, fetchDisponibilities, fetchPto } from "../services/employees"
+import { useContext, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAllEmployees, fetchDisponibilities, fetchPto } from "../services/employees";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
-import { useQuery } from "@tanstack/react-query";
-
 
 const createFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
 const PtoFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
 
-
 export const useEmployees = () => {
-
-
-    const [activeEmployees, setactiveEmployees] = useState([])
-    const [createForm, setCreateForm] = useState(createFormInitialState);
-    const [message, setMessage] = useState("");
-    const [workHours, setWorkHours] = useState([]);
-    const [ptoCreateForm, setPtoCreateForm] = useState(PtoFormInitialState);
-    const [ptoList, setPtoList] = useState([]);
-
+    const queryClient = useQueryClient();
     const { auth } = useContext(AuthContext);
 
-    const {
-        data: allEmployees = [],
-        refetch: handleGetAllEmployees
-    } = useQuery({
+    const [createForm, setCreateForm] = useState(createFormInitialState);
+    const [ptoCreateForm, setPtoCreateForm] = useState(PtoFormInitialState);
+    const [message, setMessage] = useState("");
+
+    // Queries
+    const { data: allEmployees = [] } = useQuery({
         queryKey: ["employees"],
         queryFn: () => getAllEmployees(auth.token),
-        enabled: !!auth?.token
+        enabled: !!auth?.token,
     });
 
-    const handleEmployeeSelect = async (selectedId, allEmployees) => {
-        const selectedEmployee = allEmployees.find(emp => emp.id.toString() === selectedId);
+    const { data: workHours = [], isLoading: loadingDispo } = useQuery({
+        queryKey: ["disponibilities", createForm?.id],
+        queryFn: async () => {
+            const { status, data } = await fetchDisponibilities.getDisponibilities(createForm.id);
+            return status === 204 ? [] : data;
+        },
+        enabled: !!createForm?.id,
+        onSuccess: (data) => {
+            if (data.length === 0) setMessage("No hay ausencias registradas.");
+            else setMessage("");
+        }
+    });
 
+    const { data: ptoList = [] } = useQuery({
+        queryKey: ["pto", ptoCreateForm?.id],
+        queryFn: async () => {
+            const { status, data } = await fetchPto.getPtoList(ptoCreateForm.id);
+            return status === 204 ? [] : data;
+        },
+        enabled: !!ptoCreateForm?.id,
+    });
+
+    // Mutations - Disponibilities
+    const saveDispoMutation = useMutation({
+        mutationFn: fetchDisponibilities.saveDisponibility,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["disponibilities", createForm?.id]);
+        },
+        onError: () => setMessage("Error al guardar la ausencia.")
+    });
+
+    const deleteDispoMutation = useMutation({
+        mutationFn: fetchDisponibilities.deleteDisponibilityById,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["disponibilities", createForm?.id]);
+        },
+        onError: () => setMessage("Error al eliminar la ausencia.")
+    });
+
+    // Mutations - PTO
+    const savePtoMutation = useMutation({
+        mutationFn: fetchPto.savePto,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["pto", ptoCreateForm?.id]);
+        },
+        onError: () => setMessage("Error al guardar el PTO.")
+    });
+
+    const deletePtoMutation = useMutation({
+        mutationFn: fetchPto.deletePtoById,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["pto", ptoCreateForm?.id]);
+        },
+        onError: () => setMessage("Error al eliminar el PTO.")
+    });
+
+    // Handlers
+    const handleEmployeeSelect = (selectedId) => {
+        const selectedEmployee = allEmployees.find(emp => emp.id.toString() === selectedId);
         if (selectedEmployee) {
             setCreateForm(selectedEmployee);
             setMessage("");
-            try {
-                const { status, data } = await fetchDisponibilities.getDisponibilities(selectedId);
-                if (status === 204) {
-                    setMessage("No hay ausencias registradas.");
-                    setWorkHours([]);
-                } else {
-                    setMessage("");
-                    setWorkHours(data);
-                }
-            } catch (error) {
-                console.error("Error al cargar jornadas:", error);
-                setMessage("Hubo un problema al cargar las jornadas.");
-            }
         } else {
-            setCreateForm(initialState);
-            setWorkHours([]);
+            setCreateForm(createFormInitialState);
         }
     };
 
-    const handleDeleteDisponibility = async (dispId) => {
-        try {
-            await fetchDisponibilities.deleteDisponibilityById(dispId);
-            // Recarga las ausencias del empleado seleccionado
-            if (createForm.id) {
-                const { status, data } = await fetchDisponibilities.getDisponibilities(createForm.id);
-                if (status === 204) {
-                    setMessage("No hay ausencias registradas.");
-                    setWorkHours([]);
-                } else {
-                    setMessage("");
-                    setWorkHours(data);
-                }
-            }
-        } catch (error) {
-            setMessage("Error al eliminar la ausencia.");
-            console.error(error);
-        }
-    };
-
-    const handleSaveDisponibility = async (disponibilityData) => {
-        try {
-            await fetchDisponibilities.saveDisponibility(disponibilityData);
-            if (createForm.id) {
-                const { status, data } = await fetchDisponibilities.getDisponibilities(createForm.id);
-                if (status === 204) {
-                    setMessage("No hay ausencias registradas.");
-                    setWorkHours([]);
-                } else {
-                    setMessage("");
-                    setWorkHours(data);
-                }
-            }
-        } catch (error) {
-            setMessage("Error al guardar la ausencia.");
-            console.error(error);
-        }
-    };
-
-    const handlePtoEmployeeSelect = async (selectedId, allEmployees, setPtoList) => {
+    const handlePtoEmployeeSelect = (selectedId) => {
         const selectedEmployee = allEmployees.find(emp => emp.id.toString() === selectedId);
-
         if (selectedEmployee) {
             setPtoCreateForm(selectedEmployee);
             setMessage("");
-            try {
-                const { status, data } = await fetchPto.getPtoList(selectedId);
-                if (status === 204) {
-                    setMessage("No hay ausencias registradas.");
-                    setPtoList([]);
-                } else {
-                    setMessage("");
-                    setPtoList(data);
-                }
-            } catch (error) {
-                console.error("Error al cargar jornadas:", error);
-                setMessage("Hubo un problema al cargar las jornadas.");
-                setPtoList([]);
-            }
         } else {
             setPtoCreateForm(PtoFormInitialState);
-            setPtoList([]);
         }
     };
-
-    const handleSavePto = async (PtoData) => {
-        try {
-            await fetchPto.savePto(PtoData);
-            if (ptoCreateForm.id) {
-                const { status, data } = await fetchPto.getPtoList(ptoCreateForm.id);
-                if (status === 204) {
-                    setMessage("No hay ausencias registradas.");
-                    setPtoList([]);
-                } else {
-                    setMessage("");
-                    setPtoList(data);
-                }
-            }
-        } catch (error) {
-            setMessage("Error al guardar la ausencia.");
-            console.error(error);
-        }
-    };
-
-    const handleDeletePto = async (ptoId, startDate, terminationDate) => {
-        try {
-            await fetchPto.deletePtoById(ptoId);
-
-            if (ptoCreateForm.id) {
-                const { status, data } = await fetchPto.getPtoList(ptoCreateForm.id);
-                if (status === 204) {
-                    setMessage("No hay ausencias registradas.");
-                    setPtoList([]);
-                } else {
-                    setMessage("");
-                    setPtoList(data);
-                }
-            }
-        } catch (error) {
-            setMessage("Error al eliminar la ausencia.");
-            console.error(error);
-        }
-    };
-
-
 
     return {
-        activeEmployees,
         allEmployees,
         createForm,
         message,
-
         workHours,
-
-        handleDeleteDisponibility,
-        handleEmployeeSelect,
-        handleGetAllEmployees,
-        handleSaveDisponibility,
-        setCreateForm,
-        setMessage,
-
-        setWorkHours,
         ptoCreateForm,
+        ptoList,
+        setCreateForm,
         setPtoCreateForm,
+        setMessage,
+        handleEmployeeSelect,
         handlePtoEmployeeSelect,
-        handleDeletePto,
-        handleSavePto,
-        ptoList, setPtoList
-    }
-}
+        handleSaveDisponibility: saveDispoMutation.mutate,
+        handleDeleteDisponibility: deleteDispoMutation.mutate,
+        handleSavePto: savePtoMutation.mutate,
+        handleDeletePto: (id) => deletePtoMutation.mutate(id),
+        isLoading: loadingDispo || saveDispoMutation.isLoading
+    };
+};
