@@ -94,7 +94,7 @@ export const SetupWeek = () => {
     };
 
     return (
-        <section className="min-h-screen bg-gray-50 pt-4">
+        <section className="min-h-screen bg-gray-50 pt-4 pb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Header */}

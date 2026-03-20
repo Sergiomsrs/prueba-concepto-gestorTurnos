@@ -34,7 +34,7 @@ export const MainPage = () => {
   const ONLY_ADMIN = ["ADMIN", "DEMO"];
 
   return (
-    <div className="bg-gray-100 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden">
+    <div className="bg-gray-50 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden">
       <div className="container grid min-h-[100dvh] max-w-full grid-rows-[auto_1fr_auto] relative px-0">
         <header>
           <Navbar />

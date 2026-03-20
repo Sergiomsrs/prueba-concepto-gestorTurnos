@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import { AddUSer } from '../formComponents/AddUSer';
 import { AddWwh } from '../formComponents/AddWwh';
 import { AddTeamWork } from '../formComponents/AddTeamWork';
 import { AddPto } from '../formComponents/AddPto';
@@ -7,6 +6,7 @@ import { AddDisp } from '../formComponents/AddDisp';
 import { AppContext } from '../context/AppContext';
 import { AddPublicHolidays } from '../formComponents/AddPublicHolidays';
 import { useEmployees } from '@/Hooks/useEmployees';
+import { AddUser } from '@/formComponents/AddUSer';
 
 
 
@@ -26,7 +26,7 @@ export const Add = () => {
 
   switch (activeTab) {
     case 0:
-      content = <AddUSer allEmployees={allEmployees} />;
+      content = <AddUser allEmployees={allEmployees} />;
       break;
     case 1:
       content = <AddWwh allEmployees={allEmployees} />;

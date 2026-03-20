@@ -34,7 +34,7 @@ export const SchedulesByEmployee = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 mt-6 flex justify-center">
+    <div className="min-h-screen bg-gray-100 pt-6 flex justify-center pb-20">
       {/* Cambiamos a flex-col en móvil y flex-row en desktop para controlar mejor el flujo */}
       <div className="flex flex-col md:flex-row gap-4 w-full sm:w-3/4">
 
