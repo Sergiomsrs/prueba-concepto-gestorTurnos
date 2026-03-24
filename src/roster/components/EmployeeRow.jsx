@@ -125,10 +125,10 @@ export const EmployeeRow = memo(
         };
 
         const getBackgroundClass = (value, team) => {
-            if (value === "PTO") return 'bg-red-200';
-            if (value === "Null") return 'bg-neutral-100';
-            if (value === "CONFLICT") return 'bg-amber-500 animate-pulse';
-            return selectColor(team);
+            if (value === "PTO") return 'bg-red-100';
+            if (value === "Null") return 'bg-slate-50';
+            if (value === "CONFLICT") return 'bg-amber-400 animate-pulse';
+            return ''; // WORK: el color va por style
         };
 
         return (
@@ -202,11 +202,23 @@ export const EmployeeRow = memo(
                                     mx-auto my-1
                                     shadow-sm
                                 `}
+                                style={value === "WORK" ? { backgroundColor: selectColor(employee.teamWork) } : {}}
                             />
 
                             {hourLabel && (
                                 <span
-                                    className={`absolute z-20 top-0.5 text-[10px] font-semibold leading-none text-white pointer-events-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)] ${hourLabel.type === "start" ? "left-0.5" : "right-0.5"}`}
+                                    className={`
+      absolute z-20 bottom-0 text-[9px] font-semibold leading-none
+      pointer-events-none select-none
+      px-0.5 rounded-sm
+      ${hourLabel.type === "start" ? "left-0" : "right-0"}
+    `}
+                                    style={{
+                                        background: 'rgba(0,0,0,0.28)',
+                                        color: 'white',
+                                        backdropFilter: 'blur(2px)',
+                                        lineHeight: '12px',
+                                    }}
                                 >
                                     {hourLabel.text}
                                 </span>

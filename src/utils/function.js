@@ -118,45 +118,19 @@ export const uniqueEmployeeName = (data) => {
 }
 
 export const selectColor = (teamWork) => {
-  let selectColor;
-
   switch (teamWork?.toLowerCase()) {
-    case 'red':
-      selectColor = 'bg-gradient-to-b from-red-400 to-red-600';
-      break;
-    case 'black':
-      selectColor = 'bg-gradient-to-b from-gray-700 to-gray-900';
-      break;
-    case 'blue':
-      selectColor = 'bg-gradient-to-b from-blue-400 to-blue-600';
-      break;
-    case 'green':
-      selectColor = 'bg-gradient-to-b from-emerald-400 to-emerald-600';
-      break;
-    case 'amarillo':
-      selectColor = 'bg-gradient-to-b from-yellow-300 to-yellow-500';
-      break;
-    case 'purple':
-      selectColor = 'bg-gradient-to-b from-purple-400 to-purple-600';
-      break;
-    case 'naranja':
-      selectColor = 'bg-gradient-to-b from-orange-400 to-orange-600';
-      break;
-    case 'rosa':
-      selectColor = 'bg-gradient-to-b from-pink-400 to-pink-600';
-      break;
-    case 'turquesa':
-      selectColor = 'bg-gradient-to-b from-teal-400 to-teal-600';
-      break;
-    case 'lima':
-      selectColor = 'bg-gradient-to-b from-lime-400 to-lime-600';
-      break;
-    default:
-      selectColor = 'bg-gradient-to-b from-slate-300 to-slate-400';
-      break;
+    case 'blue': return '#2e5882';
+    case 'purple': return '#8a40a3';
+    case 'amarillo': return '#f6cb41';
+    case 'green': return '#2d7d5a';
+    case 'red': return '#c0392b';
+    case 'black': return '#3d3d3d';
+    case 'naranja': return '#d4681e';
+    case 'rosa': return '#c2527a';
+    case 'turquesa': return '#1a7f8e';
+    case 'lima': return '#5a8a1e';
+    default: return '#64748b';
   }
-
-  return selectColor;
 };
 
 export const getTotalShiftDuration = (employeeName, data) => {
