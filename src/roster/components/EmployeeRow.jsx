@@ -51,6 +51,41 @@ export const EmployeeRow = memo(
             [employee.workShift]
         );
 
+        /** Hora de inicio/fin dentro de cada tramo continuo de WORK (grid desde 07:00, pasos de 15 min). */
+        const hourLabelsByIndex = useMemo(() => {
+            const labels = new Map();
+            const shift = employee.workShift || [];
+            let start = null;
+
+            const indexToTime = (index) => {
+                const totalMinutes = 7 * 60 + index * 15;
+                const hh = Math.floor(totalMinutes / 60);
+                const mm = totalMinutes % 60;
+                return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+            };
+
+            for (let i = 0; i < shift.length; i++) {
+                const isWork = shift[i] === "WORK";
+                if (isWork && start === null) start = i;
+
+                const closesSegment =
+                    start !== null && (!isWork || i === shift.length - 1);
+
+                if (closesSegment) {
+                    const end = isWork ? i : i - 1;
+                    const segmentLength = end - start + 1;
+
+                    if (segmentLength >= 3) {
+                        labels.set(start, { type: "start", text: indexToTime(start) });
+                        labels.set(end, { type: "end", text: indexToTime(end + 1) });
+                    }
+                    start = null;
+                }
+            }
+
+            return labels;
+        }, [employee.workShift]);
+
         const toggleHour = useCallback((hourIndex) => {
             const currentValue = employee.workShift[hourIndex];
 
@@ -112,6 +147,7 @@ export const EmployeeRow = memo(
                     const disabled = isIndexDisabled(hourIndex) || value === "PTO";
                     const cellBgClass = disabled ? "bg-red-200" : "bg-white";
                     const isHourStart = hourIndex % 4 === 0; // Marca de hora en punto
+                    const hourLabel = hourLabelsByIndex.get(hourIndex);
 
                     return (
                         <div
@@ -167,6 +203,14 @@ export const EmployeeRow = memo(
                                     shadow-sm
                                 `}
                             />
+
+                            {hourLabel && (
+                                <span
+                                    className={`absolute z-20 top-0.5 text-[10px] font-semibold leading-none text-white pointer-events-none drop-shadow-[0_1px_1px_rgba(0,0,0,0.5)] ${hourLabel.type === "start" ? "left-0.5" : "right-0.5"}`}
+                                >
+                                    {hourLabel.text}
+                                </span>
+                            )}
                         </div>
                     );
                 })}
