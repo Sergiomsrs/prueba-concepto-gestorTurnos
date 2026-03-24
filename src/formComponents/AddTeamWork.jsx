@@ -134,14 +134,25 @@ export const AddTeamWork = ({ allEmployees }) => {
 
                     <div className="sm:col-span-3">
                         <label htmlFor="teamWork" className="block text-sm font-medium text-gray-700 mb-2">Equipo</label>
-                        <input
-
+                        <select
                             name="teamWork"
                             id="teamWork"
                             value={newTeamWork.teamWork}
                             onChange={handleInputChange}
                             className="block w-full rounded-md border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm py-1.5 pl-2"
-                        />
+                        >
+                            <option value="">-- Selecciona un equipo --</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Purple">Purple</option>
+                            <option value="Amarillo">Amarillo</option>
+                            <option value="Green">Green</option>
+                            <option value="Red">Red</option>
+                            <option value="Black">Black</option>
+                            <option value="Naranja">Naranja</option>
+                            <option value="Rosa">Rosa</option>
+                            <option value="Turquesa">Turquesa</option>
+                            <option value="Lima">Lima</option>
+                        </select>
                     </div>
                     <div className="sm:col-span-3">
                         <label htmlFor="twStartDate" className="block text-sm font-medium text-gray-700 mb-2">Fecha de Inicio</label>
