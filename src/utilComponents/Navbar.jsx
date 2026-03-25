@@ -3,15 +3,24 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../timeTrack/context/AuthContext";
 import { saludo } from '../timeTrack/utilities/timeManagement';
 import { useQueryClient } from "@tanstack/react-query";
+import { AppContext } from "@/context/AppContext";
 
 export const Navbar = () => {
   const queryClient = useQueryClient();
   const { auth, logout } = useContext(AuthContext);
+  const { setFilters } = useContext(AppContext)
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = () => {
     queryClient.clear();
+    setFilters({
+      startDate: "",
+      endDate: "",
+      selectedTeams: [],
+      employeeName: "",
+      hideZeroHours: false,
+    })
     logout();
     navigate('/login');
   };
