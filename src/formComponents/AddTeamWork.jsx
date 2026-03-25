@@ -148,10 +148,10 @@ export const AddTeamWork = ({ allEmployees }) => {
                             <option value="Green">Green</option>
                             <option value="Red">Red</option>
                             <option value="Black">Black</option>
-                            <option value="Naranja">Naranja</option>
-                            <option value="Rosa">Rosa</option>
-                            <option value="Turquesa">Turquesa</option>
-                            <option value="Lima">Lima</option>
+                            <option value="Orange">Naranja</option>
+                            <option value="Pink">Rosa</option>
+                            <option value="Turquoise">Turquesa</option>
+                            <option value="Lime">Lima</option>
                         </select>
                     </div>
                     <div className="sm:col-span-3">

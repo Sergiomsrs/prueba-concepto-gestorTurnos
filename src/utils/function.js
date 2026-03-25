@@ -125,10 +125,10 @@ export const selectColor = (teamWork) => {
     case 'green': return '#2d7d5a';
     case 'red': return '#c0392b';
     case 'black': return '#3d3d3d';
-    case 'naranja': return '#d4681e';
-    case 'rosa': return '#c2527a';
-    case 'turquesa': return '#1a7f8e';
-    case 'lima': return '#5a8a1e';
+    case 'orange': return '#d4681e';
+    case 'pink': return '#c2527a';
+    case 'turquoise': return '#1a7f8e';
+    case 'lime': return '#5a8a1e';
     default: return '#64748b';
   }
 };
