@@ -125,7 +125,7 @@ export const EmployeeRow = memo(
         };
 
         const getBackgroundClass = (value, team) => {
-            if (value === "PTO") return 'bg-red-100';
+            if (value === "PTO") return 'bg-red-400';
             if (value === "Null") return 'bg-slate-50';
             if (value === "CONFLICT") return 'bg-amber-400 animate-pulse';
             return ''; // WORK: el color va por style
@@ -145,7 +145,7 @@ export const EmployeeRow = memo(
 
                 {employee.workShift.map((value, hourIndex) => {
                     const disabled = isIndexDisabled(hourIndex) || value === "PTO";
-                    const cellBgClass = disabled ? "bg-red-200" : "bg-white";
+                    const cellBgClass = disabled ? "bg-red-200/50" : "bg-white";
                     const isHourStart = hourIndex % 4 === 0; // Marca de hora en punto
                     const hourLabel = hourLabelsByIndex.get(hourIndex);
 

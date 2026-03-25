@@ -55,13 +55,13 @@ export const HorizontalBar = ({
     return 'cursor-pointer';
   };
 
-  const getBackgroundClass = (value, team) => {
-    if (value === "PTO") return 'bg-red-200';
-    if (value === "Null") return 'bg-neutral-100';
-    if (value === "CONFLICT") return 'bg-amber-500 animate-pulse';
-    return selectColor(team);
-  };
 
+  const getBackgroundClass = (value, team) => {
+    if (value === "PTO") return 'bg-red-100';
+    if (value === "Null") return 'bg-slate-50';
+    if (value === "CONFLICT") return 'bg-amber-400 animate-pulse';
+    return ''; // WORK: el color va por style
+  };
   if (!inputRefsMatrix.current[rowIndex]) inputRefsMatrix.current[rowIndex] = [];
 
   const handleKeyDown = (event, colIndex) => {
@@ -184,7 +184,14 @@ export const HorizontalBar = ({
               onMouseUp={handleMouseUp}
               onKeyDown={e => handleKeyDown(e, colIndex)}
               tabIndex={0}
-              style={{ display: "block", minWidth: "1.5rem", minHeight: "1.25rem", maxWidth: "2rem", maxHeight: "1.5rem" }}
+              style={{
+                display: "block",
+                minWidth: "1.5rem",
+                minHeight: "1.25rem",
+                maxWidth: "2rem",
+                maxHeight: "1.5rem",
+                ...(value === "WORK" ? { backgroundColor: selectColor(teamWork) } : {})
+              }}
             />
           </td>
         );
