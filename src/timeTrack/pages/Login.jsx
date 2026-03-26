@@ -73,7 +73,7 @@ export const Login = () => {
       const userData = await authService.getMe();
 
       // 4. Actualizamos el contexto global
-      login(token, role, userData);
+      login(token, role, userData, userData.companyName);
 
       // 5. Navegar según el rol
       navigate(role === "USER" ? "/schedules" : "/");

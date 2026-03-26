@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   });
 
 
-  const login = (token, role, user) => {
+  const login = (token, role, user, companyName) => {
     if (!token || !user) {
       console.error("Intento de login con datos incompletos:", { token, role, user });
       return;
@@ -43,12 +43,14 @@ export const AuthProvider = ({ children }) => {
 
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('role', role);
+    sessionStorage.setItem('companyName', companyName);
     sessionStorage.setItem('user', JSON.stringify(user));
     setAuth({
       isAuthenticated: true,
       token,
       role,
       user,
+      companyName,
     });
 
 
@@ -62,6 +64,7 @@ export const AuthProvider = ({ children }) => {
       token: null,
       role: "DEMO", // Cambiado aquí
       user: null,
+      companyName: null,
     });
   };
 
