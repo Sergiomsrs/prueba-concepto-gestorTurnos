@@ -713,9 +713,11 @@ export const RosterPage = () => {
                                         <HeadRow />
 
                                         <div className="bg-slate-100 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 text-center border-l flex items-center justify-center">
-                                            <span className="mr-1"><button
-                                                onClick={() => handleFilterChange('hideZeroHours', !filters.hideZeroHours)}
-                                            >⏰</button></span>
+                                            <span className="mr-1">
+                                                <button onClick={() => handleFilterChange('hideZeroHours', !filters.hideZeroHours)}>
+                                                    ⏰
+                                                </button>
+                                            </span>
                                             <span className="hidden sm:inline">Total</span>
                                         </div>
                                     </div>

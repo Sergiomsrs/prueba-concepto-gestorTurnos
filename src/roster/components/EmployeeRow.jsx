@@ -153,17 +153,19 @@ export const EmployeeRow = memo(
                         <div
                             key={hourIndex}
                             className={`${cellBgClass} flex items-center justify-center w-5 h-5 px-0 py-0 mx-0 my-1 relative
-                                ${isHourStart ? '' : 'border-l border-slate-100'}
+                                ${isHourStart ? '' : ''}
                             `}
+
                             onMouseUp={handleMouseUp}
                         >
                             {/* Línea extendida hacia arriba para horas en punto */}
                             {isHourStart && (
                                 <div
-                                    className="absolute -left-0.5 w-[2px] bg-gray-200 z-10 "
+                                    className="absolute w-[1px] bg-gray-200 z-10 pointer-events-none"
                                     style={{
-                                        top: '-15px',    // Extiende 3px hacia arriba
-                                        height: '35px', // Altura total: 26px (celda + márgenes) + 6px extra
+                                        left: '-0.5px',
+                                        top: '-15px',
+                                        height: '35px',
                                     }}
                                 />
                             )}
