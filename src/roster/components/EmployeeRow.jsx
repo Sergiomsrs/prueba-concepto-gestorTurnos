@@ -164,8 +164,8 @@ export const EmployeeRow = memo(
                                     className="absolute w-[1px] bg-gray-200 z-10 pointer-events-none"
                                     style={{
                                         left: '-0.5px',
-                                        top: '-15px',
-                                        height: '35px',
+
+                                        height: '30px',
                                     }}
                                 />
                             )}

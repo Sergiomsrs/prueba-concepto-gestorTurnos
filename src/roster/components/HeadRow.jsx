@@ -1,21 +1,43 @@
-import { hours } from "../../utils/data";
-
 
 export const HeadRow = () => {
     const TOTAL_SLOTS = 62;
     const SLOT_WIDTH = 20;
     const START_HOUR = 7;
-    const TOTAL_HOURS = Math.floor(TOTAL_SLOTS / 4); // 15 horas → 07:00 a 22:00
+    const TOTAL_HOURS = Math.floor(TOTAL_SLOTS / 4);
 
     return (
         <div
-            className="relative bg-slate-100"
+            className="relative bg-slate-100"  // ← mismo bg que las columnas de al lado
             style={{
                 gridColumn: `span ${TOTAL_SLOTS}`,
-                height: '36px',
+                height: '44px',
                 width: `${TOTAL_SLOTS * SLOT_WIDTH}px`,
+                borderBottom: '0.5px solid #94a3b8',
             }}
         >
+            {/* Ticks de media hora */}
+            {Array.from({ length: TOTAL_SLOTS + 1 }, (_, i) => {
+                const isHour = i % 4 === 0;
+                const isHalf = i % 2 === 0 && !isHour;
+                if (!isHour && !isHalf) return null;
+
+                return (
+                    <div
+                        key={`tick-${i}`}
+                        className="absolute bottom-0"
+                        style={{
+                            left: `${i * SLOT_WIDTH}px`,
+                            transform: 'translateX(-50%)',
+                            width: isHour ? '1px' : '1px',
+                            height: isHour ? '12px' : '6px',
+                            backgroundColor: isHour ? '#475569' : '#94a3b8',
+                            borderRadius: '1px',
+                        }}
+                    />
+                );
+            })}
+
+            {/* Etiquetas de hora */}
             {Array.from({ length: TOTAL_HOURS + 1 }, (_, i) => {
                 const hour = START_HOUR + i;
                 const leftPx = i * 4 * SLOT_WIDTH;
@@ -23,14 +45,22 @@ export const HeadRow = () => {
                 return (
                     <div
                         key={hour}
-                        className="absolute flex flex-col items-center justify-end h-full"
+                        className="absolute flex items-center justify-center"
                         style={{
                             left: `${leftPx}px`,
                             transform: 'translateX(-50%)',
+                            top: '8px',
                         }}
                     >
-                        <div className="w-px bg-slate-300" style={{ height: '8px' }} />
-                        <span className="text-[10px] font-mono font-bold text-slate-500 leading-none pb-1 whitespace-nowrap">
+                        <span
+                            style={{
+                                fontSize: '13px',       // ← más grande
+                                fontFamily: 'monospace',
+                                fontWeight: '700',
+                                color: '#1e293b',       // ← slate-800, máximo contraste
+                                letterSpacing: '0.02em',
+                            }}
+                        >
                             {String(hour).padStart(2, '0')}:00
                         </span>
                     </div>
