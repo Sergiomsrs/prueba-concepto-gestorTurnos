@@ -7,7 +7,7 @@ export const HeadRow = () => {
 
     return (
         <div
-            className="relative bg-slate-100"  // ← mismo bg que las columnas de al lado
+            className="relative bg-slate-100"
             style={{
                 gridColumn: `span ${TOTAL_SLOTS}`,
                 height: '44px',
@@ -54,10 +54,10 @@ export const HeadRow = () => {
                     >
                         <span
                             style={{
-                                fontSize: '13px',       // ← más grande
+                                fontSize: '13px',
                                 fontFamily: 'monospace',
                                 fontWeight: '700',
-                                color: '#1e293b',       // ← slate-800, máximo contraste
+                                color: '#1e293b',
                                 letterSpacing: '0.02em',
                             }}
                         >
