@@ -1,109 +1,130 @@
 import { useContext, useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { employess, generateData, generateShiftData } from "../utils/shiftGeneratorData";
-import { createByGenericShift, getCycle, getDefaultRoles, getRoles, toggleShiftRole } from "../services/genericShiftService";
+import {
+    createByGenericShift,
+    getCycle,
+    getDefaultRoles,
+    getRoles,
+    toggleShiftRole
+} from "../services/genericShiftService";
+
 import { rolesMock } from "@/utils/apiMock";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
 import { axiosClient } from "@/services/axiosClient";
 
-
 export const useCyclesGenerator = () => {
 
-    const [data, setData] = useState([])
-    const [ciclo, setCiclo] = useState("");
-    const [roles, setRoles] = useState(rolesMock)
-    const [defaultRoles, setDefaultRoles] = useState([])
-
+    const queryClient = useQueryClient();
     const { auth } = useContext(AuthContext);
 
+    const [data, setData] = useState([]);
+    const [ciclo, setCiclo] = useState("");
+
+
     useEffect(() => {
-
-        setData(generateData(1, employess))
-
+        setData(generateData(1, employess));
     }, []);
+
+    const {
+        data: roles = rolesMock,
+        refetch: refetchRoles
+    } = useQuery({
+        queryKey: ["roles", auth.token],
+        queryFn: () => getRoles(auth.token),
+        enabled: !!auth.token && auth.token !== "demo-token-12345",
+        initialData: auth.token === "demo-token-12345" ? rolesMock : undefined,
+    });
+
+    const {
+        data: defaultRoles = [],
+        refetch: refetchDefaults
+    } = useQuery({
+        queryKey: ["defaultRoles", auth.token],
+        queryFn: () => getDefaultRoles(auth.token),
+        enabled: !!auth.token && auth.token !== "demo-token-12345",
+    });
 
     const handleGetCycle = async (cicle) => {
         try {
-            const response = await getCycle(cicle, auth.token); // llamada al fetch
-            setData(response); // guarda en estado
+            const response = await getCycle(cicle, auth.token);
+            setData(response);
         } catch (error) {
             console.error("Error obteniendo ciclo:", error);
         }
     };
 
-
-
-    const handleSaveCycle = async () => {
-        const dataToSave = generateShiftData(data, ciclo);
-
-        try {
-            // Axios se encarga del JSON.stringify y del Content-Type automáticamente
-            const response = await axiosClient.post('/gs/saveAll', dataToSave);
-
-            // La respuesta del servidor está en response.data
+    const saveCycleMutation = useMutation({
+        mutationFn: async () => {
+            const dataToSave = generateShiftData(data, ciclo);
+            return axiosClient.post('/gs/saveAll', dataToSave);
+        },
+        onSuccess: (response) => {
             if (response.data.status === "success") {
                 console.log("Vamos Bien");
             }
-        } catch (error) {
-            // Cualquier error (4xx, 5xx o red) caerá aquí
+        },
+        onError: (error) => {
             console.log("Vamos Mal");
-            console.error("Detalles del error:", error);
+            console.error(error);
         }
+    });
+
+    const handleSaveCycle = () => {
+        saveCycleMutation.mutate();
+    };
+
+    const createMutation = useMutation({
+        mutationFn: (config) => createByGenericShift(config, auth.token),
+        onError: (error) => console.error(error)
+    });
+
+    const handleCreateByGeneric = (config) => {
+        createMutation.mutate(config);
+    };
+
+    const toggleMutation = useMutation({
+        mutationFn: (id) => toggleShiftRole(id, auth.token),
+
+        onMutate: async (id) => {
+            await queryClient.cancelQueries(["roles", auth.token]);
+
+            const previous = queryClient.getQueryData(["roles", auth.token]);
+
+            queryClient.setQueryData(["roles", auth.token], (old) =>
+                old?.map(r =>
+                    r.id === id ? { ...r, active: !r.active } : r
+                )
+            );
+
+            return { previous };
+        },
+
+        onError: (err, id, context) => {
+            queryClient.setQueryData(["roles", auth.token], context.previous);
+        },
+
+        onSettled: () => {
+            queryClient.invalidateQueries(["roles", auth.token]);
+        }
+    });
+
+    const handleToggle = (id) => {
+        toggleMutation.mutate(id);
     };
 
     const handleGetAllRoles = async () => {
-        try {
-            const response = await getRoles(auth.token);
-            setRoles(response);
-        } catch (error) {
-            console.error("Error obteniendo ciclo:", error);
-        }
-
-    }
-    const handleGetAllRolesWihtDefaults = async () => {
-        try {
-            const response = await getRoles(auth.token);
-            setRoles(response);
-
-            const response2 = await getDefaultRoles(auth.token);
-            setDefaultRoles(response2)
-        } catch (error) {
-            console.error("Error obteniendo ciclo:", error);
-        }
-
-    }
-
-    const handleGetRolesByDefault = async () => {
-        try {
-            const response = await getDefaultRoles(auth.token);
-            setDefaultRoles(response);
-        } catch (error) {
-            console.error("Error obteniendo ciclo:", error);
-        }
-
-    }
-
-    const handleCreateByGeneric = async (config) => {
-        try {
-            const response = await createByGenericShift(config, auth.token);
-        } catch (error) {
-            console.error("Error obteniendo ciclo:", error);
-        }
-
-    }
-
-    const handleToggle = async (id) => {
-        try {
-            await toggleShiftRole(id, auth.token); // Ejecuta el toggle
-            console.log("Rol actualizado:", id);
-
-            // Vuelve a cargar los roles
-            await handleGetAllRolesWihtDefaults();
-        } catch (err) {
-            console.error("Error al actualizar el rol:", err);
-        }
+        await refetchRoles();
     };
 
+    const handleGetRolesByDefault = async () => {
+        await refetchDefaults();
+    };
 
+    const handleGetAllRolesWihtDefaults = async () => {
+        await Promise.all([refetchRoles(), refetchDefaults()]);
+    };
 
     return {
         data,
@@ -119,6 +140,5 @@ export const useCyclesGenerator = () => {
         handleGetRolesByDefault,
         handleCreateByGeneric,
         handleGetAllRolesWihtDefaults
-    }
-
-}
+    };
+};
