@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../timeTrack/context/AuthContext";
 import { useQueryClient } from "@tanstack/react-query";
@@ -9,6 +9,7 @@ export const Navbar = () => {
   const { auth, logout } = useContext(AuthContext);
   const { setFilters } = useContext(AppContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -25,12 +26,12 @@ export const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
+    navigate('/login');
     queryClient.clear();
     setFilters({ startDate: "", endDate: "", selectedTeams: [], employeeName: "", hideZeroHours: false });
     setUserMenuOpen(false);
     setMenuOpen(false);
     logout();
-    navigate('/login');
   };
 
   const initials = `${auth.user?.name?.charAt(0) ?? ''}${auth.user?.lastName?.charAt(0) ?? ''}`.toUpperCase();
@@ -135,11 +136,12 @@ export const Navbar = () => {
                 </svg>
               </button>
             </div>
-          ) : (
-            <Link to="/login" className="flex items-center gap-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded transition">
-              Acceso
-            </Link>
-          )}
+          ) : ((
+            location.pathname === '/fichar' && (
+              <Link to="/login" className="flex items-center gap-2 text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-1.5 rounded transition">
+                Acceso
+              </Link>
+            )))}
         </div>
       </div>
 
