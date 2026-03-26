@@ -51,13 +51,14 @@ export const DistributionRow = memo(({ day, originalDay, showFullDistribution, o
                         key={index}
                         className="bg-slate-200 flex items-center justify-center"
                     >
-                        {/* Píldora de color que no ocupa todo el alto */}
                         <div
-                            className="flex items-center justify-center  transition-colors duration-300"
+                            className="flex items-center justify-center rounded-sm transition-all duration-200"
                             style={{
-                                width: '20px',
+                                width: '19px',
                                 height: '18px',
+                                margin: '1px',
                                 backgroundColor: color ?? 'transparent',
+                                boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.12)',
                             }}
                         >
                             <span
