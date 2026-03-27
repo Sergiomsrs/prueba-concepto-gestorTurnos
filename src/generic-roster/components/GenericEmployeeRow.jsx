@@ -55,6 +55,40 @@ export const GenericEmployeeRow = memo(
             [employee.workShift]
         );
 
+        const hourLabelsByIndex = useMemo(() => {
+            const labels = new Map();
+            const shift = employee.workShift || [];
+            let start = null;
+
+            const indexToTime = (index) => {
+                const totalMinutes = 7 * 60 + index * 15;
+                const hh = Math.floor(totalMinutes / 60);
+                const mm = totalMinutes % 60;
+                return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+            };
+
+            for (let i = 0; i < shift.length; i++) {
+                const isWork = shift[i] === "WORK";
+                if (isWork && start === null) start = i;
+
+                const closesSegment =
+                    start !== null && (!isWork || i === shift.length - 1);
+
+                if (closesSegment) {
+                    const end = isWork ? i : i - 1;
+                    const segmentLength = end - start + 1;
+
+                    if (segmentLength >= 3) {
+                        labels.set(start, { type: "start", text: indexToTime(start) });
+                        labels.set(end, { type: "end", text: indexToTime(end + 1) });
+                    }
+                    start = null;
+                }
+            }
+
+            return labels;
+        }, [employee.workShift]);
+
         // ── Sin labels de hora inicio/fin para genéricos (más limpio visualmente)
         // Si en el futuro las necesitas, es copiar el useMemo de EmployeeRow
 
@@ -117,6 +151,7 @@ export const GenericEmployeeRow = memo(
                     const disabled = isIndexDisabled(hourIndex) || value === "PTO";
                     const cellBgClass = disabled ? "bg-red-200/50" : "bg-white";
                     const isHourStart = hourIndex % 4 === 0;
+                    const hourLabel = hourLabelsByIndex.get(hourIndex);
 
                     return (
                         <div
@@ -156,16 +191,37 @@ export const GenericEmployeeRow = memo(
                                 }}
                                 disabled={disabled}
                                 className={`
-                                    w-5 h-5 m-0 p-0 appearance-none border-none
-                                    ${getCursorClass(isIndexDisabled(hourIndex), value)}
-                                    ${getBackgroundClass(value)}
-                                    ${value === "WORK" ? "border-t-2 border-b-2 border-neutral-200" : ""}
-                                    focus:ring-2 focus:ring-indigo-400
-                                    mx-auto my-1
-                                    shadow-sm
-                                `}
+                w-5 h-5 m-0 p-0 appearance-none border-none
+                ${getCursorClass(isIndexDisabled(hourIndex), value)}
+                ${getBackgroundClass(value)}
+                ${value === "WORK" ? "border-t-2 border-b-2 border-neutral-200" : ""}
+                focus:ring-2 focus:ring-indigo-400
+                mx-auto my-1
+                shadow-sm
+            `}
                                 style={value === "WORK" ? { backgroundColor: selectColor(employee.teamWork) } : {}}
                             />
+
+                            {/* ← AQUÍ, justo después del input */}
+                            {hourLabel && (
+                                <span
+                                    className={`
+                    absolute z-20 bottom-0 text-[9px] font-semibold leading-none
+                    pointer-events-none select-none
+                    px-0.5 rounded-sm
+                    ${hourLabel.type === "start" ? "left-0" : "right-0"}
+                `}
+                                    style={{
+                                        background: 'rgba(0,0,0,0.28)',
+                                        color: 'white',
+                                        backdropFilter: 'blur(2px)',
+                                        lineHeight: '12px',
+                                    }}
+                                >
+                                    {hourLabel.text}
+                                </span>
+                            )}
+
                         </div>
                     );
                 })}

@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { employess, generateData, generateShiftData } from "../utils/shiftGeneratorData";
 import {
     createByGenericShift,
+    deleteRole,
     getCycle,
     getDefaultRoles,
     getRoles,
@@ -19,13 +20,10 @@ export const useCyclesGenerator = () => {
     const queryClient = useQueryClient();
     const { auth } = useContext(AuthContext);
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(
+        auth.token === "demo-token-12345" ? generateData(1, employess) : []
+    );
     const [ciclo, setCiclo] = useState("");
-
-
-    useEffect(() => {
-        setData(generateData(1, employess));
-    }, []);
 
     const {
         data: roles = rolesMock,
@@ -72,7 +70,7 @@ export const useCyclesGenerator = () => {
     });
 
     const handleSaveCycle = (externalData, externalCiclo) => {
-        saveCycleMutation.mutate({
+        return saveCycleMutation.mutateAsync({
             data: externalData ?? data,
             ciclo: externalCiclo ?? ciclo
         });
@@ -129,6 +127,30 @@ export const useCyclesGenerator = () => {
         await Promise.all([refetchRoles(), refetchDefaults()]);
     };
 
+    const deleteMutation = useMutation({
+        mutationFn: (id) => deleteRole(id),
+        onMutate: async (id) => {
+            // Optimistic update — quita el rol de la lista inmediatamente
+            await queryClient.cancelQueries(["roles", auth.token]);
+            const previous = queryClient.getQueryData(["roles", auth.token]);
+            queryClient.setQueryData(["roles", auth.token], (old) =>
+                old?.filter(r => r.id !== id)
+            );
+            return { previous };
+        },
+        onError: (err, id, context) => {
+            // Si falla, revertir
+            queryClient.setQueryData(["roles", auth.token], context.previous);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(["roles", auth.token]);
+        }
+    });
+
+    const handleDeleteRole = (id) => {
+        deleteMutation.mutate(id);
+    };
+
     return {
         data,
         ciclo,
@@ -142,6 +164,7 @@ export const useCyclesGenerator = () => {
         handleGetAllRoles,
         handleGetRolesByDefault,
         handleCreateByGeneric,
-        handleGetAllRolesWihtDefaults
+        handleGetAllRolesWihtDefaults,
+        handleDeleteRole
     };
 };

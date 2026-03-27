@@ -1,5 +1,4 @@
-import { useEffect, useReducer, useMemo, useRef, useState, useCallback, useContext } from "react";
-import { useReactToPrint } from "react-to-print";
+import { useEffect, useReducer, useMemo, useRef, useState, useContext } from "react";
 import { DistributionRow } from "@/roster/components/DistributionRow";
 import { HeadRow } from "@/roster/components/HeadRow";
 import { GenericEmployeeRow } from "./GenericEmployeeRow";
@@ -7,6 +6,7 @@ import { OptionsPicker } from "@/genericShifts/components/OptionsPicker";
 import { AppContext } from "@/context/AppContext";
 import { useCyclesGenerator } from "@/Hooks/useCyclesGenerator";
 import { rosterReducer } from "@/roster/reducers/rosterReducer";
+import { RosterRangeSummary } from "@/roster/components/RosterRangeSummary";
 
 export const GenericRosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
@@ -115,7 +115,7 @@ export const GenericRosterPage = () => {
     const handleSaveData = async () => {
         try {
             await handleSaveCycle(data, ciclo);
-            await handleGetCycle(ciclo);  // ← recarga desde BD, como en RosterPage
+            await handleGetCycle(ciclo);
             console.log("✅ Ciclo guardado y recargado");
         } catch (error) {
             console.error("❌ Error al guardar:", error.message);
@@ -336,6 +336,22 @@ export const GenericRosterPage = () => {
                             </div>
                         );
                     })}
+                    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div className="px-4 sm:px-6 py-4 border-b border-slate-200 bg-slate-50">
+                            <div className="flex items-center space-x-3">
+                                <div className="p-2 bg-slate-100 rounded-lg">
+                                    <span className="text-xl text-slate-600">📊</span>
+                                </div>
+                                <div>
+                                    <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Resumen de Horarios</h2>
+                                    <p className="text-sm text-slate-500">
+                                        {stats.employees} turnos • {stats.days} días • {stats.hours.toFixed(1)} horas totales
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <RosterRangeSummary data={filteredData.slice(1)} />
+                    </div>
                 </div>
             </main>
         </div>

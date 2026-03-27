@@ -60,3 +60,8 @@ export const createRolesBulk = async (roles) => {
     const response = await axiosClient.post('/role/bulk', roles);
     return response.data;
 };
+
+export const deleteRole = async (roleId) => {
+    const response = await axiosClient.delete(`/role/${roleId}`);
+    return response.data;
+};
