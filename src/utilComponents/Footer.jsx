@@ -57,6 +57,11 @@ export const Footer = () => {
                                             Admin
                                         </Link>
                                     </li>
+                                    <li>
+                                        <Link to="/generic-roster" className="hover:text-white transition">
+                                            Generic Roster
+                                        </Link>
+                                    </li>
                                 </>
                             )}
 

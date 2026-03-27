@@ -64,7 +64,7 @@ export const AdminPage = () => {
 
 
           {/* Generar turnos */}
-          <Link to="/generate" className="relative group transition-transform hover:scale-105">
+          <Link to="/generic-roster" className="relative group transition-transform hover:scale-105">
             <div className="absolute inset-px rounded-xl bg-white shadow-lg group-hover:shadow-2xl transition-shadow"></div>
             <div className="relative flex h-full flex-col overflow-hidden rounded-xl">
               <div className="flex-1 flex flex-col items-center justify-center p-10">

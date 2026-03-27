@@ -56,23 +56,26 @@ export const useCyclesGenerator = () => {
     };
 
     const saveCycleMutation = useMutation({
-        mutationFn: async () => {
-            const dataToSave = generateShiftData(data, ciclo);
+        mutationFn: async ({ data: dataToUse, ciclo: cicloToUse }) => {
+            const dataToSave = generateShiftData(dataToUse, cicloToUse);
             return axiosClient.post('/gs/saveAll', dataToSave);
         },
         onSuccess: (response) => {
             if (response.data.status === "success") {
-                console.log("Vamos Bien");
+                console.log("✅ Vamos Bien");
             }
         },
         onError: (error) => {
-            console.log("Vamos Mal");
+            console.log("❌ Vamos Mal");
             console.error(error);
         }
     });
 
-    const handleSaveCycle = () => {
-        saveCycleMutation.mutate();
+    const handleSaveCycle = (externalData, externalCiclo) => {
+        saveCycleMutation.mutate({
+            data: externalData ?? data,
+            ciclo: externalCiclo ?? ciclo
+        });
     };
 
     const createMutation = useMutation({

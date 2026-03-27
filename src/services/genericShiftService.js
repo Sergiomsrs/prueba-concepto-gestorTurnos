@@ -55,3 +55,8 @@ export const saveDefaultRole = async (role) => {
         throw error;
     }
 };
+
+export const createRolesBulk = async (roles) => {
+    const response = await axiosClient.post('/role/bulk', roles);
+    return response.data;
+};

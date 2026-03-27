@@ -3,9 +3,10 @@ import { useCyclesGenerator } from "../../Hooks/useCyclesGenerator";
 import { useEmployees } from "../../Hooks/useEmployees";
 import { DateRangePicker } from "../components/DateRangePicker";
 import { OptionsPicker } from "../components/OptionsPicker";
-import { saveDefaultRole } from "../../services/genericShiftService";
+import { createRolesBulk, saveDefaultRole } from "../../services/genericShiftService";
 import ConfirmButton from "@/roster/utils/ConfirmButton";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
+import { RolesBulkModal } from "@/generic-roster/components/RolesBulkModal";
 
 export const SetupWeek = () => {
     const {
@@ -23,6 +24,8 @@ export const SetupWeek = () => {
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [range, setRange] = useState({ start: "", end: "" });
     const [config, setConfig] = useState({ range: "", cicle: "", selectedEmployees: "" });
+    const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
+    const [isBulkLoading, setIsBulkLoading] = useState(false);
 
     const { auth } = useContext(AuthContext);
 
@@ -93,6 +96,20 @@ export const SetupWeek = () => {
         }
     };
 
+    const handleBulkCreate = async (roles) => {
+        setIsBulkLoading(true);
+        try {
+            await createRolesBulk(roles);
+            await handleGetAllRolesWihtDefaults();
+            setIsBulkModalOpen(false);
+            console.log(`✅ ${roles.length} roles creados`);
+        } catch (error) {
+            console.error("❌ Error creando roles:", error);
+        } finally {
+            setIsBulkLoading(false);
+        }
+    };
+
     return (
         <section className="min-h-screen bg-gray-50 pt-4 pb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -145,6 +162,13 @@ export const SetupWeek = () => {
                             onConfirm={handleGetConfig}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white w-full h-[42px]"
                         />
+
+                        <button
+                            onClick={() => setIsBulkModalOpen(true)}
+                            className="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md shadow hover:bg-emerald-700 transition font-medium text-sm h-[42px]"
+                        >
+                            ➕ Crear Roles
+                        </button>
                     </div>
 
                     {/* Vista desktop: Layout con botones a la derecha */}
@@ -199,6 +223,12 @@ export const SetupWeek = () => {
                                 onConfirm={handleGetConfig}
                                 className="bg-emerald-600 hover:bg-emerald-700 text-white w-full h-[42px]"
                             />
+                            <button
+                                onClick={() => setIsBulkModalOpen(true)}
+                                className="flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-md shadow hover:bg-emerald-700 transition font-medium text-sm h-[42px]"
+                            >
+                                ➕ Crear Roles
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -446,6 +476,12 @@ export const SetupWeek = () => {
                     </button>
                 </div>
             </div>
+            <RolesBulkModal
+                isOpen={isBulkModalOpen}
+                onClose={() => setIsBulkModalOpen(false)}
+                onConfirm={handleBulkCreate}
+                isLoading={isBulkLoading}
+            />
         </section>
     );
 };

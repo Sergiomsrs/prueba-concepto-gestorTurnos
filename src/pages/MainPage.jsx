@@ -21,6 +21,7 @@ import { ChatUI } from "../ia/components/ChatUI"
 import { AuthContext } from "@/timeTrack/context/AuthContext"
 import { ProtectedRoute } from "@/timeTrack/context/ProtectedRoute"
 import { Footer } from "@/utilComponents/Footer"
+import { GenericRoster } from "./GenericRoster"
 
 
 export const MainPage = () => {
@@ -137,6 +138,9 @@ export const MainPage = () => {
             } />
             <Route path="/reports" element={
               <ProtectedRoute allowedRoles={ONLY_ADMIN}><Reports /></ProtectedRoute>
+            } />
+            <Route path="/generic-roster" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><GenericRoster /></ProtectedRoute>
             } />
           </Routes>
         </main>
