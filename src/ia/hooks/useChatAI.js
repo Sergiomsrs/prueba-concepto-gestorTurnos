@@ -1,11 +1,46 @@
-import { useState, useCallback, useRef } from 'react';
+import { useReducer, useCallback, useRef } from 'react';
 import { offlineChatService } from '../services/offlineChatService';
 
-export const useChatAI = () => {
-    const [messages, setMessages] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+const initialState = {
+    messages: [],
+    isLoading: false,
+};
 
-    // 🔑 contador seguro para IDs únicos
+function chatReducer(state, action) {
+    switch (action.type) {
+        case 'ADD_USER_MESSAGE':
+            return {
+                ...state,
+                messages: [...state.messages, action.payload],
+            };
+
+        case 'ADD_LOADING_MESSAGE':
+            return {
+                ...state,
+                isLoading: true,
+                messages: [...state.messages, action.payload],
+            };
+
+        case 'REPLACE_LOADING_WITH_BOT':
+            return {
+                ...state,
+                isLoading: false,
+                messages: state.messages
+                    .filter(m => m.id !== action.loadingId)
+                    .concat(action.payload),
+            };
+
+        case 'RESET':
+            return initialState;
+
+        default:
+            return state;
+    }
+}
+
+export const useChatAI = () => {
+    const [state, dispatch] = useReducer(chatReducer, initialState);
+
     const idCounter = useRef(0);
     const generateId = () => {
         idCounter.current += 1;
@@ -13,65 +48,63 @@ export const useChatAI = () => {
     };
 
     const sendMessage = useCallback(async (userMessage) => {
-        if (!userMessage.trim() || isLoading) return;
+        if (!userMessage.trim()) return;
 
-        const userId = generateId();
+        // 1. mensaje usuario
+        const userMsg = {
+            id: generateId(),
+            from: 'user',
+            text: userMessage,
+        };
 
-        setMessages(prev => [
-            ...prev,
-            {
-                from: 'user',
-                text: userMessage,
-                id: userId,
-            }
-        ]);
+        dispatch({ type: 'ADD_USER_MESSAGE', payload: userMsg });
 
-        setIsLoading(true);
-
+        // 2. mensaje loading
         const loadingId = generateId();
 
-        setMessages(prev => [
-            ...prev,
-            {
+        dispatch({
+            type: 'ADD_LOADING_MESSAGE',
+            payload: {
+                id: loadingId,
                 from: 'bot',
                 text: '...',
                 isLoading: true,
-                id: loadingId,
-            }
-        ]);
+            },
+        });
 
-        // Delay mínimo para UX
+        // 3. delay UX
         await new Promise(r => setTimeout(r, 500));
 
+        // 4. respuesta bot
         const answer = offlineChatService.getAnswer(userMessage);
 
-        setMessages(prev =>
-            prev
-                .filter(m => m.id !== loadingId)
-                .concat({
-                    from: 'bot',
-                    text: answer,
-                    id: generateId(),
-                })
-        );
+        dispatch({
+            type: 'REPLACE_LOADING_WITH_BOT',
+            loadingId,
+            payload: {
+                id: generateId(),
+                from: 'bot',
+                text: answer,
+            },
+        });
 
-        setIsLoading(false);
-    }, [isLoading]);
-
-    const resetChat = useCallback(() => {
-        setMessages([]);
-        setIsLoading(false);
-        idCounter.current = 0; // opcional: resetear contador
     }, []);
 
-    const botMessageCount = messages.filter(m => m.from === 'bot' && !m.isLoading).length;
+    const resetChat = useCallback(() => {
+        dispatch({ type: 'RESET' });
+        idCounter.current = 0;
+    }, []);
+
+    const botMessageCount = state.messages.filter(
+        m => m.from === 'bot' && !m.isLoading
+    ).length;
 
     return {
-        messages,
-        isLoading,
+        messages: state.messages,
+        isLoading: state.isLoading,
         sendMessage,
         resetChat,
         botMessageCount,
-        hasMessages: messages.length > 0,
+        hasMessages: state.messages.length > 0,
     };
 };

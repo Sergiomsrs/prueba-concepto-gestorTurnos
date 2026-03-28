@@ -1,5 +1,7 @@
 // src/ia/components/ChatMessage.jsx
 
+import { memo } from "react";
+
 const URL_REGEX = /(https?:\/\/[^\s]+)/g;
 
 const parseLinks = (text) => {
@@ -22,7 +24,7 @@ const parseLinks = (text) => {
     });
 };
 
-export const ChatMessage = ({ message }) => {
+export const ChatMessage = memo(({ message }) => {
     const isUser = message.from === "user";
     const isError = message.isError;
     const isLoading = message.isLoading;
@@ -30,10 +32,10 @@ export const ChatMessage = ({ message }) => {
     return (
         <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
             <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${isUser
-                    ? "bg-blue-500 text-white"
-                    : isError
-                        ? "bg-red-50 text-red-700 border border-red-200"
-                        : "bg-white text-gray-800 border border-gray-200"
+                ? "bg-blue-500 text-white"
+                : isError
+                    ? "bg-red-50 text-red-700 border border-red-200"
+                    : "bg-white text-gray-800 border border-gray-200"
                 }`}>
 
                 {!isUser && (
@@ -64,4 +66,4 @@ export const ChatMessage = ({ message }) => {
             </div>
         </div>
     );
-};
+});

@@ -1,5 +1,3 @@
-
-
 // ─────────────────────────────────────────────────────────────
 // NORMALIZACIÓN
 // ─────────────────────────────────────────────────────────────
@@ -95,11 +93,6 @@ export const offlineChatService = {
                 typeof bestEntry.answer === 'function'
                     ? bestEntry.answer(userMessage)
                     : bestEntry.answer;
-
-            // DEBUG (puedes quitarlo luego)
-            console.log('USER:', userMessage);
-            console.log('MATCH:', bestScore, bestEntry.keys);
-
             return answer;
         }
 
@@ -111,14 +104,6 @@ export const offlineChatService = {
         return FALLBACK;
     },
 };
-
-
-
-
-
-
-
-
 
 
 const KB = [
