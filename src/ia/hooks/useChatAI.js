@@ -1,102 +1,70 @@
-// src/ia/hooks/useChatAI.js
-import { useState, useCallback } from 'react';
-import { aiService } from '../services/aiService';
-
+import { useState, useCallback, useRef } from 'react';
+import { offlineChatService } from '../services/offlineChatService';
 
 export const useChatAI = () => {
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    /* const sendMessage = useCallback(async (userMessage) => {
-        if (!userMessage.trim() || isLoading) return;
-
-        // Agregar mensaje del usuario
-        setMessages(prev => [...prev, {
-            from: "user",
-            text: userMessage,
-            id: Date.now() // Para mejor tracking
-        }]);
-
-        // Mostrar indicador de carga
-        setIsLoading(true);
-        const loadingId = Date.now() + 1;
-        setMessages(prev => [...prev, {
-            from: "bot",
-            text: "Escribiendo...",
-            isLoading: true,
-            id: loadingId
-        }]);
-
-        try {
-            const response = await aiService.sendMessage(userMessage);
-
-            // Reemplazar el mensaje de carga con la respuesta
-            setMessages(prev => prev.filter(m => m.id !== loadingId).concat({
-                from: "bot",
-                text: response,
-                id: Date.now() + 2
-            }));
-
-        } catch (error) {
-            // Reemplazar mensaje de carga con error
-            setMessages(prev => prev.filter(m => m.id !== loadingId).concat({
-                from: "bot",
-                text: "❌ Error al procesar tu solicitud. Verifica que el servidor esté funcionando.",
-                id: Date.now() + 3,
-                isError: true
-            }));
-        } finally {
-            setIsLoading(false);
-        }
-    }, [isLoading]); */
+    // 🔑 contador seguro para IDs únicos
+    const idCounter = useRef(0);
+    const generateId = () => {
+        idCounter.current += 1;
+        return `${Date.now()}-${idCounter.current}`;
+    };
 
     const sendMessage = useCallback(async (userMessage) => {
         if (!userMessage.trim() || isLoading) return;
 
-        setMessages(prev => [...prev, {
-            from: "user",
-            text: userMessage,
-            id: Date.now()
-        }]);
+        const userId = generateId();
+
+        setMessages(prev => [
+            ...prev,
+            {
+                from: 'user',
+                text: userMessage,
+                id: userId,
+            }
+        ]);
 
         setIsLoading(true);
-        const loadingId = Date.now() + 1;
-        setMessages(prev => [...prev, {
-            from: "bot",
-            text: "Consultando disponibilidad...",
-            isLoading: true,
-            id: loadingId
-        }]);
 
-        try {
+        const loadingId = generateId();
 
-            const offlineMessage = "El servicio de IA está temporalmente fuera de servicio. Para cualquier duda puedes ver la guía de uso de la aplicación aquí: https://sergiomsrs.github.io/wsf-landing/guia/";
+        setMessages(prev => [
+            ...prev,
+            {
+                from: 'bot',
+                text: '...',
+                isLoading: true,
+                id: loadingId,
+            }
+        ]);
 
-            // 3. Reemplazar el mensaje de carga con la respuesta estática
-            setMessages(prev => prev.filter(m => m.id !== loadingId).concat({
-                from: "bot",
-                text: offlineMessage,
-                id: Date.now() + 2
-            }));
+        // Delay mínimo para UX
+        await new Promise(r => setTimeout(r, 500));
 
-        } catch (error) {
-            setMessages(prev => prev.filter(m => m.id !== loadingId).concat({
-                from: "bot",
-                text: "❌ Servicio no disponible.",
-                id: Date.now() + 3,
-                isError: true
-            }));
-        } finally {
-            setIsLoading(false);
-        }
+        const answer = offlineChatService.getAnswer(userMessage);
+
+        setMessages(prev =>
+            prev
+                .filter(m => m.id !== loadingId)
+                .concat({
+                    from: 'bot',
+                    text: answer,
+                    id: generateId(),
+                })
+        );
+
+        setIsLoading(false);
     }, [isLoading]);
 
     const resetChat = useCallback(() => {
         setMessages([]);
         setIsLoading(false);
+        idCounter.current = 0; // opcional: resetear contador
     }, []);
 
-    const botMessageCount = messages.filter(m => m.from === "bot" && !m.isLoading).length;
+    const botMessageCount = messages.filter(m => m.from === 'bot' && !m.isLoading).length;
 
     return {
         messages,
@@ -104,6 +72,6 @@ export const useChatAI = () => {
         sendMessage,
         resetChat,
         botMessageCount,
-        hasMessages: messages.length > 0
+        hasMessages: messages.length > 0,
     };
 };
