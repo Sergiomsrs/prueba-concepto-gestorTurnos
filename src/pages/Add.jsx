@@ -1,16 +1,29 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useContext, useEffect } from 'react'
 import { useEmployees } from '@/Hooks/useEmployees';
 import { usePrefetchEmployeeData } from '@/Hooks/usePrefetchEmployeeData';
+import { AuthContext } from '@/timeTrack/context/AuthContext';
 import { EmployeeDataSection } from '../formComponents/EmployeeDataSection';
 import { EmployeeManagementModal } from '../formComponents/modals/EmployeeManagementModal';
 import { PublicHolidaysModal } from '../formComponents/modals/PublicHolidaysModal';
 
 export const Add = () => {
+  const { auth } = useContext(AuthContext);
+  const isDemo = auth?.token === "demo-token-12345";
+
   const { allEmployees } = useEmployees();
   const { prefetchEmployeeData } = usePrefetchEmployeeData();
   const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
   const [showEmployeeModal, setShowEmployeeModal] = useState(false);
   const [showHolidaysModal, setShowHolidaysModal] = useState(false);
+
+  // En modo demo, seleccionar automáticamente el primer empleado
+  useEffect(() => {
+    if (isDemo && allEmployees.length > 0 && !selectedEmployeeId) {
+      const demoEmployeeId = allEmployees[0].id.toString();
+      setSelectedEmployeeId(demoEmployeeId);
+      prefetchEmployeeData(demoEmployeeId);
+    }
+  }, [isDemo, allEmployees, selectedEmployeeId, prefetchEmployeeData]);
 
   // Memoizar el empleado seleccionado
   const selectedEmployee = useMemo(() => {
@@ -26,6 +39,15 @@ export const Add = () => {
 
   return (
     <div className="w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto mt-8 animate-fade-in">
+      {/* Banner de Modo Demo */}
+      {isDemo && (
+        <div className="mb-6 p-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg border border-blue-600 shadow-lg">
+          <p className="text-white font-semibold text-center">
+            🎯 Modo Demo - Datos de ejemplo cargados automáticamente
+          </p>
+        </div>
+      )}
+
       <div className="border rounded-lg shadow-md p-6">
 
         {/* SECCIÓN: Selector de Empleado + Botones de Acción */}
@@ -63,7 +85,7 @@ export const Add = () => {
           >
             <option value="">-- Seleccione un empleado --</option>
             {allEmployees.map(employee => (
-              <option key={employee.id} value={employee.id}>
+              <option key={employee.id} value={employee.id.toString()}>
                 {employee.name} {employee.lastName} - {employee.email}
               </option>
             ))}

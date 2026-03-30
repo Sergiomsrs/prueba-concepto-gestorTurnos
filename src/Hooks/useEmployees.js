@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getAllEmployees, fetchDisponibilities, fetchPto } from "../services/employees";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
+import { activeEmployeesMock } from "../utils/apiMock";
 
 const createFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
 const PtoFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
@@ -9,6 +10,7 @@ const PtoFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '
 export const useEmployees = (employeeId) => {
     const queryClient = useQueryClient();
     const { auth } = useContext(AuthContext);
+    const isDemo = auth?.token === "demo-token-12345";
 
     const [createForm, setCreateForm] = useState(createFormInitialState);
     const [ptoCreateForm, setPtoCreateForm] = useState(PtoFormInitialState);
@@ -19,6 +21,7 @@ export const useEmployees = (employeeId) => {
         queryKey: ["employees"],
         queryFn: () => getAllEmployees(auth.token),
         enabled: !!auth?.token,
+        initialData: isDemo ? activeEmployeesMock : undefined,
     });
 
     const { data: workHours = [], isLoading: loadingDispo } = useQuery({

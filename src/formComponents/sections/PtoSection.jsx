@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useEmployees } from '../../Hooks/useEmployees';
 import { fetchPto } from '../../services/employees';
+import { ptoMockData } from '../../utils/apiMock';
+import { AuthContext } from '@/timeTrack/context/AuthContext';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 
-/**
- * PtoSection
- * Componente para gestionar ausencias (Paid Time Off) del empleado seleccionado
- * Los datos ya están precargados
- */
 export const PtoSection = ({ employeeId }) => {
+    const { auth } = useContext(AuthContext);
+    const isDemo = auth?.token === "demo-token-12345";
+
     const {
         message,
         handleDeletePto,
@@ -22,7 +22,6 @@ export const PtoSection = ({ employeeId }) => {
         ptoTerminationDate: '',
     });
 
-    // Usar query que ya está precargada
     const { data: ptoList = [], isLoading, error } = useQuery({
         queryKey: ["pto", employeeId],
         queryFn: async () => {
@@ -31,10 +30,8 @@ export const PtoSection = ({ employeeId }) => {
         },
         enabled: !!employeeId,
         staleTime: 1000 * 60 * 5,
+        initialData: isDemo ? ptoMockData : undefined,
     });
-
-    // Debug: loguear datos
-    console.log('[PtoSection] employeeId:', employeeId, 'ptoList:', ptoList, 'isLoading:', isLoading, 'error:', error);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

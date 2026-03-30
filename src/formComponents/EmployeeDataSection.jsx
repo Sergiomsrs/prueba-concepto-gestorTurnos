@@ -42,7 +42,7 @@ export const EmployeeDataSection = ({ employeeId, allEmployees, employeeData }) 
         },
         {
             id: 'teamWork',
-            title: 'Trabajo en Equipo (Team Work)',
+            title: 'Equipo de trabajo',
             icon: '👥',
             component: TeamWorkSection
         },

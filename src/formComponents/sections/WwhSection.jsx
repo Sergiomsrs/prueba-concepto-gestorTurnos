@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useEmployeeConditions } from '../../Hooks/useEmployeeConditions';
 import { fetchConditions } from '../../services/wwhService';
+import { wwhMockData } from '../../utils/apiMock';
+import { AuthContext } from '@/timeTrack/context/AuthContext';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 
-/**
- * WwhSection
- * Componente para gestionar las jornadas de trabajo (Weekly Work Hours)
- * Los datos ya están precargados, así que no hay saltos al expandir
- */
+
 export const WwhSection = ({ employeeId }) => {
+    const { auth } = useContext(AuthContext);
+    const isDemo = auth?.token === "demo-token-12345";
+
     const {
         newWorkHours,
         message,
@@ -19,16 +20,14 @@ export const WwhSection = ({ employeeId }) => {
         handleDeleteWwh,
     } = useEmployeeConditions(employeeId);
 
-    // Usar query que ya está precargada
+
     const { data: workHours = [], isLoading, error } = useQuery({
         queryKey: ["wwh", employeeId],
         queryFn: () => fetchConditions.getWwhByEmployee(employeeId),
         enabled: !!employeeId,
         staleTime: 1000 * 60 * 5,
+        initialData: isDemo ? wwhMockData : undefined,
     });
-
-    // Debug: loguear datos
-    console.log('[WwhSection] employeeId:', employeeId, 'workHours:', workHours, 'isLoading:', isLoading, 'error:', error);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

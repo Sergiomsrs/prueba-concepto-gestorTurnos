@@ -28991,3 +28991,207 @@ export const rolesMock = [
         "active": false
     }
 ]
+
+export const wwhMockData = [
+    {
+        "id": 51,
+        "employee": {
+            "id": 51,
+            "name": "Juan",
+            "lastName": "Luis",
+            "dni": "1234BB",
+            "password": "$2a$10$ukSYxnid6xJvznXEl4WOte/iXkl1zDV2EfS3KQDwk.lebK8u8bOUe",
+            "secondLastName": "",
+            "role": "ADMIN",
+            "email": "lia@aaaa.com",
+            "hireDate": "2026-03-23",
+            "terminationDate": null,
+            "sortOrder": 8,
+            "company": {
+                "id": 1,
+                "name": "Store 001",
+                "cif": "B00000000",
+                "logoUrl": null,
+                "isActive": true
+            }
+        },
+        "weeklyWorkHoursData": 39,
+        "wwhStartDate": "2026-03-23",
+        "wwhTerminationDate": "2026-03-25",
+        "company": {
+            "id": 1,
+            "name": "Store 001",
+            "cif": "B00000000",
+            "logoUrl": null,
+            "isActive": true
+        }
+    },
+    {
+        "id": 52,
+        "employee": {
+            "id": 51,
+            "name": "Juan",
+            "lastName": "Luis",
+            "dni": "1234BB",
+            "password": "$2a$10$ukSYxnid6xJvznXEl4WOte/iXkl1zDV2EfS3KQDwk.lebK8u8bOUe",
+            "secondLastName": "",
+            "role": "ADMIN",
+            "email": "lia@aaaa.com",
+            "hireDate": "2026-03-23",
+            "terminationDate": null,
+            "sortOrder": 8,
+            "company": {
+                "id": 1,
+                "name": "Store 001",
+                "cif": "B00000000",
+                "logoUrl": null,
+                "isActive": true
+            }
+        },
+        "weeklyWorkHoursData": 20,
+        "wwhStartDate": "2026-03-26",
+        "wwhTerminationDate": "2026-04-01",
+        "company": {
+            "id": 1,
+            "name": "Store 001",
+            "cif": "B00000000",
+            "logoUrl": null,
+            "isActive": true
+        }
+    },
+    {
+        "id": 53,
+        "employee": {
+            "id": 51,
+            "name": "Juan",
+            "lastName": "Luis",
+            "dni": "1234BB",
+            "password": "$2a$10$ukSYxnid6xJvznXEl4WOte/iXkl1zDV2EfS3KQDwk.lebK8u8bOUe",
+            "secondLastName": "",
+            "role": "ADMIN",
+            "email": "lia@aaaa.com",
+            "hireDate": "2026-03-23",
+            "terminationDate": null,
+            "sortOrder": 8,
+            "company": {
+                "id": 1,
+                "name": "Store 001",
+                "cif": "B00000000",
+                "logoUrl": null,
+                "isActive": true
+            }
+        },
+        "weeklyWorkHoursData": 15,
+        "wwhStartDate": "2026-04-02",
+        "wwhTerminationDate": null,
+        "company": {
+            "id": 1,
+            "name": "Store 001",
+            "cif": "B00000000",
+            "logoUrl": null,
+            "isActive": true
+        }
+    }
+]
+
+export const twMockData = [
+    {
+        "id": 62,
+        "employee": {
+            "id": 51,
+            "name": "Juan",
+            "lastName": "Luis",
+            "dni": "1234BB",
+            "password": "$2a$10$ukSYxnid6xJvznXEl4WOte/iXkl1zDV2EfS3KQDwk.lebK8u8bOUe",
+            "secondLastName": "",
+            "role": "ADMIN",
+            "email": "lia@aaaa.com",
+            "hireDate": "2026-03-23",
+            "terminationDate": null,
+            "sortOrder": 8,
+            "company": {
+                "id": 1,
+                "name": "Store 001",
+                "cif": "B00000000",
+                "logoUrl": null,
+                "isActive": true
+            }
+        },
+        "teamWork": "Blue",
+        "twStartDate": "2026-03-23",
+        "twTerminationDate": "2026-04-01",
+        "company": {
+            "id": 1,
+            "name": "Store 001",
+            "cif": "B00000000",
+            "logoUrl": null,
+            "isActive": true
+        }
+    },
+    {
+        "id": 64,
+        "employee": {
+            "id": 51,
+            "name": "Juan",
+            "lastName": "Luis",
+            "dni": "1234BB",
+            "password": "$2a$10$ukSYxnid6xJvznXEl4WOte/iXkl1zDV2EfS3KQDwk.lebK8u8bOUe",
+            "secondLastName": "",
+            "role": "ADMIN",
+            "email": "lia@aaaa.com",
+            "hireDate": "2026-03-23",
+            "terminationDate": null,
+            "sortOrder": 8,
+            "company": {
+                "id": 1,
+                "name": "Store 001",
+                "cif": "B00000000",
+                "logoUrl": null,
+                "isActive": true
+            }
+        },
+        "teamWork": "Amarillo",
+        "twStartDate": "2026-04-02",
+        "twTerminationDate": "2026-04-02",
+        "company": {
+            "id": 1,
+            "name": "Store 001",
+            "cif": "B00000000",
+            "logoUrl": null,
+            "isActive": true
+        }
+    },
+    {
+        "id": 65,
+        "employee": {
+            "id": 51,
+            "name": "Juan",
+            "lastName": "Luis",
+            "dni": "1234BB",
+            "password": "$2a$10$ukSYxnid6xJvznXEl4WOte/iXkl1zDV2EfS3KQDwk.lebK8u8bOUe",
+            "secondLastName": "",
+            "role": "ADMIN",
+            "email": "lia@aaaa.com",
+            "hireDate": "2026-03-23",
+            "terminationDate": null,
+            "sortOrder": 8,
+            "company": {
+                "id": 1,
+                "name": "Store 001",
+                "cif": "B00000000",
+                "logoUrl": null,
+                "isActive": true
+            }
+        },
+        "teamWork": "Black",
+        "twStartDate": "2026-04-03",
+        "twTerminationDate": null,
+        "company": {
+            "id": 1,
+            "name": "Store 001",
+            "cif": "B00000000",
+            "logoUrl": null,
+            "isActive": true
+        }
+    }
+]

@@ -1,15 +1,16 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useEmployees } from '../../Hooks/useEmployees';
 import { fetchDisponibilities } from '../../services/employees';
+import { dispMockData } from '../../utils/apiMock';
+import { AuthContext } from '@/timeTrack/context/AuthContext';
 import { TrashIcon } from '../../components/icons/TrashIcon';
 
-/**
- * DispSection
- * Componente para gestionar disponibilidades del empleado
- * Los datos ya están precargados
- */
+
 export const DispSection = ({ employeeId }) => {
+    const { auth } = useContext(AuthContext);
+    const isDemo = auth?.token === "demo-token-12345";
+
     const {
         message,
         handleDeleteDisponibility,
@@ -23,7 +24,6 @@ export const DispSection = ({ employeeId }) => {
         absenceReason: '',
     });
 
-    // Usar query que ya está precargada
     const { data: workHours = [], isLoading, error } = useQuery({
         queryKey: ["disponibilities", employeeId],
         queryFn: async () => {
@@ -32,10 +32,9 @@ export const DispSection = ({ employeeId }) => {
         },
         enabled: !!employeeId,
         staleTime: 1000 * 60 * 5,
+        initialData: isDemo ? dispMockData : undefined,
     });
 
-    // Debug: loguear datos
-    console.log('[DispSection] employeeId:', employeeId, 'workHours:', workHours, 'isLoading:', isLoading, 'error:', error);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
