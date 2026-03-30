@@ -1,93 +1,120 @@
-import React, { useContext, useState } from 'react'
-import { AddWwh } from '../formComponents/AddWwh';
-import { AddTeamWork } from '../formComponents/AddTeamWork';
-import { AddPto } from '../formComponents/AddPto';
-import { AddDisp } from '../formComponents/AddDisp';
-import { AppContext } from '../context/AppContext';
-import { AddPublicHolidays } from '../formComponents/AddPublicHolidays';
+import React, { useState, useCallback, useMemo } from 'react'
 import { useEmployees } from '@/Hooks/useEmployees';
-import { AddUser } from '@/formComponents/AddUSer';
-
-
+import { usePrefetchEmployeeData } from '@/Hooks/usePrefetchEmployeeData';
+import { EmployeeDataSection } from '../formComponents/EmployeeDataSection';
+import { EmployeeManagementModal } from '../formComponents/modals/EmployeeManagementModal';
+import { PublicHolidaysModal } from '../formComponents/modals/PublicHolidaysModal';
 
 export const Add = () => {
-
-
-  const { activeTab, setActiveTab } = useContext(AppContext);
-
   const { allEmployees } = useEmployees();
+  const { prefetchEmployeeData } = usePrefetchEmployeeData();
+  const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
+  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+  const [showHolidaysModal, setShowHolidaysModal] = useState(false);
 
-  const handleTabClick = (index) => {
-    setActiveTab(index);
-    localStorage.setItem("activeTab", index);
-  };
+  // Memoizar el empleado seleccionado
+  const selectedEmployee = useMemo(() => {
+    if (!selectedEmployeeId) return null;
+    return allEmployees.find(emp => emp.id.toString() === selectedEmployeeId.toString());
+  }, [selectedEmployeeId, allEmployees]);
 
-  let content;
-
-  switch (activeTab) {
-    case 0:
-      content = <AddUser allEmployees={allEmployees} />;
-      break;
-    case 1:
-      content = <AddWwh allEmployees={allEmployees} />;
-      break;
-    case 2:
-      content = <AddTeamWork allEmployees={allEmployees} />;
-      break;
-    case 3:
-      content = <AddPto allEmployees={allEmployees} />;
-      break;
-    case 4:
-      content = <AddDisp allEmployees={allEmployees} />;
-      break;
-    case 5:
-      content = <AddPublicHolidays />;
-      break;
-    default:
-      content = null;
-  }
+  const handleEmployeeChange = useCallback((employeeId) => {
+    setSelectedEmployeeId(employeeId);
+    // Hacer prefetch de todos los datos cuando se selecciona un empleado
+    prefetchEmployeeData(employeeId);
+  }, [prefetchEmployeeData]);
 
   return (
     <div className="w-full sm:w-11/12 md:w-3/4 lg:w-2/3 xl:w-2/3 mx-auto mt-8 animate-fade-in">
+      <div className="border rounded-lg shadow-md p-6">
 
+        {/* SECCIÓN: Selector de Empleado + Botones de Acción */}
+        <div className="mb-6">
+          <div className="mb-3 flex items-center justify-between">
+            <label htmlFor="employee-select" className="block text-sm font-semibold text-gray-900">
+              Seleccionar Empleado
+            </label>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowEmployeeModal(true)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Crear Empleado
+              </button>
 
-      <div className="border rounded-lg shadow-md overflow-x-auto p-4 ">
+              <button
+                onClick={() => setShowHolidaysModal(true)}
+                className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 bg-blue-100 hover:bg-blue-200 rounded-lg transition-colors"
+              >
+                <span>🎉</span>
+                Festivos
+              </button>
+            </div>
+          </div>
 
-        <div className='mb-6'>
-
-
-
-          <ul className="flex flex-row flex-nowrap gap-2 mb-6 border-b border-gray-300 dark:border-gray-600 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-            {[
-              { label: "User" },
-              { label: "Wwh" },
-              { label: "Team Work" },
-              { label: "Pto" },
-              { label: "Disp" },
-              { label: "PublicH" },
-            ].map((tab, idx) => (
-              <li key={tab.label} className="flex-none">
-                <button
-                  type="button"
-                  onClick={() => handleTabClick(idx)}
-                  className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-all duration-200 min-w-[100px]
-          ${activeTab === idx
-                      ? "text-indigo-600 border-b-2 border-indigo-600 bg-white dark:bg-gray-800"
-                      : "text-gray-500 hover:text-indigo-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-                    }
-        `}
-                >
-                  {tab.label}
-                </button>
-              </li>
+          <select
+            id="employee-select"
+            value={selectedEmployeeId || ''}
+            onChange={(e) => handleEmployeeChange(e.target.value)}
+            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 text-sm"
+          >
+            <option value="">-- Seleccione un empleado --</option>
+            {allEmployees.map(employee => (
+              <option key={employee.id} value={employee.id}>
+                {employee.name} {employee.lastName} - {employee.email}
+              </option>
             ))}
-          </ul>
+          </select>
         </div>
-        {content
-        }
 
+        {/* SECCIÓN: Información del Empleado */}
+        {selectedEmployee && (
+          <>
+            <div className="mb-6 p-4 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg border border-indigo-200">
+              <h2 className="text-lg font-bold text-gray-900">
+                {selectedEmployee.name} {selectedEmployee.lastName}
+              </h2>
+              <p className="text-sm text-gray-600 mt-1">{selectedEmployee.email}</p>
+              {selectedEmployee.hireDate && (
+                <p className="text-sm text-gray-600">
+                  Fecha de ingreso: {new Date(selectedEmployee.hireDate).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+
+            {/* SECCIÓN: Accordion con datos del empleado */}
+            <EmployeeDataSection
+              employeeId={selectedEmployee.id}
+              allEmployees={allEmployees}
+              employeeData={selectedEmployee}
+            />
+          </>
+        )}
+
+        {!selectedEmployee && (
+          <div className="pt-6 text-center text-gray-500">
+            Selecciona un empleado para ver sus datos
+          </div>
+        )}
       </div>
-    </div>
 
+      {/* Modales */}
+      <EmployeeManagementModal
+        isOpen={showEmployeeModal}
+        onClose={() => setShowEmployeeModal(false)}
+        onEmployeeCreated={() => {
+          // Refrescar lista de empleados si es necesario
+        }}
+        allEmployees={allEmployees}
+      />
+
+      <PublicHolidaysModal
+        isOpen={showHolidaysModal}
+        onClose={() => setShowHolidaysModal(false)}
+      />
+    </div>
   )
 }

@@ -14,13 +14,13 @@ export const fetchTwConditions = {
         }
     },
 
-    saveTw: async (employeeId, startDate, endDate) => {
+    saveTw: async (employeeId, teamWork, twStartDate) => {
         try {
             const response = await axiosClient.post('/teamwork/create', null, {
                 params: {
                     employeeId: employeeId,
-                    teamWork: startDate,
-                    twStartDate: endDate
+                    teamWork: teamWork,
+                    twStartDate: twStartDate
                 }
             });
 

@@ -6,7 +6,7 @@ import { AuthContext } from "@/timeTrack/context/AuthContext";
 const createFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
 const PtoFormInitialState = { name: '', lastName: '', email: '', ptoStartDate: '', ptoTerminationDate: '' };
 
-export const useEmployees = () => {
+export const useEmployees = (employeeId) => {
     const queryClient = useQueryClient();
     const { auth } = useContext(AuthContext);
 
@@ -47,7 +47,8 @@ export const useEmployees = () => {
     const saveDispoMutation = useMutation({
         mutationFn: fetchDisponibilities.saveDisponibility,
         onSuccess: () => {
-            queryClient.invalidateQueries(["disponibilities", createForm?.id]);
+            const id = employeeId || createForm?.id;
+            if (id) queryClient.invalidateQueries({ queryKey: ["disponibilities", id] });
         },
         onError: () => setMessage("Error al guardar la ausencia.")
     });
@@ -55,7 +56,8 @@ export const useEmployees = () => {
     const deleteDispoMutation = useMutation({
         mutationFn: fetchDisponibilities.deleteDisponibilityById,
         onSuccess: () => {
-            queryClient.invalidateQueries(["disponibilities", createForm?.id]);
+            const id = employeeId || createForm?.id;
+            if (id) queryClient.invalidateQueries({ queryKey: ["disponibilities", id] });
         },
         onError: () => setMessage("Error al eliminar la ausencia.")
     });
@@ -64,7 +66,8 @@ export const useEmployees = () => {
     const savePtoMutation = useMutation({
         mutationFn: fetchPto.savePto,
         onSuccess: () => {
-            queryClient.invalidateQueries(["pto", ptoCreateForm?.id]);
+            const id = employeeId || ptoCreateForm?.id;
+            if (id) queryClient.invalidateQueries({ queryKey: ["pto", id] });
         },
         onError: () => setMessage("Error al guardar el PTO.")
     });
@@ -72,7 +75,8 @@ export const useEmployees = () => {
     const deletePtoMutation = useMutation({
         mutationFn: fetchPto.deletePtoById,
         onSuccess: () => {
-            queryClient.invalidateQueries(["pto", ptoCreateForm?.id]);
+            const id = employeeId || ptoCreateForm?.id;
+            if (id) queryClient.invalidateQueries({ queryKey: ["pto", id] });
         },
         onError: () => setMessage("Error al eliminar el PTO.")
     });
