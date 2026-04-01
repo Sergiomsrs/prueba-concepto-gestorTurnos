@@ -3,20 +3,22 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchRosterBetweenDates, saveRosterData } from "../services/rosterService";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
 import { apiMockData } from "../../utils/apiMock";
+import { AppContext } from "@/context/AppContext";
 
 export const useRoster = (startDate, endDate) => {
     const { auth } = useContext(AuthContext);
+    const { appliedDates } = useContext(AppContext);
     const queryClient = useQueryClient();
 
     const isDemo = auth.token === "demo-token-12345";
 
     const rosterQuery = useQuery({
-        queryKey: ["roster", startDate, endDate],
+        queryKey: ["roster", appliedDates.startDate, appliedDates.endDate],
         queryFn: async () => {
             // Manejo del mock para modo demo
             if (auth.token === "demo-token-12345") return apiMockData;
 
-            const result = await fetchRosterBetweenDates(startDate, endDate, auth.token);
+            const result = await fetchRosterBetweenDates(appliedDates.startDate, appliedDates.endDate, auth.token);
             if (!result.success) throw new Error(result.message);
             return result.data;
         },

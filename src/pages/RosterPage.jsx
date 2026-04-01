@@ -10,6 +10,7 @@ import { EmployeeRow } from "../roster/components/EmployeeRow";
 import { RosterRangeSummary } from "../roster/components/RosterRangeSummary";
 import { PrintableRoster } from "../roster/components/PrintableRoster";
 import { AppContext } from "@/context/AppContext";
+import DateRangePicker from "@/roster/components/DateRangePicker";
 
 export const RosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
@@ -352,56 +353,65 @@ export const RosterPage = () => {
             {/* Header Principal */}
             <header className="bg-white shadow-lg border-b border-slate-200 sticky top-0 z-40">
                 <div className="max-w-[1920px] mx-auto">
-                    {/* Top Bar - Título y Botón Móvil */}
+                    {/* Top Bar */}
                     <div className="flex items-center justify-between px-4 sm:px-6 h-16">
                         <div className="flex items-center space-x-3">
-                            <div className="">
-                                <span className="text-white text-xl font-bold">
-                                    <img
-                                        src="./logo-navegador.webp"
-                                        alt="WorkSchedFlow Logo"
-                                        width="48"
-                                        height="48"
-                                    />
-                                </span>
-                            </div>
+                            <img
+                                src="./logo-navegador.webp"
+                                alt="WorkSchedFlow Logo"
+                                width="48"
+                                height="48"
+                            />
                             <div>
-                                <h1 className="text-xl sm:text-2xl font-bold text-slate-900">Roster Board</h1>
-                                <p className="text-xs sm:text-sm text-slate-500 hidden sm:block">Gestión de equipos de trabajo</p>
+                                <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
+                                    Roster Board
+                                </h1>
+                                <p className="text-xs sm:text-sm text-slate-500 hidden sm:block">
+                                    Gestión de equipos de trabajo
+                                </p>
                             </div>
                         </div>
 
-                        {/* Stats - Solo Desktop */}
-                        <div className="hidden lg:flex items-center space-x-4">
-                            <div className="flex items-center space-x-2 px-3 py-2 bg-slate-100 rounded-lg">
-                                <span className="text-slate-600">👥</span>
-                                <span className="text-sm font-medium text-slate-700">{stats.employees} Empleados</span>
+                        {/* Desktop Stats */}
+                        <div className="hidden xl:flex items-center gap-3">
+                            <div className="flex items-center gap-2 px-3 h-10 bg-slate-100 rounded-lg">
+                                <span>👥</span>
+                                <span className="text-sm font-medium whitespace-nowrap">
+                                    {stats.employees} Empleados
+                                </span>
                             </div>
-                            <div className="flex items-center space-x-2 px-3 py-2 bg-slate-100 rounded-lg">
-                                <span className="text-slate-600">⏰</span>
-                                <span className="text-sm font-medium text-slate-700">{stats.hours.toFixed(1)} Horas</span>
+
+                            <div className="flex items-center gap-2 px-3 h-10 bg-slate-100 rounded-lg">
+                                <span>⏰</span>
+                                <span className="text-sm font-medium whitespace-nowrap">
+                                    {stats.hours.toFixed(1)} Horas
+                                </span>
                             </div>
+
                             {filters.selectedTeams.length > 0 && (
-                                <div className="flex items-center space-x-2 px-3 py-2 bg-blue-100 rounded-lg">
-                                    <span className="text-blue-600">🔍</span>
-                                    <span className="text-sm font-medium text-blue-700">
-                                        {filters.selectedTeams.length} equipo{filters.selectedTeams.length > 1 ? 's' : ''}
+                                <div className="flex items-center gap-2 px-3 h-10 bg-blue-100 rounded-lg">
+                                    <span>🔍</span>
+                                    <span className="text-sm font-medium whitespace-nowrap">
+                                        {filters.selectedTeams.length} equipo{filters.selectedTeams.length > 1 ? "s" : ""}
                                     </span>
                                 </div>
                             )}
+
                             {modifiedData.length > 0 && (
-                                <div className="flex items-center space-x-2 px-3 py-2 bg-amber-100 rounded-lg">
+                                <div className="flex items-center gap-2 px-3 h-10 bg-amber-100 rounded-lg">
                                     <div className="h-2 w-2 bg-amber-500 rounded-full animate-pulse"></div>
-                                    <span className="text-sm font-medium text-amber-700">{modifiedData.length} Cambios</span>
+                                    <span className="text-sm font-medium whitespace-nowrap">
+                                        {modifiedData.length} Cambios
+                                    </span>
                                 </div>
                             )}
-                            {/* Botón de impresión */}
+
                             <button
                                 onClick={handlePrint}
                                 disabled={filteredData.length <= 1}
-                                className={`flex items-center space-x-2 px-3 py-2 rounded-lg font-medium transition-colors ${filteredData.length <= 1
+                                className={`flex items-center gap-2 px-4 h-10 rounded-lg font-medium whitespace-nowrap ${filteredData.length <= 1
                                     ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                    : "bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
+                                    : "bg-purple-600 hover:bg-purple-700 text-white"
                                     }`}
                             >
                                 <span>🖨️</span>
@@ -409,104 +419,91 @@ export const RosterPage = () => {
                             </button>
                         </div>
 
-                        {/* Botón Filtros Móvil */}
-                        <div className="lg:hidden flex items-center space-x-2">
+                        {/* Mobile/Tablet Actions */}
+                        <div className="xl:hidden flex items-center gap-2">
                             <button
                                 onClick={handlePrint}
                                 disabled={filteredData.length <= 1}
-                                className={`p-2 rounded-lg ${filteredData.length <= 1
-                                    ? "text-slate-400 cursor-not-allowed"
-                                    : "text-purple-600 hover:text-purple-900 hover:bg-purple-50"
-                                    }`}
+                                className="p-2 rounded-lg"
                             >
                                 <span className="text-lg">🖨️</span>
                             </button>
+
                             <button
                                 onClick={() => setShowMobileFilters(!showMobileFilters)}
-                                className="p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg"
+                                className="p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
                             >
                                 <span className="text-lg">🔍</span>
                             </button>
                         </div>
                     </div>
 
-                    {/* Controles de Filtros */}
-                    <div className={`border-t border-slate-200 bg-slate-50 transition-all duration-300 ${showMobileFilters ? 'block' : 'hidden lg:block'}`}>
+                    {/* Filters */}
+                    <div className={`border-t border-slate-200 bg-slate-50 ${showMobileFilters ? "block" : "hidden xl:block"}`}>
                         <div className="px-4 sm:px-6 py-4">
-                            {/* Filtros Desktop */}
-                            <div className="hidden lg:grid lg:grid-cols-6 gap-4 items-end">
+
+                            {/* Desktop Filters */}
+                            <div className="hidden xl:grid xl:grid-cols-12 gap-4 items-end">
+
                                 {/* Fechas */}
-                                <div className="col-span-2 grid grid-cols-2 gap-2">
-                                    <div>
-                                        <label className="block text-xs font-medium text-slate-700 mb-1">
-                                            Fecha Inicio
-                                        </label>
-                                        <input
-                                            type="date"
-                                            value={filters.startDate}
-                                            onChange={(e) => handleFilterChange('startDate', e.target.value)}
-                                            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-slate-700 mb-1">
-                                            Fecha Fin
-                                        </label>
-                                        <input
-                                            type="date"
-                                            value={filters.endDate}
-                                            onChange={(e) => handleFilterChange('endDate', e.target.value)}
-                                            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                    </div>
+                                <div className="col-span-3">
+                                    <DateRangePicker
+                                        filters={filters}
+                                        handleFilterChange={handleFilterChange}
+                                    />
                                 </div>
 
-                                {/* ✅ Filtro Equipos MultiSelect Desktop */}
-                                <TeamMultiSelect />
+                                {/* Equipos */}
+                                <div className="col-span-3">
+                                    <TeamMultiSelect />
+                                </div>
 
-                                {/* Filtro Empleado */}
-                                <div>
+                                {/* Empleado */}
+                                <div className="col-span-2">
                                     <label className="block text-xs font-medium text-slate-700 mb-1">
                                         Empleado
                                     </label>
                                     <input
                                         type="text"
-                                        placeholder="Buscar por nombre..."
+                                        placeholder="Buscar..."
                                         value={filters.employeeName}
-                                        onChange={(e) => handleFilterChange('employeeName', e.target.value)}
-                                        className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                        onChange={(e) =>
+                                            handleFilterChange("employeeName", e.target.value)
+                                        }
+                                        className="w-full px-3 h-10 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
 
                                 {/* Botones */}
-                                <div className="flex space-x-2">
+                                <div className="col-span-2 flex gap-2 items-stretch">
                                     <button
                                         onClick={handleGetData}
                                         disabled={loading}
-                                        className={`flex-1 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${loading
+                                        className={`flex-1 flex items-center justify-center gap-2 px-4 h-10 rounded-lg text-sm font-medium whitespace-nowrap ${loading
                                             ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                            : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                                            : "bg-blue-600 hover:bg-blue-700 text-white"
                                             }`}
                                     >
-                                        {loading ? "⏳" : "📊"} {loading ? "Cargando..." : "Preparado"}
+                                        <span>{loading ? "⏳" : "📊"}</span>
+                                        <span>{loading ? "Cargando..." : "Preparado"}</span>
                                     </button>
+
                                     <button
                                         onClick={clearFilters}
-                                        className="px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
-                                        title="Limpiar filtros"
+                                        className="flex items-center justify-center px-3 h-10 border border-slate-300 rounded-lg hover:bg-slate-100"
                                     >
                                         🔄
                                     </button>
                                 </div>
 
                                 {/* Guardar */}
-                                <div>
+                                <div className="col-span-2">
                                     <button
                                         onClick={handleSaveData}
                                         disabled={modifiedData.length === 0 || loading}
-                                        className={`w-full flex items-center justify-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all shadow-sm ${modifiedData.length === 0 || loading
+                                        className={`w-full flex items-center justify-center gap-2 px-4 h-10 rounded-lg font-medium whitespace-nowrap ${modifiedData.length === 0 || loading
                                             ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                            : "bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg"
+                                            : "bg-green-600 hover:bg-green-700 text-white"
                                             }`}
                                     >
                                         <span>💾</span>
@@ -520,108 +517,43 @@ export const RosterPage = () => {
                                 </div>
                             </div>
 
-                            {/* Filtros Móvil */}
-                            <div className="lg:hidden space-y-4">
-                                {/* Stats Móvil */}
-                                <div className="grid grid-cols-3 gap-2 text-center">
-                                    <div className="bg-white px-3 py-2 rounded-lg border">
-                                        <div className="text-lg font-semibold text-slate-900">{stats.employees}</div>
-                                        <div className="text-xs text-slate-500">Empleados</div>
-                                    </div>
-                                    <div className="bg-white px-3 py-2 rounded-lg border">
-                                        <div className="text-lg font-semibold text-slate-900">{stats.hours.toFixed(1)}</div>
-                                        <div className="text-xs text-slate-500">Horas</div>
-                                    </div>
-                                    <div className="bg-white px-3 py-2 rounded-lg border">
-                                        <div className="text-lg font-semibold text-slate-900">{stats.days}</div>
-                                        <div className="text-xs text-slate-500">Días</div>
-                                    </div>
-                                </div>
+                            {/* Mobile/Tablet Filters */}
+                            <div className="xl:hidden space-y-4">
 
-                                {/* ✅ NUEVO BOTÓN TOGGLE MÓVIL */}
-                                <button
-                                    onClick={() => handleFilterChange('hideZeroHours', !filters.hideZeroHours)}
-                                    className={`w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all ${filters.hideZeroHours
-                                        ? 'bg-blue-600 text-white shadow-sm'
-                                        : 'bg-slate-100 text-slate-700'
-                                        }`}
-                                >
-                                    <span>⏰</span>
-                                    <span>
-                                        {filters.hideZeroHours ? 'Mostrando solo empleados activos' : 'Mostrar solo empleados activos'}
-                                    </span>
-                                </button>
+                                <DateRangePicker
+                                    filters={filters}
+                                    handleFilterChange={handleFilterChange}
+                                />
 
-                                {/* Fechas */}
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <label className="block text-xs font-medium text-slate-700 mb-1">
-                                            Fecha Inicio
-                                        </label>
-                                        <input
-                                            type="date"
-                                            value={filters.startDate}
-                                            onChange={(e) => handleFilterChange('startDate', e.target.value)}
-                                            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-xs font-medium text-slate-700 mb-1">
-                                            Fecha Fin
-                                        </label>
-                                        <input
-                                            type="date"
-                                            value={filters.endDate}
-                                            onChange={(e) => handleFilterChange('endDate', e.target.value)}
-                                            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                    </div>
-                                </div>
+                                <TeamMultiSelect isMobile={true} />
 
-                                {/* Equipo y Empleado */}
-                                <div className="space-y-3">
-                                    {/* ✅ MultiSelect para móvil */}
-                                    <TeamMultiSelect isMobile={true} />
-
-                                    <div>
-                                        <label className="block text-xs font-medium text-slate-700 mb-1">
-                                            Buscar Empleado
-                                        </label>
-                                        <input
-                                            type="text"
-                                            placeholder="Nombre o apellido..."
-                                            value={filters.employeeName}
-                                            onChange={(e) => handleFilterChange('employeeName', e.target.value)}
-                                            className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                        />
-                                    </div>
-                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Buscar empleado..."
+                                    value={filters.employeeName}
+                                    onChange={(e) =>
+                                        handleFilterChange("employeeName", e.target.value)
+                                    }
+                                    className="w-full px-3 h-10 border border-slate-300 rounded-lg text-sm"
+                                />
 
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
                                         onClick={handleGetData}
                                         disabled={loading}
-                                        className={`flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-colors ${loading
-                                            ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                            : "bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
-                                            }`}
+                                        className="flex items-center justify-center gap-2 h-10 bg-blue-600 text-white rounded-lg whitespace-nowrap"
                                     >
-                                        <span>{loading ? "⏳" : "📊"}</span>
-                                        <span>{loading ? "Cargando..." : "Obtener Datos"}</span>
+                                        📊 <span>{loading ? "Cargando..." : "Preparado"}</span>
                                     </button>
 
                                     <button
                                         onClick={handleSaveData}
                                         disabled={modifiedData.length === 0 || loading}
-                                        className={`flex items-center justify-center space-x-2 px-4 py-3 rounded-lg font-medium transition-colors ${modifiedData.length === 0 || loading
-                                            ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                            : "bg-green-600 hover:bg-green-700 text-white shadow-sm"
-                                            }`}
+                                        className="flex items-center justify-center gap-2 h-10 bg-green-600 text-white rounded-lg whitespace-nowrap"
                                     >
-                                        <span>💾</span>
-                                        <span>Guardar</span>
+                                        💾 <span>Guardar</span>
                                         {modifiedData.length > 0 && (
-                                            <span className="bg-white/20 px-1.5 py-0.5 rounded text-xs">
+                                            <span className="bg-white/20 px-2 py-0.5 rounded text-xs">
                                                 {modifiedData.length}
                                             </span>
                                         )}
@@ -630,9 +562,9 @@ export const RosterPage = () => {
 
                                 <button
                                     onClick={clearFilters}
-                                    className="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
+                                    className="w-full h-10 border border-slate-300 rounded-lg"
                                 >
-                                    🔄 Limpiar Filtros
+                                    🔄 Limpiar filtros
                                 </button>
                             </div>
                         </div>

@@ -30,6 +30,12 @@ export const AppProvider = ({ children }) => {
         hideZeroHours: false, // ✅ NUEVO FILTRO
     });
 
+    const [appliedDates, setAppliedDates] = useState({
+        startDate: null,
+        endDate: null,
+    });
+
+
 
     const fetchShiftWeek = async (startDate, endDate) => {
         setLoading(true);
@@ -112,6 +118,7 @@ export const AppProvider = ({ children }) => {
             schedules,
             selectedOption,
             filters,
+            appliedDates,
 
             fetchShiftWeek,
             resetData,
@@ -123,7 +130,8 @@ export const AppProvider = ({ children }) => {
             setHolidayDates,
             setSchedules,
             setSelectedOption,
-            setFilters
+            setFilters,
+            setAppliedDates
         }}>
             {children}
         </AppContext.Provider>
