@@ -102,6 +102,7 @@ export default function DateRangePicker({ filters, handleFilterChange }) {
                         onSelect={handleSelect}
                         numberOfMonths={isMobile ? 1 : 2}
                         pagedNavigation
+                        weekStartsOn={1}
                         style={{ margin: 0 }}
                     />
                 </div>
