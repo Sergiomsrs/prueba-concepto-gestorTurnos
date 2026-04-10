@@ -1,6 +1,5 @@
 import { useContext, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AuthContext } from "../context/AuthContext";
 import {
     getLiquidationPeriods,
     getReportByPeriod,
@@ -9,6 +8,7 @@ import {
     closeBank,
     reopenBank
 } from "../services/hourBankService";
+import { AuthContext } from "@/timeTrack/context/AuthContext";
 
 export const useHourBank = () => {
     const { auth } = useContext(AuthContext);

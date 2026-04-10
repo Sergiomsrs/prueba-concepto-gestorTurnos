@@ -1,4 +1,5 @@
-import { axiosClient } from "./axiosClient";
+import { axiosClient } from "@/services/axiosClient";
+
 
 export const getLiquidationPeriods = async (year) => {
     const response = await axiosClient.get(`/liquidation-period?year=${year}`);
