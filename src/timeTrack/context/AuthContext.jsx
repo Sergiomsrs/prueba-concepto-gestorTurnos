@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const role = sessionStorage.getItem('role');
     const user = sessionStorage.getItem('user');
 
+
     if (token && user && user !== "undefined") {
       try {
         return {

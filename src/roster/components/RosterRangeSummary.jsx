@@ -42,6 +42,7 @@ const EmployeeRow = memo(
             for (const day of dataToUse) {
                 if (day.holiday) continue;
                 const emp = day.employees.find((e) => e.name === employeeName);
+                if (emp.pto == true) continue;
                 if (emp?.wwh) total += emp.wwh / 7;
             }
             return Math.round((total * 2) / 2);
@@ -160,6 +161,7 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
             for (const day of dataToUse) {
                 if (day.holiday) continue;
                 const emp = day.employees.find((e) => e.name === name);
+                if (emp.pto == false) continue;
                 if (emp?.wwh) wwh += emp.wwh / 2;
             }
             totalWWH += Math.round((wwh * 2) / 2);

@@ -60,7 +60,7 @@ export const Reports = () => {
                 {/* Festivas */}
                 <div className="bg-white rounded-2xl shadow p-4">
                     <h3 className="text-sm font-medium text-gray-500">Festivas</h3>
-                    <p className="mt-2 text-2xl font-bold text-gray-900">0</p>
+                    <p className="mt-2 text-2xl font-bold text-gray-900">{report?.totalHolidayWorkHours}</p>
                 </div>
                 <div className="bg-white rounded-2xl shadow p-4">
                     <h3 className="text-sm font-medium text-gray-500">Nocturnas</h3>
