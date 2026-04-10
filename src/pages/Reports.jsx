@@ -5,7 +5,7 @@ import { useHourBank } from "@/reports/hooks/useHourBank";
 
 
 export const Reports = () => {
-    const [mode, setMode] = useState("consulta"); // "consulta" | "gestion"
+    const [mode, setMode] = useState("consulta");
     const currentYear = new Date().getFullYear();
 
     // Modo consulta
@@ -20,26 +20,24 @@ export const Reports = () => {
         report: gestionReport,
         banks,
         isLoading: gestionLoading,
-        isGenerating,
+        isClosing,
+        isReopening,
         error: gestionError,
-        generateBanks,
         closeBank,
         reopenBank,
     } = useHourBank();
 
-    // Estado local para horas a pagar por empleado
     const [hoursPaidInput, setHoursPaidInput] = useState({});
 
     const report = mode === "consulta" ? consultaReport : gestionReport;
     const isLoading = mode === "consulta" ? consultaLoading : gestionLoading;
     const error = mode === "consulta" ? consultaError : gestionError;
 
-    const handleSearch = () => {
-        handleGetReportBetweenDates(date.start, date.end);
-    };
+    const handleSearch = () => handleGetReportBetweenDates(date.start, date.end);
 
     const handlePeriodChange = (e) => {
         setSelectedPeriodId(e.target.value);
+        setHoursPaidInput({});
     };
 
     const handleHoursPaidChange = (employeeId, value) => {
@@ -51,9 +49,20 @@ export const Reports = () => {
         await closeBank(bank.id, hoursPaid);
     };
 
-    // Buscar la bolsa de un empleado
     const getBankForEmployee = (employeeId) => {
         return banks.find(b => b.employee.id === employeeId) || null;
+    };
+
+    const hasExtraHoursChanged = (emp, bank) => {
+        if (!bank || bank.status !== "CLOSED") return false;
+        if (bank.hoursGenerated === null) return false;
+        return parseFloat(emp.extraHours) !== parseFloat(bank.hoursGenerated);
+    };
+
+    const hasWorkHoursChanged = (emp, bank) => {
+        if (!bank || bank.status !== "CLOSED") return false;
+        if (bank.hoursGenerated === null) return false;
+        return parseFloat(emp.totalWorkHours) !== parseFloat(bank.hoursGenerated) + parseFloat(emp.totalWWH);
     };
 
     return (
@@ -86,31 +95,20 @@ export const Reports = () => {
                 {mode === "consulta" ? (
                     <DatePicker date={date} setDate={setDate} onSearch={handleSearch} />
                 ) : (
-                    <div className="flex flex-col md:flex-row md:items-end md:space-x-4 w-full">
-                        <div className="flex flex-col space-y-1">
-                            <label className="text-sm font-medium text-gray-600">Periodo</label>
-                            <select
-                                className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                value={selectedPeriodId || ""}
-                                onChange={handlePeriodChange}
-                            >
-                                <option value="">Selecciona un periodo</option>
-                                {periods.map(p => (
-                                    <option key={p.id} value={p.id}>
-                                        {p.name} ({p.startDate} → {p.endDate})
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        {selectedPeriodId && (
-                            <button
-                                onClick={generateBanks}
-                                disabled={isGenerating}
-                                className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-                            >
-                                {isGenerating ? "Generando..." : "Generar bolsas"}
-                            </button>
-                        )}
+                    <div className="flex flex-col space-y-1">
+                        <label className="text-sm font-medium text-gray-600">Periodo</label>
+                        <select
+                            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            value={selectedPeriodId || ""}
+                            onChange={handlePeriodChange}
+                        >
+                            <option value="">Selecciona un periodo</option>
+                            {periods.map(p => (
+                                <option key={p.id} value={p.id}>
+                                    {p.name} ({p.startDate} → {p.endDate})
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 )}
             </div>
@@ -188,14 +186,28 @@ export const Reports = () => {
                             {report?.reportRequestDto?.map((emp) => {
                                 const bank = mode === "gestion" ? getBankForEmployee(emp.employee.id) : null;
                                 const hoursPaid = hoursPaidInput[emp.employee.id] ?? bank?.hoursTotal ?? "";
+                                const extraChanged = hasExtraHoursChanged(emp, bank);
+                                const workChanged = hasWorkHoursChanged(emp, bank);
 
                                 return (
                                     <tr key={emp.employee.id}>
-                                        <td className="px-6 py-4 text-sm text-gray-900">{emp.employee.name}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-900">{emp.totalWWH}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-900">{emp.totalWorkHours}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-900">{emp.extraHours}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-900">{emp.totalHolidayHours}</td>
+                                        <td className="px-6 py-4 text-sm text-gray-900">
+                                            {emp.employee.name}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-900">
+                                            {emp.totalWWH}
+                                        </td>
+                                        <td className={`px-6 py-4 text-sm font-medium ${workChanged ? "text-red-600" : "text-gray-900"}`}>
+                                            {emp.totalWorkHours}
+                                            {workChanged && <span className="ml-1">⚠️</span>}
+                                        </td>
+                                        <td className={`px-6 py-4 text-sm font-medium ${extraChanged ? "text-red-600" : "text-gray-900"}`}>
+                                            {emp.extraHours}
+                                            {extraChanged && <span className="ml-1">⚠️</span>}
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-gray-900">
+                                            {emp.totalHolidayHours}
+                                        </td>
                                         <td className="px-6 py-4 text-sm text-gray-900">0</td>
                                         {mode === "gestion" && (
                                             <>
@@ -224,10 +236,10 @@ export const Reports = () => {
                                                 <td className="px-6 py-4 text-sm">
                                                     {bank ? (
                                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${bank.status === "CLOSED"
-                                                            ? "bg-green-100 text-green-700"
-                                                            : bank.status === "REOPENED"
-                                                                ? "bg-yellow-100 text-yellow-700"
-                                                                : "bg-blue-100 text-blue-700"
+                                                                ? "bg-green-100 text-green-700"
+                                                                : bank.status === "REOPENED"
+                                                                    ? "bg-yellow-100 text-yellow-700"
+                                                                    : "bg-blue-100 text-blue-700"
                                                             }`}>
                                                             {bank.status}
                                                         </span>
@@ -235,21 +247,23 @@ export const Reports = () => {
                                                         <span className="text-gray-400 text-xs">Sin bolsa</span>
                                                     )}
                                                 </td>
-                                                <td className="px-6 py-4 text-sm">
+                                                <td className="px-6 py-4 text-sm space-x-2">
                                                     {bank && bank.status !== "CLOSED" && (
                                                         <button
                                                             onClick={() => handleCloseBank(bank)}
-                                                            className="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 transition-colors"
+                                                            disabled={isClosing}
+                                                            className="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 disabled:opacity-50 transition-colors"
                                                         >
-                                                            Cerrar
+                                                            {isClosing ? "..." : "Cerrar"}
                                                         </button>
                                                     )}
                                                     {bank && bank.status === "CLOSED" && (
                                                         <button
                                                             onClick={() => reopenBank(bank.id)}
-                                                            className="px-3 py-1 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600 transition-colors"
+                                                            disabled={isReopening}
+                                                            className="px-3 py-1 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600 disabled:opacity-50 transition-colors"
                                                         >
-                                                            Reabrir
+                                                            {isReopening ? "..." : "Reabrir"}
                                                         </button>
                                                     )}
                                                 </td>
