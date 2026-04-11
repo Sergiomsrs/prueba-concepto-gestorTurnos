@@ -45,7 +45,8 @@ export const Reports = () => {
     };
 
     const handleCloseBank = async (bank) => {
-        const hoursPaid = hoursPaidInput[bank.employee.id] ?? bank.hoursTotal;
+        const raw = hoursPaidInput[bank.employee.id] ?? bank.hoursTotal;
+        const hoursPaid = Math.max(0, parseFloat(raw) || 0);
         await closeBank(bank.id, hoursPaid);
     };
 
@@ -77,7 +78,7 @@ export const Reports = () => {
                         : "border-transparent text-gray-500 hover:text-gray-700"
                         }`}
                 >
-                    Consulta libre
+                    Ver Previsión
                 </button>
                 <button
                     onClick={() => setMode("gestion")}
@@ -86,7 +87,7 @@ export const Reports = () => {
                         : "border-transparent text-gray-500 hover:text-gray-700"
                         }`}
                 >
-                    Gestión de bolsa
+                    Cierre mes
                 </button>
             </div>
 
@@ -103,44 +104,102 @@ export const Reports = () => {
                             onChange={handlePeriodChange}
                         >
                             <option value="">Selecciona un periodo</option>
-                            {periods.map(p => (
-                                <option key={p.id} value={p.id}>
-                                    {p.name} ({p.startDate} → {p.endDate})
-                                </option>
-                            ))}
+                            {periods
+                                .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
+                                .map(p => {
+                                    // Capitalizar el nombre (MARZO -> Marzo)
+                                    const formattedName = p.name.charAt(0).toUpperCase() + p.name.slice(1).toLowerCase();
+
+                                    // Opcional: Acortar las fechas para que no ocupen tanto
+                                    // De 2024-03-01 a 01/03
+                                    const shortStart = p.startDate.split('-').reverse().slice(0, 2).join('/');
+                                    const shortEnd = p.endDate.split('-').reverse().slice(0, 2).join('/');
+
+                                    return (
+                                        <option key={p.id} value={p.id}>
+                                            {formattedName} | {shortStart} al {shortEnd}
+                                        </option>
+                                    );
+                                })
+                            }
                         </select>
                     </div>
                 )}
             </div>
 
-            {/* Cabecera de métricas */}
             {report && (
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div className="bg-white rounded-2xl shadow p-6 col-span-1 md:col-span-4 flex flex-col justify-center">
-                        <h3 className="text-sm font-medium text-gray-500">Horas totales</h3>
-                        <p className="mt-3 text-5xl font-extrabold text-gray-900">
-                            {report?.totalHours}
-                        </p>
-                        <div className="mt-3 text-sm text-gray-500 flex flex-col sm:flex-row sm:space-x-6">
-                            <p>Base FTE: <span className="font-medium text-gray-700">{report?.baseFte}</span></p>
-                            <p>Extra FTE: <span className="font-medium text-gray-700">{report?.extraFte}</span></p>
+                /* Contenedor principal: Menos redondeado, borde más serio */
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-stretch">
+
+                        {/* 🚀 BLOQUE 1: KPI MAESTRO (FTE) - Más contundente */}
+                        <div className="md:col-span-12 lg:col-span-4 bg-white p-6 rounded-lg border border-slate-200 flex flex-col justify-center">
+                            <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.15em] mb-2">
+                                Capacidad Operativa
+                            </p>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-5xl font-black text-slate-900 leading-none tracking-tighter">
+                                    {report?.totalFte}
+                                </span>
+                                <span className="text-xs font-bold text-slate-400 uppercase">Total FTE</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-dotted border-slate-200">
+                                <div>
+                                    <p className="text-[10px] uppercase text-slate-400 font-bold tracking-tight">Base FTE</p>
+                                    <p className="text-xl font-bold text-slate-800">{report?.baseFte}</p>
+                                </div>
+                                <div>
+                                    <p className="text-[10px] uppercase text-slate-400 font-bold tracking-tight">Extra FTE</p>
+                                    <p className="text-xl font-bold text-blue-700">+{report?.extraFte}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div className="bg-white rounded-2xl shadow p-4">
-                        <h3 className="text-sm font-medium text-gray-500">Horas trabajadas</h3>
-                        <p className="mt-2 text-2xl font-bold text-gray-900">{report?.totalWorkHours}</p>
-                    </div>
-                    <div className="bg-white rounded-2xl shadow p-4">
-                        <h3 className="text-sm font-medium text-gray-500">Horas complementarias</h3>
-                        <p className="mt-2 text-2xl font-bold text-gray-900">{report?.totalExtraWorkHours}</p>
-                    </div>
-                    <div className="bg-white rounded-2xl shadow p-4">
-                        <h3 className="text-sm font-medium text-gray-500">Festivas</h3>
-                        <p className="mt-2 text-2xl font-bold text-gray-900">{report?.totalHolidayWorkHours}</p>
-                    </div>
-                    <div className="bg-white rounded-2xl shadow p-4">
-                        <h3 className="text-sm font-medium text-gray-500">Nocturnas</h3>
-                        <p className="mt-2 text-2xl font-bold text-gray-900">0</p>
+
+                        {/* 📊 BLOQUE 2: GESTIÓN DE HORAS - Corregido desbordamiento */}
+                        <div className="md:col-span-7 lg:col-span-5 flex flex-col gap-4">
+                            {/* Usamos grid-cols-1 para móviles y sm:grid-cols-3 para tablets/pc */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 flex-grow">
+                                <div className="bg-white p-4 rounded-lg border border-slate-200 flex flex-col justify-between">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Contrato</p>
+                                    <p className="text-xl font-bold text-slate-800">{report?.totalHours}<span className="text-sm ml-0.5 font-medium text-slate-400">h</span></p>
+                                </div>
+
+                                <div className="bg-white p-4 rounded-lg border border-slate-200 border-t-4 border-t-emerald-500 flex flex-col justify-between">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Trabajadas</p>
+                                    <p className="text-xl font-bold text-emerald-600">{report?.totalWorkHours}h</p>
+                                </div>
+
+                                <div className="bg-white p-4 rounded-lg border border-slate-200 border-t-4 border-t-orange-500 flex flex-col justify-between">
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">Pendientes</p>
+                                    <p className="text-xl font-bold text-orange-600">{report?.totalWorkHourNonCompleted}h</p>
+                                </div>
+                            </div>
+
+                            {/* Complementarias con icono - Más prominente */}
+                            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200 flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <div>
+                                        <p className="text-[10px] font-bold text-blue-600 uppercase tracking-tight">Horas Complementarias</p>
+                                        <p className="text-sm text-slate-600">Adicionales trabajadas</p>
+                                    </div>
+                                </div>
+                                <span className="text-2xl font-black text-blue-700">{report?.totalExtraWorkHours}h</span>
+                            </div>
+                        </div>
+
+                        {/* ℹ️ BLOQUE 3: INFO SECUNDARIA - Estilo lista técnica */}
+                        <div className="md:col-span-5 lg:col-span-3 flex flex-col justify-center bg-white border border-slate-200 rounded-lg overflow-hidden">
+                            <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between group transition-colors hover:bg-slate-50">
+                                <span className="text-[11px] font-bold text-slate-400 uppercase">🌙 Nocturnas</span>
+                                <span className="text-sm font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded leading-none">{report?.totalNightHours}h</span>
+                            </div>
+                            <div className="px-4 py-3 flex items-center justify-between group transition-colors hover:bg-slate-50">
+                                <span className="text-[11px] font-bold text-slate-400 uppercase">🎉 Festivas</span>
+                                <span className="text-sm font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded leading-none">{report?.totalHolidayWorkHours}h</span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             )}
@@ -154,17 +213,17 @@ export const Reports = () => {
                     <table className="min-w-full divide-y divide-gray-200 min-h-20">
                         <thead className="bg-gray-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Empleado</th>
-                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Horas jornada</th>
-                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Horas trabajadas</th>
-                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Complementarias</th>
-                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Festivas</th>
-                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Nocturnas</th>
+                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Emp.</th>
+                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Base</th>
+                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">H. Trab</th>
+                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Comp.</th>
+                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Fest.</th>
+                                <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Noct.</th>
                                 {mode === "gestion" && (
                                     <>
-                                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">DI arrastrada</th>
-                                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Total bolsa</th>
-                                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">A pagar</th>
+                                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">DI Prev.</th>
+                                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">T. Bolsa</th>
+                                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Pagadas</th>
                                         <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">DI</th>
                                         <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Estado</th>
                                         <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase">Acción</th>
@@ -185,7 +244,8 @@ export const Reports = () => {
                             )}
                             {report?.reportRequestDto?.map((emp) => {
                                 const bank = mode === "gestion" ? getBankForEmployee(emp.employee.id) : null;
-                                const hoursPaid = hoursPaidInput[emp.employee.id] ?? bank?.hoursTotal ?? "";
+                                const hoursPaid = hoursPaidInput[emp.employee.id]
+                                    ?? Math.max(0, parseFloat(bank?.hoursTotal) || 0);
                                 const extraChanged = hasExtraHoursChanged(emp, bank);
                                 const workChanged = hasWorkHoursChanged(emp, bank);
 
@@ -208,7 +268,7 @@ export const Reports = () => {
                                         <td className="px-6 py-4 text-sm text-gray-900">
                                             {emp.totalHolidayHours}
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-gray-900">0</td>
+                                        <td className="px-6 py-4 text-sm text-gray-900">{emp.nightlyHours}</td>
                                         {mode === "gestion" && (
                                             <>
                                                 <td className="px-6 py-4 text-sm text-gray-900">
@@ -224,6 +284,7 @@ export const Reports = () => {
                                                         <input
                                                             type="number"
                                                             step="0.5"
+                                                            min="0"
                                                             className="border border-gray-300 rounded px-2 py-1 text-sm w-20 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                             value={hoursPaid}
                                                             onChange={(e) => handleHoursPaidChange(emp.employee.id, e.target.value)}
@@ -236,10 +297,10 @@ export const Reports = () => {
                                                 <td className="px-6 py-4 text-sm">
                                                     {bank ? (
                                                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${bank.status === "CLOSED"
-                                                                ? "bg-green-100 text-green-700"
-                                                                : bank.status === "REOPENED"
-                                                                    ? "bg-yellow-100 text-yellow-700"
-                                                                    : "bg-blue-100 text-blue-700"
+                                                            ? "bg-green-100 text-green-700"
+                                                            : bank.status === "REOPENED"
+                                                                ? "bg-yellow-100 text-yellow-700"
+                                                                : "bg-blue-100 text-blue-700"
                                                             }`}>
                                                             {bank.status}
                                                         </span>
