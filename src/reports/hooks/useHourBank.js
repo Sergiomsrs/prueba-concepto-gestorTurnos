@@ -16,6 +16,8 @@ export const useHourBank = () => {
     const currentYear = new Date().getFullYear();
 
     const [selectedPeriodId, setSelectedPeriodId] = useState(null);
+    const [closingBankId, setClosingBankId] = useState(null);
+    const [reopeningBankId, setReopeningBankId] = useState(null);
 
     // 🔵 QUERY: Periodos del año actual
     const periodsQuery = useQuery({
@@ -45,18 +47,74 @@ export const useHourBank = () => {
     const closeMutation = useMutation({
         mutationFn: ({ hourBankId, hoursPaid }) =>
             closeBank(hourBankId, hoursPaid, auth.user.id),
+        onMutate: async ({ hourBankId, hoursPaid }) => {
+            setClosingBankId(hourBankId);
+            // Cancelar queries en tránsito para evitar race conditions
+            await queryClient.cancelQueries({ queryKey: ["banks-by-period", selectedPeriodId] });
+
+            // Guardar datos anteriores para revertir si hay error
+            const previousBanks = queryClient.getQueryData(["banks-by-period", selectedPeriodId]);
+
+            // Actualizar optimistamente el estado local
+            queryClient.setQueryData(["banks-by-period", selectedPeriodId], (old) => {
+                if (!old) return old;
+                return old.map(bank =>
+                    bank.id === hourBankId
+                        ? { ...bank, status: "CLOSED", hoursPaid }
+                        : bank
+                );
+            });
+
+            return { previousBanks };
+        },
         onSuccess: () => {
+            setClosingBankId(null);
             queryClient.invalidateQueries({ queryKey: ["report-by-period", selectedPeriodId] });
             queryClient.invalidateQueries({ queryKey: ["banks-by-period", selectedPeriodId] });
+        },
+        onError: (err, variables, context) => {
+            setClosingBankId(null);
+            // Revertir a los datos anteriores si hay error
+            if (context?.previousBanks) {
+                queryClient.setQueryData(["banks-by-period", selectedPeriodId], context.previousBanks);
+            }
         }
     });
 
     const reopenMutation = useMutation({
         mutationFn: ({ hourBankId }) =>
             reopenBank(hourBankId, auth.user.id),
+        onMutate: async ({ hourBankId }) => {
+            setReopeningBankId(hourBankId);
+            // Cancelar queries en tránsito para evitar race conditions
+            await queryClient.cancelQueries({ queryKey: ["banks-by-period", selectedPeriodId] });
+
+            // Guardar datos anteriores para revertir si hay error
+            const previousBanks = queryClient.getQueryData(["banks-by-period", selectedPeriodId]);
+
+            // Actualizar optimistamente el estado local
+            queryClient.setQueryData(["banks-by-period", selectedPeriodId], (old) => {
+                if (!old) return old;
+                return old.map(bank =>
+                    bank.id === hourBankId
+                        ? { ...bank, status: "REOPENED" }
+                        : bank
+                );
+            });
+
+            return { previousBanks };
+        },
         onSuccess: () => {
+            setReopeningBankId(null);
             queryClient.invalidateQueries({ queryKey: ["report-by-period", selectedPeriodId] });
             queryClient.invalidateQueries({ queryKey: ["banks-by-period", selectedPeriodId] });
+        },
+        onError: (err, variables, context) => {
+            setReopeningBankId(null);
+            // Revertir a los datos anteriores si hay error
+            if (context?.previousBanks) {
+                queryClient.setQueryData(["banks-by-period", selectedPeriodId], context.previousBanks);
+            }
         }
     });
 
@@ -70,6 +128,8 @@ export const useHourBank = () => {
         isLoading: periodsQuery.isLoading || reportQuery.isLoading || banksQuery.isLoading,
         isClosing: closeMutation.isPending,
         isReopening: reopenMutation.isPending,
+        closingBankId,
+        reopeningBankId,
 
         error: periodsQuery.error?.message
             || reportQuery.error?.message

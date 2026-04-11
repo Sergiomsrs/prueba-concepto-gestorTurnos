@@ -22,6 +22,8 @@ export const Reports = () => {
         isLoading: gestionLoading,
         isClosing,
         isReopening,
+        closingBankId,
+        reopeningBankId,
         error: gestionError,
         closeBank,
         reopenBank,
@@ -312,19 +314,19 @@ export const Reports = () => {
                                                     {bank && bank.status !== "CLOSED" && (
                                                         <button
                                                             onClick={() => handleCloseBank(bank)}
-                                                            disabled={isClosing}
+                                                            disabled={closingBankId === bank.id}
                                                             className="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700 disabled:opacity-50 transition-colors"
                                                         >
-                                                            {isClosing ? "..." : "Cerrar"}
+                                                            {closingBankId === bank.id ? "..." : "Cerrar"}
                                                         </button>
                                                     )}
                                                     {bank && bank.status === "CLOSED" && (
                                                         <button
                                                             onClick={() => reopenBank(bank.id)}
-                                                            disabled={isReopening}
+                                                            disabled={reopeningBankId === bank.id}
                                                             className="px-3 py-1 bg-yellow-500 text-white text-xs font-medium rounded hover:bg-yellow-600 disabled:opacity-50 transition-colors"
                                                         >
-                                                            {isReopening ? "..." : "Reabrir"}
+                                                            {reopeningBankId === bank.id ? "..." : "Reabrir"}
                                                         </button>
                                                     )}
                                                 </td>
