@@ -48,18 +48,18 @@ export default function DateRangePicker({ filters, handleFilterChange }) {
 
     const handleSelect = (selectedRange) => {
         setRange(selectedRange);
-        if (selectedRange?.from) {
-            handleFilterChange("startDate", formatLocalDate(selectedRange.from));
-        }
-        if (selectedRange?.to) {
-            handleFilterChange("endDate", formatLocalDate(selectedRange.to));
-        }
     };
 
     const handleApply = () => {
+        if (range?.from) {
+            handleFilterChange("startDate", formatLocalDate(range.from));
+        }
+        if (range?.to) {
+            handleFilterChange("endDate", formatLocalDate(range.to));
+        }
         setAppliedDates({
-            startDate: filters.startDate,
-            endDate: filters.endDate,
+            startDate: range?.from ? formatLocalDate(range.from) : "",
+            endDate: range?.to ? formatLocalDate(range.to) : "",
         });
         setOpen(false);
     };
