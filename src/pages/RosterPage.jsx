@@ -65,6 +65,20 @@ export const RosterPage = () => {
         return `120px 150px repeat(${visibleSlots}, 20px) 80px`;
     }, [visibleSlots]);
 
+    // ✅ Memoizar opciones del select (evita re-generar en cada render)
+    const selectOptions = useMemo(() => {
+        return HOUR_RANGE_PRESETS.map(preset => (
+            <option key={preset.id} value={`${preset.startHour}-${preset.endHour}`}>
+                {preset.label}
+            </option>
+        ));
+    }, []); // HOUR_RANGE_PRESETS es constante, nunca cambia
+
+    // ✅ Memoizar valor del select
+    const selectValue = useMemo(() => {
+        return `${(filters?.displayHourRange?.startHour ?? 7)}-${(filters?.displayHourRange?.endHour ?? 22.5)}`;
+    }, [filters?.displayHourRange?.startHour, filters?.displayHourRange?.endHour]);
+
     // ✅ Optimizar datos filtrados (ACTUALIZADO CON FILTRO DE HORAS)
     const filteredData = useMemo(() => {
         if (!data.length) return [];
@@ -493,18 +507,14 @@ export const RosterPage = () => {
                                         Rango Horario
                                     </label>
                                     <select
-                                        value={`${(filters?.displayHourRange?.startHour ?? 7)}-${(filters?.displayHourRange?.endHour ?? 22.5)}`}
+                                        value={selectValue}
                                         onChange={(e) => {
                                             const [start, end] = e.target.value.split('-').map(Number);
                                             handleFilterChange('displayHourRange', { startHour: start, endHour: end });
                                         }}
                                         className="w-full px-3 h-10 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 bg-white"
                                     >
-                                        {HOUR_RANGE_PRESETS.map(preset => (
-                                            <option key={preset.id} value={`${preset.startHour}-${preset.endHour}`}>
-                                                {preset.label}
-                                            </option>
-                                        ))}
+                                        {selectOptions}
                                     </select>
                                 </div>
 
@@ -572,18 +582,14 @@ export const RosterPage = () => {
                                 />
 
                                 <select
-                                    value={`${(filters?.displayHourRange?.startHour ?? 7)}-${(filters?.displayHourRange?.endHour ?? 22.5)}`}
+                                    value={selectValue}
                                     onChange={(e) => {
                                         const [start, end] = e.target.value.split('-').map(Number);
                                         handleFilterChange('displayHourRange', { startHour: start, endHour: end });
                                     }}
                                     className="w-full px-3 h-10 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 bg-white"
                                 >
-                                    {HOUR_RANGE_PRESETS.map(preset => (
-                                        <option key={preset.id} value={`${preset.startHour}-${preset.endHour}`}>
-                                            {preset.label}
-                                        </option>
-                                    ))}
+                                    {selectOptions}
                                 </select>
 
                                 <div className="grid grid-cols-2 gap-3">
