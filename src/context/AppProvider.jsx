@@ -27,7 +27,11 @@ export const AppProvider = ({ children }) => {
         endDate: "",
         selectedTeams: [],
         employeeName: "",
-        hideZeroHours: false, // ✅ NUEVO FILTRO
+        hideZeroHours: false,
+        displayHourRange: {
+            startHour: 7,
+            endHour: 22.5,
+        }, // ✅ NUEVO: Rango visible (no modifica dataframe interno)
     });
 
     const [appliedDates, setAppliedDates] = useState({

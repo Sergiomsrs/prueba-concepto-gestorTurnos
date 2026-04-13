@@ -1,6 +1,8 @@
-import { memo, useMemo, useRef, useCallback } from "react";
+import { memo, useMemo, useRef, useCallback, useContext } from "react";
 import { useEmployeeInteractions } from "../hooks/useEmployeeInteractions";
 import { selectColor } from "../../utils/function";
+import { getVisibleRange, relativeToAbsoluteIndex } from "../../utils/rangeCalculator";
+import { AppContext } from "../../context/AppContext";
 
 const getHighestNonZeroIndex = (array) => {
     if (!array) return -1;
@@ -21,6 +23,13 @@ export const EmployeeRow = memo(
         inputRefsMatrix,
         previousEmployee,
     }) => {
+        const { filters } = useContext(AppContext);
+
+        // ✅ Cachear el rango visible (con valores por defecto)
+        const rangeConfig = useMemo(() => {
+            const displayRange = filters?.displayHourRange ?? { startHour: 7, endHour: 22.5 };
+            return getVisibleRange(displayRange.startHour, displayRange.endHour);
+        }, [filters?.displayHourRange?.startHour, filters?.displayHourRange?.endHour]);
         const {
             inputRefs,
             handleMouseDown,
@@ -143,91 +152,92 @@ export const EmployeeRow = memo(
                     </span>
                 </div>
 
-                {employee.workShift.map((value, hourIndex) => {
-                    const disabled = isIndexDisabled(hourIndex) || value === "PTO";
-                    const cellBgClass = disabled ? "bg-red-200/50" : "bg-white";
-                    const isHourStart = hourIndex % 4 === 0; // Marca de hora en punto
-                    const hourLabel = hourLabelsByIndex.get(hourIndex);
+                {/* ✅ RENDEREAR SOLO RANGO VISIBLE - Sin crear nuevo array */}
+                {Array.from(
+                    { length: rangeConfig.visibleSlots },
+                    (_, relativeIndex) => {
+                        const hourIndex = relativeToAbsoluteIndex(relativeIndex, rangeConfig.startIndex);
+                        const value = employee.workShift[hourIndex];
 
-                    return (
-                        <div
-                            key={hourIndex}
-                            className={`${cellBgClass} flex items-center justify-center w-5 h-5 px-0 py-0 mx-0 my-1 relative
-                                ${isHourStart ? '' : ''}
-                            `}
+                        const disabled = isIndexDisabled(hourIndex) || value === "PTO";
+                        const cellBgClass = disabled ? "bg-red-200/50" : "bg-white";
+                        const isHourStart = hourIndex % 4 === 0;
+                        const hourLabel = hourLabelsByIndex.get(hourIndex);
 
-                            onMouseUp={handleMouseUp}
-                        >
-                            {/* Línea extendida hacia arriba para horas en punto */}
-                            {isHourStart && (
-                                <div
-                                    className="absolute w-[1px] bg-gray-200 z-10 pointer-events-none"
-                                    style={{
-                                        left: '-0.5px',
+                        return (
+                            <div
+                                key={hourIndex}
+                                className={`${cellBgClass} flex items-center justify-center w-5 h-5 px-0 py-0 mx-0 my-1 relative`}
+                                onMouseUp={handleMouseUp}
+                            >
+                                {/* Línea extendida hacia arriba para horas en punto */}
+                                {isHourStart && (
+                                    <div
+                                        className="absolute w-[1px] bg-gray-200 z-10 pointer-events-none"
+                                        style={{
+                                            left: '-0.5px',
+                                            height: '30px',
+                                        }}
+                                    />
+                                )}
 
-                                        height: '30px',
+                                <input
+                                    ref={(el) => {
+                                        inputRefs.current[hourIndex] = el;
+                                        if (!inputRefsMatrix.current[dayIndex])
+                                            inputRefsMatrix.current[dayIndex] = [];
+                                        if (!inputRefsMatrix.current[dayIndex][employeeIndex])
+                                            inputRefsMatrix.current[dayIndex][employeeIndex] = [];
+                                        inputRefsMatrix.current[dayIndex][employeeIndex][hourIndex] = el;
                                     }}
-                                />
-                            )}
-
-                            <input
-                                ref={(el) => {
-                                    inputRefs.current[hourIndex] = el;
-                                    if (!inputRefsMatrix.current[dayIndex])
-                                        inputRefsMatrix.current[dayIndex] = [];
-                                    if (!inputRefsMatrix.current[dayIndex][employeeIndex])
-                                        inputRefsMatrix.current[dayIndex][employeeIndex] = [];
-                                    inputRefsMatrix.current[dayIndex][employeeIndex][hourIndex] = el;
-                                }}
-                                type="checkbox"
-                                checked={value !== "Null" && value !== "PTO"}
-                                onMouseDown={(e) => handleCellMouseDownWithLogic(hourIndex, e)}
-                                onMouseEnter={() => {
-                                    handleMouseEnter(hourIndex);
-                                }}
-                                onChange={() => { /* NOOP */ }}
-                                onKeyDown={(e) => {
-                                    if (e.key === " " || e.key === "Enter") {
-                                        e.preventDefault();
-                                        toggleHour(hourIndex);
-                                    } else {
-                                        handleKeyDown(e, hourIndex);
-                                    }
-                                }}
-                                disabled={disabled}
-                                className={`
-                                    w-5 h-5 m-0 p-0 appearance-none border-none
-                                    ${getCursorClass(isIndexDisabled(hourIndex), value)}
-                                    ${getBackgroundClass(value, employee.teamWork)}
-                                    ${value === "WORK" ? 'border-t-2 border-b-2 border-neutral-200' : ''}
-                                    focus:ring-2 focus:ring-indigo-400                          
-                                    mx-auto my-1
-                                    shadow-sm
-                                `}
-                                style={value === "WORK" ? { backgroundColor: selectColor(employee.teamWork) } : {}}
-                            />
-
-                            {hourLabel && (
-                                <span
+                                    type="checkbox"
+                                    checked={value !== "Null" && value !== "PTO"}
+                                    onMouseDown={(e) => handleCellMouseDownWithLogic(hourIndex, e)}
+                                    onMouseEnter={() => handleMouseEnter(hourIndex)}
+                                    onChange={() => { /* NOOP */ }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === " " || e.key === "Enter") {
+                                            e.preventDefault();
+                                            toggleHour(hourIndex);
+                                        } else {
+                                            handleKeyDown(e, hourIndex);
+                                        }
+                                    }}
+                                    disabled={disabled}
                                     className={`
-      absolute z-20 bottom-0 text-[9px] font-semibold leading-none
-      pointer-events-none select-none
-      px-0.5 rounded-sm
-      ${hourLabel.type === "start" ? "left-0" : "right-0"}
-    `}
-                                    style={{
-                                        background: 'rgba(0,0,0,0.28)',
-                                        color: 'white',
-                                        backdropFilter: 'blur(2px)',
-                                        lineHeight: '12px',
-                                    }}
-                                >
-                                    {hourLabel.text}
-                                </span>
-                            )}
-                        </div>
-                    );
-                })}
+                                        w-5 h-5 m-0 p-0 appearance-none border-none
+                                        ${getCursorClass(isIndexDisabled(hourIndex), value)}
+                                        ${getBackgroundClass(value, employee.teamWork)}
+                                        ${value === "WORK" ? 'border-t-2 border-b-2 border-neutral-200' : ''}
+                                        focus:ring-2 focus:ring-indigo-400                          
+                                        mx-auto my-1
+                                        shadow-sm
+                                    `}
+                                    style={value === "WORK" ? { backgroundColor: selectColor(employee.teamWork) } : {}}
+                                />
+
+                                {hourLabel && (
+                                    <span
+                                        className={`
+            absolute z-20 bottom-0 text-[9px] font-semibold leading-none
+            pointer-events-none select-none
+            px-0.5 rounded-sm
+            ${hourLabel.type === "start" ? "left-0" : "right-0"}
+          `}
+                                        style={{
+                                            background: 'rgba(0,0,0,0.28)',
+                                            color: 'white',
+                                            backdropFilter: 'blur(2px)',
+                                            lineHeight: '12px',
+                                        }}
+                                    >
+                                        {hourLabel.text}
+                                    </span>
+                                )}
+                            </div>
+                        );
+                    }
+                )}
 
                 {/* Elemento de Horas Totales */}
                 <div className="bg-white px-3 py-0 text-sm font-medium text-gray-700 border-l text-center">
@@ -235,5 +245,17 @@ export const EmployeeRow = memo(
                 </div>
             </>
         );
+    },
+    // ✅ Comparación personalizada: re-renderear si employee o previousEmployee cambian
+    // (filters se lee del contexto, no es una prop)
+    (prevProps, nextProps) => {
+        return (
+            prevProps.employee === nextProps.employee &&
+            prevProps.previousEmployee === nextProps.previousEmployee &&
+            prevProps.dayIndex === nextProps.dayIndex &&
+            prevProps.employeeIndex === nextProps.employeeIndex
+        );
     }
 );
+
+EmployeeRow.displayName = 'EmployeeRow';

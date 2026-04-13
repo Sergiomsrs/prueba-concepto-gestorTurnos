@@ -3,7 +3,6 @@ import { useRoster } from "../roster/hooks/useRoster";
 import { rosterReducer } from "../roster/reducers/rosterReducer";
 import { useReactToPrint } from "react-to-print";
 
-
 import { DistributionRow } from "../roster/components/DistributionRow";
 import { HeadRow } from "../roster/components/HeadRow";
 import { EmployeeRow } from "../roster/components/EmployeeRow";
@@ -11,6 +10,7 @@ import { RosterRangeSummary } from "../roster/components/RosterRangeSummary";
 import { PrintableRoster } from "../roster/components/PrintableRoster";
 import { AppContext } from "@/context/AppContext";
 import DateRangePicker from "@/roster/components/DateRangePicker";
+import { getVisibleRange, HOUR_RANGE_PRESETS } from "@/utils/rangeCalculator";
 
 export const RosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
@@ -52,6 +52,18 @@ export const RosterPage = () => {
         });
         return mapping;
     }, [data]);
+
+    // ✅ Cachear el cálculo del rango visible para el grid (con validación de seguridad)
+    const visibleSlots = useMemo(() => {
+        const displayRange = filters?.displayHourRange ?? { startHour: 7, endHour: 22.5 };
+        const range = getVisibleRange(displayRange.startHour, displayRange.endHour);
+        return range.visibleSlots;
+    }, [filters?.displayHourRange?.startHour, filters?.displayHourRange?.endHour]);
+
+    // ✅ Grid layout dinámico basado en visibleSlots
+    const gridColumns = useMemo(() => {
+        return `120px 150px repeat(${visibleSlots}, 20px) 80px`;
+    }, [visibleSlots]);
 
     // ✅ Optimizar datos filtrados (ACTUALIZADO CON FILTRO DE HORAS)
     const filteredData = useMemo(() => {
@@ -149,13 +161,14 @@ export const RosterPage = () => {
         setShowTeamDropdown(false);
     };
 
-    // ✅ ACTUALIZADO: incluir hideZeroHours en clearFilters
+    // ✅ ACTUALIZADO: incluir hideZeroHours y displayHourRange en clearFilters
     const clearFilters = useCallback(() => {
         setFilters(prev => ({
             ...prev,
             selectedTeams: [],
             employeeName: "",
-            hideZeroHours: false, // ✅ Reset del filtro
+            hideZeroHours: false,
+            displayHourRange: { startHour: 7, endHour: 22.5 }, // ✅ Reset a rango original
         }));
         setShowTeamDropdown(false);
     }, []);
@@ -474,6 +487,27 @@ export const RosterPage = () => {
                                     />
                                 </div>
 
+                                {/* Rango de Horas */}
+                                <div className="col-span-2">
+                                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                                        Rango Horario
+                                    </label>
+                                    <select
+                                        value={`${(filters?.displayHourRange?.startHour ?? 7)}-${(filters?.displayHourRange?.endHour ?? 22.5)}`}
+                                        onChange={(e) => {
+                                            const [start, end] = e.target.value.split('-').map(Number);
+                                            handleFilterChange('displayHourRange', { startHour: start, endHour: end });
+                                        }}
+                                        className="w-full px-3 h-10 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 bg-white"
+                                    >
+                                        {HOUR_RANGE_PRESETS.map(preset => (
+                                            <option key={preset.id} value={`${preset.startHour}-${preset.endHour}`}>
+                                                {preset.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+
                                 {/* Botones */}
                                 <div className="col-span-2 flex gap-2 items-stretch">
                                     <button
@@ -536,6 +570,21 @@ export const RosterPage = () => {
                                     }
                                     className="w-full px-3 h-10 border border-slate-300 rounded-lg text-sm"
                                 />
+
+                                <select
+                                    value={`${(filters?.displayHourRange?.startHour ?? 7)}-${(filters?.displayHourRange?.endHour ?? 22.5)}`}
+                                    onChange={(e) => {
+                                        const [start, end] = e.target.value.split('-').map(Number);
+                                        handleFilterChange('displayHourRange', { startHour: start, endHour: end });
+                                    }}
+                                    className="w-full px-3 h-10 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 bg-white"
+                                >
+                                    {HOUR_RANGE_PRESETS.map(preset => (
+                                        <option key={preset.id} value={`${preset.startHour}-${preset.endHour}`}>
+                                            {preset.label}
+                                        </option>
+                                    ))}
+                                </select>
 
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
@@ -629,7 +678,7 @@ export const RosterPage = () => {
                                     <div
                                         className="grid  bg-slate-200 min-w-max"
                                         style={{
-                                            gridTemplateColumns: "120px 150px repeat(96, 20px) 80px",
+                                            gridTemplateColumns: gridColumns,
                                         }}
                                     >
                                         {/* Headers */}
@@ -664,7 +713,7 @@ export const RosterPage = () => {
                                             <div
                                                 key={employee.id}
                                                 className={`grid  bg-slate-200 min-w-max transition-all duration-200`}
-                                                style={{ gridTemplateColumns: "120px 150px repeat(96, 20px) 80px" }}
+                                                style={{ gridTemplateColumns: gridColumns }}
                                             >
                                                 <EmployeeRow
                                                     employee={employee}
@@ -687,7 +736,7 @@ export const RosterPage = () => {
                                     {/* Fila de Distribución */}
                                     <div
                                         className="grid bg-slate-300 min-w-max border-t-2 border-slate-400"
-                                        style={{ gridTemplateColumns: "120px 150px repeat(96, 20px) 80px" }}
+                                        style={{ gridTemplateColumns: gridColumns }}
                                     >
                                         <DistributionRow
                                             day={day}

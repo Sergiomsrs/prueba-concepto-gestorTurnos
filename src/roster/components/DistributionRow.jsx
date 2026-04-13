@@ -1,4 +1,6 @@
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useContext } from 'react';
+import { getVisibleRange } from '../../utils/rangeCalculator';
+import { AppContext } from '../../context/AppContext';
 
 const getHeatColor = (value, max) => {
     if (max === 0 || value === 0) return null;
@@ -13,18 +15,27 @@ const getHeatColor = (value, max) => {
 };
 
 export const DistributionRow = memo(({ day, originalDay, showFullDistribution, onToggle }) => {
+    const { filters } = useContext(AppContext);
     const dataToUse = showFullDistribution && originalDay ? originalDay : day;
 
+    // ✅ Cachear rango visible (con valores por defecto)
+    const rangeConfig = useMemo(() => {
+        const displayRange = filters?.displayHourRange ?? { startHour: 7, endHour: 22.5 };
+        return getVisibleRange(displayRange.startHour, displayRange.endHour);
+    }, [filters?.displayHourRange?.startHour, filters?.displayHourRange?.endHour]);
+
+    // ✅ Calcular suma solo del rango visible
     const sumaPorIndice = useMemo(() => {
-        if (!dataToUse?.employees?.length) return new Array(62).fill(0);
-        const sums = new Array(dataToUse.employees[0].workShift.length).fill(0);
+        if (!dataToUse?.employees?.length) return new Array(rangeConfig.visibleSlots).fill(0);
+        const sums = new Array(rangeConfig.visibleSlots).fill(0);
         for (const emp of dataToUse.employees) {
-            for (let i = 0; i < emp.workShift.length; i++) {
-                if (emp.workShift[i] === "WORK") sums[i]++;
+            for (let i = 0; i < rangeConfig.visibleSlots; i++) {
+                const absoluteIndex = rangeConfig.startIndex + i;
+                if (emp.workShift[absoluteIndex] === "WORK") sums[i]++;
             }
         }
         return sums;
-    }, [dataToUse?.employees]);
+    }, [dataToUse?.employees, rangeConfig]);
 
     const maxValue = useMemo(() => Math.max(...sumaPorIndice), [sumaPorIndice]);
 
@@ -44,11 +55,14 @@ export const DistributionRow = memo(({ day, originalDay, showFullDistribution, o
                 )}
             </button>
 
-            {sumaPorIndice.map((valor, index) => {
+            {/* ✅ Renderear solo el rango visible */}
+            {Array.from({ length: rangeConfig.visibleSlots }, (_, relativeIndex) => {
+                const valor = sumaPorIndice[relativeIndex] ?? 0;
                 const color = getHeatColor(valor, maxValue);
+                const absoluteIndex = rangeConfig.startIndex + relativeIndex;
                 return (
                     <div
-                        key={index}
+                        key={absoluteIndex}
                         className="bg-slate-200 flex items-center justify-center"
                     >
                         <div
@@ -84,3 +98,5 @@ export const DistributionRow = memo(({ day, originalDay, showFullDistribution, o
         prevProps.showFullDistribution === nextProps.showFullDistribution
     );
 });
+
+DistributionRow.displayName = 'DistributionRow';
