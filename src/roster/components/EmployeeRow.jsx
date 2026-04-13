@@ -58,7 +58,7 @@ export const EmployeeRow = memo(
             let start = null;
 
             const indexToTime = (index) => {
-                const totalMinutes = 7 * 60 + index * 15;
+                const totalMinutes = index * 15;
                 const hh = Math.floor(totalMinutes / 60);
                 const mm = totalMinutes % 60;
                 return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;

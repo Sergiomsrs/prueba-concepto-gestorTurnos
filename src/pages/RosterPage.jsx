@@ -629,7 +629,7 @@ export const RosterPage = () => {
                                     <div
                                         className="grid  bg-slate-200 min-w-max"
                                         style={{
-                                            gridTemplateColumns: "120px 150px repeat(62, 20px) 80px",
+                                            gridTemplateColumns: "120px 150px repeat(96, 20px) 80px",
                                         }}
                                     >
                                         {/* Headers */}
@@ -664,7 +664,7 @@ export const RosterPage = () => {
                                             <div
                                                 key={employee.id}
                                                 className={`grid  bg-slate-200 min-w-max transition-all duration-200`}
-                                                style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
+                                                style={{ gridTemplateColumns: "120px 150px repeat(96, 20px) 80px" }}
                                             >
                                                 <EmployeeRow
                                                     employee={employee}
@@ -687,7 +687,7 @@ export const RosterPage = () => {
                                     {/* Fila de Distribución */}
                                     <div
                                         className="grid bg-slate-300 min-w-max border-t-2 border-slate-400"
-                                        style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
+                                        style={{ gridTemplateColumns: "120px 150px repeat(96, 20px) 80px" }}
                                     >
                                         <DistributionRow
                                             day={day}

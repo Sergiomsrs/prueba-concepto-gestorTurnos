@@ -1,8 +1,8 @@
 
 export const HeadRow = () => {
-    const TOTAL_SLOTS = 62;
+    const TOTAL_SLOTS = 96;
     const SLOT_WIDTH = 20;
-    const START_HOUR = 7;
+    const START_HOUR = 0;
     const TOTAL_HOURS = Math.floor(TOTAL_SLOTS / 4);
 
     return (
