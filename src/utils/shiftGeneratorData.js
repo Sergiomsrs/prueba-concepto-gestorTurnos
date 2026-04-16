@@ -11,7 +11,7 @@ export const generateData = (cicle, emp) => {
             lastName: '',
             teamWork: emp.teamWork,
             wwh: emp.wwh,
-            workShift: Array(62).fill("Null"),
+            workShift: Array(96).fill("Null"),
             shiftDuration: '00:00'
         }))
     }));

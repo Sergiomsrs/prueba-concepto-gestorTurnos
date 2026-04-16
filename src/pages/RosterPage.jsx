@@ -470,10 +470,10 @@ export const RosterPage = () => {
                         <div className="px-4 sm:px-6 py-4">
 
                             {/* Desktop Filters */}
-                            <div className="hidden xl:grid xl:grid-cols-12 gap-4 items-end">
+                            <div className="hidden xl:grid gap-3 items-end" style={{ gridTemplateColumns: '2.5fr 1.5fr 1.5fr 1.5fr 1fr 1fr' }}>
 
                                 {/* Fechas */}
-                                <div className="col-span-3">
+                                <div>
                                     <DateRangePicker
                                         filters={filters}
                                         handleFilterChange={handleFilterChange}
@@ -481,12 +481,12 @@ export const RosterPage = () => {
                                 </div>
 
                                 {/* Equipos */}
-                                <div className="col-span-3">
+                                <div>
                                     <TeamMultiSelect />
                                 </div>
 
                                 {/* Empleado */}
-                                <div className="col-span-2">
+                                <div>
                                     <label className="block text-xs font-medium text-slate-700 mb-1">
                                         Empleado
                                     </label>
@@ -494,15 +494,13 @@ export const RosterPage = () => {
                                         type="text"
                                         placeholder="Buscar..."
                                         value={filters.employeeName}
-                                        onChange={(e) =>
-                                            handleFilterChange("employeeName", e.target.value)
-                                        }
+                                        onChange={(e) => handleFilterChange("employeeName", e.target.value)}
                                         className="w-full px-3 h-10 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
 
                                 {/* Rango de Horas */}
-                                <div className="col-span-2">
+                                <div>
                                     <label className="block text-xs font-medium text-slate-700 mb-1">
                                         Rango Horario
                                     </label>
@@ -518,20 +516,19 @@ export const RosterPage = () => {
                                     </select>
                                 </div>
 
-                                {/* Botones */}
-                                <div className="col-span-2 flex gap-2 items-stretch">
+                                {/* Cargar + Reset */}
+                                <div className="flex gap-2 items-stretch">
                                     <button
                                         onClick={handleGetData}
                                         disabled={loading}
                                         className={`flex-1 flex items-center justify-center gap-2 px-4 h-10 rounded-lg text-sm font-medium whitespace-nowrap ${loading
-                                            ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                            : "bg-blue-600 hover:bg-blue-700 text-white"
+                                                ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                                                : "bg-blue-600 hover:bg-blue-700 text-white"
                                             }`}
                                     >
                                         <span>{loading ? "⏳" : "📊"}</span>
                                         <span>{loading ? "Cargando..." : "Preparado"}</span>
                                     </button>
-
                                     <button
                                         onClick={clearFilters}
                                         className="flex items-center justify-center px-3 h-10 border border-slate-300 rounded-lg hover:bg-slate-100"
@@ -541,13 +538,13 @@ export const RosterPage = () => {
                                 </div>
 
                                 {/* Guardar */}
-                                <div className="col-span-2">
+                                <div>
                                     <button
                                         onClick={handleSaveData}
                                         disabled={modifiedData.length === 0 || loading}
                                         className={`w-full flex items-center justify-center gap-2 px-4 h-10 rounded-lg font-medium whitespace-nowrap ${modifiedData.length === 0 || loading
-                                            ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                            : "bg-green-600 hover:bg-green-700 text-white"
+                                                ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                                                : "bg-green-600 hover:bg-green-700 text-white"
                                             }`}
                                     >
                                         <span>💾</span>
@@ -559,6 +556,7 @@ export const RosterPage = () => {
                                         )}
                                     </button>
                                 </div>
+
                             </div>
 
                             {/* Mobile/Tablet Filters */}

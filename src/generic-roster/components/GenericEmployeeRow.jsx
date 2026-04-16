@@ -22,6 +22,7 @@ export const GenericEmployeeRow = memo(
         numDays,
         inputRefsMatrix,
         previousEmployee,
+        rangeConfig,
     }) => {
         const {
             inputRefs,
@@ -61,18 +62,22 @@ export const GenericEmployeeRow = memo(
             let start = null;
 
             const indexToTime = (index) => {
-                const totalMinutes = 7 * 60 + index * 15;
+                const totalMinutes = index * 15;
                 const hh = Math.floor(totalMinutes / 60);
                 const mm = totalMinutes % 60;
                 return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
             };
 
-            for (let i = 0; i < shift.length; i++) {
+            // Si hay rangeConfig, solo procesar índices dentro del visible range
+            const startIdx = rangeConfig?.startIndex ?? 0;
+            const endIdx = rangeConfig?.endIndex ?? shift.length;
+
+            for (let i = startIdx; i < endIdx && i < shift.length; i++) {
                 const isWork = shift[i] === "WORK";
                 if (isWork && start === null) start = i;
 
                 const closesSegment =
-                    start !== null && (!isWork || i === shift.length - 1);
+                    start !== null && (!isWork || i === endIdx - 1 || i === shift.length - 1);
 
                 if (closesSegment) {
                     const end = isWork ? i : i - 1;
@@ -87,7 +92,7 @@ export const GenericEmployeeRow = memo(
             }
 
             return labels;
-        }, [employee.workShift]);
+        }, [employee.workShift, rangeConfig?.startIndex, rangeConfig?.endIndex]);
 
         // ── Sin labels de hora inicio/fin para genéricos (más limpio visualmente)
         // Si en el futuro las necesitas, es copiar el useMemo de EmployeeRow
@@ -148,6 +153,10 @@ export const GenericEmployeeRow = memo(
 
                 {/* Celdas de workShift */}
                 {employee.workShift.map((value, hourIndex) => {
+                    // Solo renderear si está dentro del rango visible
+                    if (rangeConfig && (hourIndex < rangeConfig.startIndex || hourIndex >= rangeConfig.endIndex)) {
+                        return null;
+                    }
                     const disabled = isIndexDisabled(hourIndex) || value === "PTO";
                     const cellBgClass = disabled ? "bg-red-200/50" : "bg-white";
                     const isHourStart = hourIndex % 4 === 0;

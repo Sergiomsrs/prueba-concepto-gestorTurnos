@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useMemo, useRef, useState, useContext } from "react";
+import { useEffect, useReducer, useMemo, useRef, useState, useContext, useCallback } from "react";
 import { DistributionRow } from "@/roster/components/DistributionRow";
 import { HeadRow } from "@/roster/components/HeadRow";
 import { GenericEmployeeRow } from "./GenericEmployeeRow";
@@ -7,12 +7,13 @@ import { AppContext } from "@/context/AppContext";
 import { useCyclesGenerator } from "@/Hooks/useCyclesGenerator";
 import { rosterReducer } from "@/roster/reducers/rosterReducer";
 import { RosterRangeSummary } from "@/roster/components/RosterRangeSummary";
+import { getVisibleRange, HOUR_RANGE_PRESETS } from "@/utils/rangeCalculator";
 
 export const GenericRosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
     const inputRefsMatrix = useRef([]);
 
-    const { selectedOption, setSelectedOption } = useContext(AppContext);
+    const { selectedOption, setSelectedOption, filters, setFilters } = useContext(AppContext);
 
     const {
         data: cycleData,
@@ -43,6 +44,38 @@ export const GenericRosterPage = () => {
         });
         return Array.from(teams).sort();
     }, [data]);
+
+    // ✅ Cachear el cálculo del rango visible para el grid (con validación de seguridad)
+    const visibleSlots = useMemo(() => {
+        const displayRange = filters?.displayHourRange ?? { startHour: 7, endHour: 22.5 };
+        const range = getVisibleRange(displayRange.startHour, displayRange.endHour);
+        return range.visibleSlots;
+    }, [filters?.displayHourRange?.startHour, filters?.displayHourRange?.endHour]);
+
+    // ✅ NUEVO: Cachear el rango visible completo (startIndex, endIndex, visibleSlots)
+    const rangeConfig = useMemo(() => {
+        const displayRange = filters?.displayHourRange ?? { startHour: 7, endHour: 22.5 };
+        return getVisibleRange(displayRange.startHour, displayRange.endHour);
+    }, [filters?.displayHourRange?.startHour, filters?.displayHourRange?.endHour]);
+
+    // ✅ Grid layout dinámico basado en visibleSlots
+    const gridColumns = useMemo(() => {
+        return `120px 150px repeat(${visibleSlots}, 20px) 80px`;
+    }, [visibleSlots]);
+
+    // ✅ Memoizar opciones del select (evita re-generar en cada render)
+    const selectOptions = useMemo(() => {
+        return HOUR_RANGE_PRESETS.map(preset => (
+            <option key={preset.id} value={`${preset.startHour}-${preset.endHour}`}>
+                {preset.label}
+            </option>
+        ));
+    }, []); // HOUR_RANGE_PRESETS es constante, nunca cambia
+
+    // ✅ Memoizar valor del select
+    const selectValue = useMemo(() => {
+        return `${(filters?.displayHourRange?.startHour ?? 7)}-${(filters?.displayHourRange?.endHour ?? 22.5)}`;
+    }, [filters?.displayHourRange?.startHour, filters?.displayHourRange?.endHour]);
 
     // Index mapping (igual que RosterPage)
     const indexMapping = useMemo(() => {
@@ -107,6 +140,19 @@ export const GenericRosterPage = () => {
             days: Math.max(0, filteredData.length - 1)
         };
     }, [filteredData]);
+
+    // ✅ Callbacks memoizados
+    const handleFilterChange = useCallback((key, value) => {
+        setFilters(prev => ({ ...prev, [key]: value }));
+    }, [setFilters]);
+
+    // ✅ Limpiar filtros (incluyendo displayHourRange)
+    const clearFilters = useCallback(() => {
+        setFilters(prev => ({
+            ...prev,
+            displayHourRange: { startHour: 7, endHour: 22.5 },
+        }));
+    }, [setFilters]);
 
     const handleGetData = () => {
         if (ciclo) handleGetCycle(ciclo);
@@ -199,6 +245,23 @@ export const GenericRosterPage = () => {
                                     </select>
                                 </div>
 
+                                {/* ✅ NUEVO: Rango de Horas */}
+                                <div>
+                                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                                        Rango Horario
+                                    </label>
+                                    <select
+                                        value={selectValue}
+                                        onChange={(e) => {
+                                            const [start, end] = e.target.value.split('-').map(Number);
+                                            handleFilterChange('displayHourRange', { startHour: start, endHour: end });
+                                        }}
+                                        className="px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                                    >
+                                        {selectOptions}
+                                    </select>
+                                </div>
+
                                 {/* Botones de acción */}
                                 <div className="flex gap-2">
                                     <button
@@ -210,6 +273,13 @@ export const GenericRosterPage = () => {
                                             }`}
                                     >
                                         📊 Cargar Ciclo
+                                    </button>
+                                    <button
+                                        onClick={clearFilters}
+                                        className="px-3 py-2 border border-slate-300 rounded-lg hover:bg-slate-100 text-sm font-medium transition-colors"
+                                        title="Limpiar filtros"
+                                    >
+                                        🔄
                                     </button>
                                     <button
                                         onClick={handleSaveData}
@@ -276,7 +346,7 @@ export const GenericRosterPage = () => {
                                 <div className="overflow-x-auto">
                                     <div
                                         className="grid bg-slate-200 min-w-max"
-                                        style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
+                                        style={{ gridTemplateColumns: gridColumns }}
                                     >
                                         <div className="bg-slate-100 px-3 py-2 text-xs font-medium text-slate-700 border-r flex items-center">
                                             <span className="mr-1">👥</span>
@@ -300,7 +370,7 @@ export const GenericRosterPage = () => {
                                             <div
                                                 key={employee.id}
                                                 className="grid bg-slate-200 min-w-max"
-                                                style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
+                                                style={{ gridTemplateColumns: gridColumns }}
                                             >
                                                 <GenericEmployeeRow
                                                     employee={employee}
@@ -315,6 +385,7 @@ export const GenericRosterPage = () => {
                                                             e => e.id === employee.id
                                                         )
                                                     }
+                                                    rangeConfig={rangeConfig}
                                                 />
                                             </div>
                                         );
@@ -323,7 +394,7 @@ export const GenericRosterPage = () => {
                                     {/* Fila distribución */}
                                     <div
                                         className="grid bg-slate-300 min-w-max border-t-2 border-slate-400"
-                                        style={{ gridTemplateColumns: "120px 150px repeat(62, 20px) 80px" }}
+                                        style={{ gridTemplateColumns: gridColumns }}
                                     >
                                         <DistributionRow
                                             day={day}
