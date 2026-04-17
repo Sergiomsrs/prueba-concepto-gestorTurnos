@@ -1,86 +1,56 @@
-import { useState, useEffect, useContext } from 'react';
-import { dispMockData, ptoMockData, timestampSchedulesMock } from '../utils/apiMock';
-import { fetchAbsences, searchPtoByEmployee } from '../services/employees'; // Importa tu método
-import { AuthContext } from '../timeTrack/context/AuthContext';
-import { axiosClient } from '@/services/axiosClient';
+import { useQuery } from "@tanstack/react-query";
+import { useContext } from "react";
+import { AuthContext } from "../timeTrack/context/AuthContext";
+import { axiosClient } from "@/services/axiosClient";
+import { fetchAbsences, searchPtoByEmployee } from "../services/employees";
 
 export const useSchedules = (employeeId, startDate, endDate) => {
-  const [data, setData] = useState(timestampSchedulesMock);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [employeePto, setEmployeePto] = useState(ptoMockData);
-  const [disponibility, setDisponibility] = useState(dispMockData);
   const { auth } = useContext(AuthContext);
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const employeeToFetch =
+    auth.role === "ADMIN" || auth.isAuthenticated === false
+      ? employeeId
+      : auth.user?.id;
 
-
-  const employeeToFecth = (auth.role == "ADMIN" || auth.isAuthenticated == false) ? employeeId : auth.user?.id
-
-  useEffect(() => {
-    const fetchSchedules = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const res = await axiosClient.get(
-          `/schedule/employeeday/${employeeToFecth}/schedules`,
-          {
-            params: {
-              startDate,
-              endDate,
-            },
-          }
-        );
-
-        setData(res.data);
-      } catch (err) {
-        console.error("Error al buscar horarios:", err);
-        setError(err.message || "Error desconocido");
-        setData(timestampSchedulesMock);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (employeeId && startDate && endDate) {
-      fetchSchedules();
-    }
-  }, [employeeId, startDate, endDate]);
-
-  // Nuevo useEffect para PTO
-  useEffect(() => {
-    const fetchPto = async () => {
-      try {
-        if (employeeId) {
-          const ptoList = await searchPtoByEmployee(employeeToFecth);
-          setEmployeePto(ptoList);
+  // --- SHIFTS (nuevo endpoint) ---
+  const schedulesQuery = useQuery({
+    queryKey: ["schedules", employeeToFetch, startDate, endDate],
+    queryFn: async () => {
+      const res = await axiosClient.get(
+        `/schedule/employeeday/${employeeToFetch}/shifts`,
+        {
+          params: { startDate, endDate },
         }
-        // Si no hay employeeId, puedes decidir si lo vacías o no
-      } catch (err) {
-        // No sobrescribas employeePto, así mantiene ptoMockData
-        console.error('Error al buscar ausencias del empleado:', err);
-      }
-    };
+      );
+      return res.data;
+    },
+    enabled: !!employeeToFetch && !!startDate && !!endDate,
+  });
 
-    fetchPto();
-  }, [employeeId]);
+  // --- PTO ---
+  const ptoQuery = useQuery({
+    queryKey: ["pto", employeeToFetch],
+    queryFn: () => searchPtoByEmployee(employeeToFetch),
+    enabled: !!employeeToFetch,
+  });
 
+  // --- DISPONIBILITY ---
+  const disponibilityQuery = useQuery({
+    queryKey: ["disponibility", employeeToFetch],
+    queryFn: async () => {
+      const res = await fetchAbsences(employeeToFetch);
+      if (res.status !== 200) throw new Error("Error fetching disponibility");
+      return res.data;
+    },
+    enabled: !!employeeToFetch,
+  });
 
-  useEffect(() => {
-    if (!employeeId) return;
-    fetchAbsences(employeeToFecth)
-      .then(result => {
-        if (result.status !== 200) {
-          setDisponibility(dispMockData);
-        } else {
-          setDisponibility(result.data);
-        }
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }, [employeeId]);
+  return {
+    data: schedulesQuery.data ?? [],
+    loading: schedulesQuery.isLoading,
+    error: schedulesQuery.error,
 
-  return { data, loading, error, employeePto, disponibility };
+    employeePto: ptoQuery.data ?? [],
+    disponibility: disponibilityQuery.data ?? [],
+  };
 };

@@ -1,121 +1,171 @@
-import { formatMillisecondsToTime } from "../timeTrack/utilities/timeManagement"
+import React, { useMemo } from "react";
 
-export const SchedulesList = ({ processedRecords }) => {
+export const SchedulesList = ({ records = [] }) => {
+    const todayStr = new Date().toLocaleDateString("es-ES");
+
+    const allDaysOfMonth = useMemo(() => {
+        if (records.length === 0) return [];
+
+        const [, monthPart, yearPart] = records[0].day.split("/");
+        const year = parseInt(yearPart);
+        const month = parseInt(monthPart) - 1;
+
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const recordsMap = new Map(records.map(r => [r.day, r]));
+
+        return Array.from({ length: daysInMonth }, (_, i) => {
+            const dayStr = `${String(i + 1).padStart(2, "0")}/${String(month + 1).padStart(2, "0")}/${year}`;
+
+            return recordsMap.get(dayStr) || {
+                day: dayStr,
+                isDayOff: true,
+                periods: [],
+                totalWorked: "00:00",
+                periodCount: 0
+            };
+        });
+    }, [records]);
+
     const getDayOfWeek = (dateString) => {
         const [day, month, year] = dateString.split("/");
         const date = new Date(`${year}-${month}-${day}`);
-        const weekday = date.toLocaleDateString("es-ES", { weekday: "short" }); // "lun.", "mar."
-        return weekday.charAt(0).toUpperCase() + weekday.slice(1);
+
+        const weekday = date.toLocaleDateString("es-ES", { weekday: "short" });
+
+        return {
+            name: weekday.charAt(0).toUpperCase() + weekday.slice(1).replace(".", ""),
+            isToday: dateString === todayStr
+        };
     };
 
-    return (
-        <div className="border rounded-lg overflow-hidden shadow-sm bg-white mx-2">
-            {/* --- VISTA MÓVIL COMPACTA --- */}
-            <div className="block md:hidden">
-                {processedRecords.map((record, index) => {
-                    const weekday = getDayOfWeek(record.data.day);
-                    const isWeekend = weekday.includes("Sáb") || weekday.includes("Dom");
+    const PeriodChip = ({ p }) => (
+        <div className="flex items-center gap-2 px-2 py-1 rounded-full border border-gray-100 bg-gray-50 text-xs font-medium">
+            <span className={p.entryIsMod === "true" ? "text-red-500 font-semibold" : "text-gray-700"}>
+                {p.entry}
+            </span>
+            <span className="text-gray-300">→</span>
+            <span className={p.exitIsMod === "true" ? "text-red-500 font-semibold" : "text-gray-700"}>
+                {p.exit || "--"}
+            </span>
+        </div>
+    );
 
-                    return (
-                        <div key={index} className={`px-3 py-2 border-b last:border-b-0 flex items-center gap-3 ${isWeekend ? 'bg-indigo-100/40' : 'bg-white'}`}>
-
-                            {/* Fecha y Día (Columna fija a la izquierda) */}
-                            <div className="flex flex-col items-center justify-center min-w-[50px] border-r pr-3">
-                                <span className={`text-[10px] font-bold uppercase ${isWeekend ? 'text-indigo-500' : 'text-gray-400'}`}>
-                                    {weekday.replace('.', '')}
-                                </span>
-                                <span className="text-sm font-bold text-gray-800">
-                                    {record.data.day.split('/')[0]}
-                                </span>
-                            </div>
-
-                            {/* Info Principal (Centro) */}
-                            <div className="flex-1 min-w-0">
-                                {record.data.isDayOff ? (
-                                    <span className="text-xs text-green-600 font-medium italic">Día libre</span>
-                                ) : (
-                                    <div className="flex flex-wrap gap-x-3 gap-y-1">
-                                        {record.data.periods.map((period, i) => (
-                                            <div key={i} className="flex items-center text-[13px]">
-                                                <span className={`${period.entryIsMod === "true" ? 'text-red-600 font-bold' : 'text-gray-700'}`}>
-                                                    {period.entry}
-                                                </span>
-                                                <span className="mx-1 text-gray-400 text-[10px]">→</span>
-                                                {period.exit ? (
-                                                    <span className={`${period.exitIsMod === "true" ? 'text-red-600 font-bold' : 'text-gray-700'}`}>
-                                                        {period.exit}
-                                                    </span>
-                                                ) : (
-                                                    <span className="text-amber-600 text-[10px] font-bold">...</span>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                                {/* Warning muy pequeño abajo si existe */}
-                                {record.data.warning && (
-                                    <span className="block text-[9px] text-amber-700 truncate">
-                                        ⚠️ {record.data.warning}
-                                    </span>
-                                )}
-                            </div>
-
-                            {/* Total Trabajado (Derecha) */}
-                            <div className="text-right pl-2">
-                                <span className="block text-[10px] text-gray-400 leading-none">HRS</span>
-                                <span className="text-sm font-mono font-bold text-blue-600">
-                                    {record.data.isDayOff ? "-" : record.data.totalWorked}
-                                </span>
-                            </div>
-                        </div>
-                    );
-                })}
+    if (!records.length) {
+        return (
+            <div className="p-10 text-center border rounded-2xl bg-gray-50 text-gray-400">
+                No hay datos disponibles para este periodo
             </div>
+        );
+    }
 
-            {/* --- VISTA DESKTOP --- */}
-            <div className="hidden md:block overflow-x-auto">
-                <table className="w-full border-separate border-spacing-0">
-                    <thead>
+    return (
+        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+            {/* TABLE */}
+            <div className="overflow-x-auto hidden md:block">
+                <table className="w-full text-sm">
+                    <thead className="bg-gray-50 text-[11px] uppercase tracking-wider text-gray-400">
                         <tr>
-                            <th className="py-2 px-4 text-left text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Fecha</th>
-                            <th className="py-2 px-4 text-left text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Día</th>
-                            <th className="py-2 px-4 text-left text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Horarios</th>
-                            <th className="py-2 px-4 text-center text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Total</th>
-                            <th className="py-2 px-4 text-center text-gray-500 font-semibold bg-gray-50 border-b uppercase text-[11px]">Reg.</th>
+                            <th className="text-left px-6 py-3">Fecha</th>
+                            <th className="text-left px-6 py-3">Día</th>
+                            <th className="text-left px-6 py-3">Horarios</th>
+                            <th className="text-center px-6 py-3">Total</th>
+                            <th className="text-center px-6 py-3">Registros</th>
                         </tr>
                     </thead>
+
                     <tbody className="divide-y divide-gray-100">
-                        {processedRecords.map((record, index) => {
-                            const weekday = getDayOfWeek(record.data.day);
-                            const isWeekend = weekday.includes("Sáb") || weekday.includes("Dom");
+                        {allDaysOfMonth.map((record) => {
+                            const { name, isToday } = getDayOfWeek(record.day);
 
                             return (
-                                <tr key={index} className={`hover:bg-gray-50/80 transition-colors ${isWeekend ? 'bg-indigo-100/40' : ''}`}>
-                                    <td className="py-2 px-4 text-sm font-medium text-gray-600">{record.data.day}</td>
-                                    <td className="py-2 px-4 text-sm text-gray-500">{weekday}</td>
-                                    <td className="py-2 px-4">
-                                        {record.data.isDayOff ? (
-                                            <span className="text-xs text-green-600">Día libre</span>
+                                <tr
+                                    key={record.day}
+                                    className={`transition hover:bg-gray-50 ${isToday ? "bg-indigo-50/40" : ""
+                                        }`}
+                                >
+                                    <td className="px-6 py-3 font-medium text-gray-700">
+                                        <div className="flex flex-col">
+                                            <span>{record.day}</span>
+                                            {isToday && (
+                                                <span className="text-[10px] text-indigo-500 font-semibold">
+                                                    HOY
+                                                </span>
+                                            )}
+                                        </div>
+                                    </td>
+
+                                    <td className="px-6 py-3 text-gray-500 capitalize">
+                                        {name}
+                                    </td>
+
+                                    <td className="px-6 py-3">
+                                        {record.isDayOff ? (
+                                            <span className="text-xs px-2 py-1 rounded-full bg-emerald-50 text-emerald-600 font-medium">
+                                                Día libre
+                                            </span>
                                         ) : (
-                                            <div className="flex gap-4">
-                                                {record.data.periods.map((period, i) => (
-                                                    <span key={i} className="text-sm flex items-center gap-1">
-                                                        <b className={period.entryIsMod === "true" ? "text-red-500" : ""}>{period.entry}</b>
-                                                        <span className="text-gray-300">|</span>
-                                                        <b className={period.exitIsMod === "true" ? "text-red-500" : ""}>{period.exit || '??'}</b>
-                                                    </span>
+                                            <div className="flex flex-wrap gap-2">
+                                                {record.periods?.map((p, i) => (
+                                                    <PeriodChip key={i} p={p} />
                                                 ))}
                                             </div>
                                         )}
                                     </td>
-                                    <td className="py-2 px-4 text-center font-mono font-bold text-blue-600">{record.data.isDayOff ? "-" : record.data.totalWorked}</td>
-                                    <td className="py-2 px-4 text-center text-xs text-gray-400">{record.data.isDayOff ? "0" : record.data.recordsCount / 2}</td>
+
+                                    <td className="text-center px-6 py-3 font-mono font-semibold text-gray-700">
+                                        {record.isDayOff ? "-" : record.totalWorked}
+                                    </td>
+
+                                    <td className="text-center px-6 py-3 text-gray-400 text-xs">
+                                        {record.isDayOff ? 0 : record.periodCount}
+                                    </td>
                                 </tr>
                             );
                         })}
                     </tbody>
                 </table>
             </div>
+
+            {/* MOBILE */}
+            <div className="md:hidden divide-y divide-gray-100">
+                {allDaysOfMonth.map((record) => {
+                    const { name, isToday } = getDayOfWeek(record.day);
+
+                    return (
+                        <div
+                            key={record.day}
+                            className={`p-4 ${isToday ? "bg-indigo-50/40" : ""}`}
+                        >
+                            <div className="flex justify-between items-start mb-2">
+                                <div>
+                                    <div className="font-semibold text-gray-700">
+                                        {record.day}
+                                    </div>
+                                    <div className="text-xs text-gray-400 capitalize">
+                                        {name}
+                                    </div>
+                                </div>
+
+                                <div className="text-right font-mono text-sm font-semibold">
+                                    {record.isDayOff ? "-" : record.totalWorked}
+                                </div>
+                            </div>
+
+                            {record.isDayOff ? (
+                                <span className="text-xs text-emerald-600 font-medium">
+                                    Día libre
+                                </span>
+                            ) : (
+                                <div className="flex flex-wrap gap-2">
+                                    {record.periods?.map((p, i) => (
+                                        <PeriodChip key={i} p={p} />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
         </div>
-    )
-}
+    );
+};
