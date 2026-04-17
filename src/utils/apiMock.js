@@ -31039,3 +31039,323 @@ export const twMockData = [
         }
     }
 ]
+
+export const shiftMockDaily = [
+    {
+        "day": "01/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "02/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "03/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "04/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "05/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "06/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "07/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "08/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "09/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "10/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "11/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "12/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "13/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "14/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "15/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "16/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "17/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "18/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "19/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "20/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "21/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "22/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "23/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "24/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "25/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "26/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "27/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "28/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "29/05/2026",
+        "periods": [
+            {
+                "entry": "16:00",
+                "exit": "22:00"
+            }
+        ],
+        "totalWorked": "06:00",
+        "periodCount": 1,
+        "dayOff": false
+    },
+    {
+        "day": "30/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    },
+    {
+        "day": "31/05/2026",
+        "periods": [],
+        "totalWorked": "00:00",
+        "periodCount": 0,
+        "dayOff": true
+    }
+]
