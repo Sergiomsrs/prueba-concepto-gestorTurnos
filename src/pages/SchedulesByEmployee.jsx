@@ -103,9 +103,9 @@ export const SchedulesByEmployee = () => {
             {loading ? (
               <h1 className="text-gray-500 text-center py-4">Cargando...</h1>
             ) : error ? (
-              <h1 className="text-red-500 text-center py-4">
-                Error al cargar datos
-              </h1>
+              <div className="border rounded-lg overflow-hidden shadow-sm bg-white mx-2 p-8 text-center text-sm text-gray-400">
+                Error al cargar los datos. Por favor, inténtalo de nuevo más tarde.
+              </div>
             ) : data.length === 0 ? (
               <h1 className="text-red-500 font-medium text-center py-4">
                 No hay registros
