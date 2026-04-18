@@ -21,7 +21,7 @@ export const GenericRosterPage = () => {
         setCiclo,
         roles,
         handleGetCycle,
-        handleSaveCycle,
+        handleSaveModifiedCycle,
     } = useCyclesGenerator();
 
     const [showFullDistribution, setShowFullDistribution] = useState(false);
@@ -160,9 +160,10 @@ export const GenericRosterPage = () => {
 
     const handleSaveData = async () => {
         try {
-            await handleSaveCycle(data, ciclo);
+            // ✅ Solo guardar cambios modificados
+            await handleSaveModifiedCycle(modifiedData, ciclo);
             await handleGetCycle(ciclo);
-            console.log("✅ Ciclo guardado y recargado");
+            console.log("✅ Cambios guardados y ciclo recargado");
         } catch (error) {
             console.error("❌ Error al guardar:", error.message);
         }

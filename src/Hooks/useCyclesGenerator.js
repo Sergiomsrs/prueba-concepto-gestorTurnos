@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { employess, generateData, generateShiftData } from "../utils/shiftGeneratorData";
+import { employess, generateData, generateShiftData, generateModifiedShiftData } from "../utils/shiftGeneratorData";
 import {
     createByGenericShift,
     deleteRole,
@@ -72,6 +72,30 @@ export const useCyclesGenerator = () => {
     const handleSaveCycle = (externalData, externalCiclo) => {
         return saveCycleMutation.mutateAsync({
             data: externalData ?? data,
+            ciclo: externalCiclo ?? ciclo
+        });
+    };
+
+    // ✅ NUEVO: Mutación para guardar solo cambios modificados
+    const saveModifiedCycleMutation = useMutation({
+        mutationFn: async ({ modifiedData: modifiedDataToUse, ciclo: cicloToUse }) => {
+            const dataToSave = generateModifiedShiftData(modifiedDataToUse, cicloToUse);
+            return axiosClient.post('/gs/saveAll', dataToSave);
+        },
+        onSuccess: (response) => {
+            if (response.data.status === "success") {
+                console.log("✅ Cambios guardados exitosamente");
+            }
+        },
+        onError: (error) => {
+            console.log("❌ Error al guardar cambios");
+            console.error(error);
+        }
+    });
+
+    const handleSaveModifiedCycle = (externalModifiedData, externalCiclo) => {
+        return saveModifiedCycleMutation.mutateAsync({
+            modifiedData: externalModifiedData,
             ciclo: externalCiclo ?? ciclo
         });
     };
@@ -160,6 +184,7 @@ export const useCyclesGenerator = () => {
         setCiclo,
         setData,
         handleSaveCycle,
+        handleSaveModifiedCycle,
         handleGetCycle,
         handleGetAllRoles,
         handleGetRolesByDefault,

@@ -34,6 +34,17 @@ export const generateShiftData = (dt, cycle) => {
     return shiftData;
 };
 
+// ✅ NUEVO: Procesa solo cambios modificados (más eficiente)
+export const generateModifiedShiftData = (modifiedData, cycle) => {
+    return modifiedData.map(change => ({
+        shiftRoleId: change.employeeId,
+        cycle: cycle,
+        hours: change.hours,
+        date: change.date,
+        shiftDuration: change.shiftDuration
+    }));
+};
+
 export const days = [
     { id: "0", dia: "Domingo" },
     { id: "1", dia: "Lunes" },
