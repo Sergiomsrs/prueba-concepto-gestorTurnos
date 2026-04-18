@@ -13,6 +13,9 @@ export const GenericRosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
     const inputRefsMatrix = useRef([]);
 
+    const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
+
     const { selectedOption, setSelectedOption, filters, setFilters } = useContext(AppContext);
 
     const {
@@ -325,7 +328,7 @@ export const GenericRosterPage = () => {
                                             </div>
                                             <div>
                                                 <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
-                                                    {day.dia}
+                                                    {dias[day.id - 1]}
                                                 </h2>
                                                 <p className="text-sm text-slate-500">
                                                     {day.employees?.length || 0} turnos
