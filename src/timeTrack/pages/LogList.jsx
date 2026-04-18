@@ -23,7 +23,7 @@ export const LogList = () => {
 
                 // 2. Llamada real con Axios
                 // El token y los headers ya van incluidos por el interceptor
-                const response = await axiosClient.get("/ws/last100");
+                const response = await axiosClient.get("/schedule/last100");
 
                 // Axios ya ha convertido el JSON, lo guardamos directamente
                 setLastRecords(response.data);

@@ -48,7 +48,7 @@ export const saveRosterData = async (modifiedData) => {
     }
 
     try {
-        const response = await axiosClient.post('/ws/saveAll', modifiedData);
+        const response = await axiosClient.post('/schedule/saveAll', modifiedData);
 
         return {
             success: true,
