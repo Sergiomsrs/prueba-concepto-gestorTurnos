@@ -1,7 +1,7 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"; // 👈 añade useQueryClient
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchShift } from "../services/shiftService";
 
-function floorToQuarterHour(time) { // 👈 sácala fuera del hook
+function floorToQuarterHour(time) {
     if (!time) return "";
     const [hour, minute] = time.split(":").map(Number);
     const floored = Math.floor(minute / 15) * 15;
@@ -9,7 +9,7 @@ function floorToQuarterHour(time) { // 👈 sácala fuera del hook
 }
 
 export const useShift = ({ onSuccess, onError } = {}) => {
-    const queryClient = useQueryClient(); // 👈 esto faltaba
+    const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: ({ employeeId, date, startTime, endTime }) =>

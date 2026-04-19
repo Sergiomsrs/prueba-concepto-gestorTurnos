@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { employess, generateData, generateShiftData, generateModifiedShiftData } from "../utils/shiftGeneratorData";
@@ -16,7 +16,6 @@ import { AuthContext } from "@/timeTrack/context/AuthContext";
 import { axiosClient } from "@/services/axiosClient";
 
 export const useCyclesGenerator = () => {
-
     const queryClient = useQueryClient();
     const { auth } = useContext(AuthContext);
 
@@ -25,20 +24,14 @@ export const useCyclesGenerator = () => {
     );
     const [ciclo, setCiclo] = useState("");
 
-    const {
-        data: roles = rolesMock,
-        refetch: refetchRoles
-    } = useQuery({
+    const { data: roles = rolesMock, refetch: refetchRoles } = useQuery({
         queryKey: ["roles", auth.token],
         queryFn: () => getRoles(auth.token),
         enabled: !!auth.token && auth.token !== "demo-token-12345",
         initialData: auth.token === "demo-token-12345" ? rolesMock : undefined,
     });
 
-    const {
-        data: defaultRoles = [],
-        refetch: refetchDefaults
-    } = useQuery({
+    const { data: defaultRoles = [], refetch: refetchDefaults } = useQuery({
         queryKey: ["defaultRoles", auth.token],
         queryFn: () => getDefaultRoles(auth.token),
         enabled: !!auth.token && auth.token !== "demo-token-12345",
@@ -53,109 +46,75 @@ export const useCyclesGenerator = () => {
         }
     };
 
+    // ── Guardar ciclo completo ──────────────────────────────────────────────
     const saveCycleMutation = useMutation({
-        mutationFn: async ({ data: dataToUse, ciclo: cicloToUse }) => {
+        mutationFn: ({ data: dataToUse, ciclo: cicloToUse }) => {
             const dataToSave = generateShiftData(dataToUse, cicloToUse);
             return axiosClient.post('/gs/saveAll', dataToSave);
         },
-        onSuccess: (response) => {
-            if (response.data.status === "success") {
-                console.log("✅ Vamos Bien");
-            }
-        },
-        onError: (error) => {
-            console.log("❌ Vamos Mal");
-            console.error(error);
-        }
     });
 
-    const handleSaveCycle = (externalData, externalCiclo) => {
-        return saveCycleMutation.mutateAsync({
-            data: externalData ?? data,
-            ciclo: externalCiclo ?? ciclo
-        });
+    const handleSaveCycle = (externalData, externalCiclo, callbacks = {}) => {
+        return saveCycleMutation.mutateAsync(
+            { data: externalData ?? data, ciclo: externalCiclo ?? ciclo },
+            callbacks  // { onSuccess, onError } por llamada
+        );
     };
 
-    // ✅ NUEVO: Mutación para guardar solo cambios modificados
+    // ── Guardar solo cambios modificados ───────────────────────────────────
     const saveModifiedCycleMutation = useMutation({
-        mutationFn: async ({ modifiedData: modifiedDataToUse, ciclo: cicloToUse }) => {
-            const dataToSave = generateModifiedShiftData(modifiedDataToUse, cicloToUse);
+        mutationFn: ({ modifiedData, ciclo: cicloToUse }) => {
+            const dataToSave = generateModifiedShiftData(modifiedData, cicloToUse);
             return axiosClient.post('/gs/saveAll', dataToSave);
         },
-        onSuccess: (response) => {
-            if (response.data.status === "success") {
-                console.log("✅ Cambios guardados exitosamente");
-            }
-        },
-        onError: (error) => {
-            console.log("❌ Error al guardar cambios");
-            console.error(error);
-        }
     });
 
-    const handleSaveModifiedCycle = (externalModifiedData, externalCiclo) => {
-        return saveModifiedCycleMutation.mutateAsync({
-            modifiedData: externalModifiedData,
-            ciclo: externalCiclo ?? ciclo
-        });
+    const handleSaveModifiedCycle = (externalModifiedData, externalCiclo, callbacks = {}) => {
+        return saveModifiedCycleMutation.mutateAsync(
+            { modifiedData: externalModifiedData, ciclo: externalCiclo ?? ciclo },
+            callbacks
+        );
     };
 
+    // ── Crear por genérico ─────────────────────────────────────────────────
     const createMutation = useMutation({
         mutationFn: (config) => createByGenericShift(config, auth.token),
-        onError: (error) => console.error(error)
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
+        },
+        onError: (error) => console.error("Error al crear por genérico:", error),
     });
 
-    const handleCreateByGeneric = (config) => {
-        createMutation.mutate(config);
+    const handleCreateByGeneric = (config, callbacks = {}) => {
+        return createMutation.mutateAsync(config, callbacks);
     };
 
+    // ── Toggle activo/inactivo con optimistic update ───────────────────────
     const toggleMutation = useMutation({
         mutationFn: (id) => toggleShiftRole(id, auth.token),
-
         onMutate: async (id) => {
-            await queryClient.cancelQueries(["roles", auth.token]);
-
+            await queryClient.cancelQueries({ queryKey: ["roles", auth.token] });
             const previous = queryClient.getQueryData(["roles", auth.token]);
-
             queryClient.setQueryData(["roles", auth.token], (old) =>
-                old?.map(r =>
-                    r.id === id ? { ...r, active: !r.active } : r
-                )
+                old?.map(r => r.id === id ? { ...r, active: !r.active } : r)
             );
-
             return { previous };
         },
-
         onError: (err, id, context) => {
             queryClient.setQueryData(["roles", auth.token], context.previous);
         },
-
         onSettled: () => {
-            queryClient.invalidateQueries(["roles", auth.token]);
-        }
+            queryClient.invalidateQueries({ queryKey: ["roles", auth.token] });
+        },
     });
 
-    const handleToggle = (id) => {
-        toggleMutation.mutate(id);
-    };
+    const handleToggle = (id) => toggleMutation.mutate(id);
 
-    const handleGetAllRoles = async () => {
-        await refetchRoles();
-    };
-
-    const handleGetRolesByDefault = async () => {
-        await refetchDefaults();
-    };
-
-    const handleGetAllRolesWihtDefaults = async () => {
-        await Promise.all([refetchRoles(), refetchDefaults()]);
-    };
-
+    // ── Eliminar rol con optimistic update ────────────────────────────────
     const deleteMutation = useMutation({
         mutationFn: (id) => deleteRole(id),
         onMutate: async (id) => {
-            // Optimistic update — quita el rol de la lista inmediatamente
-            await queryClient.cancelQueries(["roles", auth.token]);
+            await queryClient.cancelQueries({ queryKey: ["roles", auth.token] });
             const previous = queryClient.getQueryData(["roles", auth.token]);
             queryClient.setQueryData(["roles", auth.token], (old) =>
                 old?.filter(r => r.id !== id)
@@ -163,23 +122,27 @@ export const useCyclesGenerator = () => {
             return { previous };
         },
         onError: (err, id, context) => {
-            // Si falla, revertir
             queryClient.setQueryData(["roles", auth.token], context.previous);
         },
         onSettled: () => {
-            queryClient.invalidateQueries(["roles", auth.token]);
-        }
+            queryClient.invalidateQueries({ queryKey: ["roles", auth.token] });
+        },
     });
 
-    const handleDeleteRole = (id) => {
-        deleteMutation.mutate(id);
-    };
+    const handleDeleteRole = (id) => deleteMutation.mutate(id);
+
+    // ── Refetch helpers ───────────────────────────────────────────────────
+    const handleGetAllRoles = () => refetchRoles();
+    const handleGetRolesByDefault = () => refetchDefaults();
+    const handleGetAllRolesWihtDefaults = () => Promise.all([refetchRoles(), refetchDefaults()]);
 
     return {
         data,
         ciclo,
         roles,
         defaultRoles,
+        isSavingCycle: saveCycleMutation.isPending,
+        isSavingModified: saveModifiedCycleMutation.isPending,
         handleToggle,
         setCiclo,
         setData,
@@ -190,6 +153,6 @@ export const useCyclesGenerator = () => {
         handleGetRolesByDefault,
         handleCreateByGeneric,
         handleGetAllRolesWihtDefaults,
-        handleDeleteRole
+        handleDeleteRole,
     };
 };

@@ -161,15 +161,17 @@ export const GenericRosterPage = () => {
         if (ciclo) handleGetCycle(ciclo);
     };
 
-    const handleSaveData = async () => {
-        try {
-            // ✅ Solo guardar cambios modificados
-            await handleSaveModifiedCycle(modifiedData, ciclo);
-            await handleGetCycle(ciclo);
-            console.log("✅ Cambios guardados y ciclo recargado");
-        } catch (error) {
-            console.error("❌ Error al guardar:", error.message);
-        }
+    // GenericRosterPage.jsx
+    const handleSaveData = () => {
+        handleSaveModifiedCycle(modifiedData, ciclo, {
+            onSuccess: async () => {
+                await handleGetCycle(ciclo);
+                // aquí podrías poner un setSaveStatus('success') si añades ese estado
+            },
+            onError: (err) => {
+                console.error("❌ Error al guardar:", err.message);
+            },
+        });
     };
 
     return (
