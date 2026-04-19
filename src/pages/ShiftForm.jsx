@@ -1,13 +1,8 @@
 import React, { useState } from "react";
-import { fetchShift } from "../services/shiftService";
 import { EmployeeSelector } from "../utilComponents/EmployeeSelector";
+import { useShift } from "@/Hooks/useShift";
 
-function floorToQuarterHour(time) {
-    if (!time) return "";
-    const [hour, minute] = time.split(":").map(Number);
-    const floored = Math.floor(minute / 15) * 15;
-    return `${hour.toString().padStart(2, "0")}:${floored.toString().padStart(2, "0")}`;
-}
+
 
 export const ShiftForm = () => {
     const [form, setForm] = useState({
@@ -18,99 +13,62 @@ export const ShiftForm = () => {
     });
     const [employees, setEmployees] = useState([]);
     const [message, setMessage] = useState({ type: "", text: "" });
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const [activeTab, setActiveTab] = useState({
+    const [activeTab] = useState({
         year: new Date().getFullYear(),
-        month: new Date().getMonth(), // 0-11
+        month: new Date().getMonth(),
     });
 
+    // ✅ Hook de TanStack Query
+    const { mutate: saveShift, isPending } = useShift({
+        onSuccess: () => {
+            setMessage({ type: "success", text: "✓ Turno guardado correctamente" });
+            setTimeout(() => {
+                setForm({ employeeId: "", date: "", startTime: "", endTime: "" });
+                setMessage({ type: "", text: "" });
+            }, 2000);
+        },
+        onError: () => {
+            setMessage({ type: "error", text: "✗ Error al guardar el turno. Inténtalo de nuevo." });
+        },
+    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-        // Limpiar mensaje al editar
+        setForm((prev) => ({ ...prev, [name]: value }));
         if (message.text) setMessage({ type: "", text: "" });
     };
 
     const handleEmployeeChange = (id) => {
-        setForm((prev) => ({
-            ...prev,
-            employeeId: id,
-        }));
+        setForm((prev) => ({ ...prev, employeeId: id }));
         if (message.text) setMessage({ type: "", text: "" });
     };
 
     const calculateDuration = () => {
         if (!form.startTime || !form.endTime) return null;
-
         const [startHour, startMin] = form.startTime.split(":").map(Number);
         const [endHour, endMin] = form.endTime.split(":").map(Number);
-
-        const startMinutes = startHour * 60 + startMin;
-        const endMinutes = endHour * 60 + endMin;
-
-        const diffMinutes = endMinutes - startMinutes;
-
+        const diffMinutes = (endHour * 60 + endMin) - (startHour * 60 + startMin);
         if (diffMinutes <= 0) return null;
-
-        const hours = Math.floor(diffMinutes / 60);
-        const minutes = diffMinutes % 60;
-
-        return { hours, minutes, total: diffMinutes / 60 };
+        return { hours: Math.floor(diffMinutes / 60), minutes: diffMinutes % 60, total: diffMinutes / 60 };
     };
 
     const duration = calculateDuration();
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         setMessage({ type: "", text: "" });
-        setIsSubmitting(true);
 
-        // Validación adicional
         if (!form.employeeId || !form.date || !form.startTime || !form.endTime) {
             setMessage({ type: "error", text: "Por favor, completa todos los campos." });
-            setIsSubmitting(false);
             return;
         }
-
         if (!duration || duration.total <= 0) {
             setMessage({ type: "error", text: "La hora de fin debe ser posterior a la hora de inicio." });
-            setIsSubmitting(false);
             return;
         }
 
-        // Ajusta siempre hacia abajo
-        const flooredStart = floorToQuarterHour(form.startTime);
-        const flooredEnd = floorToQuarterHour(form.endTime);
-
-        try {
-            await fetchShift.saveIndividualShift({
-                employeeId: Number(form.employeeId),
-                date: form.date,
-                startTime: flooredStart,
-                endTime: flooredEnd,
-            });
-            setMessage({ type: "success", text: "✓ Turno guardado correctamente" });
-
-            // Resetear formulario después de 2 segundos
-            setTimeout(() => {
-                setForm({
-                    employeeId: "",
-                    date: "",
-                    startTime: "",
-                    endTime: "",
-                });
-                setMessage({ type: "", text: "" });
-            }, 2000);
-        } catch (error) {
-            setMessage({ type: "error", text: "✗ Error al guardar el turno. Inténtalo de nuevo." });
-        } finally {
-            setIsSubmitting(false);
-        }
+        saveShift(form);
     };
 
     return (
@@ -264,13 +222,13 @@ export const ShiftForm = () => {
                         {/* Botón de submit */}
                         <button
                             type="submit"
-                            disabled={isSubmitting}
-                            className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg text-base font-semibold text-white transition-all shadow-lg ${isSubmitting
+                            disabled={isPending}
+                            className={`w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg text-base font-semibold text-white transition-all shadow-lg ${isPending
                                 ? "bg-gray-400 cursor-not-allowed"
                                 : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl transform hover:-translate-y-0.5"
                                 }`}
                         >
-                            {isSubmitting ? (
+                            {isPending ? (
                                 <>
                                     <svg className="animate-spin w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

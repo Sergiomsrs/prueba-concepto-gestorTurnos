@@ -24,22 +24,4 @@ export const fetchShift = {
             throw new Error(`Error en la respuesta del servidor: ${error.response?.status || error.message}`);
         }
     },
-
-    // Copiar una semana completa a otra
-    copyWeek: async ({ sourceStartDate, targetStartDate }) => {
-        try {
-            const response = await axiosClient.post('/schedule/copy-week', {
-                sourceStartDate,
-                targetStartDate
-            });
-
-            // Axios maneja tanto texto plano como JSON en .data
-            return {
-                status: response.status,
-                data: response.data
-            };
-        } catch (error) {
-            throw new Error(error.response?.data?.message || "Error al copiar semana");
-        }
-    },
 };

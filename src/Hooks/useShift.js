@@ -1,37 +1,28 @@
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query"; // 👈 añade useQueryClient
 import { fetchShift } from "../services/shiftService";
-import { apiMockData } from "../utils/apiMock";
 
-export const useShift = () => {
-    const [shift, setShift] = useState();
-    const [shiftMessage, setShiftMessage] = useState("");
+function floorToQuarterHour(time) { // 👈 sácala fuera del hook
+    if (!time) return "";
+    const [hour, minute] = time.split(":").map(Number);
+    const floored = Math.floor(minute / 15) * 15;
+    return `${hour.toString().padStart(2, "0")}:${floored.toString().padStart(2, "0")}`;
+}
 
-    const handleSaveIndividualShift = async (shiftData) => {
-        try {
-            const result = await fetchShift.saveIndividualShift(shiftData);
-            setShiftMessage("Turno guardado correctamente.");
-            return result;
-        } catch (error) {
-            setShiftMessage("Error al guardar el turno.");
-            console.error(error);
-            throw error;
-        }
-    };
+export const useShift = ({ onSuccess, onError } = {}) => {
+    const queryClient = useQueryClient(); // 👈 esto faltaba
 
-    const handleCopyWeek = async ({ sourceStartDate, targetStartDate }) => {
-        try {
-            const result = await fetchShift.copyWeek({ sourceStartDate, targetStartDate });
-            setShiftMessage("Semana copiada correctamente");
-            return result;
-        } catch (error) {
-            setShiftMessage(error.message || "Error al copiar semana");
-            throw error;
-        }
-    };
-
-    return {
-        handleSaveIndividualShift,
-        shiftMessage,
-        handleCopyWeek,
-    };
+    return useMutation({
+        mutationFn: ({ employeeId, date, startTime, endTime }) =>
+            fetchShift.saveIndividualShift({
+                employeeId: Number(employeeId),
+                date,
+                startTime: floorToQuarterHour(startTime),
+                endTime: floorToQuarterHour(endTime),
+            }),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
+            onSuccess?.(data);
+        },
+        onError,
+    });
 };
