@@ -62,6 +62,7 @@ export const useEmployees = (employeeId) => {
         onSuccess: () => {
             const id = employeeId || createForm?.id;
             if (id) queryClient.invalidateQueries({ queryKey: ["disponibilities", id] });
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
         },
         onError: () => setMessage("Error al eliminar la ausencia.")
     });
@@ -72,6 +73,7 @@ export const useEmployees = (employeeId) => {
         onSuccess: () => {
             const id = employeeId || ptoCreateForm?.id;
             if (id) queryClient.invalidateQueries({ queryKey: ["pto", id] });
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
         },
         onError: () => setMessage("Error al guardar el PTO.")
     });
@@ -81,6 +83,7 @@ export const useEmployees = (employeeId) => {
         onSuccess: () => {
             const id = employeeId || ptoCreateForm?.id;
             if (id) queryClient.invalidateQueries({ queryKey: ["pto", id] });
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
         },
         onError: () => setMessage("Error al eliminar el PTO.")
     });
