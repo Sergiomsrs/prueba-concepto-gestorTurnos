@@ -52,6 +52,7 @@ export const useEmployees = (employeeId) => {
         onSuccess: () => {
             const id = employeeId || createForm?.id;
             if (id) queryClient.invalidateQueries({ queryKey: ["disponibilities", id] });
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
         },
         onError: () => setMessage("Error al guardar la ausencia.")
     });
