@@ -60,7 +60,6 @@ export const EmployeeRow = memo(
             [employee.workShift]
         );
 
-        /** Hora de inicio/fin dentro de cada tramo continuo de WORK (grid desde 07:00, pasos de 15 min). */
         const hourLabelsByIndex = useMemo(() => {
             const labels = new Map();
             const shift = employee.workShift || [];
@@ -140,17 +139,31 @@ export const EmployeeRow = memo(
             return ''; // WORK: el color va por style
         };
 
+        const outOfRangeIndicator = useMemo(() => {
+            const shift = employee.workShift;
+            const { startIndex, endIndex } = rangeConfig; // los índices absolutos del rango visible
+
+            const hasBefore = shift.slice(0, startIndex).some(v => v === "WORK");
+            const hasAfter = shift.slice(endIndex + 1).some(v => v === "WORK");
+
+            return { hasBefore, hasAfter };
+        }, [employee.workShift, rangeConfig.startIndex, rangeConfig.endIndex]);
+
         return (
             <>
                 {/* Elementos de Nombre y Equipo */}
                 <div className="bg-white px-3 py-0 text-sm font-medium text-gray-800 border-r flex items-center">
                     <span className="truncate">{employee.teamWork}</span>
                 </div>
-                <div className="bg-white px-3 py-0 text-sm text-gray-700 border-r flex items-center">
+                <div className={`bg-white px-3 py-0 text-sm text-gray-700 flex items-center overflow-hidden
+    ${outOfRangeIndicator.hasBefore ? 'border-l-2 border-l-amber-400' : 'border-l-4 border-l-transparent'}
+    ${outOfRangeIndicator.hasAfter ? 'border-r-2 border-r-amber-400' : 'border-r border-r-slate-200'}
+`}>
                     <span className="truncate">
                         {employee.name} {employee.lastName}
                     </span>
                 </div>
+
 
                 {/* ✅ RENDEREAR SOLO RANGO VISIBLE - Sin crear nuevo array */}
                 {Array.from(
