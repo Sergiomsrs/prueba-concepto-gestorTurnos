@@ -129,6 +129,10 @@ export const TeamWorkSection = ({ employeeId }) => {
                             <option value="Green">Green</option>
                             <option value="Red">Red</option>
                             <option value="Black">Black</option>
+                            <option value="Orange">Naranja</option>
+                            <option value="Pink">Rosa</option>
+                            <option value="Turquoise">Turquesa</option>
+                            <option value="Lime">Lima</option>
                         </select>
                     </div>
 
