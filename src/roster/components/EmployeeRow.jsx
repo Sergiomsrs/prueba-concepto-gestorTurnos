@@ -152,12 +152,13 @@ export const EmployeeRow = memo(
         return (
             <>
                 {/* Elementos de Nombre y Equipo */}
-                <div className="bg-white px-3 py-0 text-sm font-medium text-gray-800 border-r flex items-center">
+                <div className={`bg-white px-3 py-0 text-sm font-medium text-gray-800 border-r flex items-center
+
+`}>
                     <span className="truncate">{employee.teamWork}</span>
                 </div>
-                <div className={`bg-white px-3 py-0 text-sm text-gray-700 flex items-center overflow-hidden
-    ${outOfRangeIndicator.hasBefore ? 'border-l-2 border-l-amber-400' : 'border-l-4 border-l-transparent'}
-    ${outOfRangeIndicator.hasAfter ? 'border-r-2 border-r-amber-400' : 'border-r border-r-slate-200'}
+                <div className={`bg-white px-3 py-0 text-sm text-gray-700 flex items-center overflow-visible
+    ${outOfRangeIndicator.hasBefore ? 'relative before:absolute before:z-10 before:right-[-2px] before:top-0 before:h-full before:w-[2px] before:bg-amber-400 before:content-[""]' : ''}
 `}>
                     <span className="truncate">
                         {employee.name} {employee.lastName}
@@ -253,7 +254,9 @@ export const EmployeeRow = memo(
                 )}
 
                 {/* Elemento de Horas Totales */}
-                <div className="bg-white px-3 py-0 text-sm font-medium text-gray-700 border-l text-center">
+                <div className={`bg-white px-3 py-0 text-sm font-medium text-gray-700 border-l text-center
+    ${outOfRangeIndicator.hasAfter ? 'relative before:absolute before:left-[-2px] before:top-0 before:h-full before:w-[2px] before:bg-amber-400' : ''}
+`}>
                     {totalHours.toFixed(2)}
                 </div>
             </>
