@@ -139,6 +139,17 @@ export const GenericEmployeeRow = memo(
             return "";
         };
 
+        const outOfRangeIndicator = useMemo(() => {
+            const shift = employee.workShift;
+            const { startIndex, endIndex } = rangeConfig; // los índices absolutos del rango visible
+
+            const hasBefore = shift.slice(0, startIndex).some(v => v === "WORK");
+            const hasAfter = shift.slice(endIndex + 1).some(v => v === "WORK");
+
+            return { hasBefore, hasAfter };
+        }, [employee.workShift, rangeConfig.startIndex, rangeConfig.endIndex]);
+
+
         return (
             <>
                 {/* Sección / teamWork */}
@@ -147,8 +158,12 @@ export const GenericEmployeeRow = memo(
                 </div>
 
                 {/* Nombre del turno — sin botón modal, sin lastName */}
-                <div className="bg-white px-3 py-0 text-sm text-gray-700 border-r flex items-center">
-                    <span className="truncate">{employee.name}</span>
+                <div className={`bg-white px-3 py-0 text-sm text-gray-700 flex items-center overflow-visible
+    ${outOfRangeIndicator.hasBefore ? 'relative before:absolute before:z-10 before:right-[-2px] before:top-0 before:h-full before:w-[2px] before:bg-amber-400 before:content-[""]' : ''}
+`}>
+                    <span className="truncate">
+                        {employee.name}
+                    </span>
                 </div>
 
                 {/* Celdas de workShift */}
@@ -236,7 +251,9 @@ export const GenericEmployeeRow = memo(
                 })}
 
                 {/* Total horas */}
-                <div className="bg-white px-3 py-0 text-sm font-medium text-gray-700 border-l text-center">
+                <div className={`bg-white px-3 py-0 text-sm font-medium text-gray-700 border-l text-center
+    ${outOfRangeIndicator.hasAfter ? 'relative before:absolute before:left-[-2px] before:top-0 before:h-full before:w-[2px] before:bg-amber-400' : ''}
+`}>
                     {totalHours.toFixed(2)}
                 </div>
             </>
