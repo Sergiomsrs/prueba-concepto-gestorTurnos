@@ -13,7 +13,7 @@ export const EmployeeSelector = ({ employees, setEmployees, selectedEmployeeId, 
     return (
         <>
             <label className="block text-base font-medium leading-6 text-gray-900">Selecciona el empleado</label>
-            <div className="relative mt-2 mb-4 rounded-md shadow-sm">
+            <div className="relative rounded-md shadow-sm">
                 <select
                     id="employee"
                     name="employee"

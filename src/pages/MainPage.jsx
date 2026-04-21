@@ -22,6 +22,7 @@ import { AuthContext } from "@/timeTrack/context/AuthContext"
 import { ProtectedRoute } from "@/timeTrack/context/ProtectedRoute"
 import { Footer } from "@/utilComponents/Footer"
 import { GenericRoster } from "./GenericRoster"
+import { PlannerPage } from "./PlannerPage"
 
 
 export const MainPage = () => {
@@ -141,6 +142,9 @@ export const MainPage = () => {
             } />
             <Route path="/generic-roster" element={
               <ProtectedRoute allowedRoles={ONLY_ADMIN}><GenericRoster /></ProtectedRoute>
+            } />
+            <Route path="/planner" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><PlannerPage /></ProtectedRoute>
             } />
           </Routes>
         </main>
