@@ -9,7 +9,6 @@ const calculateShiftDurationFromWorkShift = (workShift) => {
     return (workCount * 15) / 60;
 };
 
-// Utilidad totales — busca por id
 const getTotalShiftDuration = (employeeId, data) => {
     let totalMinutes = 0;
     for (const day of data) {
@@ -19,7 +18,7 @@ const getTotalShiftDuration = (employeeId, data) => {
             totalMinutes += workCount * 15;
         }
     }
-    return +(totalMinutes / 60).toFixed(1);
+    return totalMinutes / 60; // múltiplos exactos de 0.25, sin redondeo
 };
 
 const getCellStyle = (hours, isHoliday) => {
@@ -78,7 +77,7 @@ const EmployeeRow = memo(
                     {totalShiftDuration}
                 </td>
                 <td className={`px-3 py-2.5 text-sm font-bold text-center border-r-2 border-slate-300 ${variation >= 0 ? "text-emerald-600" : "text-red-600"}`}>
-                    {variation > 0 ? '+' : ''}{variation.toFixed(1)}
+                    {variation > 0 ? '+' : ''}{variation}
                 </td>
 
                 {/* CALENDARIO */}
