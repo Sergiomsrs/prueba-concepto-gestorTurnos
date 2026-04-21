@@ -27,6 +27,7 @@ export const usePlanner = () => {
         mutationFn: plannerService.confirm,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["solver-status"] });
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
             alert("Sustituciones aplicadas correctamente");
         },
     });
