@@ -4,19 +4,15 @@ import { WwhSection } from './sections/WwhSection';
 import { PtoSection } from './sections/PtoSection';
 import { TeamWorkSection } from './sections/TeamWorkSection';
 import { DispSection } from './sections/DispSection';
+import { PreferencesSection } from './sections/PreferencesSection';  // ← nuevo
 
-/**
- * EmployeeDataSection
- * 
- * Componente contenedor que gestiona todas las secciones de datos del empleado
- * usando un patrón de Accordion para mantener la interfaz limpia y organizada
- */
 export const EmployeeDataSection = ({ employeeId, allEmployees, employeeData }) => {
     const [expandedSections, setExpandedSections] = useState({
-        wwh: false,
-        pto: false,
-        teamWork: false,
-        disp: false,
+        wwh:         false,
+        pto:         false,
+        teamWork:    false,
+        disp:        false,
+        preferences: false,  // ← nuevo
     });
 
     const toggleSection = (section) => {
@@ -26,31 +22,36 @@ export const EmployeeDataSection = ({ employeeId, allEmployees, employeeData }) 
         }));
     };
 
-    // Configuración de las secciones
     const sections = [
         {
-            id: 'wwh',
-            title: 'Jornadas de Trabajo (WWH)',
-            icon: '📋',
+            id:        'wwh',
+            title:     'Jornadas de Trabajo (WWH)',
+            icon:      '📋',
             component: WwhSection
         },
         {
-            id: 'pto',
-            title: 'Ausencias (PTO)',
-            icon: '🏖️',
+            id:        'pto',
+            title:     'Ausencias (PTO)',
+            icon:      '🏖️',
             component: PtoSection
         },
         {
-            id: 'teamWork',
-            title: 'Equipo de trabajo',
-            icon: '👥',
+            id:        'teamWork',
+            title:     'Equipo de trabajo',
+            icon:      '👥',
             component: TeamWorkSection
         },
         {
-            id: 'disp',
-            title: 'Disponibilidades',
-            icon: '⏰',
+            id:        'disp',
+            title:     'Disponibilidades',
+            icon:      '⏰',
             component: DispSection
+        },
+        {
+            id:        'preferences',
+            title:     'Preferencias de planificación',
+            icon:      '⚙️',
+            component: PreferencesSection   // ← nuevo
         },
     ];
 
@@ -65,7 +66,6 @@ export const EmployeeDataSection = ({ employeeId, allEmployees, employeeData }) 
                         key={section.id}
                         className="border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
                     >
-                        {/* HEADER del Accordion */}
                         <button
                             onClick={() => toggleSection(section.id)}
                             className="w-full px-4 py-4 flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors"
@@ -76,17 +76,14 @@ export const EmployeeDataSection = ({ employeeId, allEmployees, employeeData }) 
                                     {section.title}
                                 </h3>
                             </div>
-
                             <div className="flex items-center gap-2">
-                                {isExpanded ? (
-                                    <ChevronUpIcon className="w-5 h-5 text-gray-600" />
-                                ) : (
-                                    <ChevronDownIcon className="w-5 h-5 text-gray-600" />
-                                )}
+                                {isExpanded
+                                    ? <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+                                    : <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+                                }
                             </div>
                         </button>
 
-                        {/* CONTENIDO del Accordion */}
                         {isExpanded && (
                             <div className="px-4 py-4 border-t border-gray-200 bg-white animate-fade-in">
                                 <Component

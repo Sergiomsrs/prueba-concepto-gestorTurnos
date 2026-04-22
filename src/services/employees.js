@@ -62,3 +62,30 @@ export const fetchPto = {
         return { status: res.status, data: res.data };
     },
 };
+
+export const fetchSkills = {
+    getSkills: async () => {
+        const res = await axiosClient.get("/emp/skills");
+        return { status: res.status, data: res.data };
+    },
+    createSkill: async (skillData) => {
+        const res = await axiosClient.post("/emp/skills", skillData);
+        return { status: res.status, data: res.data };
+    },
+    deleteSkill: async (skillId) => {
+        const res = await axiosClient.delete(`/emp/skills/${skillId}`);
+        return { status: res.status, data: res.data };
+    },
+};
+
+// Preferencias de planificación de un empleado
+export const fetchPreferences = {
+    getPreferences: async (employeeId) => {
+        const res = await axiosClient.get(`/emp/${employeeId}/preferences`);
+        return { status: res.status, data: res.data };
+    },
+    savePreferences: async ({ employeeId, ...data }) => {
+        const res = await axiosClient.put(`/emp/${employeeId}/preferences`, data);
+        return { status: res.status, data: res.data };
+    },
+};
