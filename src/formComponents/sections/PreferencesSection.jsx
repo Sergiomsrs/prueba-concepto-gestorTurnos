@@ -4,24 +4,31 @@ import { TrashIcon } from '../../components/icons/TrashIcon';
 
 const SHIFT_OPTIONS = [
     { value: 'NO_PREFERENCE', label: 'Sin preferencia' },
-    { value: 'MORNING',       label: 'Mañana' },
-    { value: 'AFTERNOON',     label: 'Tarde' },
-    { value: 'NIGHT',         label: 'Noche' },
+    { value: 'MORNING', label: 'Mañana' },
+    { value: 'AFTERNOON', label: 'Tarde' },
+    { value: 'NIGHT', label: 'Noche' },
 ];
 
 const WEEKEND_OPTIONS = [
     { value: 'ROTATING', label: 'Rotativo' },
-    { value: 'ALWAYS',   label: 'Siempre disponible' },
-    { value: 'NEVER',    label: 'No disponible' },
+    { value: 'ALWAYS', label: 'Siempre disponible' },
+    { value: 'NEVER', label: 'No disponible' },
+];
+
+const STORE_ROLE_OPTIONS = [
+    { value: 'EMPLOYEE', label: 'Empleado' },
+    { value: 'KEYHOLDER', label: 'Keyholder (porta llaves)' },
+    { value: 'MANAGER', label: 'Manager' },
 ];
 
 const FORM_DEFAULTS = {
-    wantsExtraHours:       false,
-    maxExtraHoursPerWeek:  '',
-    shiftPreference:       'NO_PREFERENCE',
-    weekendPreference:     'ROTATING',
-    weekdayOnlyAfternoon:  false,
-    skillIds:              [],
+    wantsExtraHours: false,
+    maxExtraHoursPerWeek: '',
+    shiftPreference: 'NO_PREFERENCE',
+    weekendPreference: 'ROTATING',
+    weekdayOnlyAfternoon: false,
+    storeRole: 'EMPLOYEE',
+    skillIds: [],
 };
 
 export const PreferencesSection = ({ employeeId }) => {
@@ -36,19 +43,19 @@ export const PreferencesSection = ({ employeeId }) => {
         handleDeleteSkill,
     } = useEmployeePreferences(employeeId);
 
-    const [form, setForm]           = useState(FORM_DEFAULTS);
+    const [form, setForm] = useState(FORM_DEFAULTS);
     const [newSkillName, setNewSkillName] = useState('');
     const [showSkillInput, setShowSkillInput] = useState(false);
 
-    // Sincronizar formulario cuando llegan las preferencias del servidor
     useEffect(() => {
         if (!preferences) return;
         setForm({
-            wantsExtraHours:      preferences.wantsExtraHours      ?? false,
+            wantsExtraHours: preferences.wantsExtraHours ?? false,
             maxExtraHoursPerWeek: preferences.maxExtraHoursPerWeek ?? '',
-            shiftPreference:      preferences.shiftPreference       ?? 'NO_PREFERENCE',
-            weekendPreference:    preferences.weekendPreference     ?? 'ROTATING',
+            shiftPreference: preferences.shiftPreference ?? 'NO_PREFERENCE',
+            weekendPreference: preferences.weekendPreference ?? 'ROTATING',
             weekdayOnlyAfternoon: preferences.weekdayOnlyAfternoon ?? false,
+            storeRole: preferences.storeRole ?? 'EMPLOYEE',
             skillIds: preferences.skills?.map(s => s.id) ?? [],
         });
     }, [preferences]);
@@ -100,14 +107,38 @@ export const PreferencesSection = ({ employeeId }) => {
 
             {/* Mensaje de feedback */}
             {message && (
-                <div className={`rounded-lg px-4 py-3 text-sm font-medium animate-fade-in ${
-                    message.includes('Error')
+                <div className={`rounded-lg px-4 py-3 text-sm font-medium animate-fade-in ${message.includes('Error')
                         ? 'border border-red-200 bg-red-50 text-red-700'
                         : 'border border-green-200 bg-green-50 text-green-700'
-                }`}>
+                    }`}>
                     {message}
                 </div>
             )}
+
+            {/* ── ROL EN TIENDA ───────────────────────────────────────── */}
+            <div className="space-y-3">
+                <h4 className="text-sm font-semibold text-gray-900">Rol en tienda</h4>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Perfil de acceso
+                    </label>
+                    <select
+                        name="storeRole"
+                        value={form.storeRole}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-500 bg-white"
+                    >
+                        {STORE_ROLE_OPTIONS.map(o => (
+                            <option key={o.value} value={o.value}>{o.label}</option>
+                        ))}
+                    </select>
+                    <p className="mt-1 text-xs text-gray-500">
+                        Manager: obligatorio en horario comercial (9:00–22:30) ·{' '}
+                        Keyholder: puede estar solo fuera de horario comercial ·{' '}
+                        Empleado: sin llaves
+                    </p>
+                </div>
+            </div>
 
             {/* ── HORAS EXTRA ─────────────────────────────────────────── */}
             <div className="space-y-3">
@@ -126,7 +157,6 @@ export const PreferencesSection = ({ employeeId }) => {
                     </span>
                 </label>
 
-                {/* Solo mostrar si NO quiere horas extra — permite limitar cuántas acepta */}
                 {!form.wantsExtraHours && (
                     <div className="pl-7">
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -216,7 +246,6 @@ export const PreferencesSection = ({ employeeId }) => {
                     </button>
                 </div>
 
-                {/* Formulario inline para crear una nueva skill de empresa */}
                 {showSkillInput && (
                     <div className="flex gap-2 animate-fade-in">
                         <input
@@ -245,7 +274,6 @@ export const PreferencesSection = ({ employeeId }) => {
                     </div>
                 )}
 
-                {/* Lista de skills de la empresa — checkbox para asignar al empleado */}
                 {availableSkills.length === 0 ? (
                     <p className="text-sm text-gray-500 italic">
                         No hay habilidades definidas. Crea una con "+ Nueva habilidad".
@@ -263,13 +291,11 @@ export const PreferencesSection = ({ employeeId }) => {
                                             onChange={() => toggleSkill(skill.id)}
                                             className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 shrink-0"
                                         />
-                                        <span className={`text-sm truncate ${
-                                            isAssigned ? 'text-gray-900 font-medium' : 'text-gray-600'
-                                        }`}>
+                                        <span className={`text-sm truncate ${isAssigned ? 'text-gray-900 font-medium' : 'text-gray-600'
+                                            }`}>
                                             {skill.name}
                                         </span>
                                     </label>
-                                    {/* Botón eliminar skill visible solo en hover */}
                                     <button
                                         type="button"
                                         onClick={() => handleDeleteSkill(skill.id)}

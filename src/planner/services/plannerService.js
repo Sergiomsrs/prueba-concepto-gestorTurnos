@@ -31,5 +31,13 @@ export const plannerService = {
     reject: async () => {
         const response = await axiosClient.delete('/shifts/solver/reject');
         return response.data;
-    }
+    },
+    rejectShiftCandidate: async ({ shiftId, excludeEmployeeId }) => {
+        const response = await axiosClient.post(
+            `/shifts/solver/reject-shift/${shiftId}`,
+            null,
+            { params: { excludeEmployeeId } }
+        );
+        return response.data;
+    },
 };

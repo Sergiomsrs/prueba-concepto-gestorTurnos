@@ -40,5 +40,15 @@ export const usePlanner = () => {
         },
     });
 
-    return { status, solveMutation, confirmMutation, rejectMutation };
+    const rejectShiftCandidateMutation = useMutation({
+        mutationFn: (variables) => plannerService.rejectShiftCandidate(variables),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["solver-status"] });
+        },
+        onError: (error) => {
+            console.error("Error al rechazar candidato:", error);
+        }
+    });
+
+    return { status, solveMutation, confirmMutation, rejectMutation, rejectShiftCandidateMutation };
 };
