@@ -35,18 +35,18 @@ const ProgressCard = ({ resolveShiftId, triggerKey, isPending }) => {
     const progress = isPending ? 0 : Math.min((elapsed / totalDuration) * 100, 95);
 
     return (
-        <div className="bg-white border border-blue-200 rounded-lg overflow-hidden">
-            <div className="bg-blue-600 px-6 py-4">
+        <div className="bg-white border border-appPrimary-border rounded-lg overflow-hidden animate-fade-in">
+            <div className="bg-appPrimary-light border-b border-appPrimary-border px-6 py-4">
                 <div className="flex items-center gap-3">
-                    <svg className="animate-spin h-5 w-5 text-white flex-shrink-0" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-5 w-5 text-appPrimary flex-shrink-0" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
                     <div>
-                        <h3 className="text-white font-bold text-sm">
+                        <h3 className="text-gray-900 font-bold text-sm">
                             {resolveShiftId ? "Buscando candidato alternativo..." : "Calculando sustituciones óptimas..."}
                         </h3>
-                        <p className="text-blue-200 text-xs mt-0.5">
+                        <p className="text-gray-600 text-xs mt-0.5">
                             Timefold Solver evaluando {resolveShiftId ? "el turno seleccionado" : "todos los turnos"}
                         </p>
                     </div>
@@ -55,7 +55,7 @@ const ProgressCard = ({ resolveShiftId, triggerKey, isPending }) => {
             <div className="p-6 space-y-4">
                 <div className="w-full bg-gray-100 rounded-full h-1.5">
                     <div
-                        className="bg-blue-600 h-1.5 rounded-full transition-all duration-300"
+                        className="bg-appPrimary h-1.5 rounded-full transition-all duration-300"
                         style={{ width: `${progress}%` }}
                     />
                 </div>
@@ -65,14 +65,14 @@ const ProgressCard = ({ resolveShiftId, triggerKey, isPending }) => {
                         const isActive = i === currentStep;
                         return (
                             <div key={step.id} className="flex items-center gap-3">
-                                <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${isDone ? "bg-green-100" : isActive ? "bg-blue-100" : "bg-gray-100"
+                                <div className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300 ${isDone ? "bg-green-100" : isActive ? "bg-appPrimary-light" : "bg-gray-100"
                                     }`}>
                                     {isDone ? (
                                         <svg className="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                                         </svg>
                                     ) : isActive ? (
-                                        <svg className={`w-3.5 h-3.5 text-blue-600 ${isPending ? "" : "animate-spin"}`} fill="none" viewBox="0 0 24 24">
+                                        <svg className={`w-3.5 h-3.5 text-appPrimary ${isPending ? "" : "animate-spin"}`} fill="none" viewBox="0 0 24 24">
                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                         </svg>
@@ -80,7 +80,7 @@ const ProgressCard = ({ resolveShiftId, triggerKey, isPending }) => {
                                         <div className="w-2 h-2 rounded-full bg-gray-300" />
                                     )}
                                 </div>
-                                <span className={`text-sm transition-all duration-300 ${isDone ? "text-green-700 font-medium" : isActive ? "text-blue-700 font-semibold" : "text-gray-400"
+                                <span className={`text-sm transition-all duration-300 ${isDone ? "text-green-700 font-medium" : isActive ? "text-appPrimary-text font-semibold" : "text-gray-400"
                                     }`}>
                                     {step.label}
                                 </span>
@@ -197,14 +197,14 @@ export const PlannerLayout = () => {
                 </div>
 
                 {/* PANEL DE CONFIGURACIÓN */}
-                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden mb-6">
+                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden mb-6 animate-fade-in">
                     <div className="p-6 sm:p-8">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
 
                             {/* Selector empleado */}
                             <div className="lg:col-span-5 space-y-2">
                                 <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg className="w-4 h-4 text-appPrimary" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
                                     </svg>
                                     Empleado Ausente
@@ -224,7 +224,7 @@ export const PlannerLayout = () => {
                                     <label className="text-sm font-semibold text-gray-700">Desde</label>
                                     <input
                                         type="date"
-                                        className="w-full h-[38px] px-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                        className="w-full h-[38px] px-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-appPrimary focus:border-transparent outline-none transition-all"
                                         onChange={(e) => setRange({ ...range, from: e.target.value })}
                                     />
                                 </div>
@@ -232,7 +232,7 @@ export const PlannerLayout = () => {
                                     <label className="text-sm font-semibold text-gray-700">Hasta</label>
                                     <input
                                         type="date"
-                                        className="w-full h-[38px] px-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                                        className="w-full h-[38px] px-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-appPrimary focus:border-transparent outline-none transition-all"
                                         onChange={(e) => setRange({ ...range, to: e.target.value })}
                                     />
                                 </div>
@@ -276,7 +276,7 @@ export const PlannerLayout = () => {
 
                 {/* TABLA DE RESULTADOS */}
                 {proposal && proposal.length > 0 && !isLoading && (
-                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <div className="bg-white border border-gray-200 rounded-lg overflow-hidden animate-fade-in">
                         <div className="bg-gray-100 px-6 sm:px-8 py-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div>
                                 <h3 className="text-lg font-bold text-gray-900">Propuesta de Sustituciones</h3>
@@ -299,14 +299,14 @@ export const PlannerLayout = () => {
                         </div>
 
                         <div className="overflow-x-auto">
-                            <table className="w-full text-sm">
-                                <thead className="bg-gray-50 border-b border-gray-200">
+                            <table className="w-full !text-sm">
+                                <thead className="sticky top-0 z-10 bg-white/95 backdrop-blur border-b border-gray-200">
                                     <tr>
-                                        <th className="px-6 py-3 text-left font-semibold text-gray-700">Fecha</th>
-                                        <th className="px-6 py-3 text-left font-semibold text-gray-700">Horario</th>
-                                        <th className="px-6 py-3 text-left font-semibold text-gray-700">Sustituto propuesto</th>
-                                        <th className="px-6 py-3 text-left font-semibold text-gray-700">Descartados</th>
-                                        <th className="px-6 py-3" />
+                                        <th className="!px-6 !py-2.5 text-left text-[11px] font-semibold tracking-wide uppercase text-gray-500">Fecha</th>
+                                        <th className="!px-6 !py-2.5 text-left text-[11px] font-semibold tracking-wide uppercase text-gray-500">Horario</th>
+                                        <th className="!px-6 !py-2.5 text-left text-[11px] font-semibold tracking-wide uppercase text-gray-500">Sustituto propuesto</th>
+                                        <th className="!px-6 !py-2.5 text-left text-[11px] font-semibold tracking-wide uppercase text-gray-500">Descartados</th>
+                                        <th className="!px-6 !py-2.5" />
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-100">
@@ -314,42 +314,43 @@ export const PlannerLayout = () => {
                                         const isBeingResolved = resolvingShiftId === shift.shiftId;
                                         const rejected = rejectedByShift[shift.shiftId] || [];
                                         return (
-                                            <tr key={shift.shiftId} className={`transition-colors ${isBeingResolved ? "bg-blue-50" : "hover:bg-gray-50"
+                                            <tr key={shift.shiftId} className={`transition-colors ${isBeingResolved ? "bg-appPrimary-light/60" : "hover:bg-slate-50"
                                                 }`}>
-                                                <td className="px-6 py-4 font-semibold text-gray-900">
+                                                <td className="!px-6 !py-3.5 font-semibold text-gray-900 leading-tight">
                                                     {shift.date}
                                                 </td>
-                                                <td className="px-6 py-4">
-                                                    <span className="inline-flex items-center bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-mono">
+                                                <td className="!px-6 !py-3.5">
+                                                    <span className="inline-flex items-center bg-gray-50 border border-gray-200 text-gray-700 px-2 py-0.5 rounded-md text-[11px] font-mono leading-tight">
                                                         {shift.startTime.substring(0, 5)} - {shift.endTime.substring(0, 5)}
                                                     </span>
                                                 </td>
-                                                <td className="px-6 py-4">
+                                                <td className="!px-6 !py-3.5">
                                                     {isBeingResolved ? (
-                                                        <div className="flex items-center gap-2 text-blue-600">
+                                                        <div className="flex items-center gap-2 text-appPrimary">
                                                             <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                                             </svg>
-                                                            <span className="text-sm font-medium">Buscando alternativa...</span>
+                                                            <span className="text-xs font-medium">Buscando alternativa...</span>
                                                         </div>
                                                     ) : (
                                                         <div className="flex flex-col">
-                                                            <span className="font-semibold text-blue-600">{shift.proposedEmployeeName}</span>
-                                                            <span className="text-xs text-gray-400 mt-0.5">ID: {shift.proposedEmployeeId}</span>
+                                                            <span className="font-semibold text-gray-900 leading-tight">{shift.proposedEmployeeName}</span>
+                                                            <span className="text-[11px] text-appPrimary-text mt-0.5 leading-tight">ID: {shift.proposedEmployeeId}</span>
                                                         </div>
                                                     )}
                                                 </td>
-                                                <td className="px-6 py-4">
+                                                <td className="!px-6 !py-3.5">
                                                     {rejected.length > 0 ? (
-                                                        <div className="flex flex-wrap gap-1">
+                                                        <div className="flex flex-wrap gap-1.5">
                                                             {rejected.map((r) => (
                                                                 <span
                                                                     key={r.id}
                                                                     title={`ID: ${r.id}`}
-                                                                    className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-red-50 text-red-600 border border-red-100"
+                                                                    className="inline-flex items-center gap-1 rounded-md border border-rose-200 bg-rose-50/70 px-1.5 py-0.5 text-[11px] font-medium text-rose-700 leading-tight"
                                                                 >
-                                                                    {r.name}
+                                                                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-rose-400" />
+                                                                    <span className="max-w-[120px] truncate">{r.name}</span>
                                                                 </span>
                                                             ))}
                                                         </div>
@@ -357,14 +358,17 @@ export const PlannerLayout = () => {
                                                         <span className="text-gray-300 text-xs">—</span>
                                                     )}
                                                 </td>
-                                                <td className="px-6 py-4 text-right">
+                                                <td className="!px-6 !py-3.5 text-right">
                                                     {!isBeingResolved && shift.proposedEmployeeId && (
                                                         <button
                                                             onClick={() => handleRejectCandidate(shift)}
                                                             disabled={rejectShiftCandidateMutation.isPending}
-                                                            className="text-xs text-gray-400 hover:text-red-600 font-medium transition-colors disabled:opacity-40 whitespace-nowrap"
+                                                            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] font-semibold text-gray-600 leading-none transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700 disabled:opacity-40 whitespace-nowrap"
                                                         >
-                                                            Proponer otro →
+                                                            <span>Proponer otro</span>
+                                                            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                            </svg>
                                                         </button>
                                                     )}
                                                 </td>
@@ -373,6 +377,24 @@ export const PlannerLayout = () => {
                                     })}
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                )}
+
+                {/* ESTADO INICIAL / PLACEHOLDER DE RESULTADOS */}
+                {(!proposal || proposal.length === 0) && !isLoading && (
+                    <div className="bg-white border border-gray-200 rounded-lg min-h-[320px] flex items-center justify-center px-6 py-10 animate-fade-in">
+                        <div className="max-w-lg text-center">
+                            <div className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-appPrimary-light text-appPrimary">
+                                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17l6-6m0 0l-6-6m6 6H3m18 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 className="text-base font-semibold text-gray-900">Todavia no hay propuesta calculada</h3>
+                            <p className="mt-2 text-sm text-gray-500">
+                                Selecciona el empleado ausente y el rango de fechas, luego pulsa
+                                <span className="font-medium text-gray-700"> Calcular Sustituciones</span> para generar recomendaciones.
+                            </p>
                         </div>
                     </div>
                 )}
