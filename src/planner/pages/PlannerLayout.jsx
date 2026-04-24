@@ -113,6 +113,11 @@ export const PlannerLayout = () => {
     const isSolving = status === "SOLVING_ACTIVE";
     const isLoading = isSolving || isSubmitting;
 
+    // Scroll al top al entrar al componente
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     useEffect(() => {
         if (!isSolving && (status === "NOT_SOLVING" || status === "SOLVING")) {
             handleViewProposal();

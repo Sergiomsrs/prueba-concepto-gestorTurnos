@@ -23,6 +23,7 @@ import { ProtectedRoute } from "@/timeTrack/context/ProtectedRoute"
 import { Footer } from "@/utilComponents/Footer"
 import { GenericRoster } from "./GenericRoster"
 import { PlannerPage } from "./PlannerPage"
+import ScrollToTop from "@/utils/components/ScrollToTop"
 
 
 export const MainPage = () => {
@@ -94,6 +95,7 @@ export const MainPage = () => {
         </div>
 
         <main className="flex flex-col w-full max-w-full overflow-x-auto">
+          <ScrollToTop />
           <Routes>
             {/* --- 1. RUTAS TOTALMENTE PÚBLICAS --- */}
             <Route path="/login" element={<Login />} />
