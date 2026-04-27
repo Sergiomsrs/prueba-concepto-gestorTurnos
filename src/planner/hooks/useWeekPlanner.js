@@ -4,80 +4,70 @@ import { weekPlannerService } from "../services/weekPlannerService";
 export const useWeekPlanner = () => {
     const queryClient = useQueryClient();
 
-    // Estado del solver de semana
-    const { data: status, isLoading: statusLoading } = useQuery({
+    // 1. Estado del Solver (con polling inteligente)
+    const { data: status } = useQuery({
         queryKey: ["week-solver-status"],
-        queryFn: weekPlannerService.status,
-        refetchInterval: (query) => (query.state.data === "SOLVING_ACTIVE" ? 2000 : false),
+        queryFn: weekPlannerService.getStatus,
+        // Si el estado es "SOLVING_ACTIVE", consulta cada 2 segundos 
+        refetchInterval: (query) =>
+            query.state.data === "SOLVING_ACTIVE" ? 2000 : false,
     });
 
-    // Propuesta actual de conflictos
-    const { data: proposal, isLoading: proposalLoading } = useQuery({
-        queryKey: ["week-solver-proposal"],
+    // 2. Obtener la Propuesta (solo se activa si NO está resolviendo)
+    const { data: proposal, isLoading: isLoadingProposal } = useQuery({
+        queryKey: ["week-proposal"],
         queryFn: weekPlannerService.getProposal,
-        enabled: false, // Solo se ejecuta cuando se llama manualmente
+        enabled: status !== "SOLVING_ACTIVE" && status !== undefined,
     });
 
-    // Mutation para analizar la semana
+    // 3. Mutación para Analizar (Sustituye a 'solve')
     const analyzeMutation = useMutation({
         mutationFn: (dto) => weekPlannerService.analyze(dto),
         onSuccess: () => {
+            // Invalidamos estado para activar el polling 
             queryClient.invalidateQueries({ queryKey: ["week-solver-status"] });
-            queryClient.invalidateQueries({ queryKey: ["week-solver-proposal"] });
         },
         onError: (error) => {
-            console.error("Error al analizar semana:", error);
+            console.error("Error al iniciar análisis semanal:", error);
         }
     });
 
-    // Mutation para confirmar propuesta
+    // 4. Mutación para Confirmar
     const confirmMutation = useMutation({
         mutationFn: weekPlannerService.confirm,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["week-solver-status"] });
-            queryClient.invalidateQueries({ queryKey: ["week-solver-proposal"] });
-            queryClient.invalidateQueries({ queryKey: ["roster"] });
-            queryClient.invalidateQueries({ queryKey: ["shifts"] });
+            queryClient.invalidateQueries({ queryKey: ["roster"] }); // Refresca el calendario general
+            queryClient.setQueryData(["week-proposal"], null); // Limpiamos la propuesta tras confirmar
         },
-        onError: (error) => {
-            console.error("Error al confirmar propuesta:", error);
-        }
     });
 
-    // Mutation para rechazar propuesta
+    // 5. Mutación para Rechazar toda la propuesta
     const rejectMutation = useMutation({
         mutationFn: weekPlannerService.reject,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["week-solver-status"] });
-            queryClient.invalidateQueries({ queryKey: ["week-solver-proposal"] });
+            queryClient.setQueryData(["week-proposal"], null);
         },
-        onError: (error) => {
-            console.error("Error al rechazar propuesta:", error);
-        }
     });
 
-    // Mutation para rechazar candidato específico para un turno
+    // 6. Mutación para Rechazar un candidato específico
     const rejectShiftCandidateMutation = useMutation({
-        mutationFn: (variables) => weekPlannerService.rejectShiftCandidate(variables),
+        mutationFn: ({ shiftId, excludeEmployeeId }) =>
+            weekPlannerService.rejectShiftCandidate({ shiftId, excludeEmployeeId }),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["week-solver-proposal"] });
+            // Tras rechazar un candidato, el backend suele re-calcular
+            queryClient.invalidateQueries({ queryKey: ["week-solver-status"] });
         },
-        onError: (error) => {
-            console.error("Error al rechazar candidato de turno:", error);
-        }
     });
 
     return {
-        // Queries
         status,
-        statusLoading,
         proposal,
-        proposalLoading,
-
-        // Mutations
+        isLoadingProposal,
         analyzeMutation,
         confirmMutation,
         rejectMutation,
-        rejectShiftCandidateMutation,
+        rejectShiftCandidateMutation
     };
 };

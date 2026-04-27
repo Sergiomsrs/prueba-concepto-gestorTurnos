@@ -7,6 +7,7 @@ import { createRolesBulk, saveDefaultRole } from "../../services/genericShiftSer
 import ConfirmButton from "@/roster/utils/ConfirmButton";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
 import { RolesBulkModal } from "@/generic-roster/components/RolesBulkModal";
+import { WeekAnalysisPanel } from "@/planner/pages/WeekAnalysisPanel";
 
 export const SetupWeek = () => {
     const {
@@ -28,6 +29,8 @@ export const SetupWeek = () => {
     const [isBulkModalOpen, setIsBulkModalOpen] = useState(false);
     const [isBulkLoading, setIsBulkLoading] = useState(false);
     const [saveStatus, setSaveStatus] = useState(null); // 'success' | 'error' | null
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [analysisConfig, setAnalysisConfig] = useState(null);
 
     const { auth } = useContext(AuthContext);
 
@@ -73,16 +76,36 @@ export const SetupWeek = () => {
     const isEmployeeRepeated = (employeeId) => employeeCounts[employeeId] > 1;
 
     const handleGetConfig = () => {
+        if (!ciclo || !range.start || !range.end) {
+            setSaveStatus('error');
+            return;
+        }
         const config = {
             cycle: ciclo,
             startDate: range.start,
             endDate: range.end,
             selectedEmployees,
         };
-        handleCreateByGeneric(config, {
-            onSuccess: () => setSaveStatus('success'),
-            onError: () => setSaveStatus('error'),
-        });
+        setAnalysisConfig(config);
+        setIsAnalyzing(true);
+    };
+
+    const handleAnalysisClose = () => {
+        setIsAnalyzing(false);
+        setAnalysisConfig(null);
+    };
+
+    const handleAnalysisSuccess = () => {
+        setSaveStatus('success');
+        setIsAnalyzing(false);
+        setAnalysisConfig(null);
+        // Reiniciar el estado después del éxito
+        setTimeout(() => {
+            setRange({ start: "", end: "" });
+            setCiclo("");
+            setSelectedEmployees([]);
+            handleGetAllRolesWihtDefaults();
+        }, 1000);
     };
 
     const handleSendEmployeeToApi = async (role) => {
@@ -135,6 +158,17 @@ export const SetupWeek = () => {
         );
     };
 
+    // Si está en fase de análisis, mostrar el panel
+    if (isAnalyzing && analysisConfig) {
+        return (
+            <WeekAnalysisPanel
+                config={analysisConfig}
+                onClose={handleAnalysisClose}
+                onSuccess={handleAnalysisSuccess}
+            />
+        );
+    }
+
     return (
         <section className="min-h-screen bg-gray-50 pt-4 pb-20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -160,11 +194,11 @@ export const SetupWeek = () => {
                         <OptionsPicker value={ciclo} onChange={setCiclo} />
                         <SaveStatusBanner />
                         <ConfirmButton
-                            triggerText={isSavingCycle ? "Guardando..." : "Enviar Configuración"}
-                            title="¿Confirmar envío de datos?"
-                            description="Se aplicarán los cambios en el horario del trabajador seleccionado."
+                            triggerText="Generar Semana"
+                            title="¿Generar análisis de semana?"
+                            description="Se validarán disponibilidades y se buscarán sustitutos óptimos para los conflictos detectados."
                             onConfirm={handleGetConfig}
-                            disabled={isSavingCycle}
+                            disabled={isAnalyzing}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white w-full h-[42px]"
                         />
                         <button
@@ -197,11 +231,11 @@ export const SetupWeek = () => {
                                 <ReloadIcon /> Recargar
                             </button>
                             <ConfirmButton
-                                triggerText={isSavingCycle ? "Guardando..." : "Enviar Configuración"}
-                                title="¿Confirmar envío de datos?"
-                                description="Se aplicarán los cambios en el horario del trabajador seleccionado."
+                                triggerText="Generar Semana"
+                                title="¿Generar análisis de semana?"
+                                description="Se validarán disponibilidades y se buscarán sustitutos óptimos para los conflictos detectados."
                                 onConfirm={handleGetConfig}
-                                disabled={isSavingCycle}
+                                disabled={isAnalyzing}
                                 className="bg-emerald-600 hover:bg-emerald-700 text-white w-full h-[42px]"
                             />
                             <button
