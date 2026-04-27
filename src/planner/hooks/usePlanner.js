@@ -28,7 +28,6 @@ export const usePlanner = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["solver-status"] });
             queryClient.invalidateQueries({ queryKey: ["roster"] });
-            alert("Sustituciones aplicadas correctamente");
         },
     });
 

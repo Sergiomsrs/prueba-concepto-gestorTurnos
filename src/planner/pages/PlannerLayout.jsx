@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePlanner } from '../hooks/usePlanner';
 import { EmployeeSelector } from '@/utilComponents/EmployeeSelector';
+import { AlertModal } from '@/timeTrack/components/AlertModal';
 import { plannerService } from "../services/plannerService";
 
 const PROGRESS_STEPS = [
@@ -104,6 +105,8 @@ export const PlannerLayout = () => {
     const [rejectedByShift, setRejectedByShift] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [progressKey, setProgressKey] = useState(0);
+    const [modalMessage, setModalMessage] = useState({});
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [activeTab] = useState({
         year: new Date().getFullYear(),
@@ -124,6 +127,20 @@ export const PlannerLayout = () => {
         }
     }, [status]);
 
+    useEffect(() => {
+        if (confirmMutation.isSuccess) {
+            setModalMessage({
+                type: 'success',
+                text: 'Sustituciones aplicadas correctamente'
+            });
+            setIsModalOpen(true);
+            setTimeout(() => {
+                setIsModalOpen(false);
+                setProposal(null);
+            }, 2000);
+        }
+    }, [confirmMutation.isSuccess]);
+
     const handleViewProposal = async () => {
         try {
             const data = await plannerService.getProposal();
@@ -138,7 +155,12 @@ export const PlannerLayout = () => {
 
     const handleSolve = () => {
         if (!absentId || !range.from || !range.to) {
-            alert("Por favor, selecciona un empleado y el rango de fechas completo.");
+            setModalMessage({
+                type: 'error',
+                text: 'Por favor, selecciona un empleado y el rango de fechas completo.'
+            });
+            setIsModalOpen(true);
+            setTimeout(() => setIsModalOpen(false), 2000);
             return;
         }
         setProposal(null);
@@ -166,6 +188,12 @@ export const PlannerLayout = () => {
             shiftId: shift.shiftId,
             excludeEmployeeId: shift.proposedEmployeeId
         });
+    };
+
+    const handleConfirmAll = () => {
+        setRejectedByShift({});
+        setResolvingShiftId(null);
+        confirmMutation.mutate();
     };
 
     const handleRejectAll = () => {
@@ -286,7 +314,7 @@ export const PlannerLayout = () => {
                             </div>
                             <div className="flex gap-2 w-full sm:w-auto">
                                 <button
-                                    onClick={() => confirmMutation.mutate()}
+                                    onClick={handleConfirmAll}
                                     className="flex-1 sm:flex-none px-4 py-2 bg-appPrimary hover:bg-primary-hover text-white rounded-lg font-semibold transition-all active:scale-95 text-sm"                                >
                                     Confirmar todo
                                 </button>
@@ -324,19 +352,25 @@ export const PlannerLayout = () => {
                                                         {shift.startTime.substring(0, 5)} - {shift.endTime.substring(0, 5)}
                                                     </span>
                                                 </td>
-                                                <td className="!px-6 !py-3.5">
+                                                <td className="px-6 py-4">
                                                     {isBeingResolved ? (
-                                                        <div className="flex items-center gap-2 text-appPrimary">
+                                                        <div className="flex items-center gap-2 text-blue-600">
                                                             <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                                             </svg>
-                                                            <span className="text-xs font-medium">Buscando alternativa...</span>
+                                                            <span className="text-sm font-medium">Buscando alternativa...</span>
+                                                        </div>
+                                                    ) : !shift.solved ? (
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                                                ⚠ Sin candidatos disponibles
+                                                            </span>
                                                         </div>
                                                     ) : (
                                                         <div className="flex flex-col">
-                                                            <span className="font-semibold text-gray-900 leading-tight">{shift.proposedEmployeeName}</span>
-                                                            <span className="text-[11px] text-appPrimary-text mt-0.5 leading-tight">ID: {shift.proposedEmployeeId}</span>
+                                                            <span className="font-semibold text-appPrimary">{shift.proposedEmployeeName}</span>
+                                                            <span className="text-xs text-gray-400 mt-0.5">ID: {shift.proposedEmployeeId}</span>
                                                         </div>
                                                     )}
                                                 </td>
@@ -358,17 +392,14 @@ export const PlannerLayout = () => {
                                                         <span className="text-gray-300 text-xs">—</span>
                                                     )}
                                                 </td>
-                                                <td className="!px-6 !py-3.5 text-right">
-                                                    {!isBeingResolved && shift.proposedEmployeeId && (
+                                                <td className="px-6 py-4 text-right">
+                                                    {!isBeingResolved && shift.solved && shift.proposedEmployeeId && (
                                                         <button
                                                             onClick={() => handleRejectCandidate(shift)}
                                                             disabled={rejectShiftCandidateMutation.isPending}
-                                                            className="inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] font-semibold text-gray-600 leading-none transition-colors hover:border-red-200 hover:bg-red-50 hover:text-red-700 disabled:opacity-40 whitespace-nowrap"
+                                                            className="text-xs text-gray-400 hover:text-red-600 font-medium transition-colors disabled:opacity-40 whitespace-nowrap"
                                                         >
-                                                            <span>Proponer otro</span>
-                                                            <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                                            </svg>
+                                                            Proponer otro →
                                                         </button>
                                                     )}
                                                 </td>
@@ -399,6 +430,8 @@ export const PlannerLayout = () => {
                     </div>
                 )}
             </div>
+
+            <AlertModal isOpen={isModalOpen} message={modalMessage} />
         </div>
     );
 };
