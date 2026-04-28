@@ -11,6 +11,7 @@ import { PrintableRoster } from "../roster/components/PrintableRoster";
 import { AppContext } from "@/context/AppContext";
 import DateRangePicker from "@/roster/components/DateRangePicker";
 import { getVisibleRange, HOUR_RANGE_PRESETS } from "@/utils/rangeCalculator";
+import { Link } from "react-router-dom";
 
 export const RosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
@@ -382,72 +383,65 @@ export const RosterPage = () => {
                 <div className="max-w-[1920px] mx-auto">
                     {/* Top Bar */}
                     <div className="flex items-center justify-between px-4 sm:px-6 h-16">
-                        <div className="flex items-center space-x-3">
+                        {/* Logo + Info Group */}
+                        <div className="hidden xl:flex items-center gap-4">
                             <img
                                 src="./logo-navegador.webp"
                                 alt="WorkSchedFlow Logo"
                                 width="48"
                                 height="48"
                             />
-                            <div>
-                                <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
-                                    Roster Board
-                                </h1>
-                                <p className="text-xs sm:text-sm text-slate-500 hidden sm:block">
-                                    Gestión de equipos de trabajo
-                                </p>
+                            {/* Info Group */}
+                            <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-2 px-3 h-10 bg-slate-100 rounded-lg">
+                                    <span>👥</span>
+                                    <span className="text-sm font-medium whitespace-nowrap">
+                                        {stats.employees} Empleados
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center gap-2 px-3 h-10 bg-slate-100 rounded-lg">
+                                    <span>⏰</span>
+                                    <span className="text-sm font-medium whitespace-nowrap">
+                                        {stats.hours.toFixed(1)} Horas
+                                    </span>
+                                </div>
+
+                                {filters.selectedTeams.length > 0 && (
+                                    <div className="flex items-center gap-2 px-3 h-10 bg-blue-100 rounded-lg">
+                                        <span>🔍</span>
+                                        <span className="text-sm font-medium whitespace-nowrap">
+                                            {filters.selectedTeams.length} equipo{filters.selectedTeams.length > 1 ? "s" : ""}
+                                        </span>
+                                    </div>
+                                )}
+
+                                {modifiedData.length > 0 && (
+                                    <div className="flex items-center gap-2 px-3 h-10 bg-amber-100 rounded-lg">
+                                        <div className="h-2 w-2 bg-amber-500 rounded-full animate-pulse"></div>
+                                        <span className="text-sm font-medium whitespace-nowrap">
+                                            {modifiedData.length} Cambios
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        {/* Desktop Stats */}
-                        <div className="hidden xl:flex items-center gap-3">
-                            <div className="flex items-center gap-2 px-3 h-10 bg-slate-100 rounded-lg">
-                                <span>👥</span>
-                                <span className="text-sm font-medium whitespace-nowrap">
-                                    {stats.employees} Empleados
-                                </span>
-                            </div>
-
-                            <div className="flex items-center gap-2 px-3 h-10 bg-slate-100 rounded-lg">
-                                <span>⏰</span>
-                                <span className="text-sm font-medium whitespace-nowrap">
-                                    {stats.hours.toFixed(1)} Horas
-                                </span>
-                            </div>
-
-                            {filters.selectedTeams.length > 0 && (
-                                <div className="flex items-center gap-2 px-3 h-10 bg-blue-100 rounded-lg">
-                                    <span>🔍</span>
-                                    <span className="text-sm font-medium whitespace-nowrap">
-                                        {filters.selectedTeams.length} equipo{filters.selectedTeams.length > 1 ? "s" : ""}
-                                    </span>
-                                </div>
-                            )}
-
-                            {modifiedData.length > 0 && (
-                                <div className="flex items-center gap-2 px-3 h-10 bg-amber-100 rounded-lg">
-                                    <div className="h-2 w-2 bg-amber-500 rounded-full animate-pulse"></div>
-                                    <span className="text-sm font-medium whitespace-nowrap">
-                                        {modifiedData.length} Cambios
-                                    </span>
-                                </div>
-                            )}
-
-                            <button
-                                onClick={handlePrint}
-                                disabled={filteredData.length <= 1}
-                                className={`flex items-center gap-2 px-4 h-10 rounded-lg font-medium whitespace-nowrap ${filteredData.length <= 1
-                                    ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                    : "bg-purple-600 hover:bg-purple-700 text-white"
-                                    }`}
+                        {/* Mobile Logo + Actions */}
+                        <div className="xl:hidden flex items-center gap-3">
+                            <img
+                                src="./logo-navegador.webp"
+                                alt="WorkSchedFlow Logo"
+                                width="40"
+                                height="40"
+                            />
+                            <Link
+                                to="/planner"
+                                className="flex items-center gap-2 px-4 h-10 rounded-lg font-medium whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-300"
                             >
-                                <span>🖨️</span>
-                                <span className="text-sm">Imprimir</span>
-                            </button>
-                        </div>
+                                <span>🗓️</span>
+                            </Link>
 
-                        {/* Mobile/Tablet Actions */}
-                        <div className="xl:hidden flex items-center gap-2">
                             <button
                                 onClick={handlePrint}
                                 disabled={filteredData.length <= 1}
@@ -462,6 +456,32 @@ export const RosterPage = () => {
                             >
                                 <span className="text-lg">🔍</span>
                             </button>
+                        </div>
+
+                        {/* Desktop Divider + Actions */}
+                        <div className="hidden xl:flex items-center gap-4">
+
+                            {/* Action Group */}
+                            <div className="flex items-center gap-2">
+                                <Link
+                                    to="/planner"
+                                    className="flex items-center gap-2 px-4 h-10 rounded-lg font-medium whitespace-nowrap bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-300"
+                                >
+                                    <span>🗓️</span>
+                                    <span className="text-sm">Ausencias</span>
+                                </Link>
+                                <button
+                                    onClick={handlePrint}
+                                    disabled={filteredData.length <= 1}
+                                    className={`flex items-center gap-2 px-4 h-10 rounded-lg font-medium whitespace-nowrap ${filteredData.length <= 1
+                                        ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                                        : "bg-purple-600 hover:bg-purple-700 text-white"
+                                        }`}
+                                >
+                                    <span>🖨️</span>
+                                    <span className="text-sm">Imprimir</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -522,8 +542,8 @@ export const RosterPage = () => {
                                         onClick={handleGetData}
                                         disabled={loading}
                                         className={`flex-1 flex items-center justify-center gap-2 px-4 h-10 rounded-lg text-sm font-medium whitespace-nowrap ${loading
-                                                ? "bg-slate-300 text-slate-500 cursor-not-allowed"
-                                                : "bg-blue-600 hover:bg-blue-700 text-white"
+                                            ? "bg-slate-300 text-slate-500 cursor-not-allowed"
+                                            : "bg-blue-600 hover:bg-blue-700 text-white"
                                             }`}
                                     >
                                         <span>{loading ? "⏳" : "📊"}</span>
@@ -543,8 +563,8 @@ export const RosterPage = () => {
                                         onClick={handleSaveData}
                                         disabled={modifiedData.length === 0 || loading}
                                         className={`w-full flex items-center justify-center gap-2 px-4 h-10 rounded-lg font-medium whitespace-nowrap ${modifiedData.length === 0 || loading
-                                                ? "bg-slate-200 text-slate-500 cursor-not-allowed"
-                                                : "bg-green-600 hover:bg-green-700 text-white"
+                                            ? "bg-slate-200 text-slate-500 cursor-not-allowed"
+                                            : "bg-green-600 hover:bg-green-700 text-white"
                                             }`}
                                     >
                                         <span>💾</span>
