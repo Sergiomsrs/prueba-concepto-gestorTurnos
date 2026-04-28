@@ -2,7 +2,7 @@
 
 ## Descripción
 
-**WorkSchedFlow** es una prueba de concepto diseñada para facilitar la gestión de turnos de trabajo. Su objetivo principal es cubrir las necesidades de los gestores de equipos, proporcionando una herramienta que simplifica el diseño de horarios, garantiza el cumplimiento de la normativa laboral y tiene en cuenta las expectativas y disponibilidad de los empleados.
+**WorkSchedFlow** es una plataforma de planificación operativa de personal diseñada para empresas con turnos, campañas y alta variabilidad de demanda. No es una herramienta de consulta ni de control de horarios, sino un sistema de diseño estratégico de cuadrantes. Permite construir la planificación óptima de equipos en función de la demanda del negocio, los picos de actividad y los objetivos de cobertura. Su enfoque está en ayudar a tomar decisiones, no solo en visualizar información. A través de su entorno de planificación, facilita el equilibrio entre necesidad operativa, disponibilidad de empleados y presupuesto. Es una herramienta pensada para sentarse a diseñar, optimizar y ajustar la estructura de trabajo, no solo para revisarla.
 
 👉 **Demo online:**  
 [WorkSchedFlow – GitHub Pages](https://sergiomsrs.github.io/prueba-concepto-gestorTurnos/)
