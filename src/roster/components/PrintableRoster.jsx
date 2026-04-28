@@ -1,32 +1,35 @@
 import React, { useMemo } from "react";
 import { selectColor } from "../../utils/function";
+import { getVisibleRange } from "../../utils/rangeCalculator";
 
 // --- CONSTANTS ---
 // Defining these outside ensures they are calculated only once, not on every render.
 const START_HOUR = 7;
-const TOTAL_SLOTS = 62;
-const TIME_SLOTS = Array.from({ length: TOTAL_SLOTS }, (_, i) => {
-    const totalMinutes = START_HOUR * 60 + (i * 15);
-    const hour = Math.floor(totalMinutes / 60);
-    return {
-        label: hour.toString().padStart(2, '0'),
-        isHourStart: i % 4 === 0
-    };
-});
+const DEFAULT_TOTAL_SLOTS = 62;
 
 // --- MEMOIZED INTERNAL COMPONENTS ---
 
 /**
  * Encabezado de la cuadrícula con las horas.
- * Optimizado: Usa la constante TIME_SLOTS pre-calculada.
+ * Dinámico: Calcula los slots según el rango visible usando getVisibleRange.
  */
-const PrintableHeadRow = React.memo(() => {
+const PrintableHeadRow = React.memo(({ rangeConfig }) => {
     return (
         <>
-            {TIME_SLOTS.map((slot, i) => {
-                const borderClass = slot.isHourStart
+            {Array.from({ length: rangeConfig.visibleSlots }, (_, i) => {
+                const absoluteIndex = rangeConfig.startIndex + i;
+                const isHourStart = absoluteIndex % 4 === 0;
+
+                const borderClass = isHourStart
                     ? 'border-l-[0.2px] border-slate-300'
                     : 'border-l-[0.2px] border-slate-100';
+
+                let hourLabel = "";
+                if (isHourStart) {
+                    const totalMinutes = absoluteIndex * 15;
+                    const hour = Math.floor(totalMinutes / 60);
+                    hourLabel = hour.toString().padStart(2, '0');
+                }
 
                 return (
                     <div
@@ -34,11 +37,11 @@ const PrintableHeadRow = React.memo(() => {
                         className={`
                             bg-slate-100 h-3 flex items-center justify-center 
                             text-[5pt] relative
-                            ${slot.isHourStart ? 'font-bold text-slate-700' : 'font-normal text-slate-400'}
+                            ${isHourStart ? 'font-bold text-slate-700' : 'font-normal text-slate-400'}
                             ${borderClass}
                         `}
                     >
-                        {slot.isHourStart ? slot.label : ""}
+                        {hourLabel}
                     </div>
                 );
             })}
@@ -49,27 +52,28 @@ const PrintableHeadRow = React.memo(() => {
 /**
  * Fila individual de un empleado.
  */
-const PrintableEmployeeRow = React.memo(({ employee }) => {
-    // Safety check for workShift
+const PrintableEmployeeRow = React.memo(({ employee, rangeConfig }) => {
     const workShift = employee.workShift || [];
-    const totalHours = (workShift.filter((w) => w === "WORK").length * 15) / 60;
+    const { startIndex, visibleSlots } = rangeConfig;
 
-    const getCellClasses = (value, isHourStart) => {
+    const visibleWorkShift = workShift.slice(startIndex, startIndex + visibleSlots);
+    const totalHours = (visibleWorkShift.filter((w) => w === "WORK").length * 15) / 60;
+
+    const getCellProps = (value, absoluteIndex) => {
+        const isHourStart = absoluteIndex % 4 === 0;
         const baseClasses = `h-3.5 flex items-center justify-center`;
         const borderClass = isHourStart
             ? 'border-l-[0.1px] border-slate-300'
             : 'border-l-[0.1px] border-slate-100';
 
-        let backgroundClass = 'bg-slate-50';
+        // Clase base para el fondo (por defecto o conflicto)
+        let backgroundClass = value === "CONFLICT" ? 'bg-amber-400' : 'bg-slate-50';
 
-        if (value === "CONFLICT") {
-            backgroundClass = 'bg-amber-400';
-        } else if (value === "WORK") {
-            // Ensure selectColor returns a valid tailwind class
-            backgroundClass = selectColor(employee.teamWork);
-        }
-
-        return `${baseClasses} ${backgroundClass} ${borderClass}`;
+        return {
+            className: `${baseClasses} ${backgroundClass} ${borderClass}`,
+            // El truco está aquí: si es WORK, aplicamos el color hex vía style
+            style: value === "WORK" ? { backgroundColor: selectColor(employee.teamWork) } : {}
+        };
     };
 
     return (
@@ -84,9 +88,19 @@ const PrintableEmployeeRow = React.memo(({ employee }) => {
             </div>
 
             {/* Time Grid */}
-            {workShift.map((value, hourIndex) => (
-                <div key={hourIndex} className={getCellClasses(value, hourIndex % 4 === 0)} />
-            ))}
+            {visibleWorkShift.map((value, relativeIndex) => {
+                const absoluteIndex = startIndex + relativeIndex;
+                // EXTRAEMOS className y style del objeto que devuelve la función
+                const { className, style } = getCellProps(value, absoluteIndex);
+
+                return (
+                    <div
+                        key={relativeIndex}
+                        className={className}
+                        style={style}
+                    />
+                );
+            })}
 
             {/* Total Hours Column */}
             <div className="bg-white py-[1px] px-1 text-[6pt] font-semibold text-slate-800 border-l-[0.2px] border-slate-200 flex items-center justify-center">
@@ -99,13 +113,16 @@ const PrintableEmployeeRow = React.memo(({ employee }) => {
 /**
  * Fila de distribución de empleados por franja horaria.
  */
-const PrintableDistributionRow = React.memo(({ day }) => {
-    // Memoize the distribution calculation within the component to prevent recalc on non-data renders
+const PrintableDistributionRow = React.memo(({ day, rangeConfig }) => {
+    const { startIndex, visibleSlots } = rangeConfig;
+
+    // Memoize the distribution calculation dentro del rango visible
     const distributionData = useMemo(() => {
-        return Array.from({ length: TOTAL_SLOTS }, (_, i) =>
-            day.employees?.reduce((acc, emp) => acc + (emp.workShift?.[i] === "WORK" ? 1 : 0), 0) || 0
-        );
-    }, [day.employees]);
+        return Array.from({ length: visibleSlots }, (_, i) => {
+            const absoluteIndex = startIndex + i;
+            return day.employees?.reduce((acc, emp) => acc + (emp.workShift?.[absoluteIndex] === "WORK" ? 1 : 0), 0) || 0;
+        });
+    }, [day.employees, startIndex, visibleSlots]);
 
     return (
         <>
@@ -113,14 +130,15 @@ const PrintableDistributionRow = React.memo(({ day }) => {
                 Distribución
             </div>
 
-            {distributionData.map((count, i) => {
-                const borderClass = i % 4 === 0
+            {distributionData.map((count, relativeIndex) => {
+                const absoluteIndex = startIndex + relativeIndex;
+                const borderClass = absoluteIndex % 4 === 0
                     ? 'border-l-[0.2px] border-slate-300'
                     : 'border-l-[0.1px] border-slate-100';
 
                 return (
                     <div
-                        key={i}
+                        key={relativeIndex}
                         className={`
                             bg-slate-100 
                             flex items-center justify-center text-[5.5pt] font-bold 
@@ -236,10 +254,18 @@ const PrintableSummaryTable = React.memo(({ data }) => {
 /**
  * Componente principal.
  */
-export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
+export const PrintableRoster = React.forwardRef(({ data, filters, visibleSlots = DEFAULT_TOTAL_SLOTS }, ref) => {
+    // Calcular el rango visible correctamente
+    const rangeConfig = useMemo(() => {
+        const displayRange = filters?.displayHourRange ?? { startHour: 7, endHour: 22.5 };
+        return getVisibleRange(displayRange.startHour, displayRange.endHour);
+    }, [filters?.displayHourRange?.startHour, filters?.displayHourRange?.endHour]);
+
+    const gridCol = `repeat(${rangeConfig.visibleSlots}, 0.08fr)`;
+
     // Grid inline style extraction for cleaner JSX
     const gridStyle = {
-        gridTemplateColumns: '1.5fr 2fr repeat(62, 0.5fr) 1fr',
+        gridTemplateColumns: `0.6fr 1fr ${gridCol} 0.4fr`,
     };
 
     return (
@@ -357,15 +383,15 @@ export const PrintableRoster = React.forwardRef(({ data, filters }, ref) => {
                                     <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Equipo</div>
                                     <div className="bg-slate-200 px-1 py-0 text-[6pt] font-semibold text-slate-600 flex items-center gap-1">Empleado</div>
 
-                                    <PrintableHeadRow />
+                                    <PrintableHeadRow rangeConfig={rangeConfig} />
 
                                     <div className="bg-slate-200 p-0 text-[7pt] font-semibold text-slate-600 flex items-center justify-center gap-1">⏰</div>
 
                                     {day.employees?.map((employee) => (
-                                        <PrintableEmployeeRow key={employee.id} employee={employee} />
+                                        <PrintableEmployeeRow key={employee.id} employee={employee} rangeConfig={rangeConfig} />
                                     ))}
 
-                                    <PrintableDistributionRow day={day} />
+                                    <PrintableDistributionRow day={day} rangeConfig={rangeConfig} />
                                 </div>
                             </div>
                         </section>
