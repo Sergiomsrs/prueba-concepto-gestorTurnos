@@ -11,18 +11,30 @@ import { PrintableRoster } from "../roster/components/PrintableRoster";
 import { AppContext } from "@/context/AppContext";
 import DateRangePicker from "@/roster/components/DateRangePicker";
 import { getVisibleRange, HOUR_RANGE_PRESETS } from "@/utils/rangeCalculator";
+import { ZoomControls } from "@/components/ZoomControls";
+import { useGridZoom } from "@/Hooks/useGridZoom";
 import { Link } from "react-router-dom";
 
 export const RosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
     const inputRefsMatrix = useRef([]);
 
+    // ✅ Control de Zoom usando Hook personalizado
+    const {
+        zoom: gridZoom,
+        containerRef: gridContainerRef,
+        handleZoomIn,
+        handleZoomOut,
+        handleZoomReset,
+        MIN_ZOOM,
+        MAX_ZOOM,
+    } = useGridZoom(1, 0.5, 2, 0.1);
 
     const { filters, setFilters } = useContext(AppContext)
     const { apiData, loading, error, saveData } = useRoster(filters.startDate, filters.endDate);
     const [showMobileFilters, setShowMobileFilters] = useState(false);
     const [showTeamDropdown, setShowTeamDropdown] = useState(false);
-    const [showFullDistribution, setShowFullDistribution] = useState(false); // Agregar este estado
+    const [showFullDistribution, setShowFullDistribution] = useState(false);
 
     const dropdownDesktopRef = useRef(null);
     const dropdownMobileRef = useRef(null);
@@ -693,81 +705,101 @@ export const RosterPage = () => {
                                                 </div>
                                                 <div className="text-xs text-slate-500">Total del día</div>
                                             </div>
+
+                                            {/* ✅ Controles de Zoom */}
+                                            <ZoomControls
+                                                zoom={gridZoom}
+                                                onZoomIn={handleZoomIn}
+                                                onZoomOut={handleZoomOut}
+                                                onZoomReset={handleZoomReset}
+                                                minZoom={MIN_ZOOM}
+                                                maxZoom={MAX_ZOOM}
+                                                hideOnMobile={true}
+                                            />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Tabla de Turnos */}
-                                <div className="overflow-x-auto">
+                                <div className="overflow-x-auto grid-zoom-container" ref={gridContainerRef}>
+                                    {/* ✅ Wrapper para aplicar zoom a todo el contenido */}
                                     <div
-                                        className="grid  bg-slate-200 min-w-max"
                                         style={{
-                                            gridTemplateColumns: gridColumns,
+                                            zoom: gridZoom,
+                                            transition: 'zoom 150ms ease-out',
                                         }}
                                     >
-                                        {/* Headers */}
-                                        <div className="bg-slate-100 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 border-r flex items-center">
-                                            <span className="mr-1">👥</span>
-                                            <span className="hidden sm:inline">Equipo</span>
-                                        </div>
-                                        <div className="bg-slate-100 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 border-r flex items-center">
-                                            <span className="mr-1">👤</span>
-                                            <span className="hidden sm:inline">Empleado</span>
-                                        </div>
-
-                                        <HeadRow />
-
-                                        <div className="bg-slate-100 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 text-center border-l flex items-center justify-center">
-                                            <span className="mr-1">
-                                                <button onClick={() => handleFilterChange('hideZeroHours', !filters.hideZeroHours)}>
-                                                    ⏰
-                                                </button>
-                                            </span>
-                                            <span className="hidden sm:inline">Total</span>
-                                        </div>
-                                    </div>
-
-                                    {/* ✅ Optimizar mapeo de empleados */}
-                                    {day.employees?.map((employee) => {
-                                        const originalEmployeeIndex = dayMapping.employeeMap.get(employee.id);
-
-                                        if (originalEmployeeIndex === undefined) return null;
-
-                                        return (
-                                            <div
-                                                key={employee.id}
-                                                className={`grid  bg-slate-200 min-w-max transition-all duration-200`}
-                                                style={{ gridTemplateColumns: gridColumns }}
-                                            >
-                                                <EmployeeRow
-                                                    employee={employee}
-                                                    dayIndex={dayMapping.dayIndex}
-                                                    employeeIndex={originalEmployeeIndex}
-                                                    numRows={day.employees.length}
-                                                    numDays={filteredData.length}
-                                                    inputRefsMatrix={inputRefsMatrix}
-                                                    dispatch={dispatch}
-                                                    previousEmployee={
-                                                        filteredData[realDayIndex - 1]?.employees?.find(
-                                                            (e) => e.id === employee.id
-                                                        )
-                                                    }
-                                                />
+                                        {/* Headers Grid */}
+                                        <div
+                                            className="grid bg-slate-200 min-w-max"
+                                            style={{
+                                                gridTemplateColumns: gridColumns,
+                                            }}
+                                        >
+                                            {/* Headers */}
+                                            <div className="bg-slate-100 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 border-r flex items-center">
+                                                <span className="mr-1">👥</span>
+                                                <span className="hidden sm:inline">Equipo</span>
                                             </div>
-                                        );
-                                    })}
+                                            <div className="bg-slate-100 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 border-r flex items-center">
+                                                <span className="mr-1">👤</span>
+                                                <span className="hidden sm:inline">Empleado</span>
+                                            </div>
 
-                                    {/* Fila de Distribución */}
-                                    <div
-                                        className="grid bg-slate-300 min-w-max border-t-2 border-slate-400"
-                                        style={{ gridTemplateColumns: gridColumns }}
-                                    >
-                                        <DistributionRow
-                                            day={day}
-                                            originalDay={data[dayMapping.dayIndex]}
-                                            showFullDistribution={showFullDistribution}
-                                            onToggle={() => setShowFullDistribution(!showFullDistribution)}
-                                        />
+                                            <HeadRow />
+
+                                            <div className="bg-slate-100 px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 text-center border-l flex items-center justify-center">
+                                                <span className="mr-1">
+                                                    <button onClick={() => handleFilterChange('hideZeroHours', !filters.hideZeroHours)}>
+                                                        ⏰
+                                                    </button>
+                                                </span>
+                                                <span className="hidden sm:inline">Total</span>
+                                            </div>
+                                        </div>
+
+                                        {/* ✅ Optimizar mapeo de empleados */}
+                                        {day.employees?.map((employee) => {
+                                            const originalEmployeeIndex = dayMapping.employeeMap.get(employee.id);
+
+                                            if (originalEmployeeIndex === undefined) return null;
+
+                                            return (
+                                                <div
+                                                    key={employee.id}
+                                                    className={`grid  bg-slate-200 min-w-max transition-all duration-200`}
+                                                    style={{ gridTemplateColumns: gridColumns }}
+                                                >
+                                                    <EmployeeRow
+                                                        employee={employee}
+                                                        dayIndex={dayMapping.dayIndex}
+                                                        employeeIndex={originalEmployeeIndex}
+                                                        numRows={day.employees.length}
+                                                        numDays={filteredData.length}
+                                                        inputRefsMatrix={inputRefsMatrix}
+                                                        dispatch={dispatch}
+                                                        previousEmployee={
+                                                            filteredData[realDayIndex - 1]?.employees?.find(
+                                                                (e) => e.id === employee.id
+                                                            )
+                                                        }
+                                                    />
+                                                </div>
+                                            );
+                                        })}
+
+                                        {/* Fila de Distribución */}
+                                        <div
+                                            className="grid bg-slate-300 min-w-max border-t-2 border-slate-400"
+                                            style={{ gridTemplateColumns: gridColumns }}
+                                        >
+                                            <DistributionRow
+                                                day={day}
+                                                originalDay={data[dayMapping.dayIndex]}
+                                                showFullDistribution={showFullDistribution}
+                                                onToggle={() => setShowFullDistribution(!showFullDistribution)}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

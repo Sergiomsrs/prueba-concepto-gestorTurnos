@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import './styles.css'
+import './styles-zoom.css'
 import { HashRouter } from 'react-router-dom'
 import { MainPage } from './pages/MainPage.jsx'
 import { AppProvider } from './context/AppProvider'
