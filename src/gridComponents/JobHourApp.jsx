@@ -35,9 +35,9 @@ export const JobHourApp = ({ employees, onHourChange, day, eh, data }) => {
                     lastName={employee.lastName}
                     shiftDurationes={employee.shiftDuration}
                     phours={
-                      previousShift ? previousShift.workShift : Array(62).fill("Null")
+                      previousShift ? previousShift.workShift.slice(28, 90) : Array(62).fill("Null")
                     }
-                    hours={employee.workShift}
+                    hours={employee.workShift.slice(28, 90)}
                     startSelection={startSelection}
                     isSelecting={isSelecting}
                     setIsSelecting={setIsSelecting}
