@@ -1,79 +1,55 @@
 # WorkSchedFlow - POC
 
-## Descripción
+## 🚀 Descripción
+**WorkSchedFlow** WorkSchedFlow es una plataforma de planificación operativa de personal diseñada para empresas con turnos, campañas y alta variabilidad de demanda. No es una herramienta de consulta ni de control de horarios, sino un sistema de diseño estratégico de cuadrantes. Permite construir la planificación óptima de equipos en función de la demanda del negocio, los picos de actividad y los objetivos de cobertura. Su enfoque está en ayudar a tomar decisiones, no solo en visualizar información. A través de su entorno de planificación, facilita el equilibrio entre necesidad operativa, disponibilidad de empleados y presupuesto. Es una herramienta pensada para sentarse a diseñar, optimizar y ajustar la estructura de trabajo, no solo para revisarla.
 
-**WorkSchedFlow** es una plataforma de planificación operativa de personal diseñada para empresas con turnos, campañas y alta variabilidad de demanda. No es una herramienta de consulta ni de control de horarios, sino un sistema de diseño estratégico de cuadrantes. Permite construir la planificación óptima de equipos en función de la demanda del negocio, los picos de actividad y los objetivos de cobertura. Su enfoque está en ayudar a tomar decisiones, no solo en visualizar información. A través de su entorno de planificación, facilita el equilibrio entre necesidad operativa, disponibilidad de empleados y presupuesto. Es una herramienta pensada para sentarse a diseñar, optimizar y ajustar la estructura de trabajo, no solo para revisarla.
+> [!IMPORTANT]
+> **Aviso de Demo:** El servidor está alojado en la capa gratuita de Render. Si el sistema lleva más de 15 minutos inactivo, el servidor se "duerme". Al acceder por primera vez, puede tardar unos **3 minutos en responder** mientras se reactiva.
 
-👉 **Demo online:**  
-[WorkSchedFlow – GitHub Pages](https://sergiomsrs.github.io/prueba-concepto-gestorTurnos/)
-
-🎥 **Vídeo demostración:**  
-[Ver demo en YouTube](https://youtu.be/RifYxP6gKqA)
+👉 **Demo online:** [WorkSchedFlow – Frontend en GitHub Pages](https://sergiomsrs.github.io/prueba-concepto-gestorTurnos/)  
+🎥 **Vídeo demostración:** [Ver demo en YouTube](https://youtu.be/RifYxP6gKqA)  
+📖 **Documentación:** [Guía de Uso Completa](https://sergiomsrs.github.io/wsf-landing/guia/)
 
 ![imagenApp](/public/general.webp)
 
 ---
 
-## Estado del Proyecto
-
-El proyecto se encuentra actualmente en **fase de despliegue** y cuenta con una **versión demo funcional** publicada en GitHub Pages.  
-Además, dispone de una **API REST** que todavía no ha sido desplegada.
-
-En paralelo, se está trabajando en el desarrollo de un **microservicio de inteligencia artificial**, basado en **LangChain y Ollama**, orientado a la automatización y optimización de la planificación de turnos.
+## 🛠️ Estado del Proyecto
+* **Frontend:** Desplegado y funcional en GitHub Pages.
+* **Backend (API REST):** Desplegado en producción a través de Render.
+* **Microservicio de IA:** En fase de desarrollo experimental utilizando **LangChain y Ollama** para la optimización automatizada de turnos.
 
 ---
 
-## Características Principales
+## ✨ Características Principales
 
-### Gestión y planificación
-- Plataforma integral que unifica **gestión de empleados**, **cuadrantes horarios** y **control de fichajes**.
-- Sistema totalmente automatizado: seleccionando un rango de fechas se generan los empleados activos, sus jornadas y los equipos de trabajo.
-- Control preciso de jornadas y equipos, definiendo fechas de inicio y fin para cada asignación.
+### 🧠 Inteligencia Artificial (Experimental)
+* **Chat de Planificación:** Inserción de turnos mediante lenguaje natural (ej: *"Pon a Juan de 09:00 a 18:00 el próximo lunes"*).
+* **Análisis de Cuadrantes:** Consultas inteligentes sobre el equilibrio de la carga de trabajo y cobertura de perfiles mediante IA.
 
-### Vista del empleado
-- Vista personal por empleado con:
-  - Horarios asignados
-  - Ausencias y vacaciones
-  - Registros de jornada
-  - Notificaciones ante cualquier modificación
+### 📅 Gestión y Planificación Avanzada
+* **Pizarra de Trabajo:** Interfaz interactiva con precisión de 15 minutos y soporte para teclado/ratón.
+* **Turnos Genéricos:** Configuración de hasta 6 plantillas de semanas modelo para despliegues rápidos.
+* **Validaciones Automáticas:** Control de descanso mínimo legal (12h) y detección de solapamientos o conflictos de disponibilidad.
+* **Gestión de Ausencias:** Bloqueo automático de vacaciones y días no disponibles en la planificación.
 
-### Ausencias y disponibilidad
-- Gestión completa de **ausencias, vacaciones y horas no disponibles**.
-- Las ausencias se muestran señalizadas y quedan automáticamente excluidas de la planificación.
+### 👤 Vista del Empleado
+* Portal personal para consulta de horarios, registros de jornada y notificaciones en tiempo real sobre cualquier modificación.
 
-### Herramientas avanzadas de cuadrantes
-- Creación de cuadrantes con:
-  - Marcaje automático de descansos
-  - Filtros por equipo o empleado
-  - Vista diaria solo de empleados activos
-  - Vistas globales o segmentadas por grupos
-- Creación flexible de cuadrantes:
-  - Desde cero
-  - Copiando semanas anteriores
-  - Aplicando turnos por defecto
+### 📋 Control de Jornada e Inspección
+* **Sistema de Fichajes:** Registro de entrada/salida con alertas por ausencia o fichajes incorrectos.
+* **Auditoría:** Vista de inspección para corregir registros con trazabilidad total y envío de notificaciones automáticas vía email.
 
-### Plantillas y planificación modelo
-- Configuración de **semanas genéricas** con empleados ficticios para planificaciones tipo.
-- Asignación posterior de estas semanas a empleados reales.
-- Hasta **6 semanas genéricas** disponibles.
+### 📊 Reportes y Exportación
+* Generación de reportes mensuales: horas totales, extra, nocturnas y festivas.
+* **Cálculo de Costes:** Estimación automática según la lógica de negocio configurada.
+* **Exportación:** Impresión directa de cuadrantes y reportes de inspección en **PDF**.
 
-### Control de jornada e inspección
-- Control de registros de jornada con:
-  - Alertas por ausencia en turno
-  - Alertas por fichajes incorrectos
-- Vista dedicada para inspección con:
-  - Acceso completo a todos los registros
-  - Descarga de informes en PDF
-- Posibilidad de añadir o corregir fichajes, generando:
-  - Notificaciones automáticas
-  - Envío de correos tanto al gestor como al empleado
+---
 
-### Reportes y exportación
-- Resumen automático por trabajador y totales del periodo seleccionado.
-- Reporte mensual completo con:
-  - Horas totales por empleado
-  - Horas extra, nocturnas y festivas
-  - Cálculo de costes según la lógica de negocio
-- Impresión directa de cuadrantes en PDF, con una vista clara y lista para entregar.
-
-
+## 💻 Tecnologías Utilizadas
+* **Frontend:** React, Tailwind CSS.
+* **Backend:** Node.js / Express (API REST).
+* **Base de Datos:** PostgreSQL / MongoDB (según configuración).
+* **IA:** LangChain, Ollama.
+* **Despliegue:** GitHub Pages (UI) y Render (Server).
