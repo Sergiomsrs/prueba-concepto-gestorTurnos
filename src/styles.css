@@ -53,12 +53,15 @@
 
   /* Ocultar scrollbar vertical global */
   html {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE y Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    -ms-overflow-style: none;
+    /* IE y Edge */
   }
 
   html::-webkit-scrollbar {
-    width: 0; /* Chrome, Safari y Edge */
+    width: 0;
+    /* Chrome, Safari y Edge */
     display: none;
   }
 }
