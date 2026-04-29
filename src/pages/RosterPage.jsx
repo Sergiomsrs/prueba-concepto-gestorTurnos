@@ -415,7 +415,7 @@ export const RosterPage = () => {
                                 <div className="flex items-center gap-2 px-3 h-10 bg-slate-100 rounded-lg">
                                     <span>⏰</span>
                                     <span className="text-sm font-medium whitespace-nowrap">
-                                        {stats.hours.toFixed(1)} Horas
+                                        {stats.hours.toFixed(2)} Horas
                                     </span>
                                 </div>
 
@@ -701,7 +701,7 @@ export const RosterPage = () => {
                                                 <span>
                                                     {((day.employees?.reduce((total, emp) =>
                                                         total + emp.workShift.filter(w => w === "WORK").length, 0
-                                                    ) || 0) * 0.25).toFixed(1)}
+                                                    ) || 0) * 0.25).toFixed(2)}
                                                     <span className="hidden sm:inline"> horas</span>
                                                 </span>
                                             </div>
