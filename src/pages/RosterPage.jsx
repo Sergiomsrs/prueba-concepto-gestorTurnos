@@ -371,7 +371,7 @@ export const RosterPage = () => {
     }, [showTeamDropdown]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pb-20">
+        <div className="w-full bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col">
             {/* Componente oculto para impresión - Optimizado para móvil y PC */}
             <div style={{
                 display: 'none',
@@ -658,7 +658,7 @@ export const RosterPage = () => {
             </header>
 
             {/* Contenido Principal */}
-            <main className="max-w-[1920px] mx-auto p-3 sm:p-6">
+            <main className="max-w-[1920px] mx-auto p-3 sm:p-6 flex-1 w-full">
                 <div className="space-y-4 sm:space-y-6">
                     {filteredData.slice(1).map((day, visibleDayIndex) => {
                         const realDayIndex = visibleDayIndex + 1;

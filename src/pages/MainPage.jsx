@@ -94,7 +94,7 @@ export const MainPage = () => {
           <div className="pointer-events-auto"><ChatUI /></div>
         </div>
 
-        <main className="flex flex-col w-full max-w-full overflow-x-auto">
+        <main className="flex flex-col w-full max-w-full overflow-x-auto flex-1">
           <ScrollToTop />
           <Routes>
             {/* --- 1. RUTAS TOTALMENTE PÚBLICAS --- */}
