@@ -695,19 +695,18 @@ export const RosterPage = () => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-3 pr-3">
-                                            {/* Estadísticas del día */}
-                                            <div className="text-right">
-                                                <div className="text-sm font-medium text-slate-900">
+                                        <div className="flex items-center gap-2">
+                                            {/* Badge horas */}
+                                            <div className="flex items-center gap-1.5 bg-slate-100 border border-slate-200 rounded-full px-3 py-1.5 text-sm font-medium text-slate-700">
+                                                <span>
                                                     {((day.employees?.reduce((total, emp) =>
                                                         total + emp.workShift.filter(w => w === "WORK").length, 0
-                                                    ) || 0) * 0.25).toFixed(1)} horas
-                                                </div>
-                                                <div className="text-xs text-slate-500">Total del día</div>
+                                                    ) || 0) * 0.25).toFixed(1)}
+                                                    <span className="hidden sm:inline"> horas</span>
+                                                </span>
                                             </div>
 
-                                            <div className="hidden sm:block w-px h-7 bg-slate-200" />
-                                            {/* ✅ Controles de Zoom */}
+                                            {/* Zoom */}
                                             <ZoomControls
                                                 zoom={gridZoom}
                                                 onZoomIn={handleZoomIn}
@@ -715,7 +714,7 @@ export const RosterPage = () => {
                                                 onZoomReset={handleZoomReset}
                                                 minZoom={MIN_ZOOM}
                                                 maxZoom={MAX_ZOOM}
-                                                hideOnMobile={true}
+                                                hideOnMobile={false}
                                             />
                                         </div>
                                     </div>

@@ -28,7 +28,7 @@ export const ZoomControls = ({
 
     return (
         <div
-            className={`${hideClass} items-center gap-0.5 bg-slate-100 border border-slate-200 rounded-lg p-0.5 ${className}`}
+            className={`${hideClass} items-center gap-0.5 bg-slate-100 border border-slate-200 rounded-full p-0.5 ${className}`}
         >
             <button
                 onClick={onZoomOut}
@@ -46,8 +46,8 @@ export const ZoomControls = ({
             <button
                 onClick={onZoomReset}
                 className={`flex items-center justify-center h-7 px-2 rounded-md text-xs font-medium tabular-nums transition-all duration-100 active:scale-95 ${isModified
-                        ? 'bg-blue-50 text-blue-600 border border-blue-200 cursor-pointer hover:brightness-95'
-                        : 'text-slate-500 cursor-default'
+                    ? 'bg-blue-50 text-indigo-600 border border-indigo-200 cursor-pointer hover:brightness-95'
+                    : 'text-slate-500 cursor-default'
                     }`}
                 style={{ minWidth: '2.5rem', letterSpacing: '0.02em' }}
                 title={isModified ? 'Click para resetear' : undefined}
