@@ -189,7 +189,7 @@ export const EmployeeRow = memo(
                                     <div
                                         className="absolute w-[1px] bg-gray-200 z-10 pointer-events-none"
                                         style={{
-                                            left: '-0.5px',
+                                            left: '0px',
                                             height: '30px',
                                         }}
                                     />

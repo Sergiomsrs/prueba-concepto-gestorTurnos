@@ -5,13 +5,18 @@
     overflow-x: auto;
     overflow-y: hidden;
     transition: all 150ms ease-out;
+    /* Evitar artefactos de rendering con zoom */
+    image-rendering: auto;
+    text-rendering: optimizeSpeed;
 }
 
 /* Grid con soporte para zoom y scroll suave */
 .grid-zoom-container .grid {
-    will-change: transform;
-    backface-visibility: hidden;
-    perspective: 1000px;
+    will-change: auto;
+    backface-visibility: visible;
+    perspective: none;
+    /* Asegurar que los bordes se rendericen correctamente */
+    border-collapse: collapse;
 }
 
 /* Scrollbar personalizada para mejor visualización con zoom */

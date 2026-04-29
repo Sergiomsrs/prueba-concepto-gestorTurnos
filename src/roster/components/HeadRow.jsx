@@ -34,7 +34,7 @@ export const HeadRow = memo(() => {
                 gridColumn: `span ${rangeConfig.visibleSlots}`,
                 height: '44px',
                 width: `${rangeConfig.visibleSlots * SLOT_WIDTH}px`,
-                borderBottom: '0.5px solid #94a3b8',
+                borderBottom: '1px solid #cbd5e1',
             }}
         >
             {/* Ticks de media hora (solo del rango visible) */}
