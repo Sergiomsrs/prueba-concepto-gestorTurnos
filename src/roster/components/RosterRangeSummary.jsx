@@ -74,10 +74,10 @@ const EmployeeRow = memo(
                     {wwh}
                 </td>
                 <td className="px-3 py-2.5 text-sm font-bold text-slate-900 text-center border-r border-slate-200">
-                    {totalShiftDuration}
+                    {totalShiftDuration.toFixed(2)}
                 </td>
                 <td className={`px-3 py-2.5 text-sm font-bold text-center border-r-2 border-slate-300 ${variation >= 0 ? "text-emerald-600" : "text-red-600"}`}>
-                    {variation > 0 ? '+' : ''}{variation}
+                    {variation > 0 ? '+' : ''}{variation.toFixed(2)}
                 </td>
 
                 {/* CALENDARIO */}
