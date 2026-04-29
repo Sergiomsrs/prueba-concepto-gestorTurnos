@@ -157,8 +157,8 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
 
         return {
             wwh: totalWWH,
-            total: totalHours.toFixed(1),
-            variation: totalVariation.toFixed(1)
+            total: totalHours.toFixed(2),
+            variation: totalVariation.toFixed(2)
         };
     }, [dataToUse, employeesData, holidayDates, selectedOption]);
 

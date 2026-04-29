@@ -816,7 +816,7 @@ export const RosterPage = () => {
                                 <div>
                                     <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Resumen de Horarios</h2>
                                     <p className="text-sm text-slate-500">
-                                        {stats.employees} empleados • {stats.days} días • {stats.hours.toFixed(1)} horas totales
+                                        {stats.employees} empleados • {stats.days} días • {stats.hours.toFixed(2)} horas totales
                                     </p>
                                 </div>
                             </div>
