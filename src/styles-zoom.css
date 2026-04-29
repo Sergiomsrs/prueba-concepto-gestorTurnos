@@ -21,22 +21,22 @@
 
 /* Scrollbar personalizada para mejor visualización con zoom */
 .grid-zoom-container::-webkit-scrollbar {
-    height: 8px;
+    height: 6px;
 }
 
 .grid-zoom-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
+    background: #f8f9fa;
 }
 
 .grid-zoom-container::-webkit-scrollbar-thumb {
-    background: #79a6ee;
-    border-radius: 4px;
-    transition: background 200ms;
+    background: #ccd0d5;
+    /* Gris neutro */
+    border-radius: 10px;
 }
 
 .grid-zoom-container::-webkit-scrollbar-thumb:hover {
-    background: #4f46e5;
+    background: #4224c7;
+    /* Solo aquí mostramos el color de marca */
 }
 
 /* Optimización para dispositivos móviles */
