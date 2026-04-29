@@ -397,12 +397,7 @@ export const RosterPage = () => {
                     <div className="flex items-center justify-between px-4 sm:px-6 h-16">
                         {/* Logo + Info Group */}
                         <div className="hidden xl:flex items-center gap-4">
-                            <img
-                                src="./logo-navegador.webp"
-                                alt="WorkSchedFlow Logo"
-                                width="48"
-                                height="48"
-                            />
+
                             {/* Info Group */}
                             <div className="flex items-center gap-2">
                                 <div className="flex items-center gap-2 px-3 h-10 bg-slate-100 rounded-lg">
