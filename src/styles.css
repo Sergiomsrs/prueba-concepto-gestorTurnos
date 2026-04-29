@@ -50,6 +50,17 @@
     --ring: 243 75% 59%;
     --radius: 0.5rem;
   }
+
+  /* Ocultar scrollbar vertical global */
+  html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE y Edge */
+  }
+
+  html::-webkit-scrollbar {
+    width: 0; /* Chrome, Safari y Edge */
+    display: none;
+  }
 }
 
 
