@@ -61,6 +61,7 @@
 /* Animación suave para los botones de zoom */
 .zoom-button {
     @apply transition-all duration-150 ease-out;
+    outline: none;
 }
 
 .zoom-button:hover:not(:disabled) {
@@ -73,5 +74,12 @@
 
 /* Estado deshabilitado */
 .zoom-button:disabled {
-    @apply cursor-not-allowed opacity-50;
+    @apply cursor-not-allowed opacity-40;
+}
+
+/* Indicador interactivo */
+.zoom-indicator {
+    @apply cursor-pointer transition-all duration-200 ease-out;
+    user-select: none;
+    outline: none;
 }

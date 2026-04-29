@@ -22,50 +22,51 @@ export const ZoomControls = ({
     maxZoom = 2,
     hideOnMobile = true,
     className = '',
-    title = 'Controles de Zoom'
 }) => {
     const hideClass = hideOnMobile ? 'hidden sm:flex' : 'flex';
+    const isModified = Math.abs(zoom - 1) > 0.01;
 
     return (
         <div
-            className={`${hideClass} items-center gap-1 pl-3 border-l border-slate-300 ${className}`}
-            title={title}
+            className={`${hideClass} items-center gap-0.5 bg-slate-100 border border-slate-200 rounded-lg p-0.5 ${className}`}
         >
-            {/* Botón Alejar */}
             <button
                 onClick={onZoomOut}
                 disabled={zoom <= minZoom}
-                className="zoom-button p-1.5 rounded hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold"
-                title="Alejar (Ctrl + Scroll)"
+                className="flex items-center justify-center w-7 h-7 rounded-md hover:bg-white hover:border hover:border-slate-200 disabled:opacity-30 disabled:cursor-not-allowed text-slate-500 hover:text-slate-800 transition-all duration-100 active:scale-90"
                 aria-label="Alejar"
             >
-                −
+                <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none">
+                    <line x1="3" y1="8" x2="13" y2="8" />
+                </svg>
             </button>
 
-            {/* Indicador de Zoom */}
-            <div className="zoom-indicator w-12 text-center text-xs font-medium text-slate-600">
-                {Math.round(zoom * 100)}%
-            </div>
+            <div className="w-px h-3.5 bg-slate-200 mx-0.5" />
 
-            {/* Botón Acercar */}
+            <button
+                onClick={onZoomReset}
+                className={`flex items-center justify-center h-7 px-2 rounded-md text-xs font-medium tabular-nums transition-all duration-100 active:scale-95 ${isModified
+                        ? 'bg-blue-50 text-blue-600 border border-blue-200 cursor-pointer hover:brightness-95'
+                        : 'text-slate-500 cursor-default'
+                    }`}
+                style={{ minWidth: '2.5rem', letterSpacing: '0.02em' }}
+                title={isModified ? 'Click para resetear' : undefined}
+            >
+                {Math.round(zoom * 100)}%
+            </button>
+
+            <div className="w-px h-3.5 bg-slate-200 mx-0.5" />
+
             <button
                 onClick={onZoomIn}
                 disabled={zoom >= maxZoom}
-                className="zoom-button p-1.5 rounded hover:bg-slate-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-semibold"
-                title="Acercar (Ctrl + Scroll)"
+                className="flex items-center justify-center w-7 h-7 rounded-md hover:bg-white hover:border hover:border-slate-200 disabled:opacity-30 disabled:cursor-not-allowed text-slate-500 hover:text-slate-800 transition-all duration-100 active:scale-90"
                 aria-label="Acercar"
             >
-                +
-            </button>
-
-            {/* Botón Restablecer */}
-            <button
-                onClick={onZoomReset}
-                className="zoom-button ml-1 px-2 py-1.5 rounded bg-slate-100 hover:bg-slate-200 text-xs font-medium transition-colors"
-                title="Restablecer zoom (100%)"
-                aria-label="Restablecer zoom"
-            >
-                ↺
+                <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" fill="none">
+                    <line x1="8" y1="3" x2="8" y2="13" />
+                    <line x1="3" y1="8" x2="13" y2="8" />
+                </svg>
             </button>
         </div>
     );

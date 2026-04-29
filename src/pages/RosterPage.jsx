@@ -695,7 +695,7 @@ export const RosterPage = () => {
                                             </div>
                                         </div>
 
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex items-center gap-3 pr-3">
                                             {/* Estadísticas del día */}
                                             <div className="text-right">
                                                 <div className="text-sm font-medium text-slate-900">
@@ -706,6 +706,7 @@ export const RosterPage = () => {
                                                 <div className="text-xs text-slate-500">Total del día</div>
                                             </div>
 
+                                            <div className="hidden sm:block w-px h-7 bg-slate-200" />
                                             {/* ✅ Controles de Zoom */}
                                             <ZoomControls
                                                 zoom={gridZoom}
