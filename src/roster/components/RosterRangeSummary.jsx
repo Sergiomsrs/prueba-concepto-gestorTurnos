@@ -134,33 +134,39 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
         let totalWWH = 0;
         let totalHours = 0;
 
-        if (!employeesData || !Array.isArray(employeesData)) {
-            return { wwh: 0, total: '0.0', variation: '0.0' };
-        }
+        if (!employeesData) return { wwh: 0, total: '0.0', variation: '0.0' };
 
         for (const [id, employeeInfo] of employeesData) {
+            // Filtro de equipo
             const isVisible = selectedOption === "todos" || selectedOption === employeeInfo.teamWork;
             if (!isVisible) continue;
 
-            let wwh = 0;
+            let wwhProporcionalEmpleado = 0;
+
             for (const day of dataToUse) {
+                // Saltamos si el día es festivo (no genera carga de horas contratadas)
                 if (day.holiday) continue;
-                const emp = day.employees.find((e) => e.id === id);
-                if (emp?.pto == false) continue;
-                if (emp?.wwh) wwh += emp.wwh / 2;
+
+                const emp = day.employees?.find((e) => Number(e.id) === Number(id));
+
+                // Si el empleado existe y NO está de vacaciones (PTO)
+                if (emp && emp.pto !== true) {
+                    // 39 / 7 = 5.57 horas diarias proporcionales
+                    const diaria = Number(emp.wwh || 0) / 7;
+                    wwhProporcionalEmpleado += diaria;
+                }
             }
-            totalWWH += Math.round((wwh * 2) / 2);
+
+            totalWWH += wwhProporcionalEmpleado;
             totalHours += getTotalShiftDuration(id, dataToUse);
         }
 
-        const totalVariation = totalWWH - totalHours;
-
         return {
-            wwh: totalWWH,
+            wwh: Math.round(totalWWH), // O .toFixed(1) si prefieres decimales
             total: totalHours.toFixed(2),
-            variation: totalVariation.toFixed(2)
+            variation: (totalWWH - totalHours).toFixed(2)
         };
-    }, [dataToUse, employeesData, holidayDates, selectedOption]);
+    }, [dataToUse, employeesData, selectedOption]);
 
     return (
         <tr className="bg-slate-50 border-t-2 border-slate-300">
