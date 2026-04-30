@@ -48,7 +48,7 @@ export const DistributionRow = memo(({ day, originalDay, showFullDistribution, o
             {/* Celda equipo — discreta, mismo fondo que filas */}
             <div className="bg-white border-t border-slate-100 px-3 flex items-center">
                 <span className="text-[10px] font-medium text-slate-300 uppercase tracking-widest select-none">
-                    ocup.
+
                 </span>
             </div>
 
