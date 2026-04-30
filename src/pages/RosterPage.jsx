@@ -785,7 +785,7 @@ export const RosterPage = () => {
 
                                         {/* Fila de Distribución */}
                                         <div
-                                            className="grid bg-slate-300 min-w-max border-t-2 border-slate-400"
+                                            className="grid bg-slate-300 min-w-max border-t-[1px] border-slate-100"
                                             style={{ gridTemplateColumns: gridColumns }}
                                         >
                                             <DistributionRow
