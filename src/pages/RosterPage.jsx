@@ -14,6 +14,7 @@ import { getVisibleRange, HOUR_RANGE_PRESETS } from "@/utils/rangeCalculator";
 import { ZoomControls } from "@/components/ZoomControls";
 import { useGridZoom } from "@/Hooks/useGridZoom";
 import { Link } from "react-router-dom";
+import { VirtualizedEmployeeList } from "../roster/components/VirtualizedEmployeeList";
 
 export const RosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
@@ -754,34 +755,16 @@ export const RosterPage = () => {
                                         </div>
 
                                         {/* ✅ Optimizar mapeo de empleados */}
-                                        {day.employees?.map((employee) => {
-                                            const originalEmployeeIndex = dayMapping.employeeMap.get(employee.id);
-
-                                            if (originalEmployeeIndex === undefined) return null;
-
-                                            return (
-                                                <div
-                                                    key={employee.id}
-                                                    className={`grid  bg-slate-200 min-w-max transition-all duration-200`}
-                                                    style={{ gridTemplateColumns: gridColumns }}
-                                                >
-                                                    <EmployeeRow
-                                                        employee={employee}
-                                                        dayIndex={dayMapping.dayIndex}
-                                                        employeeIndex={originalEmployeeIndex}
-                                                        numRows={day.employees.length}
-                                                        numDays={filteredData.length}
-                                                        inputRefsMatrix={inputRefsMatrix}
-                                                        dispatch={dispatch}
-                                                        previousEmployee={
-                                                            filteredData[realDayIndex - 1]?.employees?.find(
-                                                                (e) => e.id === employee.id
-                                                            )
-                                                        }
-                                                    />
-                                                </div>
-                                            );
-                                        })}
+                                        <VirtualizedEmployeeList
+                                            employees={day.employees ?? []}
+                                            dayMapping={dayMapping}
+                                            filteredData={filteredData}
+                                            realDayIndex={realDayIndex}
+                                            gridColumns={gridColumns}
+                                            inputRefsMatrix={inputRefsMatrix}
+                                            dispatch={dispatch}
+                                            ROW_HEIGHT={28}   // ← ajusta si cambias el tamaño de celda con zoom
+                                        />
 
                                         {/* Fila de Distribución */}
                                         <div
