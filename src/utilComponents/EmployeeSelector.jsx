@@ -11,7 +11,7 @@ export const EmployeeSelector = ({ employees, setEmployees, selectedEmployeeId, 
 
 
     return (
-        <>
+        <div className='mb-2'>
             <label className="block text-base font-medium leading-6 text-gray-900">Selecciona el empleado</label>
             <div className="relative rounded-md shadow-sm">
                 <select
@@ -29,6 +29,6 @@ export const EmployeeSelector = ({ employees, setEmployees, selectedEmployeeId, 
                     ))}
                 </select>
             </div>
-        </>
+        </div>
     )
 }

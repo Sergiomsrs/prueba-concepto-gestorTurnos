@@ -36,7 +36,7 @@ export const SchedulesByEmployee = () => {
       <div className="flex flex-col md:flex-row gap-4 w-full sm:w-3/4">
 
         {/* --- COLUMNA IZQUIERDA --- */}
-        <div className="flex flex-col gap-4 md:w-1/3 contents md:flex">
+        <div className="flex flex-col gap-4 md:w-1/3  md:flex">
 
           {/* FILTROS */}
           <div className="order-1 w-full bg-gray-50 border border-gray-200 rounded-lg p-4">
