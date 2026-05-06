@@ -46,14 +46,42 @@ export const EmployeeRow = memo(
             inputRefsMatrix,
         });
 
-        const disabledLimit = useMemo(() => {
-            if (!previousEmployee?.workShift) return -1;
+        const disabledRange = useMemo(() => {
+            if (!previousEmployee?.workShift) return null;
+
             const highestIndex = getHighestNonZeroIndex(previousEmployee.workShift);
-            return highestIndex >= 48 ? highestIndex - 48 : -1;
-        }, [previousEmployee?.workShift]);
+            if (highestIndex < 48) return null;
+
+            // Caso especial: continuidad de turno en medianoche (00:00 -> 00:00).
+            // Si el empleado sigue marcando al inicio del dia, desplazamos la ventana
+            // para mantener siempre 12h de descanso desde la ultima marca consecutiva.
+            if (highestIndex === 95) {
+                const currentShift = employee?.workShift ?? [];
+                let lastConsecutiveStartIndex = -1;
+
+                for (let i = 0; i < currentShift.length; i++) {
+                    if (currentShift[i] !== "WORK") break;
+                    lastConsecutiveStartIndex = i;
+                }
+
+                if (lastConsecutiveStartIndex === -1) {
+                    // Estado inicial: dejamos libres los 2 primeros inputs.
+                    return { start: 2, end: 47 };
+                }
+
+                // Dejamos libre el siguiente slot inmediato para poder extender
+                // el turno continuo desde el inicio del dia.
+                const start = Math.min(lastConsecutiveStartIndex + 2, 95);
+                const end = Math.min(lastConsecutiveStartIndex + 48, 95);
+                if (start > end) return null;
+                return { start, end };
+            }
+
+            return { start: 0, end: highestIndex - 48 };
+        }, [previousEmployee?.workShift, employee?.workShift]);
 
         const isIndexDisabled = (index) =>
-            disabledLimit >= 0 && index <= disabledLimit;
+            !!disabledRange && index >= disabledRange.start && index <= disabledRange.end;
 
         const totalHours = useMemo(
             () => (employee.workShift.filter((w) => w === "WORK").length * 15) / 60,
