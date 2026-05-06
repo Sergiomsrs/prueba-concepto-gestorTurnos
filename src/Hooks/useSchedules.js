@@ -21,7 +21,7 @@ export const useSchedules = (employeeId, startDate, endDate) => {
     queryKey: ["schedules", employeeToFetch, startDate, endDate],
     queryFn: async () => {
       const res = await axiosClient.get(
-        `/schedule/employeeday/${employeeToFetch}/shifts`,
+        `/schedule/${employeeToFetch}/shifts`,
         {
           params: { startDate, endDate },
         }
