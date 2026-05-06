@@ -4,12 +4,27 @@ import { selectColor } from "../../utils/function";
 import { getVisibleRange, relativeToAbsoluteIndex } from "../../utils/rangeCalculator";
 import { AppContext } from "../../context/AppContext";
 
+const NOOP = () => {};
+
 const getHighestNonZeroIndex = (array) => {
     if (!array) return -1;
     for (let i = array.length - 1; i >= 0; i--) {
         if (array[i] === "WORK") return i;
     }
     return -1;
+};
+
+const getCursorClass = (isDisabled, value) => {
+    if (isDisabled || value === "PTO") return "cursor-not-allowed opacity-30";
+    if (value === "CONFLICT") return "cursor-pointer opacity-90";
+    return "cursor-pointer";
+};
+
+const getBackgroundClass = (value) => {
+    if (value === "PTO") return "bg-red-400";
+    if (value === "Null") return "bg-slate-50";
+    if (value === "CONFLICT") return "bg-amber-400 animate-pulse";
+    return ""; // WORK: el color va por style
 };
 
 export const EmployeeRow = memo(
@@ -80,13 +95,20 @@ export const EmployeeRow = memo(
             return { start: 0, end: highestIndex - 48 };
         }, [previousEmployee?.workShift, employee?.workShift]);
 
-        const isIndexDisabled = (index) =>
-            !!disabledRange && index >= disabledRange.start && index <= disabledRange.end;
+        const isIndexDisabled = useCallback((index) => (
+            !!disabledRange && index >= disabledRange.start && index <= disabledRange.end
+        ), [disabledRange]);
 
-        const totalHours = useMemo(
-            () => (employee.workShift.filter((w) => w === "WORK").length * 15) / 60,
-            [employee.workShift]
-        );
+        const totalHours = useMemo(() => {
+            let workedSlots = 0;
+            const shift = employee.workShift;
+            for (let i = 0; i < shift.length; i++) {
+                if (shift[i] === "WORK") workedSlots++;
+            }
+            return (workedSlots * 15) / 60;
+        }, [employee.workShift]);
+
+        const teamColor = useMemo(() => selectColor(employee.teamWork), [employee.teamWork]);
 
         const hourLabelsByIndex = useMemo(() => {
             const labels = new Map();
@@ -154,25 +176,24 @@ export const EmployeeRow = memo(
             handleMouseDown(hourIndex);
         }, [employee.workShift, isIndexDisabled, toggleHour, handleMouseDown]);
 
-        const getCursorClass = (isDisabled, value) => {
-            if (isDisabled || value === "PTO") return 'cursor-not-allowed opacity-30';
-            if (value === "CONFLICT") return 'cursor-pointer opacity-90';
-            return 'cursor-pointer';
-        };
-
-        const getBackgroundClass = (value, team) => {
-            if (value === "PTO") return 'bg-red-400';
-            if (value === "Null") return 'bg-slate-50';
-            if (value === "CONFLICT") return 'bg-amber-400 animate-pulse';
-            return ''; // WORK: el color va por style
-        };
-
         const outOfRangeIndicator = useMemo(() => {
             const shift = employee.workShift;
             const { startIndex, endIndex } = rangeConfig; // los índices absolutos del rango visible
+            let hasBefore = false;
+            let hasAfter = false;
 
-            const hasBefore = shift.slice(0, startIndex).some(v => v === "WORK");
-            const hasAfter = shift.slice(endIndex + 1).some(v => v === "WORK");
+            for (let i = 0; i < startIndex; i++) {
+                if (shift[i] === "WORK") {
+                    hasBefore = true;
+                    break;
+                }
+            }
+            for (let i = endIndex + 1; i < shift.length; i++) {
+                if (shift[i] === "WORK") {
+                    hasAfter = true;
+                    break;
+                }
+            }
 
             return { hasBefore, hasAfter };
         }, [employee.workShift, rangeConfig.startIndex, rangeConfig.endIndex]);
@@ -201,7 +222,8 @@ export const EmployeeRow = memo(
                         const hourIndex = relativeToAbsoluteIndex(relativeIndex, rangeConfig.startIndex);
                         const value = employee.workShift[hourIndex];
 
-                        const disabled = isIndexDisabled(hourIndex) || value === "PTO";
+                        const isDisabledByRule = isIndexDisabled(hourIndex);
+                        const disabled = isDisabledByRule || value === "PTO";
                         const cellBgClass = disabled ? "bg-red-200/50" : "bg-white";
                         const isHourStart = hourIndex % 4 === 0;
                         const hourLabel = hourLabelsByIndex.get(hourIndex);
@@ -236,7 +258,7 @@ export const EmployeeRow = memo(
                                     checked={value !== "Null" && value !== "PTO"}
                                     onMouseDown={(e) => handleCellMouseDownWithLogic(hourIndex, e)}
                                     onMouseEnter={() => handleMouseEnter(hourIndex)}
-                                    onChange={() => { /* NOOP */ }}
+                                    onChange={NOOP}
                                     onKeyDown={(e) => {
                                         if (e.key === " " || e.key === "Enter") {
                                             e.preventDefault();
@@ -248,14 +270,14 @@ export const EmployeeRow = memo(
                                     disabled={disabled}
                                     className={`
                                         w-5 h-5 m-0 p-0 appearance-none border-none
-                                        ${getCursorClass(isIndexDisabled(hourIndex), value)}
-                                        ${getBackgroundClass(value, employee.teamWork)}
+                                        ${getCursorClass(isDisabledByRule, value)}
+                                        ${getBackgroundClass(value)}
                                         ${value === "WORK" ? 'border-t-2 border-b-2 border-neutral-200' : ''}
                                         focus:ring-2 focus:ring-indigo-400                          
                                         mx-auto my-1
                                         shadow-sm
                                     `}
-                                    style={value === "WORK" ? { backgroundColor: selectColor(employee.teamWork) } : {}}
+                                    style={value === "WORK" ? { backgroundColor: teamColor } : {}}
                                 />
 
                                 {hourLabel && (

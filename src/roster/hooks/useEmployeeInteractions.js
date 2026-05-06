@@ -10,6 +10,9 @@ export const useEmployeeInteractions = ({
     inputRefsMatrix,
 }) => {
     const inputRefs = useRef([]);
+    const rafIdRef = useRef(null);
+    const pendingRangeRef = useRef(null);
+    const lastAppliedRangeRef = useRef(null);
     // Estado para el arrastre del ratón
     const [isSelecting, setIsSelecting] = useState(false);
     // Índice donde empezó el arrastre
@@ -19,15 +22,46 @@ export const useEmployeeInteractions = ({
     // Último índice enfocado para la selección con Shift
     const lastFocusedIndexRef = useRef(null); // ✅ Usar ref para evitar dependencia excesiva
 
+    const flushPendingRange = useCallback(() => {
+        const pending = pendingRangeRef.current;
+        if (!pending) return;
+
+        const lastApplied = lastAppliedRangeRef.current;
+        const isSameRange =
+            lastApplied &&
+            lastApplied.dayIndex === pending.dayIndex &&
+            lastApplied.employeeIndex === pending.employeeIndex &&
+            lastApplied.startIndex === pending.startIndex &&
+            lastApplied.endIndex === pending.endIndex &&
+            lastApplied.value === pending.value;
+
+        if (isSameRange) return;
+
+        dispatch({
+            type: "UPDATE_SHIFT_RANGE",
+            payload: pending,
+        });
+
+        lastAppliedRangeRef.current = pending;
+    }, [dispatch]);
+
     // ✅ NUEVO: Limpieza global para el mouse, más simple y basado en isSelecting
     useEffect(() => {
         if (!isSelecting) return;
 
         // Función para finalizar cualquier arrastre
         const handleGlobalMouseStop = () => {
+            if (rafIdRef.current !== null) {
+                cancelAnimationFrame(rafIdRef.current);
+                rafIdRef.current = null;
+            }
+            flushPendingRange();
+
             setIsSelecting(false);
             startSelectionIndexRef.current = null;
             baseValueRef.current = null;
+            pendingRangeRef.current = null;
+            lastAppliedRangeRef.current = null;
         };
 
         // Escucha en el documento para terminar el arrastre fuera de la celda
@@ -38,7 +72,7 @@ export const useEmployeeInteractions = ({
             document.removeEventListener('mouseup', handleGlobalMouseStop);
             document.removeEventListener('mouseleave', handleGlobalMouseStop);
         };
-    }, [isSelecting]);
+    }, [isSelecting, flushPendingRange]);
 
     // 🖱️ MOUSE HANDLERS
     const handleMouseDown = useCallback(
@@ -51,6 +85,8 @@ export const useEmployeeInteractions = ({
             setIsSelecting(true);
             startSelectionIndexRef.current = index;
             baseValueRef.current = newValue;
+            pendingRangeRef.current = null;
+            lastAppliedRangeRef.current = null;
 
             // La celda inicial debe ser actualizada inmediatamente
             dispatch({
@@ -70,26 +106,37 @@ export const useEmployeeInteractions = ({
             const start = Math.min(startSelectionIndexRef.current, index);
             const end = Math.max(startSelectionIndexRef.current, index);
 
-            // Aplicar el valor base al rango
-            dispatch({
-                type: "UPDATE_SHIFT_RANGE",
-                payload: {
-                    dayIndex,
-                    employeeIndex,
-                    startIndex: start,
-                    endIndex: end,
-                    value: baseValueRef.current,
-                },
-            });
+            pendingRangeRef.current = {
+                dayIndex,
+                employeeIndex,
+                startIndex: start,
+                endIndex: end,
+                value: baseValueRef.current,
+            };
+
+            if (rafIdRef.current === null) {
+                rafIdRef.current = requestAnimationFrame(() => {
+                    rafIdRef.current = null;
+                    flushPendingRange();
+                });
+            }
         },
-        [isSelecting, dayIndex, employeeIndex, dispatch]
+        [isSelecting, dayIndex, employeeIndex, flushPendingRange]
     );
 
     const handleMouseUp = useCallback(() => {
+        if (rafIdRef.current !== null) {
+            cancelAnimationFrame(rafIdRef.current);
+            rafIdRef.current = null;
+        }
+        flushPendingRange();
+
         setIsSelecting(false);
         startSelectionIndexRef.current = null;
         baseValueRef.current = null;
-    }, []);
+        pendingRangeRef.current = null;
+        lastAppliedRangeRef.current = null;
+    }, [flushPendingRange]);
 
     // 🎹 TECLADO HANDLER
     const handleKeyDown = useCallback(

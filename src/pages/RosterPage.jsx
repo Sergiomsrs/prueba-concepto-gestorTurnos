@@ -135,6 +135,27 @@ export const RosterPage = () => {
         }));
     }, [data, filters.selectedTeams, filters.employeeName, filters.hideZeroHours]);
 
+    // ✅ Cachear empleados del día anterior para lookup O(1) por employee.id
+    const previousDayEmployeeMapping = useMemo(() => {
+        const mapping = new Map();
+
+        for (let visibleDayIndex = 0; visibleDayIndex < filteredData.length - 1; visibleDayIndex++) {
+            const currentDay = filteredData[visibleDayIndex + 1];
+            if (!currentDay?.id) continue;
+
+            const previousEmployees = filteredData[visibleDayIndex]?.employees || [];
+            const previousEmployeeMap = new Map();
+
+            for (const emp of previousEmployees) {
+                previousEmployeeMap.set(emp.id, emp);
+            }
+
+            mapping.set(currentDay.id, previousEmployeeMap);
+        }
+
+        return mapping;
+    }, [filteredData]);
+
     // ✅ Optimizar modifiedData
     const modifiedData = useMemo(() => {
         const result = [];
@@ -657,6 +678,7 @@ export const RosterPage = () => {
                 <div className="space-y-4 sm:space-y-6">
                     {filteredData.slice(1).map((day, visibleDayIndex) => {
                         const realDayIndex = visibleDayIndex + 1;
+                        const previousEmployeesMap = previousDayEmployeeMapping.get(day.id);
 
                         // ✅ Obtener mapeo una sola vez por día
                         const dayMapping = indexMapping.get(day.id);
@@ -773,11 +795,7 @@ export const RosterPage = () => {
                                                         numDays={filteredData.length}
                                                         inputRefsMatrix={inputRefsMatrix}
                                                         dispatch={dispatch}
-                                                        previousEmployee={
-                                                            filteredData[realDayIndex - 1]?.employees?.find(
-                                                                (e) => e.id === employee.id
-                                                            )
-                                                        }
+                                                        previousEmployee={previousEmployeesMap?.get(employee.id)}
                                                     />
                                                 </div>
                                             );
