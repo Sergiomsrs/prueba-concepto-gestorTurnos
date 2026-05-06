@@ -4,7 +4,7 @@ import { selectColor } from "../../utils/function";
 import { getVisibleRange, relativeToAbsoluteIndex } from "../../utils/rangeCalculator";
 import { AppContext } from "../../context/AppContext";
 
-const NOOP = () => {};
+const NOOP = () => { };
 
 const getHighestNonZeroIndex = (array) => {
     if (!array) return -1;
@@ -312,8 +312,6 @@ export const EmployeeRow = memo(
             </>
         );
     },
-    // ✅ Comparación personalizada: re-renderear si employee o previousEmployee cambian
-    // (filters se lee del contexto, no es una prop)
     (prevProps, nextProps) => {
         return (
             prevProps.employee === nextProps.employee &&
