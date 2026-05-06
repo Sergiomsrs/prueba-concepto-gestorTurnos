@@ -8,7 +8,6 @@ export const useWeekPlanner = () => {
     const { data: status } = useQuery({
         queryKey: ["week-solver-status"],
         queryFn: weekPlannerService.getStatus,
-        // Si el estado es "SOLVING_ACTIVE", consulta cada 2 segundos 
         refetchInterval: (query) =>
             query.state.data === "SOLVING_ACTIVE" ? 2000 : false,
     });
@@ -20,26 +19,30 @@ export const useWeekPlanner = () => {
         enabled: status !== "SOLVING_ACTIVE" && status !== undefined,
     });
 
-    // 3. Mutación para Analizar (Sustituye a 'solve')
-    const analyzeMutation = useMutation({
-        mutationFn: (dto) => weekPlannerService.analyze(dto),
-        onSuccess: () => {
-            // Invalidamos estado para activar el polling 
-            queryClient.invalidateQueries({ queryKey: ["week-solver-status"] });
-        },
-        onError: (error) => {
-            console.error("Error al iniciar análisis semanal:", error);
-        }
-    });
-
-    // 4. Mutación para Confirmar
+    // 4. Mutación para Confirmar (ANTES de analyzeMutation para poder referenciarla)
     const confirmMutation = useMutation({
         mutationFn: weekPlannerService.confirm,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["week-solver-status"] });
-            queryClient.invalidateQueries({ queryKey: ["roster"] }); // Refresca el calendario general
-            queryClient.setQueryData(["week-proposal"], null); // Limpiamos la propuesta tras confirmar
+            queryClient.invalidateQueries({ queryKey: ["roster"] });
+            queryClient.setQueryData(["week-proposal"], null);
         },
+    });
+
+    // 3. Mutación para Analizar
+    const analyzeMutation = useMutation({
+        mutationFn: (dto) => weekPlannerService.analyze(dto),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["week-solver-status"] });
+
+            // Sin conflictos → confirmar automáticamente para persistir los turnos limpios
+            if (data.conflictsDetected === 0) {
+                confirmMutation.mutate();
+            }
+        },
+        onError: (error) => {
+            console.error("Error al iniciar análisis semanal:", error);
+        }
     });
 
     // 5. Mutación para Rechazar toda la propuesta
@@ -56,7 +59,6 @@ export const useWeekPlanner = () => {
         mutationFn: ({ shiftId, excludeEmployeeId }) =>
             weekPlannerService.rejectShiftCandidate({ shiftId, excludeEmployeeId }),
         onSuccess: () => {
-            // Tras rechazar un candidato, el backend suele re-calcular
             queryClient.invalidateQueries({ queryKey: ["week-solver-status"] });
         },
     });
