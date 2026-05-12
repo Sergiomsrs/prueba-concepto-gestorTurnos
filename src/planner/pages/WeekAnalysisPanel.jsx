@@ -185,14 +185,20 @@ export const WeekAnalysisPanel = ({ config, onClose, onSuccess }) => {
     };
 
     const handleConfirmAll = () => {
-        if (!hasProposal || proposal.some(p => !p.solved)) {
+        const unsolvedCount = proposal?.filter(p => !p.solved).length ?? 0;
+
+        if (unsolvedCount > 0) {
+            // Warning informativo, no bloqueante
             setModalMessage({
                 type: 'warning',
-                text: 'No pueden confirmarse turnos sin candidato asignado. Revisa los conflictos pendientes.'
+                text: `${unsolvedCount} turno${unsolvedCount !== 1 ? 's' : ''} quedarán sin cubrir y se conservarán como conflictos en la planificación. ¿Deseas confirmar igualmente?`
             });
             setIsModalOpen(true);
+            // Confirmar de todas formas tras mostrar el aviso
+            confirmMutation.mutate();
             return;
         }
+
         setRejectedByShift({});
         setResolvingShiftId(null);
         confirmMutation.mutate();
