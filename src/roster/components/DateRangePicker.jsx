@@ -129,7 +129,7 @@ export default function DateRangePicker({ filters, handleFilterChange }) {
         <div className="relative w-full flex flex-col gap-3" ref={triggerRef}>
             <div className="flex gap-3">
                 <div className="flex-1 flex flex-col gap-1">
-                    <label className="text-xs font-medium text-slate-700">Entrada</label>
+                    <label className="text-xs font-medium text-slate-700 ml-1">Desde</label>
                     <div
                         onClick={handleOpen}
                         className="border border-slate-300 rounded-lg px-3 py-2 cursor-pointer hover:border-blue-500 transition text-sm truncate bg-white h-10 flex items-center"
@@ -139,7 +139,7 @@ export default function DateRangePicker({ filters, handleFilterChange }) {
                 </div>
 
                 <div className="flex-1 flex flex-col gap-1">
-                    <label className="text-xs font-medium text-slate-700">Salida</label>
+                    <label className="text-xs font-medium text-slate-700 ml-1">Hasta</label>
                     <div
                         onClick={handleOpen}
                         className="border border-slate-300 rounded-lg px-3 py-2 cursor-pointer hover:border-blue-500 transition text-sm truncate bg-white h-10 flex items-center"

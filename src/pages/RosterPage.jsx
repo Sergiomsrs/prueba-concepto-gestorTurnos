@@ -300,7 +300,7 @@ export const RosterPage = () => {
     // ✅ Componente MultiSelect memoizado
     const TeamMultiSelect = useCallback(({ isMobile = false }) => (
         <div className="relative" ref={isMobile ? dropdownMobileRef : dropdownDesktopRef}>
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+            <label className="block text-xs font-medium text-slate-700 mb-1 ml-1">
                 {isMobile ? "Filtrar por Equipos" : "Equipos"}
             </label>
             <button
@@ -535,7 +535,7 @@ export const RosterPage = () => {
 
                                 {/* Empleado */}
                                 <div>
-                                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                                    <label className="block text-xs font-medium text-slate-700 mb-1 ml-1">
                                         Empleado
                                     </label>
                                     <input
@@ -549,7 +549,7 @@ export const RosterPage = () => {
 
                                 {/* Rango de Horas */}
                                 <div>
-                                    <label className="block text-xs font-medium text-slate-700 mb-1">
+                                    <label className="block text-xs font-medium text-slate-700 mb-1 ml-1">
                                         Rango Horario
                                     </label>
                                     <select
