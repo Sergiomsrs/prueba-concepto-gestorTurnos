@@ -53,3 +53,20 @@
 * **Base de Datos:** PostgreSQL / MongoDB (según configuración).
 * **IA:** LangChain, Ollama.
 * **Despliegue:** GitHub Pages (UI) y Render (Server).
+
+# 📦 Gestión de paquetes — pnpm
+ 
+Este proyecto fue migrado de **npm** a **pnpm**.
+ 
+## Comandos
+ 
+| Acción | Comando |
+|---|---|
+| Instalar dependencias | `pnpm install` |
+| Iniciar en desarrollo | `pnpm dev` |
+| Compilar para producción | `pnpm build` |
+| Publicar en GitHub Pages | `pnpm run deploy` |
+| Añadir una dependencia | `pnpm add <paquete>` |
+| Eliminar una dependencia | `pnpm remove <paquete>` |
+ 
+> ⚠️ No usar `npm install` en este proyecto. Usar siempre `pnpm` para mantener el `pnpm-lock.yaml` consistente.
