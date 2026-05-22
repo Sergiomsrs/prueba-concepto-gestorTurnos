@@ -31,22 +31,24 @@ const getCellStyle = (hours, isHoliday) => {
 // - isVisible se filtra en el padre → este componente nunca se monta si no es visible
 // - fullName y variation son operaciones triviales, no necesitan useMemo
 const EmployeeRow = memo(
-    ({ employeeId, employeeName, employeeLastName, teamWork, dataToUse, holidayDates, selectedOption }) => {
+    ({ employeeId, employeeName, employeeLastName, teamWork, dataToUse, dataForCalculations, holidayDates, selectedOption }) => {
 
         const wwh = useMemo(() => {
+            // Usar datos originales para el cálculo, independientemente del filtrado visual
+            const sourceData = dataForCalculations || dataToUse;
             let total = 0;
-            for (const day of dataToUse) {
+            for (const day of sourceData) {
                 if (day.holiday) continue;
                 const emp = day.employees.find((e) => e.id === employeeId);
                 if (emp?.pto == true) continue;
                 if (emp?.wwh) total += emp.wwh / 7;
             }
             return Math.round((total * 2) / 2);
-        }, [dataToUse, employeeId, holidayDates]);
+        }, [dataToUse, dataForCalculations, employeeId, holidayDates]);
 
         const totalShiftDuration = useMemo(
-            () => getTotalShiftDuration(employeeId, dataToUse),
-            [employeeId, dataToUse]
+            () => getTotalShiftDuration(employeeId, dataForCalculations || dataToUse),
+            [employeeId, dataToUse, dataForCalculations]
         );
 
         // Resta de dos números ya memoizados — no necesita useMemo
@@ -107,6 +109,7 @@ const EmployeeRow = memo(
             prevProps.employeeLastName === nextProps.employeeLastName &&
             prevProps.teamWork === nextProps.teamWork &&
             prevProps.dataToUse === nextProps.dataToUse &&
+            prevProps.dataForCalculations === nextProps.dataForCalculations &&
             prevProps.holidayDates === nextProps.holidayDates &&
             prevProps.selectedOption === nextProps.selectedOption
         );
@@ -116,7 +119,7 @@ const EmployeeRow = memo(
 EmployeeRow.displayName = 'EmployeeRow';
 
 //  Fila footer
-const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selectedOption }) => {
+const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees, holidayDates, selectedOption }) => {
     const dailyTotals = useMemo(() => {
         return dataToUse.map((day) => {
             let totalMinutes = 0;
@@ -134,16 +137,16 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
         let totalWWH = 0;
         let totalHours = 0;
 
-        if (!employeesData) return { wwh: 0, total: '0.0', variation: '0.0' };
+        if (!visibleEmployees || visibleEmployees.length === 0) return { wwh: 0, total: '0.0', variation: '0.0' };
 
-        for (const [id, employeeInfo] of employeesData) {
-            // Filtro de equipo
-            const isVisible = selectedOption === "todos" || selectedOption === employeeInfo.teamWork;
-            if (!isVisible) continue;
+        // Usar datos originales para cálculos de WWH
+        const sourceData = dataForCalculations || dataToUse;
 
+        // Iterar solo sobre empleados visibles (ya filtrados por equipo)
+        for (const [id, employeeInfo] of visibleEmployees) {
             let wwhProporcionalEmpleado = 0;
 
-            for (const day of dataToUse) {
+            for (const day of sourceData) {
                 // Saltamos si el día es festivo (no genera carga de horas contratadas)
                 if (day.holiday) continue;
 
@@ -158,7 +161,7 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
             }
 
             totalWWH += wwhProporcionalEmpleado;
-            totalHours += getTotalShiftDuration(id, dataToUse);
+            totalHours += getTotalShiftDuration(id, sourceData);
         }
 
         return {
@@ -166,7 +169,7 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
             total: totalHours.toFixed(2),
             variation: (totalWWH - totalHours).toFixed(2)
         };
-    }, [dataToUse, employeesData, selectedOption]);
+    }, [dataToUse, dataForCalculations, visibleEmployees]);
 
     return (
         <tr className="bg-slate-50 border-t-2 border-slate-300">
@@ -196,22 +199,25 @@ const DailySummaryRow = memo(({ dataToUse, employeesData, holidayDates, selected
 }, (prevProps, nextProps) => {
     return (
         prevProps.dataToUse === nextProps.dataToUse &&
-        prevProps.employeesData === nextProps.employeesData &&  // referencia estable gracias al useMemo del padre
-        prevProps.holidayDates === nextProps.holidayDates &&
-        prevProps.selectedOption === nextProps.selectedOption
+        prevProps.dataForCalculations === nextProps.dataForCalculations &&
+        prevProps.visibleEmployees === nextProps.visibleEmployees &&  // referencia estable gracias al useMemo del padre
+        prevProps.holidayDates === nextProps.holidayDates
     );
 });
 
 DailySummaryRow.displayName = 'DailySummaryRow';
 
 // Componente principal
-export const RosterRangeSummary = memo(({ data }) => {
+export const RosterRangeSummary = memo(({ data, originalData }) => {
     const { selectedOption, holidayDates } = useContext(AppContext);
 
-    // Clave del mapa: emp.id (único y estable)
-    const employeesData = useMemo(() => {
+    // Usar originalData para cálculos si está disponible, sino fallback a data
+    const dataForCalculations = originalData || data;
+
+    // Mapa de empleados para búsqueda rápida en cálculos (datos originales)
+    const allEmployeesForCalculations = useMemo(() => {
         const employeeMap = new Map();
-        for (const day of data) {
+        for (const day of dataForCalculations) {
             for (const emp of day.employees) {
                 if (!employeeMap.has(emp.id)) {
                     employeeMap.set(emp.id, {
@@ -222,14 +228,29 @@ export const RosterRangeSummary = memo(({ data }) => {
                 }
             }
         }
-        return Array.from(employeeMap.entries()); // [[id, { name, lastName, teamWork }], ...]
-    }, [data]);
+        return employeeMap;
+    }, [dataForCalculations]);
 
-    // Filtrado en el padre — EmployeeRow no se monta si no es visible, evita ejecutar sus hooks
+    // Empleados visibles: extraer del data filtrado (lo que realmente aparece en la tabla)
     const visibleEmployees = useMemo(() => {
-        if (selectedOption === "todos") return employeesData;
-        return employeesData.filter(([, { teamWork }]) => teamWork === selectedOption);
-    }, [employeesData, selectedOption]);
+        const visibleMap = new Map();
+        // Usar dataForCalculations para mostrar TODOS los empleados, independientemente de los filtros visuales
+        for (const day of dataForCalculations) {
+            for (const emp of day.employees) {
+                if (!visibleMap.has(emp.id)) {
+                    visibleMap.set(emp.id, {
+                        name: emp.name,
+                        lastName: emp.lastName,
+                        teamWork: emp.teamWork,
+                    });
+                }
+            }
+        }
+        // Convertir a array y aplicar filtro por equipo si es necesario
+        const visibleArray = Array.from(visibleMap.entries());
+        if (selectedOption === "todos") return visibleArray;
+        return visibleArray.filter(([, { teamWork }]) => teamWork === selectedOption);
+    }, [dataForCalculations, selectedOption]);
 
     const dayHeaders = useMemo(() => {
         return data.map((item) => {
@@ -281,13 +302,15 @@ export const RosterRangeSummary = memo(({ data }) => {
                             employeeLastName={lastName}
                             teamWork={teamWork}
                             dataToUse={data}
+                            dataForCalculations={dataForCalculations}
                             holidayDates={holidayDates}
                             selectedOption={selectedOption}
                         />
                     ))}
                     <DailySummaryRow
                         dataToUse={data}
-                        employeesData={employeesData}
+                        dataForCalculations={dataForCalculations}
+                        visibleEmployees={visibleEmployees}
                         holidayDates={holidayDates}
                         selectedOption={selectedOption}
                     />
@@ -296,7 +319,7 @@ export const RosterRangeSummary = memo(({ data }) => {
         </div>
     );
 }, (prevProps, nextProps) => {
-    return prevProps.data === nextProps.data;
+    return prevProps.data === nextProps.data && prevProps.originalData === nextProps.originalData;
 });
 
 RosterRangeSummary.displayName = 'RosterRangeSummary';

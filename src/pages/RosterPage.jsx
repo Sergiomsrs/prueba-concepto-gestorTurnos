@@ -834,7 +834,7 @@ export const RosterPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <RosterRangeSummary data={filteredData.slice(1)} />
+                        <RosterRangeSummary data={filteredData.slice(1)} originalData={data.slice(1)} />
                     </div>
                 </div>
             </main>
