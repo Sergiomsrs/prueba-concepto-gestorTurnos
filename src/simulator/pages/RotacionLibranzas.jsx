@@ -33,7 +33,7 @@ export default function RotacionLibranzas() {
     const diasTotales = numCiclos * 7;
 
     return (
-        <div className="p-6 space-y-8 mt-12 sm:px-16 w-2/3 mx-auto">
+        <div className="p-3 sm:p-6 space-y-8 mt-12 sm:px-16 w-full md:w-2/3 max-w-full mx-auto overflow-x-hidden">
             <h2 className="sr-only">Visualización de los {diasTotales} días del ciclo de rotación de libranzas</h2>
 
             {/* ── SECCIÓN DE CONTROLES PRINCIPALES ── */}
@@ -44,7 +44,7 @@ export default function RotacionLibranzas() {
                         <button
                             type="button"
                             onClick={() => numEmp > numCiclos && setNumEmp(numEmp - 1)}
-                            className="w-11 h-11 bg-[#378ADD] text-white font-bold text-lg active:bg-[#25619d] transition-colors"
+                            className="w-11 h-11 bg-[#378ADD] text-white font-bold text-lg active:bg-[#25619d] transition-colors flex-shrink-0"
                         >
                             —
                         </button>
@@ -52,24 +52,24 @@ export default function RotacionLibranzas() {
                             type="text"
                             value={numEmp}
                             readOnly
-                            className="w-12 h-11 text-center text-lg font-bold text-[#1a1a1a]"
+                            className="w-12 h-11 text-center text-lg font-bold text-[#1a1a1a] flex-shrink-0"
                         />
                         <button
                             type="button"
                             onClick={() => numEmp < 36 && setNumEmp(numEmp + 1)}
-                            className="w-11 h-11 bg-[#378ADD] text-white font-bold text-lg active:bg-[#25619d] transition-colors"
+                            className="w-11 h-11 bg-[#378ADD] text-white font-bold text-lg active:bg-[#25619d] transition-colors flex-shrink-0"
                         >
                             +
                         </button>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3 flex-1 min-w-[200px]">
+                <div className="flex items-center gap-3 flex-1 min-w-0 sm:min-w-[200px]">
                     <label className="text-sm font-semibold text-[#6b6b6b] whitespace-nowrap">Vista:</label>
                     <select
                         value={vistaMode}
                         onChange={(e) => setVistaMode(e.target.value)}
-                        className="w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#378ADD]"
+                        className="w-full min-w-0 p-2.5 border border-gray-300 rounded-lg text-sm bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#378ADD]"
                     >
                         <option value="cobertura">Cobertura (empleados trabajando)</option>
                         <option value="libranza">Quién libra cada día</option>
@@ -79,7 +79,7 @@ export default function RotacionLibranzas() {
                 <button
                     type="button"
                     onClick={() => setShowConfig(!showConfig)}
-                    className="md:ml-auto p-2.5 px-4 border border-gray-300 rounded-lg bg-white text-sm font-semibold hover:bg-gray-50 transition-colors shadow-sm"
+                    className="md:ml-auto p-2.5 px-4 border border-gray-300 rounded-lg bg-white text-sm font-semibold hover:bg-gray-50 transition-colors shadow-sm whitespace-nowrap"
                 >
                     ⚙ Configurar ciclos
                 </button>
@@ -94,7 +94,7 @@ export default function RotacionLibranzas() {
                             <button
                                 type="button"
                                 onClick={decrementarBorradorCiclo}
-                                className="w-11 h-11 bg-[#378ADD] text-white font-bold text-lg active:bg-[#25619d]"
+                                className="w-11 h-11 bg-[#378ADD] text-white font-bold text-lg active:bg-[#25619d] flex-shrink-0"
                             >
                                 —
                             </button>
@@ -102,12 +102,12 @@ export default function RotacionLibranzas() {
                                 type="text"
                                 value={borradorNumCiclos}
                                 readOnly
-                                className="w-12 h-11 text-center text-lg font-bold"
+                                className="w-12 h-11 text-center text-lg font-bold flex-shrink-0"
                             />
                             <button
                                 type="button"
                                 onClick={incrementarBorradorCiclo}
-                                className="w-11 h-11 bg-[#378ADD] text-white font-bold text-lg active:bg-[#25619d]"
+                                className="w-11 h-11 bg-[#378ADD] text-white font-bold text-lg active:bg-[#25619d] flex-shrink-0"
                             >
                                 +
                             </button>
@@ -146,7 +146,7 @@ export default function RotacionLibranzas() {
                         })}
                     </div>
 
-                    <div className="flex gap-3 mt-4">
+                    <div className="flex flex-col sm:flex-row gap-3 mt-4">
                         <button
                             type="button"
                             onClick={aplicarCiclos}
@@ -167,19 +167,19 @@ export default function RotacionLibranzas() {
 
             {/* ── CUADRÍCULA DE MÉTRICAS ── */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
-                <div className="bg-gradient-to-br from-[#f5f5f5] to-[#efefef] p-4 rounded-lg border border-gray-200 shadow-sm text-center md:text-left">
+                <div className="bg-gradient-to-br from-[#f5f5f5] to-[#efefef] p-4 rounded-lg border border-gray-200 shadow-sm text-center md:text-left min-w-0">
                     <div className="text-2xl md:text-3xl font-bold leading-none mb-2">{totalActivos}/{numEmp}</div>
                     <div className="text-[10px] sm:text-xs font-semibold tracking-wider text-[#6b6b6b] uppercase">Empleados activos</div>
                 </div>
-                <div className="bg-gradient-to-br from-[#f5f5f5] to-[#efefef] p-4 rounded-lg border border-gray-200 shadow-sm text-center md:text-left">
+                <div className="bg-gradient-to-br from-[#f5f5f5] to-[#efefef] p-4 rounded-lg border border-gray-200 shadow-sm text-center md:text-left min-w-0">
                     <div className="text-2xl md:text-3xl font-bold leading-none mb-2">{metrics.max}</div>
                     <div className="text-[10px] sm:text-xs font-semibold tracking-wider text-[#6b6b6b] uppercase">Máximo diario</div>
                 </div>
-                <div className="bg-gradient-to-br from-[#f5f5f5] to-[#efefef] p-4 rounded-lg border border-gray-200 shadow-sm text-center md:text-left">
+                <div className="bg-gradient-to-br from-[#f5f5f5] to-[#efefef] p-4 rounded-lg border border-gray-200 shadow-sm text-center md:text-left min-w-0">
                     <div className="text-2xl md:text-3xl font-bold leading-none mb-2">{metrics.min}</div>
                     <div className="text-[10px] sm:text-xs font-semibold tracking-wider text-[#6b6b6b] uppercase">Mínimo diario</div>
                 </div>
-                <div className="bg-gradient-to-br from-[#f5f5f5] to-[#efefef] p-4 rounded-lg border border-gray-200 shadow-sm text-center md:text-left">
+                <div className="bg-gradient-to-br from-[#f5f5f5] to-[#efefef] p-4 rounded-lg border border-gray-200 shadow-sm text-center md:text-left min-w-0">
                     <div className="text-2xl md:text-3xl font-bold leading-none mb-2">{metrics.pctDeseq}%</div>
                     <div className="text-[10px] sm:text-xs font-semibold tracking-wider text-[#6b6b6b] uppercase">Desequilibrio</div>
                 </div>
@@ -187,10 +187,10 @@ export default function RotacionLibranzas() {
 
             {/* ── LEYENDA GENERAL ── */}
             <div className="flex flex-wrap gap-4 p-4 bg-[#fafafa] rounded-lg mb-6 text-xs sm:text-sm text-[#6b6b6b]">
-                <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-[#1D9E75]" />Alta cobertura (≥75%)</span>
-                <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-[#378ADD]" />Normal (60–74%)</span>
-                <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-[#EF9F27]" />Ajustada (45–59%)</span>
-                <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-[#E24B4A]" />Crítica (&lt;45%)</span>
+                <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-[#1D9E75] flex-shrink-0" />Alta cobertura (≥75%)</span>
+                <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-[#378ADD] flex-shrink-0" />Normal (60–74%)</span>
+                <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-[#EF9F27] flex-shrink-0" />Ajustada (45–59%)</span>
+                <span className="flex items-center gap-2"><span className="w-3 h-3 rounded-sm bg-[#E24B4A] flex-shrink-0" />Crítica (&lt;45%)</span>
             </div>
 
             {/* ── CUADRÍCULA CALENDARIO SEMANAL DE ROTACIÓN ── */}
@@ -200,17 +200,17 @@ export default function RotacionLibranzas() {
 
             <div className="flex flex-col gap-[1px] mb-8 bg-gray-200 rounded-lg overflow-hidden shadow-sm">
                 {/* Fila Cabecera */}
-                <div className="grid grid-cols-[40px_repeat(7,_1fr)] sm:grid-cols-[50px_repeat(7,_1fr)] gap-[1px] bg-white items-center text-center">
+                <div className="grid grid-cols-[28px_repeat(7,_1fr)] sm:grid-cols-[50px_repeat(7,_1fr)] gap-[1px] bg-white items-center text-center">
                     <div className="text-[10px] sm:text-xs font-semibold text-[#6b6b6b] bg-[#fafafa] py-2" />
                     {DIAS_NOMBRES.map((d, i) => (
-                        <div key={i} className="text-[10px] sm:text-xs font-semibold text-[#6b6b6b] bg-[#fafafa] py-2">{d}</div>
+                        <div key={i} className="text-[9px] sm:text-xs font-semibold text-[#6b6b6b] bg-[#fafafa] py-2 truncate px-0.5">{d}</div>
                     ))}
                 </div>
 
                 {/* Filas de Datos Semanales */}
                 {matrizDatos.map((semana, sIdx) => (
-                    <div key={sIdx} className="grid grid-cols-[40px_repeat(7,_1fr)] sm:grid-cols-[50px_repeat(7,_1fr)] gap-[1px] bg-white items-center">
-                        <div className="text-[10px] sm:text-xs font-semibold text-[#6b6b6b] text-center bg-[#fafafa] py-3">S{sIdx + 1}</div>
+                    <div key={sIdx} className="grid grid-cols-[28px_repeat(7,_1fr)] sm:grid-cols-[50px_repeat(7,_1fr)] gap-[1px] bg-white items-center">
+                        <div className="text-[9px] sm:text-xs font-semibold text-[#6b6b6b] text-center bg-[#fafafa] py-3">S{sIdx + 1}</div>
                         {semana.map((dia, dIdx) => {
                             const pct = dia.total > 0 ? dia.trabajando / dia.total : 0;
                             const claseColor = getColorClase(pct);
@@ -223,7 +223,7 @@ export default function RotacionLibranzas() {
                                         title={`${DIAS_FULL[dIdx]} semana ${sIdx + 1}: ${dia.trabajando} trabajando, ${dia.libran} librando`}
                                     >
                                         <span className="text-xs sm:text-base font-bold">{dia.trabajando}</span>
-                                        <span className="text-[9px] sm:text-[11px] opacity-90">{Math.round(pct * 100)}%</span>
+                                        <span className="text-[8px] sm:text-[11px] opacity-90">{Math.round(pct * 100)}%</span>
                                     </div>
                                 );
                             } else {
@@ -235,7 +235,7 @@ export default function RotacionLibranzas() {
                                         title={`${DIAS_FULL[dIdx]} semana ${sIdx + 1}: libran ${dia.libran} emp`}
                                     >
                                         <span className="text-xs sm:text-base font-bold">{dia.libran}</span>
-                                        <span className="text-[9px] sm:text-[11px] font-medium">libran</span>
+                                        <span className="text-[8px] sm:text-[11px] font-medium">libran</span>
                                     </div>
                                 );
                             }
@@ -245,20 +245,20 @@ export default function RotacionLibranzas() {
             </div>
 
             {/* ── SECCIÓN DETALLE POR EMPLEADO ── */}
-            <div className="bg-[#fafafa] p-4 rounded-lg border border-gray-200">
+            <div className="bg-[#fafafa] p-3 sm:p-4 rounded-lg border border-gray-200">
                 <p className="text-sm font-semibold tracking-wider text-[#1a1a1a] uppercase mb-3">
                     Detalle de libranzas por empleado — {diasTotales} días
                 </p>
 
                 {/* Leyenda Detalle Ciclos */}
                 <div className="flex flex-wrap gap-3 mb-4 text-[11px] sm:text-xs text-[#6b6b6b]">
-                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#FCEBEB] border border-[#E24B4A]" />Libra (L)</span>
+                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-[#FCEBEB] border border-[#E24B4A] flex-shrink-0" />Libra (L)</span>
                     {Array.from({ length: numCiclos }).map((_, c) => {
                         const diasTxt = patron[c]?.map(d => DIAS_NOMBRES[d]).join('-') || '';
                         const color = PALETA_CICLOS[c % PALETA_CICLOS.length];
                         return (
                             <span key={c} className="flex items-center gap-1.5">
-                                <span className={`w-3 h-3 rounded-sm ${color.bg}`} />
+                                <span className={`w-3 h-3 rounded-sm ${color.bg} flex-shrink-0`} />
                                 C{c + 1}: {diasTxt}
                             </span>
                         );
@@ -266,7 +266,7 @@ export default function RotacionLibranzas() {
                 </div>
 
                 {/* Grid de cuadrícula interna horizontal escroleable */}
-                <div className="overflow-x-auto border border-gray-200 rounded-md bg-white">
+                <div className="overflow-x-auto -mx-3 sm:mx-0 px-3 sm:px-0 border-y sm:border border-gray-200 rounded-md sm:rounded-md bg-white">
                     <div className="min-w-[760px] p-2 flex flex-col gap-[1px]">
 
                         {/* Cabecera Días */}
@@ -318,7 +318,7 @@ export default function RotacionLibranzas() {
 
                                     {/* Nombre Empleado */}
                                     <div className={`${numEmp > 18 ? 'w-11 text-[10px]' : 'w-14 text-xs'} font-semibold text-[#6b6b6b] text-right pr-2 flex-shrink-0 flex items-center justify-end gap-1`}>
-                                        <span className={`inline-block w-2 h-2 rounded-sm ${colorCicloBase.bg}`} />
+                                        <span className={`inline-block w-2 h-2 rounded-sm ${colorCicloBase.bg} flex-shrink-0`} />
                                         <span className={!estaActivo ? 'line-through' : ''}>
                                             Emp {String(ei + 1).padStart(2, '0')}
                                         </span>

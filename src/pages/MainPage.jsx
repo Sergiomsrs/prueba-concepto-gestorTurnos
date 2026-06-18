@@ -103,6 +103,7 @@ export const MainPage = () => {
             <Route path="/fichar" element={<AddTimeTrack />} />
             <Route path="/info" element={<Landing />} />
             <Route path="/techinfo" element={<TechInfo />} />
+            <Route path="/simulator" element={<RotacionLibranzas />} />
 
             {/* --- 2. RUTAS PARA USER, ADMIN Y DEMO --- */}
             <Route path="/revisar" element={
@@ -148,9 +149,6 @@ export const MainPage = () => {
             } />
             <Route path="/planner" element={
               <ProtectedRoute allowedRoles={ONLY_ADMIN}><PlannerPage /></ProtectedRoute>
-            } />
-            <Route path="/simulator" element={
-              <ProtectedRoute allowedRoles={ONLY_ADMIN}><RotacionLibranzas /></ProtectedRoute>
             } />
           </Routes>
         </main>
