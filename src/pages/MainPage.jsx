@@ -24,6 +24,7 @@ import { Footer } from "@/utilComponents/Footer"
 import { GenericRoster } from "./GenericRoster"
 import { PlannerPage } from "./PlannerPage"
 import ScrollToTop from "@/utils/components/ScrollToTop"
+import RotacionLibranzas from "@/simulator/pages/RotacionLibranzas"
 
 
 export const MainPage = () => {
@@ -147,6 +148,9 @@ export const MainPage = () => {
             } />
             <Route path="/planner" element={
               <ProtectedRoute allowedRoles={ONLY_ADMIN}><PlannerPage /></ProtectedRoute>
+            } />
+            <Route path="/simulator" element={
+              <ProtectedRoute allowedRoles={ONLY_ADMIN}><RotacionLibranzas /></ProtectedRoute>
             } />
           </Routes>
         </main>
