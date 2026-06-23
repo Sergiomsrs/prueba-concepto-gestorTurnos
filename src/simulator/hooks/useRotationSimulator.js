@@ -16,7 +16,7 @@ export const PALETA_CICLOS = [
     { bg: 'bg-[#7B5EA7]', text: 'text-white', hex: '#7B5EA7' },
 ];
 
-const PATRON_DEFECTO = [[5, 6], [4, 5], [3, 4], [0, 6]];
+const PATRON_DEFECTO = [[5, 6], [5, 6], [5, 6], [5, 6]];
 
 export function useRotationSimulator() {
     // Estados Principales
@@ -28,7 +28,7 @@ export function useRotationSimulator() {
     const [showConfig, setShowConfig] = useState(false);
 
     // Estados Borrador (Panel de Configuración)
-    const [borradorNumCiclos, setBorradorNumCiclos] = useState(6);
+    const [borradorNumCiclos, setBorradorNumCiclos] = useState(4);
     const [borradorPatron, setBorradorPatron] = useState(PATRON_DEFECTO.map(d => [...d]));
 
     // Sincronizar empleados activos al cambiar el número total
@@ -173,7 +173,7 @@ export function useRotationSimulator() {
     };
 
     const restaurarCiclosDefecto = () => {
-        setBorradorNumCiclos(6);
+        setBorradorNumCiclos(4);
         setBorradorPatron(PATRON_DEFECTO.map(d => [...d]));
     };
 

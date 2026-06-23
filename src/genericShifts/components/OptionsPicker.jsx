@@ -7,7 +7,7 @@ export const OptionsPicker = ({ value, onChange }) => {
             className="px-3 py-2 rounded-lg border border-gray-300 bg-gray-50 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm transition h-fit min-w-[120px]"
         >
             <option value="">Ciclo</option>
-            {[1, 2, 3, 4, 5, 6].map(num => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
                 <option key={num} value={num}>{num}</option>
             ))}
         </select>
