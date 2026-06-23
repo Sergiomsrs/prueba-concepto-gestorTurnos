@@ -108,8 +108,8 @@ export const PreferencesSection = ({ employeeId }) => {
             {/* Mensaje de feedback */}
             {message && (
                 <div className={`rounded-lg px-4 py-3 text-sm font-medium animate-fade-in ${message.includes('Error')
-                        ? 'border border-red-200 bg-red-50 text-red-700'
-                        : 'border border-green-200 bg-green-50 text-green-700'
+                    ? 'border border-red-200 bg-red-50 text-red-700'
+                    : 'border border-green-200 bg-green-50 text-green-700'
                     }`}>
                     {message}
                 </div>
@@ -236,7 +236,7 @@ export const PreferencesSection = ({ employeeId }) => {
             {/* ── SKILLS ──────────────────────────────────────────────── */}
             <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-semibold text-gray-900">Habilidades en tienda</h4>
+                    <h4 className="text-sm font-semibold text-gray-900">Habilidades</h4>
                     <button
                         type="button"
                         onClick={() => setShowSkillInput(v => !v)}
