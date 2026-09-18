@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useMemo, useRef, useState, useCallback, useContext } from "react";
 import { useRoster } from "../roster/hooks/useRoster";
+import { useShift } from "../Hooks/useShift";
 import { rosterReducer } from "../roster/reducers/rosterReducer";
 import { useReactToPrint } from "react-to-print";
 
@@ -32,6 +33,7 @@ export const RosterPage = () => {
 
     const { filters, setFilters } = useContext(AppContext)
     const { apiData, loading, error, saveData } = useRoster(filters.startDate, filters.endDate);
+    const { mutate: saveIndividualShift } = useShift();
     const [showMobileFilters, setShowMobileFilters] = useState(false);
     const [showTeamDropdown, setShowTeamDropdown] = useState(false);
     const [showFullDistribution, setShowFullDistribution] = useState(false);
@@ -834,7 +836,7 @@ export const RosterPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <RosterRangeSummary data={filteredData.slice(1)} originalData={data.slice(1)} />
+                        <RosterRangeSummary data={filteredData.slice(1)} originalData={data.slice(1)} onSaveShift={saveIndividualShift} />
                     </div>
                 </div>
             </main>

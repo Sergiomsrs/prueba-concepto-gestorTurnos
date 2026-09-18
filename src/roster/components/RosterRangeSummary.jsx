@@ -1,8 +1,8 @@
-import { useMemo, memo, useContext } from "react";
+import { useMemo, memo, useContext, useState, useEffect, useCallback } from "react";
 import { daysOfWeek } from "../../utils/data";
 import { AppContext } from "../../context/AppContext";
+import { splitIntoBlocksByIndex } from "../../utils/blockHours";
 
-// Utilidad para calcular horas
 const calculateShiftDurationFromWorkShift = (workShift) => {
     if (!workShift) return 0;
     const workCount = workShift.filter((block) => block === "WORK").length;
@@ -18,23 +18,150 @@ const getTotalShiftDuration = (employeeId, data) => {
             totalMinutes += workCount * 15;
         }
     }
-    return totalMinutes / 60; // múltiplos exactos de 0.25, sin redondeo
+    return totalMinutes / 60;
+};
+
+const indexToTime = (index) => {
+    const totalMinutes = index * 15;
+    const hh = Math.floor(totalMinutes / 60);
+    const mm = totalMinutes % 60;
+    return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+};
+
+const getShiftTimes = (workShift) => {
+    if (!workShift) return null;
+    const blocks = splitIntoBlocksByIndex(workShift);
+    if (blocks.length === 0) return null;
+    const [start, end] = blocks[0];
+    return { min: indexToTime(start), max: indexToTime(end + 1) };
+};
+
+const formatTimeRange = (times) => {
+    if (!times) return null;
+    const start = times.min;
+    const end = times.max;
+    return `${start.substring(0, 5)}-${end.substring(0, 5)}`;
 };
 
 const getCellStyle = (hours, isHoliday) => {
-    if (hours > 0) return "bg-emerald-500 text-white font-semibold";
-    if (isHoliday) return "bg-purple-50 text-purple-400 border border-purple-200";
-    return "bg-slate-100 text-slate-400";
+    const base = "flex flex-col items-center justify-center text-xs rounded cursor-pointer transition-all hover:ring-2 hover:ring-blue-300";
+    if (hours > 0) return `${base} bg-emerald-500 text-white font-semibold`;
+    if (isHoliday) return `${base} bg-purple-50 text-purple-400 border border-purple-200`;
+    return `${base} bg-slate-100 text-slate-400`;
 };
 
-//  Fila de empleado
-// - isVisible se filtra en el padre → este componente nunca se monta si no es visible
-// - fullName y variation son operaciones triviales, no necesitan useMemo
+// Modal de edición de turno
+const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, currentTimes, onClose, onSaveShift }) => {
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
+
+    useEffect(() => {
+        if (currentTimes) {
+            setStartTime(currentTimes.min.substring(0, 5));
+            setEndTime(currentTimes.max.substring(0, 5));
+        } else {
+            setStartTime("08:00");
+            setEndTime("16:00");
+        }
+    }, [currentTimes]);
+
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key === "Escape") onClose();
+        };
+        document.addEventListener("keydown", handleEsc);
+        return () => document.removeEventListener("keydown", handleEsc);
+    }, [onClose]);
+
+    const handleSave = () => {
+        if (!startTime || !endTime) return;
+        onSaveShift({
+            employeeId,
+            date: dateId,
+            startTime,
+            endTime,
+        });
+        onClose();
+    };
+
+    const handleClear = () => {
+        onSaveShift({
+            employeeId,
+            date: dateId,
+            startTime: "00:00",
+            endTime: "00:00",
+        });
+        onClose();
+    };
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+            <div className="relative bg-white rounded-xl shadow-2xl border border-slate-200 p-5 w-72">
+                <div className="flex items-center justify-between mb-1">
+                    <h3 className="text-sm font-bold text-slate-900 truncate">{employeeName}</h3>
+                    <button onClick={onClose} className="text-slate-400 hover:text-slate-600 ml-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <p className="text-xs text-slate-500 mb-4">{dateLabel}</p>
+
+                <div className="space-y-3">
+                    <div>
+                        <label className="block text-xs font-medium text-slate-600 mb-1">Entrada</label>
+                        <input
+                            type="time"
+                            value={startTime}
+                            onChange={(e) => setStartTime(e.target.value)}
+                            step="900"
+                            className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-xs font-medium text-slate-600 mb-1">Salida</label>
+                        <input
+                            type="time"
+                            value={endTime}
+                            onChange={(e) => setEndTime(e.target.value)}
+                            step="900"
+                            className="w-full px-3 py-2 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                    </div>
+                </div>
+
+                <div className="flex gap-2 mt-5">
+                    <button
+                        onClick={handleSave}
+                        className="flex-1 px-3 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                    >
+                        Guardar
+                    </button>
+                    {currentTimes && (
+                        <button
+                            onClick={handleClear}
+                            className="px-3 py-2 text-sm font-medium bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-colors"
+                            title="Limpiar turno"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+});
+
+ShiftEditModal.displayName = 'ShiftEditModal';
+
+// Fila de empleado
 const EmployeeRow = memo(
-    ({ employeeId, employeeName, employeeLastName, teamWork, dataToUse, dataForCalculations, holidayDates, selectedOption }) => {
+    ({ employeeId, employeeName, employeeLastName, teamWork, dataToUse, dataForCalculations, holidayDates, selectedOption, onCellClick }) => {
 
         const wwh = useMemo(() => {
-            // Usar datos originales para el cálculo, independientemente del filtrado visual
             const sourceData = dataForCalculations || dataToUse;
             let total = 0;
             for (const day of sourceData) {
@@ -51,10 +178,7 @@ const EmployeeRow = memo(
             [employeeId, dataToUse, dataForCalculations]
         );
 
-        // Resta de dos números ya memoizados — no necesita useMemo
         const variation = wwh - totalShiftDuration;
-
-        // Concatenación trivial — no necesita useMemo
         const fullName = `${employeeName} ${employeeLastName}`;
 
         return (
@@ -87,14 +211,24 @@ const EmployeeRow = memo(
                     const emp = day.employees.find((e) => e.id === employeeId);
                     const hours = emp?.workShift ? calculateShiftDurationFromWorkShift(emp.workShift) : 0;
                     const isHoliday = day.holiday;
+                    const shiftTimes = emp?.workShift ? getShiftTimes(emp.workShift) : null;
+                    const timeRange = formatTimeRange(shiftTimes);
 
                     return (
-                        <td key={day.id} className="p-0.5 w-8 h-10">
+                        <td key={day.id} className="p-0.5 w-16 h-14">
                             <div
-                                className={`w-full h-full flex items-center justify-center text-xs rounded ${getCellStyle(hours, isHoliday)}`}
-                                title={`${day.day}: ${hours}h`}
+                                className={`w-full h-full flex flex-col items-center justify-center text-[10px] rounded ${getCellStyle(hours, isHoliday)}`}
+                                title={`${day.day}: ${hours}h${timeRange ? ` (${timeRange})` : ''}`}
+                                onClick={(e) => onCellClick(employeeId, employeeName, day.id, day.day, e.currentTarget, shiftTimes)}
                             >
-                                {hours > 0 ? hours : isHoliday ? '🎉' : ''}
+                                {hours > 0 ? (
+                                    <>
+                                        <span className="text-xs font-bold leading-tight">{hours}h</span>
+                                        {timeRange && (
+                                            <span className="text-[9px] leading-tight opacity-90">{timeRange}</span>
+                                        )}
+                                    </>
+                                ) : isHoliday ? '🎉' : ''}
                             </div>
                         </td>
                     );
@@ -111,14 +245,15 @@ const EmployeeRow = memo(
             prevProps.dataToUse === nextProps.dataToUse &&
             prevProps.dataForCalculations === nextProps.dataForCalculations &&
             prevProps.holidayDates === nextProps.holidayDates &&
-            prevProps.selectedOption === nextProps.selectedOption
+            prevProps.selectedOption === nextProps.selectedOption &&
+            prevProps.onCellClick === nextProps.onCellClick
         );
     }
 );
 
 EmployeeRow.displayName = 'EmployeeRow';
 
-//  Fila footer
+// Fila footer
 const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees, holidayDates, selectedOption }) => {
     const dailyTotals = useMemo(() => {
         return dataToUse.map((day) => {
@@ -139,22 +274,15 @@ const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees
 
         if (!visibleEmployees || visibleEmployees.length === 0) return { wwh: 0, total: '0.0', variation: '0.0' };
 
-        // Usar datos originales para cálculos de WWH
         const sourceData = dataForCalculations || dataToUse;
 
-        // Iterar solo sobre empleados visibles (ya filtrados por equipo)
         for (const [id, employeeInfo] of visibleEmployees) {
             let wwhProporcionalEmpleado = 0;
 
             for (const day of sourceData) {
-                // Saltamos si el día es festivo (no genera carga de horas contratadas)
                 if (day.holiday) continue;
-
                 const emp = day.employees?.find((e) => Number(e.id) === Number(id));
-
-                // Si el empleado existe y NO está de vacaciones (PTO)
                 if (emp && emp.pto !== true) {
-                    // 39 / 7 = 5.57 horas diarias proporcionales
                     const diaria = Number(emp.wwh || 0) / 7;
                     wwhProporcionalEmpleado += diaria;
                 }
@@ -165,7 +293,7 @@ const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees
         }
 
         return {
-            wwh: Math.round(totalWWH), // O .toFixed(1) si prefieres decimales
+            wwh: Math.round(totalWWH),
             total: totalHours.toFixed(2),
             variation: (totalWWH - totalHours).toFixed(2)
         };
@@ -188,7 +316,7 @@ const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees
             </td>
 
             {dailyTotals.map((hours, i) => (
-                <td key={i} className="p-0.5 w-8">
+                <td key={i} className="p-0.5 w-16">
                     <div className="w-full h-full flex items-center justify-center text-xs font-bold bg-slate-200 text-slate-900 rounded">
                         {hours}
                     </div>
@@ -200,7 +328,7 @@ const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees
     return (
         prevProps.dataToUse === nextProps.dataToUse &&
         prevProps.dataForCalculations === nextProps.dataForCalculations &&
-        prevProps.visibleEmployees === nextProps.visibleEmployees &&  // referencia estable gracias al useMemo del padre
+        prevProps.visibleEmployees === nextProps.visibleEmployees &&
         prevProps.holidayDates === nextProps.holidayDates
     );
 });
@@ -208,13 +336,13 @@ const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees
 DailySummaryRow.displayName = 'DailySummaryRow';
 
 // Componente principal
-export const RosterRangeSummary = memo(({ data, originalData }) => {
+export const RosterRangeSummary = memo(({ data, originalData, onSaveShift }) => {
     const { selectedOption, holidayDates } = useContext(AppContext);
 
-    // Usar originalData para cálculos si está disponible, sino fallback a data
+    const [activeCell, setActiveCell] = useState(null);
+
     const dataForCalculations = originalData || data;
 
-    // Mapa de empleados para búsqueda rápida en cálculos (datos originales)
     const allEmployeesForCalculations = useMemo(() => {
         const employeeMap = new Map();
         for (const day of dataForCalculations) {
@@ -231,10 +359,8 @@ export const RosterRangeSummary = memo(({ data, originalData }) => {
         return employeeMap;
     }, [dataForCalculations]);
 
-    // Empleados visibles: extraer del data filtrado (lo que realmente aparece en la tabla)
     const visibleEmployees = useMemo(() => {
         const visibleMap = new Map();
-        // Usar dataForCalculations para mostrar TODOS los empleados, independientemente de los filtros visuales
         for (const day of dataForCalculations) {
             for (const emp of day.employees) {
                 if (!visibleMap.has(emp.id)) {
@@ -246,7 +372,6 @@ export const RosterRangeSummary = memo(({ data, originalData }) => {
                 }
             }
         }
-        // Convertir a array y aplicar filtro por equipo si es necesario
         const visibleArray = Array.from(visibleMap.entries());
         if (selectedOption === "todos") return visibleArray;
         return visibleArray.filter(([, { teamWork }]) => teamWork === selectedOption);
@@ -261,8 +386,33 @@ export const RosterRangeSummary = memo(({ data, originalData }) => {
         });
     }, [data]);
 
+    const handleCellClick = useCallback((employeeId, employeeName, dateId, dayName, cellElement, currentTimes) => {
+        const dateLabel = new Date(dateId + 'T12:00:00').toLocaleDateString('es-ES', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+        });
+        setActiveCell({
+            employeeId,
+            employeeName,
+            dateId,
+            dateLabel,
+            currentTimes,
+        });
+    }, []);
+
+    const handleClosePopover = useCallback(() => {
+        setActiveCell(null);
+    }, []);
+
+    const handleSaveShift = useCallback((params) => {
+        if (onSaveShift) {
+            onSaveShift(params);
+        }
+    }, [onSaveShift]);
+
     return (
-        <div className="overflow-x-auto rounded-lg border border-slate-200">
+        <div className="overflow-x-auto rounded-lg border border-slate-200 relative">
             <table className="w-auto border-collapse bg-white">
                 <thead>
                     <tr className="bg-slate-50 border-b-2 border-slate-300">
@@ -283,7 +433,7 @@ export const RosterRangeSummary = memo(({ data, originalData }) => {
                         {dayHeaders.map((d) => (
                             <th
                                 key={d.id}
-                                className={`p-2 w-8 text-center ${d.isWeekend ? 'bg-slate-100' : 'bg-slate-50'}`}
+                                className={`p-2 w-16 text-center ${d.isWeekend ? 'bg-slate-100' : 'bg-slate-50'}`}
                             >
                                 <div className="flex flex-col items-center">
                                     <span className="text-xs font-semibold text-slate-700">{d.initial}</span>
@@ -305,6 +455,7 @@ export const RosterRangeSummary = memo(({ data, originalData }) => {
                             dataForCalculations={dataForCalculations}
                             holidayDates={holidayDates}
                             selectedOption={selectedOption}
+                            onCellClick={handleCellClick}
                         />
                     ))}
                     <DailySummaryRow
@@ -316,10 +467,22 @@ export const RosterRangeSummary = memo(({ data, originalData }) => {
                     />
                 </tbody>
             </table>
+
+            {activeCell && (
+                <ShiftEditModal
+                    employeeId={activeCell.employeeId}
+                    employeeName={activeCell.employeeName}
+                    dateId={activeCell.dateId}
+                    dateLabel={activeCell.dateLabel}
+                    currentTimes={activeCell.currentTimes}
+                    onClose={handleClosePopover}
+                    onSaveShift={handleSaveShift}
+                />
+            )}
         </div>
     );
 }, (prevProps, nextProps) => {
-    return prevProps.data === nextProps.data && prevProps.originalData === nextProps.originalData;
+    return prevProps.data === nextProps.data && prevProps.originalData === nextProps.originalData && prevProps.onSaveShift === nextProps.onSaveShift;
 });
 
 RosterRangeSummary.displayName = 'RosterRangeSummary';
