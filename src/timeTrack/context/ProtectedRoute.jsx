@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { useContext } from "react";
 import { AuthContext } from "@/timeTrack/context/AuthContext";
 

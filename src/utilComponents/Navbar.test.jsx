@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react"
-import { BrowserRouter } from "react-router-dom"
+import { BrowserRouter } from "react-router"
 import { AuthContext } from "../timeTrack/context/AuthContext"
 import { Navbar } from "./Navbar"
 import { expect } from "vitest"

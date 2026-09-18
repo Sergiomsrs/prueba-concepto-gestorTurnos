@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 
 import './styles.css'
 import './styles-zoom.css'
-import { HashRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router'
 import { MainPage } from './pages/MainPage.jsx'
 import { AppProvider } from './context/AppProvider'
 import { AuthProvider } from './timeTrack/context/AuthContext'
@@ -20,7 +20,7 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <HashRouter future={{ v7_startTransition: true }} >
+    <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }} >
       <QueryClientProvider client={queryClient}>
         <AppProvider>
           <AuthProvider>

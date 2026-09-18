@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { AlertMessage } from '../components/AlertMessage';
 import { authService } from '@/auth/services/authService';
 

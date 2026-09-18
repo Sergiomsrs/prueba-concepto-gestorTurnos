@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { Landing } from "./Landing";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter } from "react-router";
 
 
 describe('app', () => {

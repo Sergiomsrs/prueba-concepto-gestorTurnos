@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter } from 'react-router'
 import { describe, test, expect, vi } from 'vitest'
 import { MainPage } from './MainPage'
 import { AuthContext } from '../timeTrack/context/AuthContext'

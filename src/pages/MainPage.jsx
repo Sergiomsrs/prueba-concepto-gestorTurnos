@@ -1,4 +1,4 @@
-import { Route, Routes, Link, useLocation } from "react-router-dom"
+import { Route, Routes, Link, useLocation } from "react-router"
 import { Navbar } from "../utilComponents/Navbar"
 import { EmployeeWeek } from "./EmployeeWeek"
 import { Daily } from "../gridComponents/Daily"

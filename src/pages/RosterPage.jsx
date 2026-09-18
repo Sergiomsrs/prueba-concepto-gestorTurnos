@@ -13,7 +13,7 @@ import DateRangePicker from "@/roster/components/DateRangePicker";
 import { getVisibleRange, HOUR_RANGE_PRESETS } from "@/utils/rangeCalculator";
 import { ZoomControls } from "@/components/ZoomControls";
 import { useGridZoom } from "@/Hooks/useGridZoom";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 export const RosterPage = () => {
     const [data, dispatch] = useReducer(rosterReducer, []);
