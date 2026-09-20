@@ -1,8 +1,27 @@
 export const rosterReducer = (state, action) => {
     switch (action.type) {
 
-        case "SET_ROSTER":
-            return action.payload;
+        case "SET_ROSTER": {
+            const newPayload = action.payload;
+            const currentState = state;
+
+            if (!currentState.length) return newPayload;
+
+            return newPayload.map((newDay) => {
+                const currentDay = currentState.find((d) => d.id === newDay.id);
+                if (!currentDay) return newDay;
+
+                const mergedEmployees = newDay.employees.map((newEmp) => {
+                    const currentEmp = currentDay.employees.find((e) => e.id === newEmp.id);
+                    if (currentEmp?.isModified) {
+                        return { ...currentEmp, isModified: false };
+                    }
+                    return newEmp;
+                });
+
+                return { ...newDay, employees: mergedEmployees };
+            });
+        }
 
         case "UPDATE_SHIFT": {
             const { dayIndex, employeeIndex, hourIndex } = action.payload;

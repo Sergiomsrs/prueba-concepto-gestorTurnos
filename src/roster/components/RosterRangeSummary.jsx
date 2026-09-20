@@ -51,7 +51,7 @@ const getCellStyle = (hours, isHoliday) => {
 };
 
 // Modal de edición de turno
-const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, currentTimes, onClose, onSaveShift }) => {
+const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, currentTimes, currentData, onClose, onSaveShift }) => {
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
 
@@ -80,6 +80,7 @@ const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, curr
             date: dateId,
             startTime,
             endTime,
+            currentData,
         });
         onClose();
     };
@@ -90,6 +91,7 @@ const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, curr
             date: dateId,
             startTime: "00:00",
             endTime: "00:00",
+            currentData,
         });
         onClose();
     };
@@ -336,7 +338,7 @@ const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees
 DailySummaryRow.displayName = 'DailySummaryRow';
 
 // Componente principal
-export const RosterRangeSummary = memo(({ data, originalData, onSaveShift }) => {
+export const RosterRangeSummary = memo(({ data, originalData, currentData, onSaveShift }) => {
     const { selectedOption, holidayDates } = useContext(AppContext);
 
     const [activeCell, setActiveCell] = useState(null);
@@ -475,6 +477,7 @@ export const RosterRangeSummary = memo(({ data, originalData, onSaveShift }) => 
                     dateId={activeCell.dateId}
                     dateLabel={activeCell.dateLabel}
                     currentTimes={activeCell.currentTimes}
+                    currentData={currentData}
                     onClose={handleClosePopover}
                     onSaveShift={handleSaveShift}
                 />
@@ -482,7 +485,7 @@ export const RosterRangeSummary = memo(({ data, originalData, onSaveShift }) => 
         </div>
     );
 }, (prevProps, nextProps) => {
-    return prevProps.data === nextProps.data && prevProps.originalData === nextProps.originalData && prevProps.onSaveShift === nextProps.onSaveShift;
+    return prevProps.data === nextProps.data && prevProps.originalData === nextProps.originalData && prevProps.currentData === nextProps.currentData && prevProps.onSaveShift === nextProps.onSaveShift;
 });
 
 RosterRangeSummary.displayName = 'RosterRangeSummary';

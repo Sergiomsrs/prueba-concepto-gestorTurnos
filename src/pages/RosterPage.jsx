@@ -836,7 +836,7 @@ export const RosterPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <RosterRangeSummary data={filteredData.slice(1)} originalData={data.slice(1)} onSaveShift={saveIndividualShift} />
+                        <RosterRangeSummary data={filteredData.slice(1)} originalData={data.slice(1)} currentData={data} onSaveShift={saveIndividualShift} />
                     </div>
                 </div>
             </main>
