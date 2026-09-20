@@ -234,6 +234,8 @@ export const RosterPage = () => {
             // Usamos mutateAsync del hook que creamos antes
             await saveData(modifiedData);
 
+            dispatch({ type: "RESET_MODIFIED" });
+
             // Si llega aquí, es que fue EXITOSO (el hook lanzó el invalidateQueries)
             console.log("✅ Datos guardados y tabla actualizada automáticamente");
 
@@ -836,7 +838,7 @@ export const RosterPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <RosterRangeSummary data={filteredData.slice(1)} originalData={data.slice(1)} currentData={data} onSaveShift={saveIndividualShift} />
+                        <RosterRangeSummary data={filteredData.slice(1)} originalData={data.slice(1)} currentData={data} onSaveShift={saveIndividualShift} modifiedData={modifiedData} onSaveBoardChanges={handleSaveData} />
                     </div>
                 </div>
             </main>

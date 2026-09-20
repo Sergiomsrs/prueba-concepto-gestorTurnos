@@ -51,9 +51,10 @@ const getCellStyle = (hours, isHoliday) => {
 };
 
 // Modal de edición de turno
-const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, currentTimes, currentData, onClose, onSaveShift }) => {
+const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, currentTimes, currentData, onClose, onSaveShift, modifiedData, onSaveBoardChanges }) => {
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
+    const [showConfirm, setShowConfirm] = useState(false);
 
     useEffect(() => {
         if (currentTimes) {
@@ -73,8 +74,14 @@ const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, curr
         return () => document.removeEventListener("keydown", handleEsc);
     }, [onClose]);
 
+    const hasPendingBoardChanges = modifiedData && modifiedData.length > 0;
+
     const handleSave = () => {
         if (!startTime || !endTime) return;
+        if (hasPendingBoardChanges) {
+            setShowConfirm(true);
+            return;
+        }
         onSaveShift({
             employeeId,
             date: dateId,
@@ -83,6 +90,39 @@ const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, curr
             currentData,
         });
         onClose();
+    };
+
+    const handleConfirmSaveAll = async () => {
+        setShowConfirm(false);
+        try {
+            await onSaveBoardChanges();
+        } catch (e) {
+            console.error("Error guardando cambios de pizarra:", e);
+        }
+        onSaveShift({
+            employeeId,
+            date: dateId,
+            startTime,
+            endTime,
+            currentData,
+        });
+        onClose();
+    };
+
+    const handleConfirmSaveShiftOnly = () => {
+        setShowConfirm(false);
+        onSaveShift({
+            employeeId,
+            date: dateId,
+            startTime,
+            endTime,
+            currentData,
+        });
+        onClose();
+    };
+
+    const handleConfirmCancel = () => {
+        setShowConfirm(false);
     };
 
     const handleClear = () => {
@@ -153,6 +193,41 @@ const ShiftEditModal = memo(({ employeeId, employeeName, dateId, dateLabel, curr
                     )}
                 </div>
             </div>
+
+            {showConfirm && (
+                <div className="absolute inset-0 z-60 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/30" onClick={handleConfirmCancel} />
+                    <div className="relative bg-white rounded-xl shadow-2xl border border-slate-200 p-5 w-80">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="text-amber-500 text-lg">⚠️</span>
+                            <h4 className="text-sm font-bold text-slate-900">Cambios pendientes en pizarra</h4>
+                        </div>
+                        <p className="text-xs text-slate-600 mb-5">
+                            Tienes <span className="font-bold text-amber-600">{modifiedData.length} cambio{modifiedData.length > 1 ? 's' : ''}</span> sin guardar en la pizarra. ¿Deseas guardarlos también?
+                        </p>
+                        <div className="flex flex-col gap-2">
+                            <button
+                                onClick={handleConfirmSaveAll}
+                                className="w-full px-3 py-2 text-sm font-medium bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
+                            >
+                                Sí, guardar todo
+                            </button>
+                            <button
+                                onClick={handleConfirmSaveShiftOnly}
+                                className="w-full px-3 py-2 text-sm font-medium bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg transition-colors"
+                            >
+                                No, solo este turno
+                            </button>
+                            <button
+                                onClick={handleConfirmCancel}
+                                className="w-full px-3 py-2 text-sm font-medium bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors"
+                            >
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 });
@@ -338,7 +413,7 @@ const DailySummaryRow = memo(({ dataToUse, dataForCalculations, visibleEmployees
 DailySummaryRow.displayName = 'DailySummaryRow';
 
 // Componente principal
-export const RosterRangeSummary = memo(({ data, originalData, currentData, onSaveShift }) => {
+export const RosterRangeSummary = memo(({ data, originalData, currentData, onSaveShift, modifiedData, onSaveBoardChanges }) => {
     const { selectedOption, holidayDates } = useContext(AppContext);
 
     const [activeCell, setActiveCell] = useState(null);
@@ -480,12 +555,14 @@ export const RosterRangeSummary = memo(({ data, originalData, currentData, onSav
                     currentData={currentData}
                     onClose={handleClosePopover}
                     onSaveShift={handleSaveShift}
+                    modifiedData={modifiedData}
+                    onSaveBoardChanges={onSaveBoardChanges}
                 />
             )}
         </div>
     );
 }, (prevProps, nextProps) => {
-    return prevProps.data === nextProps.data && prevProps.originalData === nextProps.originalData && prevProps.currentData === nextProps.currentData && prevProps.onSaveShift === nextProps.onSaveShift;
+    return prevProps.data === nextProps.data && prevProps.originalData === nextProps.originalData && prevProps.currentData === nextProps.currentData && prevProps.onSaveShift === nextProps.onSaveShift && prevProps.modifiedData === nextProps.modifiedData && prevProps.onSaveBoardChanges === nextProps.onSaveBoardChanges;
 });
 
 RosterRangeSummary.displayName = 'RosterRangeSummary';

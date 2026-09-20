@@ -14,7 +14,7 @@ export const rosterReducer = (state, action) => {
                 const mergedEmployees = newDay.employees.map((newEmp) => {
                     const currentEmp = currentDay.employees.find((e) => e.id === newEmp.id);
                     if (currentEmp?.isModified) {
-                        return { ...currentEmp, isModified: false };
+                        return { ...currentEmp };
                     }
                     return newEmp;
                 });
@@ -116,6 +116,16 @@ export const rosterReducer = (state, action) => {
             newState[dayIndex] = day;
 
             return newState;
+        }
+
+        case "RESET_MODIFIED": {
+            return state.map(day => ({
+                ...day,
+                employees: day.employees.map(emp => ({
+                    ...emp,
+                    isModified: false
+                }))
+            }));
         }
 
         default:
