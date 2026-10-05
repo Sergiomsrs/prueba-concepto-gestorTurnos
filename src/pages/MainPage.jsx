@@ -34,8 +34,8 @@ export const MainPage = () => {
   const { auth } = useContext(AuthContext);
 
   // Definimos los grupos de roles para no repetir strings
-  const ALL_AUTHENTICATED = ["USER", "ADMIN", "DEMO"];
-  const ONLY_ADMIN = ["ADMIN", "DEMO"];
+  const ALL_AUTHENTICATED = ["USER", "ADMIN", "DEMO", "GUEST"];
+  const ONLY_ADMIN       = ["ADMIN", "DEMO", "GUEST"];
 
   return (
     <div className="bg-gray-50 text-gray-900 min-h-screen w-full max-w-full overflow-x-hidden">

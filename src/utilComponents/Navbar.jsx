@@ -52,7 +52,7 @@ export const Navbar = () => {
         <div className="hidden lg:flex flex-grow justify-center px-4">
           {auth.isAuthenticated && (
             <div className="flex divide-x divide-indigo-700 bg-gray-800 rounded-lg overflow-hidden shadow">
-              {(auth.role === "ADMIN" || auth.role === "DEMO") && (
+              {(auth.role === "ADMIN" || auth.role === "DEMO" || auth.role === "GUEST") && (
                 <>
                   <Link to="/" className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition">Cuadrantes</Link>
                   <Link to="/schedules" className="px-6 py-2.5 text-lg text-gray-200 hover:bg-indigo-600 hover:text-white font-semibold transition">Mensual</Link>
@@ -149,7 +149,7 @@ export const Navbar = () => {
       {auth.isAuthenticated && menuOpen && (
         <div className="lg:hidden absolute top-full left-0 right-0 bg-gray-900 border-t border-gray-800 shadow-lg px-6 py-4 space-y-4 z-50">
           <div className="flex flex-col gap-3">
-            {(auth.role === "ADMIN" || auth.role === "DEMO") && (
+            {(auth.role === "ADMIN" || auth.role === "DEMO" || auth.role === "GUEST") && (
               <>
                 <Link to="/" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Cuadrantes</Link>
                 <Link to="/schedules" className="text-gray-300 hover:text-indigo-400 transition font-medium" onClick={() => setMenuOpen(false)}>Mensual</Link>

@@ -10,14 +10,16 @@ export const axiosClient = axios.create({
     },
 });
 
+import { DEMO_OFFLINE_TOKEN } from "../utils/demoConfig";
+
 // --- INTERCEPTOR DE PETICIÓN (REQUEST) ---
 axiosClient.interceptors.request.use(
     (config) => {
         const token = sessionStorage.getItem("token");
 
-        // Bloqueo total para el modo Demo
-        if (token === "demo-token-12345") {
-            console.warn(`🚫 Petición ${config.method.toUpperCase()} bloqueada: Modo Demo activo.`);
+        // Bloqueo total para el modo Demo sin conexión (fallback offline)
+        if (token === DEMO_OFFLINE_TOKEN) {
+            console.warn(`🚫 Petición ${config.method.toUpperCase()} bloqueada: Modo Demo sin conexión activo.`);
 
             const demoError = new Error("BLOCK_ALL_DEMO_REQUESTS");
             demoError.isDemoCancel = true;

@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router';
 import { AlertMessage } from '../components/AlertMessage';
 import { authService } from '@/auth/services/authService';
+import { DEMO_CREDENTIALS, DEMO_OFFLINE_TOKEN } from '../../utils/demoConfig';
 
 export const Login = () => {
   const { login } = useContext(AuthContext);
@@ -98,19 +99,46 @@ export const Login = () => {
     }
   };
 
-  const handleDemoLogin = () => {
-    const demoToken = "demo-token-12345";
-    const demoRole = "ADMIN";
-    const demoUserData = {
-      id: 0,
-      name: "Usuario",
-      lastName: "de Demo",
-      dni: "00000000X",
-      email: "demo@workschdedflow.com",
-      role: "ADMIN"
-    };
-    login(demoToken, demoRole, demoUserData);
-    navigate("/");
+  const handleDemoLogin = async () => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    clearTimeout(slowServerTimer);
+
+    try {
+      // Intentar login real con usuario demo GUEST (API)
+      const { token, role } = await authService.login(DEMO_CREDENTIALS);
+      sessionStorage.setItem('token', token);
+      const userData = await authService.getMe();
+      login(token, role, userData, userData?.companyName);
+      navigate(role === "USER" ? "/schedules" : "/");
+    } catch (err) {
+      // Detectar fallo por conexión (no 401/403)
+      const isNetworkError = err.code === 'ERR_NETWORK' || !err.response;
+      if (isNetworkError) {
+        // Fallback: modo invitado sin API (mantener comportamiento actual)
+        const demoToken = DEMO_OFFLINE_TOKEN;
+        const demoRole = "ADMIN";
+        const demoUserData = {
+          id: 0,
+          name: "Usuario",
+          lastName: "de Demo",
+          dni: "00000000X",
+          email: "demo@workschdedflow.com",
+          role: "ADMIN"
+        };
+        login(demoToken, demoRole, demoUserData);
+        navigate("/");
+      } else {
+        // Error de credenciales (401/403) u otro
+        const msg = err.response?.status === 403
+          ? "Sesión inválida o sin permisos"
+          : "No se ha podido iniciar sesión en modo demo";
+        setErrorMessage({ text: msg, type: 'error' });
+      }
+    } finally {
+      setIsLoading(false);
+      setIsServerWakingUp(false);
+    }
   };
 
   return (

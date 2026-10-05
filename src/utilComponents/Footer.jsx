@@ -40,7 +40,7 @@ export const Footer = () => {
                         </h4>
                         <ul className="space-y-2 text-sm">
 
-                            {(auth.role === "ADMIN" || auth.role === "DEMO") && (
+                            {(auth.role === "ADMIN" || auth.role === "DEMO" || auth.role === "GUEST") && (
                                 <>
                                     <li>
                                         <Link to="/" className="hover:text-white transition">

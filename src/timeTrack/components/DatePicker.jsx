@@ -96,7 +96,7 @@ export const DatePicker = ({ activeTab, setActiveTab, setIsModalAddOpen, selecte
         </select>
       </div>
 
-      {(auth.role == "ADMIN" || auth.role == "DEMO") &&
+      {(auth.role == "ADMIN" || auth.role == "DEMO" || auth.role == "GUEST") &&
         <div className='w-full'>
 
           <button
