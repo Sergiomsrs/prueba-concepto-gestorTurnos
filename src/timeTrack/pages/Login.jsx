@@ -1,8 +1,15 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router';
 import { AlertMessage } from '../components/AlertMessage';
 import { authService } from '@/auth/services/authService';
+
+const isConnectionError = (error) => (
+  error?.code === 'ERR_NETWORK'
+  || error?.code === 'ECONNABORTED'
+  || error?.code === 'ETIMEDOUT'
+  || (error?.isAxiosError && !error.response && error.code !== 'ERR_CANCELED')
+);
 
 export const Login = () => {
   const { login } = useContext(AuthContext);
@@ -10,33 +17,11 @@ export const Login = () => {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState({ text: '', type: '' });
   const [isLoading, setIsLoading] = useState(false);
-  const [isServerWakingUp, setIsServerWakingUp] = useState(false);
 
   const [formData, setFormData] = useState({
     dni: '',
     password: ''
   });
-
-  /**
-   * EFECTO DE CALENTAMIENTO (Warm-up)
-   * Lanza una petición silenciosa en cuanto el usuario entra a la pantalla de login.
-   * Esto gana segundos valiosos mientras el usuario escribe sus credenciales.
-   */
-  useEffect(() => {
-    const wakeUpServer = async () => {
-      console.log("⏳ Intentando despertar al servidor en:", import.meta.env.VITE_API_URL_HEALTH);
-      try {
-        // Usamos 'no-cors' para que la petición llegue al servidor 
-        // aunque el endpoint de health no tenga configurado CORS.
-        // El servidor se despertará igual al recibir el hit.
-        await fetch(`${import.meta.env.VITE_API_URL_HEALTH}/health`, { mode: 'no-cors' });
-        console.log("✅ Señal de despertador enviada con éxito.");
-      } catch (e) {
-        console.warn("⚠️ Error al despertar (esto es normal si el server duerme aún):", e);
-      }
-    };
-    wakeUpServer();
-  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -50,16 +35,6 @@ export const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     setError(false);
-    setIsServerWakingUp(false);
-
-    /**
-     * Timer de cortesía:
-     * Si a los 4 segundos no hay respuesta, asumimos que el servidor está en "Cold Start"
-     * y mostramos un mensaje informativo al usuario.
-     */
-    const slowServerTimer = setTimeout(() => {
-      setIsServerWakingUp(true);
-    }, 4000);
 
     try {
       // 1. Intentar el login para obtener el TOKEN
@@ -82,23 +57,20 @@ export const Login = () => {
       console.error("Error en el proceso de login:", error);
       setError(true);
 
-      // Ajustamos el mensaje si el error parece ser por timeout o caída
-      const isTimeout = error.code === 'ECONNABORTED' || !error.response;
-
       setErrorMessage({
-        text: isTimeout
-          ? "El servidor está tardando en responder. Por favor, reintenta en unos segundos."
-          : (error.response?.status === 403 ? "Sesión inválida o sin permisos" : "Credenciales incorrectas"),
+        text: error.response?.status === 403
+          ? "Sesión inválida o sin permisos"
+          : error.response?.status === 401
+            ? "Credenciales incorrectas"
+            : "No se pudo conectar con el servidor. Inténtalo de nuevo.",
         type: 'error'
       });
     } finally {
-      clearTimeout(slowServerTimer);
       setIsLoading(false);
-      setIsServerWakingUp(false);
     }
   };
 
-  const handleDemoLogin = () => {
+  const enterOfflineDemoMode = () => {
     const demoToken = "demo-token-12345";
     const demoRole = "ADMIN";
     const demoUserData = {
@@ -111,6 +83,55 @@ export const Login = () => {
     };
     login(demoToken, demoRole, demoUserData);
     navigate("/");
+  };
+
+  const handleDemoLogin = async () => {
+    setIsLoading(true);
+    setError(false);
+
+    let pendingToken;
+
+    try {
+      const loginData = await authService.login(
+        { dni: '12345678C', password: 'demopassword' },
+        { timeout: 10000 }
+      );
+      const { token, role } = loginData;
+
+      pendingToken = token;
+      sessionStorage.setItem('token', token);
+
+      const userData = await authService.getMe({ timeout: 10000 });
+      login(token, role, { ...userData, isSharedDemoAccount: true }, userData.companyName);
+      navigate(role === "USER" ? "/schedules" : "/");
+    } catch (error) {
+      console.error("Error al acceder a la cuenta de demo:", {
+        code: error.code,
+        status: error.response?.status,
+        endpoint: error.config?.url
+      });
+
+      if (pendingToken) {
+        sessionStorage.removeItem('token');
+      }
+
+      if (isConnectionError(error)) {
+        enterOfflineDemoMode();
+        return;
+      }
+
+      setError(true);
+      setErrorMessage({
+        text: error.response?.status === 401
+          ? "No se pudo iniciar sesión con las credenciales de demo."
+          : error.response?.status === 403
+            ? `La API ha denegado el acceso${error.config?.url ? ` en ${error.config.url}` : ''}. Comprueba que la cuenta demo exista en el servidor y tenga rol ADMIN o USER.`
+            : "No se pudo iniciar sesión en modo demo. Inténtalo de nuevo.",
+        type: 'error'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -157,14 +178,16 @@ export const Login = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Explorar la aplicación</h2>
             <p className="text-gray-600 text-sm mb-5">Accede al panel completo con datos de ejemplo.</p>
             <button
+              type="button"
               onClick={handleDemoLogin}
-              className="relative w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold flex items-center justify-center gap-3 transition duration-300 hover:shadow-[0_8px_25px_rgba(37,99,235,0.35)] hover:scale-[1.02] active:scale-[0.98] group"
+              disabled={isLoading}
+              className="relative w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold flex items-center justify-center gap-3 transition duration-300 hover:shadow-[0_8px_25px_rgba(37,99,235,0.35)] hover:scale-[1.02] active:scale-[0.98] group disabled:cursor-not-allowed disabled:opacity-60"
             >
               <svg className="w-5 h-5 group-hover:scale-110 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
-              Entrar en modo demo
+              {isLoading ? "Accediendo..." : "Entrar en modo demo"}
             </button>
             <p className="text-xs text-gray-500 mt-3">Sin registro · Acceso completo · Datos de prueba incluidos</p>
           </div>
@@ -215,21 +238,12 @@ export const Login = () => {
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span>{isServerWakingUp ? "Despertando servidor..." : "Validando..."}</span>
+                    <span>Validando...</span>
                   </>
                 ) : (
                   "Iniciar sesión"
                 )}
               </button>
-
-              {/* AVISO DE COLD START */}
-              {isServerWakingUp && (
-                <div className="bg-blue-50 border-l-4 border-blue-400 p-3 mt-2">
-                  <p className="text-xs text-blue-700 leading-tight">
-                    <strong>Nota:</strong> El servidor gratuito se "duerme" por inactividad. El primer arranque puede tardar.
-                  </p>
-                </div>
-              )}
 
               {error && (
                 <div className="mt-4">

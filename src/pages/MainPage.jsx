@@ -32,6 +32,8 @@ export const MainPage = () => {
   const location = useLocation()
   const isRosterPage = location.pathname === "/"
   const { auth } = useContext(AuthContext);
+  const isOfflineDemo = auth.token === "demo-token-12345";
+  const isSharedDemoAccount = auth.user?.isSharedDemoAccount === true;
 
   // Definimos los grupos de roles para no repetir strings
   const ALL_AUTHENTICATED = ["USER", "ADMIN", "DEMO"];
@@ -45,7 +47,7 @@ export const MainPage = () => {
         </header>
 
         {/* Banner DEMO: Solo se muestra si el usuario logueado tiene rol DEMO */}
-        {auth.token === "demo-token-12345" && (
+        {(isOfflineDemo || isSharedDemoAccount) && (
           <div
             className={`fixed right-0 z-50 flex items-center transition-all duration-500 ease-in-out ${showDemoBanner ? "translate-x-0" : "translate-x-[calc(100%-40px)]"
               }`}
@@ -71,7 +73,9 @@ export const MainPage = () => {
                   ¡Modo DEMO activo!
                 </span>
                 <span className="text-xs lg:text-sm">
-                  Sin conexión a API.
+                  {isSharedDemoAccount
+                    ? "Los datos son compartidos y pueden restaurarse."
+                    : "Sin conexión a API."}
                   <Link to="/info" className="ml-1 underline text-indigo-700 hover:text-indigo-900 font-semibold">
                     Ver más info
                   </Link>

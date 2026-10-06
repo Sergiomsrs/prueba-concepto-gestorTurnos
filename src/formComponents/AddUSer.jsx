@@ -16,6 +16,8 @@ const initialState = {
     sortOrder: "",
 };
 
+const DEMO_ACCOUNT_DNI = "12345678C";
+
 export const AddUser = ({ allEmployees: employees }) => {
     const queryClient = useQueryClient();
     const [createForm, setCreateForm] = useState(initialState);
@@ -64,7 +66,10 @@ export const AddUser = ({ allEmployees: employees }) => {
     const handleSearch = async () => {
         try {
             const { data } = await axiosClient.get('/emp/search', { params: { email: searchEmail } });
-            setCreateForm(data);
+            setCreateForm({
+                ...data,
+                password: data.dni?.toUpperCase() === DEMO_ACCOUNT_DNI ? "" : data.password
+            });
             setIsExistingEmployee(true);
             setMessage("");
         } catch (error) {
@@ -78,7 +83,12 @@ export const AddUser = ({ allEmployees: employees }) => {
         const selectedEmployee = employees.find(emp => emp.id.toString() === selectedId);
 
         if (selectedEmployee) {
-            setCreateForm(selectedEmployee);
+            setCreateForm({
+                ...selectedEmployee,
+                password: selectedEmployee.dni?.toUpperCase() === DEMO_ACCOUNT_DNI
+                    ? ""
+                    : selectedEmployee.password
+            });
             setIsExistingEmployee(true);
             setMessage("");
         } else {
@@ -92,6 +102,9 @@ export const AddUser = ({ allEmployees: employees }) => {
         setSearchEmail("");
         setMessage("");
     };
+
+    const isDemoAccount = isExistingEmployee
+        && createForm.dni?.toUpperCase() === DEMO_ACCOUNT_DNI;
 
     return (
         <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
@@ -165,12 +178,15 @@ export const AddUser = ({ allEmployees: employees }) => {
 
                     <div className="sm:col-span-3">
                         <label className="block text-sm font-medium text-gray-900">Password</label>
-                        <input onChange={handleInputCreateChange} name="password" value={createForm.password || ""} type="password" placeholder="Mín. 8 caracteres" className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} name="password" value={createForm.password || ""} type="password" placeholder={isDemoAccount ? "No modificable para la cuenta demo" : "Mín. 8 caracteres"} disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
+                        {isDemoAccount && (
+                            <p className="mt-1 text-xs text-gray-500">La contraseña de la cuenta demo no se puede modificar.</p>
+                        )}
                     </div>
 
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-900">DNI / NIE</label>
-                        <input onChange={handleInputCreateChange} type="text" name="dni" value={createForm.dni || ""} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} type="text" name="dni" value={createForm.dni || ""} disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
                     </div>
 
                     <div className="sm:col-span-2">
