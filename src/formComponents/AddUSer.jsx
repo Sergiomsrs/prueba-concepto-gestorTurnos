@@ -158,22 +158,22 @@ export const AddUser = ({ allEmployees: employees }) => {
                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-6 sm:grid-cols-6">
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-900">Nombre</label>
-                        <input onChange={handleInputCreateChange} type="text" name="name" value={createForm.name || ""} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} type="text" name="name" value={createForm.name || ""} disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
                     </div>
 
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-900">Primer Apellido</label>
-                        <input onChange={handleInputCreateChange} type="text" name="lastName" value={createForm.lastName || ""} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} type="text" name="lastName" value={createForm.lastName || ""} disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
                     </div>
 
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-900">Segundo Apellido</label>
-                        <input onChange={handleInputCreateChange} type="text" name="secondLastName" value={createForm.secondLastName || ""} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} type="text" name="secondLastName" value={createForm.secondLastName || ""} disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
                     </div>
 
                     <div className="sm:col-span-3">
                         <label className="block text-sm font-medium text-gray-900">Email Corporativo</label>
-                        <input onChange={handleInputCreateChange} name="email" value={createForm.email || ""} type="email" className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} name="email" value={createForm.email || ""} type="email" disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
                     </div>
 
                     <div className="sm:col-span-3">
@@ -191,7 +191,7 @@ export const AddUser = ({ allEmployees: employees }) => {
 
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-900">Rol / Puesto</label>
-                        <input onChange={handleInputCreateChange} type="text" name="role" value={createForm.role || ""} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} type="text" name="role" value={createForm.role || ""} disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
                     </div>
 
                     <div className="sm:col-span-2">
@@ -201,18 +201,19 @@ export const AddUser = ({ allEmployees: employees }) => {
                             type="number"
                             name="sortOrder"
                             value={createForm.sortOrder || ""}
+                            disabled={isDemoAccount}
                             className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-indigo-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm bg-indigo-50"
                         />
                     </div>
 
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-900">Fecha de Alta</label>
-                        <input onChange={handleInputCreateChange} type="date" name="hireDate" value={createForm.hireDate || ""} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} type="date" name="hireDate" value={createForm.hireDate || ""} disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
                     </div>
 
                     <div className="sm:col-span-2">
                         <label className="block text-sm font-medium text-gray-900 text-red-600">Fecha de Baja</label>
-                        <input onChange={handleInputCreateChange} type="date" name="terminationDate" value={createForm.terminationDate || ""} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm" />
+                        <input onChange={handleInputCreateChange} type="date" name="terminationDate" value={createForm.terminationDate || ""} disabled={isDemoAccount} className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm disabled:cursor-not-allowed disabled:bg-gray-100" />
                     </div>
                 </div>
             </div>
@@ -222,6 +223,11 @@ export const AddUser = ({ allEmployees: employees }) => {
                     Limpiar formulario
                 </button>
                 {isExistingEmployee ? (
+                    isDemoAccount ? (
+                        <p className="text-sm text-amber-700">
+                            La cuenta demo está protegida y no se puede modificar ni eliminar.
+                        </p>
+                    ) : (
                     <>
                         <button
                             onClick={() => deleteMutation.mutate(createForm.id)}
@@ -240,6 +246,7 @@ export const AddUser = ({ allEmployees: employees }) => {
                             {updateMutation.isLoading ? "Actualizando..." : "Actualizar Datos"}
                         </button>
                     </>
+                    )
                 ) : (
                     <button
                         onClick={() => createMutation.mutate(createForm)}
